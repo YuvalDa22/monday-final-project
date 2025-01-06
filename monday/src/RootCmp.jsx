@@ -6,7 +6,7 @@ import { Login } from './pages/Login'
 import { HomePage } from './pages/HomePage'
 import { SignUp } from './pages/SignUp'
 import { MondayIndex } from './pages/MondayIndex'
-function App() {
+function RootCmp() {
 
   return (
     <div >
@@ -25,4 +25,4 @@ function App() {
   )
 }
 
-export default App
+export default RootCmp

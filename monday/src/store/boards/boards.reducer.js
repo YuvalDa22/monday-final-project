@@ -1,37 +1,37 @@
-export const SET_TOYS = 'SET_TOYS'
-export const REMOVE_TOY = 'REMOVE_TOY'
-export const ADD_TOY = 'ADD_TOY'
-export const EDIT_TOY = 'EDIT_TOY'
+export const SET_BOARDS = 'SET_BOARDS'
+export const REMOVE_BOARD = 'REMOVE_BOARD'
+export const ADD_BOARD = 'ADD_BOARD'
+export const EDIT_BOARD = 'EDIT_BOARD'
 export const SET_FILTER = 'SET_FILTER'
 export const SET_IS_LOADING = 'SET_IS_LOADING'
 
 const initialState = {
-  toys: [],
+  boards: [],
   filterBy: {},
   isLoading: true,
 }
 
-export function toysReducer(state = initialState, cmd) {
+export function boardsReducer(state = initialState, cmd) {
   switch (cmd.type) {
-    case SET_TOYS:
+    case SET_BOARDS:
       return {
         ...state,
-        toys: cmd.toys,
+        boards: cmd.boards,
       }
-    case REMOVE_TOY:
+    case REMOVE_BOARD:
       return {
         ...state,
-        toys: state.toys.filter((toy) => toy.id !== cmd.toyId),
+        boards: state.boards.filter((board) => board.id !== cmd.boardId),
       }
-    case ADD_TOY:
+    case ADD_BOARD:
       return {
         ...state,
-        toys: [...state.toys, cmd.toys],
+        boards: [...state.boards, cmd.boards],
       }
-    case EDIT_TOY:
+    case EDIT_BOARD:
       return {
         ...state,
-        toys: state.toys?.map((toy) => (toy.id === cmd.toy.id ? cmd.toy : toy)),
+        boards: state.boards?.map((board) => (board.id === cmd.board.id ? cmd.board : board)),
       }
 
     case SET_FILTER:
