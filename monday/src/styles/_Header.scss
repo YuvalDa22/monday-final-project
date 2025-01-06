@@ -1,0 +1,36 @@
+.header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 4rem;
+  position: sticky;
+  background-color: #fff;
+  box-shadow: 4px 4px 20px #e8e5e5;
+
+  position: sticky; /* Makes the header stick */
+  top: 0; /* Sticks the header to the top of the viewport */
+  div {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  img {
+    width: 30px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  button {
+    border: none;
+    padding: 10px 20px;
+    background-color: #5a5ad5;
+    color: #fff;
+    border-radius: 2rem;
+
+    &:hover {
+      background-color: #4f4fa5;
+    }
+  }
+}
