@@ -1,49 +1,49 @@
-import { storageService } from './async-storage.service.js'
-import { utilService } from './util.service.js'
+import { storageService } from "./async-storage.service.js";
+import { utilService } from "./util.service.js";
 
 export const boardsService = {
-	query,
-	save,
-	remove,
-	getById,
-	getDefaultFilter,
-	getFilterFromSearchParams,
-}
+  query,
+  save,
+  remove,
+  getById,
+  //   getDefaultFilter,
+  //   getFilterFromSearchParams,
+};
 
-const STORAGE_KEY = 'boards'
-
-_createBoard()
+const STORAGE_KEY = "boards";
 
 async function query(filterBy = {}) {
-	try {
-		let boards = await storageService.query(STORAGE_KEY)
+  try {
+    let boards = await storageService.query(STORAGE_KEY);
+    if (!boards || boards.length == 0) {
+      boards = _createBoard();
+    }
+    // if (filterBy.title) {
+    // 	const nameRegex = new RegExp(filterBy.title, 'i')
+    // 	boards = boards.filter((board) => nameRegex.test(board.title))
+    // }
 
-		// if (filterBy.title) {
-		// 	const nameRegex = new RegExp(filterBy.title, 'i')
-		// 	boards = boards.filter((board) => nameRegex.test(board.title))
-		// }
-
-		return boards
-	} catch (error) {
-		console.log('error:', error)
-		throw error
-	}
+    return boards;
+  } catch (error) {
+    console.log("error:", error);
+    throw error;
+  }
 }
 
 async function getById(id) {
-	return await storageService.get(STORAGE_KEY, id)
+  return await storageService.get(STORAGE_KEY, id);
 }
 
 async function remove(id) {
-	return await storageService.remove(STORAGE_KEY, id)
+  return await storageService.remove(STORAGE_KEY, id);
 }
 
 async function save(boardToSave) {
-	if (boardToSave.id) {
-		return await storageService.put(STORAGE_KEY, boardToSave)
-	} else {
-		return await storageService.post(STORAGE_KEY, boardToSave)
-	}
+  if (boardToSave.id) {
+    return await storageService.put(STORAGE_KEY, boardToSave);
+  } else {
+    return await storageService.post(STORAGE_KEY, boardToSave);
+  }
 }
 
 // function getDefaultFilter() {
@@ -62,30 +62,46 @@ async function save(boardToSave) {
 // }
 
 function _createBoard() {
-	return {
-		_id: 'b101',
-		title: 'Robot dev proj',
-		createdAt: Date.now(),
-		
-		labels: [],
-		members: [],
-		groups: [
-			{
-				id: 'g101',
-				title: 'Group 1',
-				tasks: [
-					{
-						id: 'c101',
-						title: 'Replace logo',
-					},
-					{
-						id: 'c102',
-						title: 'Add Samples',
-					},
-				],
-			},
-		],
-	}
+  return [
+    {
+      _id: "b101",
+      title: "My first project",
+      createdAt: Date.now(),
+
+      labels: ["Label 1", "Label 2", "Label 3"],
+      members: ["Member 1", "Member 2"],
+      groups: [
+        {
+          id: "g101",
+          title: "Group 1",
+          tasks: [
+            {
+              id: "c101",
+              title: "Task 1",
+            },
+            {
+              id: "c102",
+              title: "Task 2",
+            },
+          ],
+        },
+        {
+          id: "g102",
+          title: "Group 2",
+          tasks: [
+            {
+              id: "c101",
+              title: "Task 1",
+            },
+            {
+              id: "c102",
+              title: "Task 2",
+            },
+          ],
+        },
+      ],
+    },
+  ];
 }
 
 // function saveTask(boardId, groupId, task, activity)  {

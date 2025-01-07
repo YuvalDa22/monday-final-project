@@ -1,0 +1,31 @@
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: center;
+  }
+  
+  .custom-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  
+  .header-cell {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  .task-cell {
+    background-color: #fafafa;
+    font-weight: bold;
+  }
+  
+  .data-cell {
+    background-color: #fff;
+  }
+  
+  .empty-cell {
+    background-color: #f9f9f9;
+  }
+  

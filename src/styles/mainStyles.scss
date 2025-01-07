@@ -8,6 +8,8 @@
 @use 'boardDetails';
 @use 'navbar';
 @use 'sidebar';
+@use 'taskList';
+
 html{
 
   background-color: vars.$bg-color;
