@@ -19,35 +19,35 @@ export const userService = {
 
 window.userService = userService
 
-makeAdminAccount()
+// makeAdminAccount()
 
-async function makeAdminAccount() {
-  const admin = {
-    username: 'admin',
-    name: 'mr.Admin',
-    password: '123',
-    imgUrl:
-      'https://res.cloudinary.com/danlxus36/image/upload/v1735619252/pexels-pixabay-163036_ucbhhc.jpg',
-    isAdmin: true,
-  }
+// async function makeAdminAccount() {
+//   const admin = {
+//     username: 'admin',
+//     name: 'mr.Admin',
+//     password: '123',
+//     imgUrl:
+//       'https://res.cloudinary.com/danlxus36/image/upload/v1735619252/pexels-pixabay-163036_ucbhhc.jpg',
+//     isAdmin: true,
+//   }
 
-  try {
-    const users = (await storageService.query(STORAGE_KEY_USER_DB)) || []
+//   try {
+//     const users = (await storageService.query(STORAGE_KEY_USER_DB)) || []
 
-    if (users.find((user) => user.isAdmin)) {
-      console.log('Admin account already exists.')
-      return
-    }
+//     if (users.find((user) => user.isAdmin)) {
+//       console.log('Admin account already exists.')
+//       return
+//     }
 
-    await storageService.post(STORAGE_KEY_USER_DB, admin)
-    console.log('Admin account created successfully.')
-  } catch (error) {
-    console.error('Error checking or creating admin account:', error)
-  }
-}
+//     await storageService.post(STORAGE_KEY_USER_DB, admin)
+//     console.log('Admin account created successfully.')
+//   } catch (error) {
+//     console.error('Error checking or creating admin account:', error)
+//   }
+// }
 
-function getUsers() {
-  return storageService.query(STORAGE_KEY_USER_DB)
+async function getUsers() {
+  return await storageService.query(STORAGE_KEY_USER_DB)
 }
 
 async function getById(userId) {
@@ -55,17 +55,17 @@ async function getById(userId) {
   return user
 }
 
-function remove(userId) {
-  return storageService.remove(STORAGE_KEY_USER_DB, userId)
+async function remove(userId) {
+  return await storageService.remove(STORAGE_KEY_USER_DB, userId)
 }
 
 async function update(userToUpdate) {
-  const user = await getById(userToUpdate.id)
+  const user = await getById(userToUpdate._id)
   const updatedUser = await storageService.put(STORAGE_KEY_USER_DB, {
     ...user,
     ...userToUpdate,
   })
-  if (getLoggedinUser().id === updatedUser.id) saveLocalUser(updatedUser)
+  if (getLoggedinUser()._id === updatedUser._id) saveLocalUser(updatedUser)
   return updatedUser
 }
 
@@ -87,12 +87,12 @@ async function signup(userCred) {
   if (!userCred.imgUrl)
     userCred.imgUrl =
       'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
-  const user = await storageService.post('user', userCred)
+  const user = await storageService.post(STORAGE_KEY_USER_DB, userCred)
   return saveLocalUser(user)
 }
 
 async function logout() {
-  sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
+  return await sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
 }
 
 function getEmptyUser() {
@@ -101,19 +101,13 @@ function getEmptyUser() {
     fullname: '',
     password: '',
     imgUrl: '',
+    email: '',
   }
-}
-
-async function spendBalance(amount) {
-  const user = getLoggedinUser()
-  if (!user) throw new Error('Not loggedin')
-  user.balance = user.balance - amount
-  return await update(user)
 }
 
 function saveLocalUser(user) {
   user = {
-    id: user.id,
+    _id: user._id,
     email: user.email,
     fullName: user.fullName,
     imgUrl: user.imgUrl,

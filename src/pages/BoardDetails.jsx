@@ -1,14 +1,20 @@
-import Alert from "@mui/material/Alert";
-import CheckIcon from "@mui/icons-material/Check";
 
-import "../styles/_boardDetails.scss";
-export function BoardDetails() {
-  return (
-    <div className="main-container">
-      This is board Details
-      <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
-        This is a test for Material UI component
-      </Alert>
-    </div>
-  );
+import { BoardHeader } from "../cmps/BoardHeader";
+import { GroupPreview } from "../cmps/GroupPreview";
+
+export function BoardDetails(){
+    //board-header
+        return (
+            <>
+            <BoardHeader board={board}/>
+           
+            {groups && groups.map(group => <GroupPreview group={group} board={board} key={group._id}/>)}
+
+            <button>add group</button>
+            </>
+        )
+
+
+
 }
+
