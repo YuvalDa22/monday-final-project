@@ -1,9 +1,9 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import sass from 'sass'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import sass from "sass";
 
 export default defineConfig({
-  base: '/RM-toys-shop/', // Replace with your repository name
+  base: "/OGY-Monday/", // Replace with your repository name
   plugins: [react()],
   css: {
     preprocessorOptions: {
@@ -12,4 +12,4 @@ export default defineConfig({
       },
     },
   },
-})
+});

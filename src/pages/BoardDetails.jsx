@@ -1,3 +1,4 @@
+
 import { BoardHeader } from "../cmps/BoardHeader";
 import { GroupPreview } from "../cmps/GroupPreview";
 
@@ -16,3 +17,4 @@ export function BoardDetails(){
 
 
 }
+

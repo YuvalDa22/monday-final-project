@@ -1,0 +1,54 @@
+/* src/Navbar.css */
+@use 'vars';
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 50px;
+  font-family: vars.$navbar-font; /* TODO: replace with something more general */
+  font-size: large;
+
+}
+
+.navbar-logo img {
+  height: 30px;
+  width: 30px;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 150;
+}
+.navbar-logo span {
+  font-weight: bold;
+  opacity: 0.8;
+}
+
+
+.appsroundedicon{
+  margin-top: 4px; // Ugly adaptaion to center the icon...
+}
+
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.navbar-link {
+  text-decoration: none;
+  transition: scale 0.35s ease;
+}
+
+.navbar-link:hover {
+  scale: 1.1;
+}
+
+
