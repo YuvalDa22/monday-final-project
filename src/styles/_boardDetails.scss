@@ -1,0 +1,5 @@
+.main-container{
+    margin-left: 250px;  /* Add margin equal to the sidebar's width */
+    padding: 20px;
+    transition: margin-left 0.3s ease; /* Optional: smooth transition if you add toggle functionality */
+}
