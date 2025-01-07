@@ -1,37 +1,57 @@
 // src/Navbar.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import "../styles/_navbar.scss"; // Import the CSS file
+import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
+import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
+import ExtensionOutlinedIcon from "@mui/icons-material/ExtensionOutlined";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import QuestionMarkOutlinedIcon from "@mui/icons-material/QuestionMarkOutlined";
+import AppsRoundedIcon from "@mui/icons-material/AppsRounded";
+import Avatar from "@mui/material/Avatar";
+
 const Navbar = () => {
   return (
     <nav className="navbar">
       {/* Logo */}
       <div className="navbar-logo">
-        <img src="/path-to-your-logo.png" alt="Logo" />
+        <img src="./icon.svg" alt="Logo" />
+        <span>monday </span> work management
       </div>
 
       {/* Navigation Links */}
       <div className="navbar-links">
-        <Link to="/dashboard" className="navbar-link">
-          Dashboard
+        <Link to="/workspace/board/xxx" className="navbar-link">
+          <NotificationsOutlinedIcon />
         </Link>
-        <Link to="/projects" className="navbar-link">
-          Projects
+        <Link to="/workspace/board/xxx" className="navbar-link">
+          <PersonAddAltOutlinedIcon />
+        </Link>{" "}
+        <Link to="/workspace/board/xxx" className="navbar-link">
+          <ExtensionOutlinedIcon />
+        </Link>{" "}
+        <Link to="/workspace/board/xxx" className="navbar-link">
+          <SearchOutlinedIcon />
+        </Link>{" "}
+        <Link to="/workspace/board/xxx" className="navbar-link">
+          <QuestionMarkOutlinedIcon />
         </Link>
-        <Link to="/team" className="navbar-link">
-          Team
+        <span
+          style={{
+            fontFamily: "cursive",
+            fontWeight: "lighter",
+          }}
+        >
+          |
+        </span>
+        <Link to="/workspace/board/xxx" className="navbar-link appsroundedicon">
+          <AppsRoundedIcon />
         </Link>
-      </div>
-
-      {/* Right-side Icons */}
-      <div className="navbar-right">
-        <input type="text" placeholder="Search..." className="search-bar" />
-        <div className="navbar-icon">
-          <img src="/path-to-notification-icon.png" alt="Notifications" />
-        </div>
-        <div className="navbar-user">
-          <img src="/path-to-user-icon.png" alt="User" />
-        </div>
+        <Avatar
+          className="navbar-avatar"
+          alt="User Avatar"
+          src=""
+          sx={{ width: 32, height: 32 }}
+        />
       </div>
     </nav>
   );

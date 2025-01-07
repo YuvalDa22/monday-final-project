@@ -1,56 +1,54 @@
 /* src/Navbar.css */
+@use 'vars';
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #1c1c1c; /* Dark background */
-  color: white;
   position: sticky;
   top: 0;
   z-index: 1000;
   height: 50px;
+  font-family: vars.$navbar-font; /* TODO: replace with something more general */
+  font-size: large;
+
 }
 
 .navbar-logo img {
-  height: 60px; /* Adjust based on your logo size */
+  height: 30px;
+  width: 30px;
 }
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 150;
+}
+.navbar-logo span {
+  font-weight: bold;
+  opacity: 0.8;
+}
+
+
+.appsroundedicon{
+  margin-top: 4px; // Ugly adaptaion to center the icon...
+}
+
 
 .navbar-links {
   display: flex;
-  gap: 20px;
+  align-items: center;
+  gap: 25px;
 }
 
 .navbar-link {
-  color: white;
   text-decoration: none;
-  font-size: 16px;
-  transition: color 0.3s ease;
+  transition: scale 0.35s ease;
 }
 
 .navbar-link:hover {
-  color: #f4a261; /* Highlight color on hover */
+  scale: 1.1;
 }
 
-.navbar-right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
 
-.search-bar {
-  padding: 5px 10px;
-  font-size: 14px;
-  border-radius: 20px;
-  border: none;
-}
-
-.navbar-icon img, .navbar-user img {
-  height: 25px;
-  width: 25px;
-  cursor: pointer;
-}
-
-.navbar-icon img:hover, .navbar-user img:hover {
-  opacity: 0.7;
-}

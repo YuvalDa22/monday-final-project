@@ -1,5 +1,8 @@
 .main-container{
-    margin-left: 250px;  /* Add margin equal to the sidebar's width */
+    margin-left: 260px;  /* Add margin equal to the sidebar's width */
     padding: 20px;
+    border-radius: 8px 0px;
+    background-color: white;
+    height: 100vh;
     transition: margin-left 0.3s ease; /* Optional: smooth transition if you add toggle functionality */
 }

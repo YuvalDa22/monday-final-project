@@ -1,47 +1,37 @@
 // Sidebar.jsx
 //import React from "react";
-import "../styles/_sidebar.scss";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import EventAvailableOutlinedIcon from "@mui/icons-material/EventAvailableOutlined";
+import StarOutlineOutlinedIcon from "@mui/icons-material/StarOutlineOutlined";
+import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
 
 function Sidebar() {
   return (
     <div className="sidebar">
-      {/* Logo Section */}
-      <div className="sidebar-logo">
-        <img src="https://via.placeholder.com/50" alt="Logo" className="logo" />
-        <span className="logo-text">Work Management</span>
-      </div>
-
       {/* Navigation Links */}
       <ul className="sidebar-links">
         <li className="sidebar-item">
-          <span>Home</span>
+          <HomeOutlinedIcon /> <span>Home</span>
         </li>
         <li className="sidebar-item">
-          <span>My Work</span>
+          <EventAvailableOutlinedIcon /> <span>My Work</span>
         </li>
         <li className="sidebar-item">
+          <StarOutlineOutlinedIcon />
           <span>Favorites</span>
         </li>
-        <li
-          className="sidebar-item
-        active"
-        >
+        <br />
+        <li className="sidebar-item">
+          <GridViewOutlinedIcon />
           <span>Workspaces</span>
         </li>
       </ul>
 
       {/* Workspace Section */}
       <div className="workspace-section">
-        <h4 className="workspace-title">Workspaces</h4>
         <ul className="workspace-links">
-          <li className="workspace-item">Main Workspace</li>
-          {/* Add other workspaces if needed */}
+          <li className="workspace-item active">Main Workspace</li>
         </ul>
-      </div>
-
-      {/* Dashboard Section */}
-      <div className="dashboard-section">
-        <h4 className="dashboard-title">Dashboard and Reporting</h4>
       </div>
     </div>
   );

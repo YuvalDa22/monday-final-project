@@ -5,12 +5,18 @@
 @use 'login';
 @use 'index';
 @use 'usermsg';
+@use 'boardDetails';
+@use 'navbar';
+@use 'sidebar';
+html{
 
+  background-color: vars.$bg-color;
+}
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-
+  color:black; // default text color black
 }
 
 body {
