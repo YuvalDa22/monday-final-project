@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { Divider } from "@mui/material";
 
 export function SuggestedActions() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -44,9 +45,12 @@ export function SuggestedActions() {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        <MenuItem onClick={handleClose}>Remove Group</MenuItem>
+        <Divider />
+        <MenuItem onClick={handleClose}>Remove Task</MenuItem>
+        <Divider />
+        <MenuItem onClick={handleClose}>Add Label</MenuItem>
+        <MenuItem onClick={handleClose}>Remove Label</MenuItem>
       </Menu>
     </div>
   );
