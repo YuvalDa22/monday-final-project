@@ -9,6 +9,7 @@ import SideBar from './cmps/SideBar'
 import { BoardDetails } from './pages/BoardDetails'
 import Navbar from './cmps/NavBar'
 import { TaskDetails } from './pages/TaskDetails'
+import { BoardIndex } from './pages/BoardIndex'
 
 function RootCmp() {
 	const location = useLocation()
