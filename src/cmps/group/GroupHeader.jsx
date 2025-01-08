@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SuggestedActions } from "./SuggestedActions";
+import { SuggestedActions } from "../SuggestedActions.jsx";
 // import { ContentEditable } from "./react-content-editable";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 export function GroupHeader({ group }) {

@@ -1,0 +1,23 @@
+/* Setup */
+@import './setup/vars';
+
+/* Basics */
+@import './base/helpers.scss';
+@import './base/base.scss';
+
+/* Components */
+@import './cmps/Header';
+@import './cmps/footer';
+@import './cmps/usermsg';
+@import './cmps/navbar';
+@import './cmps/sidebar';
+@import './cmps/taskList';
+@import './cmps/suggestedActions';
+@import './cmps/groupHeader';
+@import './cmps/groupPreview';
+
+/* Pages */
+@import './pages/homePage';
+@import './pages/login';
+@import './pages/index';
+@import './pages/boardDetails';

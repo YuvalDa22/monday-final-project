@@ -1,5 +1,5 @@
 /* src/Navbar.css */
-@use 'vars';
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -9,7 +9,7 @@
   top: 0;
   z-index: 1000;
   height: 50px;
-  font-family: vars.$navbar-font; /* TODO: replace with something more general */
+  font-family: $navbar-font; /* TODO: replace with something more general */
   font-size: large;
 
 }

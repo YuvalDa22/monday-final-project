@@ -1,11 +1,12 @@
-import { BoardHeader } from '../cmps/BoardHeader'
-import { GroupPreview } from '../cmps/GroupPreview'
-import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { loadBoards } from '../store/boards/boards.actions.js'
+import { useSelector } from "react-redux"
+import { BoardHeader } from "../cmps/board/BoardHeader"
+import { GroupPreview } from "../cmps/group/GroupPreview"
+import { useEffect } from "react"
+import { loadBoards } from "../store/boards/boards.actions"
+
 
 export function BoardDetails() {
-	const allBoards = useSelector((state) => state.boardsModule.boards)
+	const allBoards = useSelector((storeState) => storeState.boardsModule.boards)
 
 	useEffect(() => {
 		if (!allBoards || allBoards.length === 0) loadBoards()
@@ -30,6 +31,7 @@ export function BoardDetails() {
 				{/* <button>add group</button> */}
 			</div>
 		</>
+	)
 
 		// Ofir & Yuval
 		// <>
@@ -38,5 +40,4 @@ export function BoardDetails() {
 
 		// <button>add group</button>
 		// </>
-	)
 }

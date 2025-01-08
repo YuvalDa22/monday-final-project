@@ -1,22 +1,22 @@
-import { Routes, Route, useLocation } from 'react-router-dom'
-import './styles/mainStyles.scss'
-import { UserMsg } from './cmps/Usermsg'
-import { Login } from './pages/Login'
-import { HomePage } from './pages/HomePage'
-import { SignUp } from './pages/SignUp'
-import { MondayIndex } from './pages/MondayIndex'
-import SideBar from './cmps/SideBar'
-import { BoardDetails } from './pages/BoardDetails'
-import Navbar from './cmps/NavBar'
-import { TaskDetails } from './pages/TaskDetails'
-import { BoardIndex } from './pages/BoardIndex'
+import { Route, Routes, useLocation } from "react-router"
+import Navbar from "./cmps/layout/NavBar"
+import Sidebar from "./cmps/layout/SideBar"
+import { HomePage } from "./pages/HomePage"
+import { BoardIndex } from "./pages/BoardIndex"
+import { TaskDetails } from "./pages/TaskDetails"
+import { BoardDetails } from "./pages/BoardDetails"
+import { UserMsg } from "./cmps/UserMsg"
+import { MondayIndex } from "./pages/MondayIndex"
+import { Login } from "./pages/Login"
+import { SignUp } from "./pages/SignUp"
+import './assets/styles/styles.scss'
 
 function RootCmp() {
 	const location = useLocation()
 	const showSidebarAndNavBar = location.pathname.startsWith('/workspace')
 	return (
 		<div>
-			{showSidebarAndNavBar && <SideBar />}
+			{showSidebarAndNavBar && <Sidebar />}
 			{showSidebarAndNavBar && <Navbar />}
 			<Routes>
 

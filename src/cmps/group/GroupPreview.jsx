@@ -4,12 +4,14 @@ import { GroupHeader } from "./GroupHeader";
 import { TaskList } from "./TaskList";
 
 export function GroupPreview({ group, labels }) {
+  
   return (
     <div className="gp-main-container">
       <GroupHeader group={group} />
       <TaskList group={group} labels={labels} />
     </div>
   );
+  
 }
 
 // Yuval & Ofir

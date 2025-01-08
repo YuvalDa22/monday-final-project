@@ -1,0 +1,46 @@
+.clean-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  .text-right {
+    text-align: right;
+  }
+  
+  .text-left {
+    text-align: left;
+  }
+  
+  .center-block {
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .p10 {
+    padding: 10px;
+  }
+  
+  .m10 {
+    margin: 10px;
+  }
+  
+  .blurred {
+    filter: blur(4px);
+  }
+
+  .flex {
+    display: flex;
+  }
+
+  .align-center {
+    align-items: center;
+  }
+
+  .space-between {
+    justify-content: space-between;
+  }
