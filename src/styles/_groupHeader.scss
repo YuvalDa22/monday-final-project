@@ -1,0 +1,23 @@
+@use 'suggestedactions';
+
+.gh-main-container{
+    display: flex;
+    align-items: center;
+}
+
+.gh-how-many-tasks{
+    visibility: hidden;
+    opacity: 0;     
+    transition: opacity 0.3s ease, visibility 0s 0.5s; /* Smooth fade-in and fade-out */
+}
+
+.gh-main-container:hover .sa-main-container ,.gh-main-container:hover .gh-how-many-tasks{
+    visibility: visible;
+    opacity: 1; /* Fully visible */
+    transition: opacity 0.3s ease, visibility 0s 0s; /* Smooth fade-in */
+}
+
+.gh-expand-icon{
+    
+}
+

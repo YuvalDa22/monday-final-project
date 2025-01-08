@@ -4,6 +4,7 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import EventAvailableOutlinedIcon from "@mui/icons-material/EventAvailableOutlined";
 import StarOutlineOutlinedIcon from "@mui/icons-material/StarOutlineOutlined";
 import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
+import { Divider } from "@mui/material";
 
 function Sidebar() {
   return (
@@ -15,11 +16,13 @@ function Sidebar() {
         </li>
         <li className="sidebar-item">
           <EventAvailableOutlinedIcon /> <span>My Work</span>
-        </li>
+        </li>{" "}
+        <Divider />
         <li className="sidebar-item">
           <StarOutlineOutlinedIcon />
           <span>Favorites</span>
         </li>
+        <Divider />
         <br />
         <li className="sidebar-item">
           <GridViewOutlinedIcon />
