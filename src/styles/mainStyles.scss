@@ -8,6 +8,11 @@
 @use 'boardDetails';
 @use 'navbar';
 @use 'sidebar';
+@use 'taskList';
+@use 'suggestedActions';
+@use 'groupHeader';
+@use 'groupPreview';
+
 html{
 
   background-color: vars.$bg-color;
