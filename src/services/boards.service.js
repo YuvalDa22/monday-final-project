@@ -97,6 +97,10 @@ function _createBoard() {
               id: "c102",
               title: "Task 2",
             },
+            {
+              id: "c103",
+              title: "Task 3",
+            },
           ],
         },
       ],

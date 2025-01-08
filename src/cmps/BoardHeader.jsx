@@ -7,7 +7,7 @@ export function BoardHeader({ board }) {
   return (
     <>
       {/*TODO: remove inline style */}
-      <h1 style={{ marginBottom: 30 }}>{board.title}</h1>{" "}
+      <h1 style={{ marginBottom: 20 }}>{board.title}</h1>{" "}
       {/* <AdditionalBoardActions /> */}
       {/* <BoardNavBar/> */}
       {/* <BoardActionsBar />  */}

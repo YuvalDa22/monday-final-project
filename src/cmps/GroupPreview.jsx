@@ -5,7 +5,7 @@ import { TaskList } from "./TaskList";
 
 export function GroupPreview({ group, labels }) {
   return (
-    <div>
+    <div className="gp-main-container">
       <GroupHeader group={group} />
       <TaskList group={group} labels={labels} />
     </div>
