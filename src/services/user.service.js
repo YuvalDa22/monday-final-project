@@ -13,7 +13,6 @@ export const userService = {
   getById,
   remove,
   update,
-  // spendBalance,
   getEmptyUser,
 };
 

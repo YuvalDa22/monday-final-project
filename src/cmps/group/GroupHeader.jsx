@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SuggestedActions } from "./SuggestedActions";
+import { SuggestedActions } from "../SuggestedActions.jsx";
 // import { ContentEditable } from "./react-content-editable";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 export function GroupHeader({ group }) {
@@ -29,10 +29,11 @@ export function GroupHeader({ group }) {
             position: "relative",
             top: "4",
           }}
-        />
+          />
       </div>
+       {/* group title - contentEditable TODO - UNDERSTAND IT  */}
+       {/*TODO: make it <ContentEditable> */}
       <h2 style={{ marginRight: 8 }}>{group.title}</h2>{" "}
-      {/*TODO: make it <ContentEditable> */}
       <span className="gh-how-many-tasks">{group.tasks.length} Tasks</span>
     </div>
   );

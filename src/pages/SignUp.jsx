@@ -2,7 +2,7 @@ import { useNavigate } from "react-router"
 import { login, signup } from "../store/user/user.actions";
 import { useState } from "react";
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service";
-import { AppHeader } from "../cmps/AppHeader";
+import { AppHeader } from "../cmps/layout/AppHeader";
 import { Link } from "react-router-dom";
 import { ImgUploader } from "../cmps/ImgUploader";
 

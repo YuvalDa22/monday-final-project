@@ -1,6 +1,6 @@
-import { AppHeader } from "../cmps/AppHeader";
-import { Footer } from "../cmps/Footer";
-import { useNavigate } from "react-router";
+import { AppHeader } from "../cmps/layout/AppHeader";
+import { Footer } from "../cmps/layout/Footer";
+import { useNavigate } from "react-router-dom";
 export function HomePage() {
   const navigate = useNavigate();
 

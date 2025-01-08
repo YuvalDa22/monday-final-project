@@ -26,6 +26,17 @@ export function TaskList({ group, labels }) {
               ))}
             </tr>
           ))}
+
+        {/* <tr> */}
+					{/* last tr-1 - add task */}
+					{/* <AddTask group={group} /> */}
+				{/* </tr> */}
+				{/* <tr> */}
+					{/* last tr - group summary */}
+          {/* TODO - IMPLEMENT SUMMARY */}
+					{/* <GroupSummary group={group} /> */}
+				{/* </tr> */}
+
         </tbody>
       </table>
     </div>
