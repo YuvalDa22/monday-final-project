@@ -2,11 +2,11 @@
 @import './setup/vars';
 
 /* Basics */
-@import './base/helpers.scss';
-@import './base/base.scss';
+@import './base/helpers';
+@import './base/base';
 
 /* Components */
-@import './cmps/Header';
+@import './cmps/header';
 @import './cmps/footer';
 @import './cmps/usermsg';
 @import './cmps/navbar';
