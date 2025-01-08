@@ -9,17 +9,17 @@ const initialState = {
   users: [],
 }
 
-export function userReducer(state = initialState, action = {}) {
-  switch (action.type) {
+export function userReducer(state = initialState, cmd ) {
+  switch (cmd.type) {
     case SET_USER:
-      return { ...state, user: action.user }
+      return { ...state, user: cmd.user }
     case REMOVE_USER:
       return {
         ...state,
-        users: state.users.filter((user) => user.id !== action.userId),
+        users: state.users.filter((user) => user._id !== cmd.userId),
       }
     case SET_USERS:
-      return { ...state, users: action.users }
+      return { ...state, users: cmd.users }
     default:
       return state
   }
