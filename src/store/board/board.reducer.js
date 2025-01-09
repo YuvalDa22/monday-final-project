@@ -10,9 +10,11 @@ const initialState = {
   boards: [],
   filterBy: {},
   isLoading: false,
+  cmpsOrder: [],
+  cmpTitles: [],
 }
 
-export function boardsReducer(state = initialState, cmd) {
+export function boardReducer(state = initialState, cmd) {
   switch (cmd.type) {
     case SET_BOARDS:
       return {

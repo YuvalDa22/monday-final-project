@@ -1,13 +1,13 @@
 import { showErrorMsg, showSuccessMsg } from '../../services/event-bus.service'
-import { boardsService } from '../../services/boards.service'
+import { boardService } from '../../services/board.service'
 import { store } from '../store'
-import {  ADD_BOARD,  REMOVE_BOARD,  SET_FILTER_BY,  SET_BOARDS, UPDATE_BOARD} from './boards.reducer'
+import {  ADD_BOARD,  REMOVE_BOARD,  SET_FILTER_BY,  SET_BOARDS, UPDATE_BOARD} from './board.reducer'
 
 
 
 export async function loadBoards(filterBy) {
   try {
-    const boards = await boardsService.query(filterBy)
+    const boards = await boardService.query(filterBy)
     store.dispatch({ type: SET_BOARDS, boards })
   } catch (err) {
     console.log('board actions -> Cannot load boards:', err)
@@ -17,7 +17,7 @@ export async function loadBoards(filterBy) {
 
 export async function removeBoard(boardId) {
   try {
-    await boardsService.remove(boardId)
+    await boardService.remove(boardId)
     store.dispatch({ type: REMOVE_BOARD, boardId })
   } catch (err) {
     console.log('board actions -> Cannot remove board:', err)
@@ -28,7 +28,7 @@ export async function removeBoard(boardId) {
 export async function saveBoard(board) {
   try {
     const type = board._id ? UPDATE_BOARD : ADD_BOARD;
-    const savedBoard = await boardsService.save(board)
+    const savedBoard = await boardService.save(board)
     store.dispatch({ type, board: savedBoard })
   } catch (err) {
     console.log('board actions -> Cannot save board:', err)

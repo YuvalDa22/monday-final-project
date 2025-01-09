@@ -2,18 +2,18 @@ import { useSelector } from "react-redux"
 import { BoardHeader } from "../cmps/board/BoardHeader"
 import { GroupPreview } from "../cmps/group/GroupPreview"
 import { useEffect } from "react"
-import { loadBoards } from "../store/boards/boards.actions"
+import { loadBoards } from "../store/board/board.actions"
 
 
 export function BoardDetails() {
-	const allBoards = useSelector((storeState) => storeState.boardsModule.boards)
+	const allBoards = useSelector((storeState) => storeState.boardModule.boards)
 
 	useEffect(() => {
-		if (!allBoards || allBoards.length === 0) loadBoards()
-	})
-
-	//board-header
-	console.log(allBoards)
+		if (allBoards){
+			loadBoards().then((res) => {
+			})
+		} 
+	},[])
 
 	if (!allBoards || allBoards.length === 0) return <div>Loading...</div>
 	return (
@@ -24,7 +24,7 @@ export function BoardDetails() {
 					allBoards[0].groups.map((group) => (
 						<GroupPreview
 							group={group}
-							labels={allBoards[0].labels}
+							cmpTitles={allBoards[0].cmpTitles}
 							key={group.id}
 						/>
 					))}

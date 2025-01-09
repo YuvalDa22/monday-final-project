@@ -4,11 +4,11 @@ import {
   legacy_createStore as createStore,
 } from "redux";
 import { userReducer } from "./user/user.reducer";
-import { boardsReducer } from "./boards/boards.reducer";
+import { boardReducer } from "./board/board.reducer";
 
 const rootReducer = combineReducers({
   userModule: userReducer,
-  boardsModule: boardsReducer,
+  boardModule: boardReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

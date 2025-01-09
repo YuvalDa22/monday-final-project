@@ -3,15 +3,15 @@ import { GroupHeader } from "./GroupHeader";
 // import { GroupSummary } from "./GroupSummary";
 import { TaskList } from "./TaskList";
 
-export function GroupPreview({ group, labels }) {
+export function GroupPreview({ group, cmpTitles }) {
   
   return (
     <div className="gp-main-container">
       <GroupHeader group={group} />
-      <TaskList group={group} labels={labels} />
+      <TaskList group={group} cmpTitles={cmpTitles} />
     </div>
   );
-  
+
 }
 
 // Yuval & Ofir

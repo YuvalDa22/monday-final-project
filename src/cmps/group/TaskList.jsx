@@ -2,7 +2,12 @@
 // import { GroupSummary } from './GroupSummary'
 // import { TaskPreview } from './TaskPreview'
 
-export function TaskList({ group, labels }) {
+import { useSelector } from "react-redux";
+import { TaskPreview } from "../task/TaskPreview";
+
+export function TaskList({ group, cmpTitles }) {
+
+
   // table
 
   return (
@@ -11,19 +16,20 @@ export function TaskList({ group, labels }) {
         <tbody>
           <tr>
             <td className="empty-cell"></td>
-            {labels.map((label, index) => (
+            {cmpTitles.map((title, index) => (
               <td key={index} className="header-cell">
-                {label}
+                {title}
               </td>
             ))}
           </tr>
 
           {group.tasks.map((task) => (
-            <tr key={task.id}>
-              <td className="task-cell">{task.title}</td>
-              {labels.map((_, index) => (
-                <td key={index} className="data-cell"></td>
-              ))}
+            <tr key={task._id}>
+              {/* <td className="task-cell">{task.title}</td>
+              {cmpTitles.map((_, index) => (
+                <td key={index} className="data-cell"></td> */}
+                <TaskPreview task={task} />
+              {/* } */}
             </tr>
           ))}
 
@@ -42,3 +48,4 @@ export function TaskList({ group, labels }) {
     </div>
   );
 }
+
