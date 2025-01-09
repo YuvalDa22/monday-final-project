@@ -12,31 +12,86 @@ import Divider from '@mui/material/Divider'
 import Button from '@mui/material/Button'
 
 export function BoardNavBar() {
-  const [value, setValue] = useState('one')
+  const [value, setValue] = useState(1)
+  const [tabs, setTabs] = useState([
+    { value: 1, label: 'Main Table' },
+    { value: 2, label: 'Item 2' },
+    { value: 3, label: 'Item 3' },
+  ])
 
   // Handle tab change
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
 
+  // Handle adding new tabs
   const handleAddTab = () => {
-    // TODO: implement
+    setTabs((prev) => {
+      const nextValue = prev.length + 1
+      const nextLabel = `Item ${prev.length + 1}`
+      return [...prev, { value: nextValue, label: nextLabel }]
+    })
   }
 
-  const [anchorEl, setAnchorEl] = useState(null)
-  const open = Boolean(anchorEl)
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget)
-  }
-  const handleClose = () => {
-    setAnchorEl(null)
+  // The three dots menu each item has
+  const ThreeDotsMenu = () => {
+    const [anchorEl, setAnchorEl] = useState(null)
+    const open = Boolean(anchorEl)
+
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget) // Attach to the button clicked
+    }
+
+    const handleClose = () => {
+      setAnchorEl(null) // Close menu
+    }
+    return (
+      <>
+        <Button
+          id='basic-button'
+          aria-controls={open ? 'basic-menu' : undefined}
+          aria-haspopup='true'
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+          sx={{
+            padding: '2px',
+            minWidth: 0,
+            minHeight: 0,
+          }}
+        >
+          <MoreHorizIcon sx={{ opacity: '0.55', scale: 0.7 }} />
+        </Button>
+
+        <Menu
+          id='basic-menu'
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
+        >
+          <MenuItem onClick={handleClose}>משהו</MenuItem>
+          <Divider />
+          <MenuItem onClick={handleClose}>עוד משהו</MenuItem>
+        </Menu>
+      </>
+    )
   }
 
   return (
     <Box
       sx={{
         width: '100%',
-        borderBottom: '1px solid #e0e0e0', // the gray underline
+        borderBottom: '1px solid #e0e0e0',
         display: 'flex',
       }}
     >
@@ -48,94 +103,45 @@ export function BoardNavBar() {
           variant='scrollable'
           TabIndicatorProps={{
             sx: {
-              // blue line
               height: '2px',
               backgroundColor: '#1976d2',
             },
           }}
         >
-          {/* Tab 1 */}
-          <Tab
-            value='one'
-            label={
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <HomeOutlinedIcon sx={{ opacity: '0.55' }} />
-                Main Table
-                <Button
-                  id='basic-button'
-                  aria-controls={open ? 'basic-menu' : undefined}
-                  aria-haspopup='true'
-                  aria-expanded={open ? 'true' : undefined}
-                  onClick={handleClick}
+          {tabs.map((tab, index) => (
+            <Tab
+              key={index}
+              value={tab.value}
+              label={
+                <Box
                   sx={{
-                    padding: '2px',
-                    minWidth: 0,
-                    minHeight: 0,
+                    display: 'flex',
+                    alignItems: 'center',
                   }}
                 >
-                  <MoreHorizIcon sx={{ opacity: '0.55', scale: 0.7 }} />
-                </Button>
-                <Menu
-                  id='basic-menu'
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                  MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                  }}
-                >
-                  <MenuItem onClick={handleClose}>משהו</MenuItem>
-                  <Divider />
-                  <MenuItem onClick={handleClose}>עוד משהו</MenuItem>
-                </Menu>
-              </Box>
-            }
-            sx={{
-              textTransform: 'none',
-              padding: '4px 12px', // Reduce padding
-              minHeight: '32px', // Compact height
-              lineHeight: '2.7', // Align text closer to underline
-              '&:hover': {
-                backgroundColor: '#eaeefb',
-                borderRadius: '5px',
-              },
-            }}
-          />
-
-          {/* Tab 2 */}
-          <Tab
-            value='two'
-            label='Item Two'
-            sx={{
-              textTransform: 'none',
-              padding: '4px 12px',
-              minHeight: '32px',
-              lineHeight: '1',
-              '&:hover': {
-                backgroundColor: '#eaeefb',
-                borderRadius: '5px',
-              },
-            }}
-          />
-
-          {/* Tab 3 */}
-          <Tab
-            value='three'
-            label='Item Three'
-            sx={{
-              textTransform: 'none',
-              padding: '4px 12px',
-              minHeight: '32px',
-              lineHeight: '1',
-              '&:hover': {
-                backgroundColor: '#eaeefb',
-                borderRadius: '5px',
-              },
-            }}
-          />
+                  {/* the icon for the first tab */}
+                  {tab.value === 1 && (
+                    <HomeOutlinedIcon sx={{ opacity: '0.55' }} />
+                  )}
+                  {tab.label}
+                  {/* show menu if tab selected */}
+                  {value === tab.value && <ThreeDotsMenu />}
+                </Box>
+              }
+              sx={{
+                textTransform: 'none',
+                padding: '4px 12px',
+                minHeight: '32px',
+                lineHeight: '2.7',
+                '&:hover': {
+                  backgroundColor: '#eaeefb',
+                  borderRadius: '5px',
+                },
+              }}
+            />
+          ))}
         </Tabs>
 
-        {/* Plus Button - Right next to the tabs */}
         <IconButton
           onClick={handleAddTab}
           sx={{
@@ -143,7 +149,7 @@ export function BoardNavBar() {
             borderRadius: '5px',
             marginLeft: '8px',
             '&:hover': {
-              backgroundColor: '#eaeefb', // Hover effect
+              backgroundColor: '#eaeefb',
             },
           }}
         >
