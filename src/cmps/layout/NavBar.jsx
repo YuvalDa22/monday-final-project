@@ -9,7 +9,7 @@ import QuestionMarkOutlinedIcon from "@mui/icons-material/QuestionMarkOutlined";
 import AppsRoundedIcon from "@mui/icons-material/AppsRounded";
 import Avatar from "@mui/material/Avatar";
 
-const Navbar = () => {
+const NavBar = () => {
   return (
     <nav className="navbar">
       {/* Logo */}
@@ -57,4 +57,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavBar;

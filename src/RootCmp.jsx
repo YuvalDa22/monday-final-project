@@ -1,13 +1,13 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
-import './styles/mainStyles.scss'
+import './assets/styles/styles.scss'
 import { UserMsg } from './cmps/Usermsg'
 import { Login } from './pages/Login'
 import { HomePage } from './pages/HomePage'
 import { SignUp } from './pages/SignUp'
 import { MondayIndex } from './pages/MondayIndex'
-import SideBar from './cmps/SideBar'
+import SideBar from './cmps/layout/SideBar'
 import { BoardDetails } from './pages/BoardDetails'
-import Navbar from './cmps/NavBar'
+import  NavBar   from './cmps/layout/NavBar'
 
 function RootCmp() {
   const location = useLocation()
@@ -15,7 +15,7 @@ function RootCmp() {
   return (
     <div>
       {showSidebarAndNavBar && <SideBar />}
-      {showSidebarAndNavBar && <Navbar />}
+      {showSidebarAndNavBar && <NavBar />}
       <Routes>
         <Route path='/' element={<HomePage />} />
         <Route path='workspace/board/:boardId' element={<BoardDetails />} />
