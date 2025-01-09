@@ -5,7 +5,7 @@
 import { useSelector } from "react-redux";
 import { TaskPreview } from "../task/TaskPreview";
 
-export function TaskList({ group, cmpTitles }) {
+export function TaskList({ group, cmpTitles, cmpsOrder }) {
 
 
   // table
@@ -25,11 +25,8 @@ export function TaskList({ group, cmpTitles }) {
 
           {group.tasks.map((task) => (
             <tr key={task._id}>
-              {/* <td className="task-cell">{task.title}</td>
-              {cmpTitles.map((_, index) => (
-                <td key={index} className="data-cell"></td> */}
-                <TaskPreview task={task} />
-              {/* } */}
+              <td className="task-cell">{task.title}</td>
+                <TaskPreview task={task} cmpsOrder={cmpsOrder} />
             </tr>
           ))}
 

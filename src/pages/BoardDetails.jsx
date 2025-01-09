@@ -7,11 +7,10 @@ import { loadBoards } from "../store/board/board.actions"
 
 export function BoardDetails() {
 	const allBoards = useSelector((storeState) => storeState.boardModule.boards)
-
+	const cmpsOrder = useSelector((storeState) => storeState.boardModule.cmpsOrder)
 	useEffect(() => {
 		if (allBoards){
-			loadBoards().then((res) => {
-			})
+			loadBoards()
 		} 
 	},[])
 
@@ -25,6 +24,7 @@ export function BoardDetails() {
 						<GroupPreview
 							group={group}
 							cmpTitles={allBoards[0].cmpTitles}
+							cmpsOrder = {cmpsOrder}
 							key={group.id}
 						/>
 					))}

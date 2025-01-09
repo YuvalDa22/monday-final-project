@@ -1,14 +1,15 @@
 import { useSelector } from 'react-redux'
 import { DynamicCmp } from './DynamicCmp'
 import { boardService } from '../../services/board.service'
+import { useEffect } from 'react'
 
-export function TaskPreview({ task }) {
-	const cmpsOrder = useSelector((storeState) => storeState.boardModule.cmpsOrder)
+export function TaskPreview({ task, cmpsOrder }) {
+
 	return (
 		<section>
 			{cmpsOrder.map((cmp, idx) => {
 				return (
-					<td>
+					<td className="data-cell">
 						<DynamicCmp
 							cmp={cmp}
 							key={idx}
