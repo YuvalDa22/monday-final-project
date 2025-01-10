@@ -9,7 +9,6 @@ export function GroupHeader({ group }) {
   const handleClick = () => {
     setIsRotated(!isRotated);
   };
-  console.log("test", group);
 
   {
     /* TODO: Maybe remove all the inline styles ? not entirely necesarry tho */

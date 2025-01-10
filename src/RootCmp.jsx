@@ -8,8 +8,8 @@ import { MondayIndex } from './pages/MondayIndex'
 import SideBar from './cmps/layout/SideBar'
 import { BoardDetails } from './pages/BoardDetails'
 import  NavBar   from './cmps/layout/NavBar'
-import { BoardsIndex } from './pages/BoardsIndex'
-import { TaskDetails } from './pages/TaskDetails'
+// import { BoardsIndex } from './pages/BoardsIndex'
+// import { TaskDetails } from './pages/TaskDetails'
 
 function RootCmp() {
   const location = useLocation()

@@ -8,7 +8,9 @@ import {  ADD_BOARD,  REMOVE_BOARD,  SET_FILTER_BY,  SET_BOARDS, UPDATE_BOARD} f
 export async function loadBoards(filterBy) {
   try {
     const boards = await boardService.query(filterBy)
+    console.log('board actions -> boards:', boards);
     store.dispatch({ type: SET_BOARDS, boards })
+    return boards
   } catch (err) {
     console.log('board actions -> Cannot load boards:', err)
     throw err

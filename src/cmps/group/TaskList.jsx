@@ -2,18 +2,13 @@
 // import { GroupSummary } from './GroupSummary'
 // import { TaskPreview } from './TaskPreview'
 
-import { useSelector } from "react-redux";
 import { TaskPreview } from "../task/TaskPreview";
 
 export function TaskList({ group, cmpTitles, cmpsOrder }) {
-
-
-  // table
-
   return (
     <div>
       <table className="custom-table">
-        <tbody>
+        <thead>
           <tr>
             <td className="empty-cell"></td>
             {cmpTitles.map((title, index) => (
@@ -22,13 +17,19 @@ export function TaskList({ group, cmpTitles, cmpsOrder }) {
               </td>
             ))}
           </tr>
-
-          {group.tasks.map((task) => (
+        </thead>
+        <tbody>
+          {group.tasks.map((task, index) => (
             <tr key={task._id}>
-              <td className="task-cell">{task.title}</td>
-                <TaskPreview task={task} cmpsOrder={cmpsOrder} />
+              <td key={index} className="task-cell">{task.title}</td>
+              <TaskPreview  task={task} cmpsOrder={cmpsOrder} />
             </tr>
           ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
 
         {/* <tr> */}
 					{/* last tr-1 - add task */}
@@ -40,9 +41,4 @@ export function TaskList({ group, cmpTitles, cmpsOrder }) {
 					{/* <GroupSummary group={group} /> */}
 				{/* </tr> */}
 
-        </tbody>
-      </table>
-    </div>
-  );
-}
 

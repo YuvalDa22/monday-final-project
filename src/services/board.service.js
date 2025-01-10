@@ -45,7 +45,9 @@ async function save(boardToSave) {
 }
 
 function getCmpInfo(cmpType) {
-	return cmps.find((cmp) => cmp.type === cmpType).info
+    const cmp = cmps.find((cmp) => cmp.type === cmpType);
+    console.log('getCmpInfo:', { cmpType, cmp });
+    return cmp?.info;
 }
 
 // function getDefaultFilter() {
@@ -87,7 +89,7 @@ function _createBoards() {
 
 			members: [
 				{
-					_id: 'u101',
+					id: 'u101',
 					fullname: 'Tal Tarablus',
 				},
 			],
@@ -143,8 +145,8 @@ function _createBoards() {
 					],
 				},
 			],
-			cmpOrder: ['id', 'title', 'status', 'priority', 'members'],
-			cmpTitles: ['Task', 'Status', 'Priority', 'Members'],
+			cmpsOrder: ['status-picker', 'priority-picker', 'member-picker', 'date-picker'],
+			cmpTitles: ['Status', 'Priority', 'Members', 'Due Date'],
 			groupSummary: [null, null, null],
 		},
 	]
@@ -166,6 +168,14 @@ const cmps = [
 		info: {
 			selectedMembers: ['m1', 'm2'],
 			members: ['m1', 'm2', 'm3'],
+		},
+	},
+
+	{
+		type: 'priority-picker',
+		info: {
+			selectedPriority: 'low',
+			priorities: [{}, {}],
 		},
 	},
 

@@ -3,16 +3,25 @@ import { BoardHeader } from "../cmps/board/BoardHeader"
 import { GroupPreview } from "../cmps/group/GroupPreview"
 import { useEffect } from "react"
 import { loadBoards } from "../store/board/board.actions"
+import { showErrorMsg } from "../services/event-bus.service"
 
 
 export function BoardDetails() {
 	const allBoards = useSelector((storeState) => storeState.boardModule.boards)
-	const cmpsOrder = useSelector((storeState) => storeState.boardModule.cmpsOrder)
+
 	useEffect(() => {
-		if (allBoards){
-			loadBoards()
-		} 
+			onLoadBoards()
 	},[])
+
+	async function onLoadBoards() {
+		try {
+			const boards = await loadBoards();
+			console.log('boards:', boards); // Debug log
+		} catch (error) {
+			showErrorMsg("Cannot load boards");
+			console.error(error);
+		}
+	}
 
 	if (!allBoards || allBoards.length === 0) return <div>Loading...</div>
 	return (
@@ -24,7 +33,7 @@ export function BoardDetails() {
 						<GroupPreview
 							group={group}
 							cmpTitles={allBoards[0].cmpTitles}
-							cmpsOrder = {cmpsOrder}
+							cmpsOrder = {allBoards[0].cmpsOrder}
 							key={group.id}
 						/>
 					))}
