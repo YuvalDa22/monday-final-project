@@ -10,13 +10,12 @@ export function BoardDetails() {
 	const allBoards = useSelector((storeState) => storeState.boardModule.boards)
 
 	useEffect(() => {
-			onLoadBoards()
+		onLoadBoards()
 	},[])
 
 	async function onLoadBoards() {
 		try {
-			const boards = await loadBoards();
-			console.log('boards:', boards); // Debug log
+			await loadBoards();
 		} catch (error) {
 			showErrorMsg("Cannot load boards");
 			console.error(error);
