@@ -3,17 +3,17 @@ import { MemberPicker } from './cmps/MemberPicker'
 import { PriorityPicker } from './cmps/PriorityPicker'
 import { StatusCmp } from './cmps/StatusCmp'
 
-export function DynamicCmp({ value, board, cmp, info, onUpdate }) {
+export function DynamicCmp({ board, cmp, info, onUpdate }) {
 	// console.log('DynamicCmp -> cmp:', cmp, 'info:', info);
 	switch (cmp) {
 		case 'status':
-			return <StatusCmp value={value} board={board} info={info} onUpdate={onUpdate} />
+			return <StatusCmp board={board} info={info} onUpdate={onUpdate} />
 		case 'byMember':
-			return <MemberPicker value={value} board={board} info={info} onUpdate={onUpdate} />
+			return <MemberPicker board={board} info={info} onUpdate={onUpdate} />
 		case 'date':
-			return <DatePicker value={value} board={board} info={info} onUpdate={onUpdate} />
+			return <DatePicker board={board} info={info} onUpdate={onUpdate} />
 		case 'priority':
-			return <PriorityPicker value={value} board={board} info={info} onUpdate={onUpdate} />
+			return <PriorityPicker board={board} info={info} onUpdate={onUpdate} />
 		default:
 			return <p>UNKNOWN {cmp}</p>
 	}

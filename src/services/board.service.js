@@ -216,7 +216,7 @@ function _createBoards() {
 				}
 			],
 		  
-			cmpsOrder: ['status', 'priority', 'byMember', 'date'],
+			cmpsOrder: ['status', 'priority', 'byMember', 'dueDate'],
 			cmpTitles: ['Status', 'Priority', 'Members', 'Due Date'],
 			groupSummary: [null, null, null],
 		}

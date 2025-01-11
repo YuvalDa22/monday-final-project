@@ -13,8 +13,7 @@ export function TaskPreview({ task, cmpsOrder, board }) {
 					<DynamicCmp
 						cmp={cmp}
 						board={board}
-						value={task[cmp]} // Pass the current value for this key
-						info={boardService.getCmpInfo(cmp)}
+						info={task[cmp]} // Pass the current value for this key
 						onUpdate={(data) => {
 							console.log('Updating: ', cmp, 'with data:', data)
 							// make a copy, update the task
