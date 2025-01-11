@@ -4,7 +4,7 @@
 
 import { TaskPreview } from "../task/TaskPreview";
 
-export function TaskList({ group, cmpTitles, cmpsOrder }) {
+export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
   return (
     <div>
       <table className="custom-table">
@@ -22,7 +22,7 @@ export function TaskList({ group, cmpTitles, cmpsOrder }) {
           {group.tasks.map((task, index) => (
             <tr key={task._id}>
               <td key={index} className="task-cell">{task.title}</td>
-              <TaskPreview  task={task} cmpsOrder={cmpsOrder} />
+              <TaskPreview board={board} task={task} cmpsOrder={cmpsOrder} />
             </tr>
           ))}
         </tbody>

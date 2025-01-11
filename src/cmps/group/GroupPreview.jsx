@@ -3,12 +3,12 @@ import { GroupHeader } from "./GroupHeader";
 // import { GroupSummary } from "./GroupSummary";
 import { TaskList } from "./TaskList";
 
-export function GroupPreview({ group, cmpTitles, cmpsOrder }) {
+export function GroupPreview({ group, cmpTitles, cmpsOrder, board }) {
   
   return (
     <div className="gp-main-container">
       <GroupHeader group={group} />
-      <TaskList group={group} cmpTitles={cmpTitles} cmpsOrder={cmpsOrder} />
+      <TaskList board={board} group={group} cmpTitles={cmpTitles} cmpsOrder={cmpsOrder} />
     </div>
   );
 

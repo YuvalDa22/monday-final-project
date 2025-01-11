@@ -30,6 +30,7 @@ export function BoardDetails() {
 				{allBoards[0].groups &&
 					allBoards[0].groups.map((group) => (
 						<GroupPreview
+							board={allBoards[0]}
 							group={group}
 							cmpTitles={allBoards[0].cmpTitles}
 							cmpsOrder = {allBoards[0].cmpsOrder}

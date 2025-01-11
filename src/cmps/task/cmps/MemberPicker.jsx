@@ -1,3 +1,3 @@
-export function MemberPicker({ info, onUpdate }) {
-	return <span onClick={() => onUpdate('member update')}>Member</span>
+export function MemberPicker({ info, onUpdate, value, board }) {
+	return <span onClick={() => onUpdate('member update')}>{value?.fullname || 'Set Members'}</span>
 }
