@@ -22,7 +22,7 @@ export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
           {group.tasks.map((task, index) => (
             <tr key={task._id}>
               <td key={index} className="task-cell">{task.title}</td>
-              <TaskPreview board={board} task={task} cmpsOrder={cmpsOrder} />
+              <TaskPreview group={group} board={board} task={task} cmpsOrder={cmpsOrder} />
             </tr>
           ))}
         </tbody>

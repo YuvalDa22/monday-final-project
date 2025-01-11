@@ -41,3 +41,34 @@ export function setFilterBy(filterBy = {}) {
   store.dispatch({ type: SET_FILTER_BY, filterBy })
   console.log('board actions -> filterBy: ' ,filterBy)
 }
+
+export function updateBoard(board, groupId, taskId, { key, value }) {
+  
+  if (!board) return
+
+  const gIdx = board?.groups.findIndex(group => group.id === groupId)
+  const tIdx = board.groups[gIdx]?.tasks.findIndex(task => task.id === taskId)
+
+  let activity = null
+  let userMsg = ''
+
+  if (gIdx !== -1 && tIdx !== -1) {
+      // activity = createActivity(null, groupId, taskId, key, value, board.groups[gIdx].tasks[tIdx][key])
+      board.groups[gIdx].tasks[tIdx][key] = value
+      // board.activities.unshift(activity)
+      userMsg = 'Task updated successfully'
+      console.log('board after update:', board.groups[gIdx]);
+  } else if (gIdx !== -1 && tIdx === -1) {
+      // activity = createActivity(null, groupId, null, key, value, board.groups[gIdx][key])
+      board.groups[gIdx][key] = value
+      // board.activities.unshift(activity)
+      userMsg = 'Group updated successfully'
+  } else {
+      // activity = createActivity(board._id, null, null, key, value, board[key])
+      board[key] = value
+      // board.activities.unshift(activity)
+      userMsg = 'Board updated successfully'
+  }
+  saveBoard(board)
+}
+  

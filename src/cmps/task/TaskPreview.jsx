@@ -2,8 +2,9 @@ import { useSelector } from 'react-redux'
 import { DynamicCmp } from './DynamicCmp'
 import { boardService } from '../../services/board.service'
 import { useEffect } from 'react'
+import { updateBoard } from '../../store/board/board.actions'
 
-export function TaskPreview({ task, cmpsOrder, board }) {
+export function TaskPreview({ task, cmpsOrder, board, group }) {
 	// console.log('TaskPreview -> task:', task);
 	return (
 		<>
@@ -16,9 +17,7 @@ export function TaskPreview({ task, cmpsOrder, board }) {
 						info={task[cmp]} // Pass the current value for this key
 						onUpdate={(data) => {
 							console.log('Updating: ', cmp, 'with data:', data)
-							// make a copy, update the task
-							// Call action: updateTask(task)
-							//updateTask(cmpType, $event)
+							updateBoard(board, group.id, task.id, { key: cmp, value: data})
 						}}
 						/>
 				</td>
