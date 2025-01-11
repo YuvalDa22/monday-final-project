@@ -49,6 +49,11 @@ export function updateBoard(board, groupId, taskId, { key, value }) {
   const gIdx = board?.groups.findIndex(group => group.id === groupId)
   const tIdx = board.groups[gIdx]?.tasks.findIndex(task => task.id === taskId)
 
+  if (gIdx === -1 || tIdx === -1) {
+    console.error("Invalid group or task ID");
+    return;
+  }
+
   let activity = null
   let userMsg = ''
 
@@ -70,5 +75,6 @@ export function updateBoard(board, groupId, taskId, { key, value }) {
       userMsg = 'Board updated successfully'
   }
   saveBoard(board)
+  store.dispatch({type: UPDATE_BOARD, board})
 }
   
