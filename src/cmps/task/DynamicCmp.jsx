@@ -10,7 +10,7 @@ export function DynamicCmp({ board, cmp, info, onUpdate }) {
 			return <StatusCmp board={board} info={info} onUpdate={onUpdate} />
 		case 'byMember':
 			return <MemberPicker board={board} info={info} onUpdate={onUpdate} />
-		case 'date':
+		case 'dueDate':
 			return <DatePicker board={board} info={info} onUpdate={onUpdate} />
 		case 'priority':
 			return <PriorityPicker board={board} info={info} onUpdate={onUpdate} />
