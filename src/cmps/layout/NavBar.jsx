@@ -1,60 +1,58 @@
 // src/Navbar.jsx
-import React from "react";
-import { Link } from "react-router-dom";
-import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
-import ExtensionOutlinedIcon from "@mui/icons-material/ExtensionOutlined";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import QuestionMarkOutlinedIcon from "@mui/icons-material/QuestionMarkOutlined";
-import AppsRoundedIcon from "@mui/icons-material/AppsRounded";
-import Avatar from "@mui/material/Avatar";
+import React from 'react'
+import { Link } from 'react-router-dom'
+import AppsRoundedIcon from '@mui/icons-material/AppsRounded'
+import Avatar from '@mui/material/Avatar'
+import { getSvg } from '../../services/util.service'
+
+const SvgIcon = ({ iconName, options }) => {
+  return <i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>
+}
 
 const NavBar = () => {
   return (
-    <nav className="navbar">
+    <nav className='navbar'>
       {/* Logo */}
-      <div className="navbar-logo">
-        <img src="./icon.svg" alt="Logo" />
+      <div className='navbar-logo'>
+        <img src='./icon.svg' alt='Logo' />
         <span>monday </span> work management
       </div>
 
       {/* Navigation Links */}
-      <div className="navbar-links">
-        <Link to="/workspace/board/xxx" className="navbar-link">
-          <NotificationsOutlinedIcon />
+      <div className='navbar-links'>
+        <Link to='/workspace/board/xxx' className='navbar-link'>
+          <SvgIcon iconName={'navbar_bell'} />
         </Link>
-        <Link to="/workspace/board/xxx" className="navbar-link">
-          <PersonAddAltOutlinedIcon />
-        </Link>{" "}
-        <Link to="/workspace/board/xxx" className="navbar-link">
-          <ExtensionOutlinedIcon />
-        </Link>{" "}
-        <Link to="/workspace/board/xxx" className="navbar-link">
-          <SearchOutlinedIcon />
-        </Link>{" "}
-        <Link to="/workspace/board/xxx" className="navbar-link">
-          <QuestionMarkOutlinedIcon />
+        <Link to='/workspace/board/xxx' className='navbar-link'>
+          <SvgIcon iconName={'navbar_updateFeed'} />
+        </Link>{' '}
+        <Link to='/workspace/board/xxx' className='navbar-link'>
+          <SvgIcon iconName={'navbar_inviteMembers'} />
+        </Link>{' '}
+        <Link to='/workspace/board/xxx' className='navbar-link'>
+          <SvgIcon iconName={'navbar_mondayMarketplace'} />
+        </Link>{' '}
+        <Link to='/workspace/board/xxx' className='navbar-link'>
+          <SvgIcon iconName={'navbar_search'} />
         </Link>
         <span
           style={{
-            fontFamily: "cursive",
-            fontWeight: "lighter",
+            fontWeight: 'lighter',
+            display: 'flex',
+            top: '5',
           }}
         >
           |
         </span>
-        <Link to="/workspace/board/xxx" className="navbar-link appsroundedicon">
-          <AppsRoundedIcon />
-        </Link>
         <Avatar
-          className="navbar-avatar"
-          alt="User Avatar"
-          src=""
+          className='navbar-avatar'
+          alt='User Avatar'
+          src=''
           sx={{ width: 32, height: 32 }}
         />
       </div>
     </nav>
-  );
-};
+  )
+}
 
-export default NavBar;
+export default NavBar

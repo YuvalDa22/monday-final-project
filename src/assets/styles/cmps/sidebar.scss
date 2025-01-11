@@ -67,12 +67,12 @@
   }
   
   .workspace-links {
-    list-style: none;
-    padding: 0;
+
   }
   
   .workspace-item {
     padding: 8px 15px;
+    gap: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
   }

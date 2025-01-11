@@ -8,7 +8,11 @@ import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined'
 import ImportExportOutlinedIcon from '@mui/icons-material/ImportExportOutlined'
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined'
 import BentoOutlinedIcon from '@mui/icons-material/BentoOutlined'
+import { getSvg } from '../../services/util.service'
 
+const SvgIcon = ({ iconName, options }) => {
+  return <i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>
+}
 export function BoardActionsBar() {
   const [anchorEl, setAnchorEl] = useState(null)
   const handleMenuOpen = (event) => setAnchorEl(event.currentTarget)
@@ -33,27 +37,27 @@ export function BoardActionsBar() {
         <MenuItem onClick={handleMenuClose}>option2</MenuItem>
       </Menu>
       <IconButton sx={{ borderRadius: '5px', fontSize: '18px' }}>
-        <SearchOutlinedIcon sx={{ opacity: 0.6 }} />
+        <SvgIcon iconName={'boardActionsBar_search'} />
         Search
       </IconButton>
       <IconButton sx={{ borderRadius: '5px', fontSize: '18px' }}>
-        <AccountCircleOutlinedIcon sx={{ opacity: 0.6, marginRight: '8px' }} />
+        <SvgIcon iconName={'boardActionsBar_person'} />
         Person
       </IconButton>
       <IconButton sx={{ borderRadius: '5px', fontSize: '18px' }}>
-        <FilterAltOutlinedIcon sx={{ opacity: 0.6, marginRight: '8px' }} />
+        <SvgIcon iconName={'boardActionsBar_filter'} />
         Filter
       </IconButton>
       <IconButton sx={{ borderRadius: '5px', fontSize: '18px' }}>
-        <ImportExportOutlinedIcon sx={{ opacity: 0.6, marginRight: '8px' }} />
+        <SvgIcon iconName={'boardActionsBar_sort'} />
         Sort
       </IconButton>
       <IconButton sx={{ borderRadius: '5px', fontSize: '18px' }}>
-        <VisibilityOffOutlinedIcon sx={{ opacity: 0.6, marginRight: '8px' }} />
+        <SvgIcon iconName={'boardActionsBar_hide'} />
         Hide
       </IconButton>
       <IconButton sx={{ borderRadius: '5px', fontSize: '18px' }}>
-        <BentoOutlinedIcon sx={{ opacity: 0.6, marginRight: '8px' }} />
+        <SvgIcon iconName={'boardActionsBar_groupBy'} />
         Group by
       </IconButton>
     </Stack>

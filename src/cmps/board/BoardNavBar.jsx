@@ -47,20 +47,23 @@ export function BoardNavBar() {
     }
     return (
       <>
-        <Button
+        <span
           id='basic-button'
           aria-controls={open ? 'basic-menu' : undefined}
           aria-haspopup='true'
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
-          sx={{
+          style={{
+            cursor: 'pointer',
+            display: 'inline-flex',
+            alignItems: 'center',
             padding: '2px',
             minWidth: 0,
             minHeight: 0,
           }}
         >
           <MoreHorizIcon sx={{ opacity: '0.55', scale: 0.7 }} />
-        </Button>
+        </span>
 
         <Menu
           id='basic-menu'
