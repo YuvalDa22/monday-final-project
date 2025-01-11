@@ -4,6 +4,10 @@ import { GroupPreview } from "../cmps/group/GroupPreview"
 import { useEffect } from "react"
 import { loadBoards } from "../store/board/board.actions"
 import { showErrorMsg } from "../services/event-bus.service"
+import { Button } from "@mui/material";
+import { updateBoard } from "../store/board/board.actions"
+import { utilService } from "../services/util.service"
+
 
 
 export function BoardDetails() {
@@ -23,6 +27,23 @@ export function BoardDetails() {
 	}
 
 	if (!allBoards || allBoards.length === 0) return <div>Loading...</div>
+	
+	const onAddGroup = () => { 
+		const board = allBoards[0]
+		console.log("board",board)
+		if(!board) return;
+		const newGroup = {
+			id: utilService.makeId(),
+			title: "New Group",
+			tasks: [],
+			style: {},
+		}
+		console.log("New group",newGroup)
+		const updatedGroups = [...board.groups, newGroup]
+		console.log("updated groups",updatedGroups)
+		updateBoard(board, null, null, {key: "groups", value: updatedGroups})
+	}
+
 	return (
 		<>
 			<div className='main-container'>
@@ -37,7 +58,12 @@ export function BoardDetails() {
 							key={group.id}
 						/>
 					))}
-				{/* <button>add group</button> */}
+				<Button
+				variant="contained"
+				color="primary"
+				onClick={onAddGroup}
+				>Add new group
+					</Button>
 			</div>
 		</>
 	)

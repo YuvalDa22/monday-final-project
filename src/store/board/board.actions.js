@@ -43,16 +43,12 @@ export function setFilterBy(filterBy = {}) {
 }
 
 export function updateBoard(board, groupId, taskId, { key, value }) {
-  
+  console.log(board)
   if (!board) return
 
   const gIdx = board?.groups.findIndex(group => group.id === groupId)
-  const tIdx = board.groups[gIdx]?.tasks.findIndex(task => task.id === taskId)
-
-  if (gIdx === -1 || tIdx === -1) {
-    console.error("Invalid group or task ID");
-    return;
-  }
+  const tIdx = board?.groups[gIdx]?.tasks.findIndex(task => task.id === taskId)
+  console.log(gIdx, tIdx)
 
   let activity = null
   let userMsg = ''
@@ -71,10 +67,10 @@ export function updateBoard(board, groupId, taskId, { key, value }) {
   } else {
       // activity = createActivity(board._id, null, null, key, value, board[key])
       board[key] = value
+      console.log("update board",board )
       // board.activities.unshift(activity)
       userMsg = 'Board updated successfully'
   }
   saveBoard(board)
-  store.dispatch({type: UPDATE_BOARD, board})
 }
   
