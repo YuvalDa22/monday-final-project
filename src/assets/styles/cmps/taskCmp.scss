@@ -40,9 +40,9 @@
 /* Dropdown (calendar) container */
 .date-picker-dropdown {
   position: absolute;
-  top: 100%; /* Position below the displayed text */
+  top: 100%; 
   left: 0;
-  z-index: 10; /* Ensure it appears above other content */
+  z-index: 10; 
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
@@ -58,13 +58,13 @@
 
 /* Styling for the selected day */
 .custom-calendar .react-datepicker__day--selected {
-  background-color: #0073e6; /* Selected day background color */
+  background-color: #0073e6;
   color: white;
-  border-radius: 50%; /* Round shape for selected day */
+  border-radius: 50%; 
 }
 
 /* Styling for hover effect on days */
 .custom-calendar .react-datepicker__day:hover {
-  background-color: #f0f0f0; /* Hover effect for days */
+  background-color: #f0f0f0;
   border-radius: 50%;
 }
