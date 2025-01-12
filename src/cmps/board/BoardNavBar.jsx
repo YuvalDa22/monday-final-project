@@ -10,6 +10,22 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Divider from '@mui/material/Divider'
 import Button from '@mui/material/Button'
+import { getSvg } from '../../services/util.service'
+
+const SvgIcon = ({ iconName, options }) => {
+  return (
+    <i
+      dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}
+      style={{
+        display: 'flex',
+        opacity: 0.75,
+        height: 17,
+        width: 17,
+        alignItems: 'center',
+      }}
+    ></i>
+  )
+}
 
 export function BoardNavBar() {
   const [value, setValue] = useState(1)
@@ -120,12 +136,12 @@ export function BoardNavBar() {
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
+                    gap: '3px',
+                    opacity: 0.8,
                   }}
                 >
                   {/* the icon for the first tab */}
-                  {tab.value === 1 && (
-                    <HomeOutlinedIcon sx={{ opacity: '0.55' }} />
-                  )}
+                  {tab.value === 1 && <SvgIcon iconName={'sidebar_home'} />}
                   {tab.label}
                   {/* show menu if tab selected */}
                   {value === tab.value && <ThreeDotsMenu />}

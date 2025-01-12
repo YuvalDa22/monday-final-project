@@ -1,0 +1,14 @@
+.boardHeader_main-container{
+    display:flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.boardHeader_title_and_additionalBoardActions{
+  display: flex;
+  justify-content: space-between;
+}
+
+.additional_board_actions{
+
+}

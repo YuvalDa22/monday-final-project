@@ -73,7 +73,6 @@ export function getSvg(
   options = { height: '22', width: '22', color: 'currentColor' }
 ) {
   const { height, width, color } = options
-  console.log(svgs)
 
   if (!svgs[name]) return ''
   // return svgs[name];
