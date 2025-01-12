@@ -68,3 +68,57 @@
   background-color: #f0f0f0;
   border-radius: 50%;
 }
+
+
+/* Styling for the MemberPicker */
+
+//* Container for the entire MemberPicker */
+.member-picker {
+  position: relative;
+  width: 100%; /* Stretch the container to fit the full width of the parent td */
+  height: 100%; /* Stretch to fit the full height of the parent td */
+}
+
+.member-avatars {
+  display: flex;
+  justify-content: center; /* Center content horizontally */
+  align-items: center;    /* Center content vertically */
+  width: 100%;            /* Stretch to fill the parent container's width */
+  height: 100%;           /* Stretch to fill the parent container's height */
+  cursor: pointer;
+  padding: 8px;
+  background-color: #fff;
+  box-sizing: border-box; /* Include padding in the width and height calculation */
+}
+
+/* Individual member avatar */
+.member-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  position: relative;
+  border: 2px solid white;
+}
+
+/* Dropdown container */
+.dropdown-container {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  z-index: 1000;
+  width:inherit;
+}
+
+/* Dropdown option */
+.member-option {
+  display: flex;
+  align-items: center;
+}
+
+/* Dropdown option image */
+.member-option-img {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
