@@ -39,16 +39,21 @@
 .navbar-links {
   display: flex;
   align-items: center;
-  gap: 25px;
+  gap: 5px;
 }
 
 .navbar-link {
   text-decoration: none;
   transition: scale 0.35s ease;
+  padding: 9px
 }
 
 .navbar-link:hover {
-  scale: 1.1;
+  background-color: #e1e1e1;
+  border-radius: 10px;
 }
 
 
+.navbar-avatar{
+  margin-left: 30px;
+}

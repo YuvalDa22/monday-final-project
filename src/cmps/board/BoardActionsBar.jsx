@@ -3,18 +3,28 @@ import { Button, IconButton, Menu, MenuItem } from '@mui/material'
 import { ArrowDropDown } from '@mui/icons-material'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import Stack from '@mui/material/Stack'
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined'
-import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined'
-import ImportExportOutlinedIcon from '@mui/icons-material/ImportExportOutlined'
-import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined'
-import BentoOutlinedIcon from '@mui/icons-material/BentoOutlined'
+
+import { getSvg } from '../../services/util.service'
+
+const SvgIcon = ({ iconName, options }) => {
+  return (
+    <i
+      dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}
+      style={{ display: 'flex', opacity: 0.62 }}
+    ></i>
+  )
+}
 
 export function BoardActionsBar() {
   const [anchorEl, setAnchorEl] = useState(null)
   const handleMenuOpen = (event) => setAnchorEl(event.currentTarget)
   const handleMenuClose = () => setAnchorEl(null)
   return (
-    <Stack direction={'row'} spacing={'25px'}>
+    <Stack
+      direction={'row'}
+      spacing={'25px'}
+      style={{ display: 'flex', alignItems: 'center' }}
+    >
       <Button
         variant='contained'
         endIcon={<ArrowDropDown sx={{ fill: 'white' }} />} // Updated to use MUI's sx prop
@@ -32,28 +42,49 @@ export function BoardActionsBar() {
         <MenuItem onClick={handleMenuClose}>option1</MenuItem>
         <MenuItem onClick={handleMenuClose}>option2</MenuItem>
       </Menu>
-      <IconButton sx={{ borderRadius: '5px', fontSize: '18px' }}>
-        <SearchOutlinedIcon sx={{ opacity: 0.6 }} />
+      <IconButton
+        sx={{
+          borderRadius: '5px',
+          fontSize: '18px',
+          gap: 1,
+        }}
+      >
+        <SearchOutlinedIcon style={{ opacity: 0.62, height: 20, width: 20 }} />
         Search
       </IconButton>
-      <IconButton sx={{ borderRadius: '5px', fontSize: '18px' }}>
-        <AccountCircleOutlinedIcon sx={{ opacity: 0.6, marginRight: '8px' }} />
+      <IconButton sx={{ borderRadius: '5px', fontSize: '18px', gap: 1 }}>
+        <SvgIcon
+          iconName={'boardActionsBar_person'}
+          options={{ height: 20, width: 20 }}
+        />
         Person
       </IconButton>
-      <IconButton sx={{ borderRadius: '5px', fontSize: '18px' }}>
-        <FilterAltOutlinedIcon sx={{ opacity: 0.6, marginRight: '8px' }} />
+      <IconButton sx={{ borderRadius: '5px', fontSize: '18px', gap: 1 }}>
+        <SvgIcon
+          iconName={'boardActionsBar_filter'}
+          options={{ height: 20, width: 20 }}
+        />
         Filter
       </IconButton>
-      <IconButton sx={{ borderRadius: '5px', fontSize: '18px' }}>
-        <ImportExportOutlinedIcon sx={{ opacity: 0.6, marginRight: '8px' }} />
+      <IconButton sx={{ borderRadius: '5px', fontSize: '18px', gap: 1 }}>
+        <SvgIcon
+          iconName={'boardActionsBar_sort'}
+          options={{ height: 20, width: 20 }}
+        />
         Sort
       </IconButton>
-      <IconButton sx={{ borderRadius: '5px', fontSize: '18px' }}>
-        <VisibilityOffOutlinedIcon sx={{ opacity: 0.6, marginRight: '8px' }} />
+      <IconButton sx={{ borderRadius: '5px', fontSize: '18px', gap: 1 }}>
+        <SvgIcon
+          iconName={'boardActionsBar_hide'}
+          options={{ height: 20, width: 20 }}
+        />
         Hide
       </IconButton>
-      <IconButton sx={{ borderRadius: '5px', fontSize: '18px' }}>
-        <BentoOutlinedIcon sx={{ opacity: 0.6, marginRight: '8px' }} />
+      <IconButton sx={{ borderRadius: '5px', fontSize: '18px', gap: 1 }}>
+        <SvgIcon
+          iconName={'boardActionsBar_groupBy'}
+          options={{ height: 16, width: 16 }}
+        />
         Group by
       </IconButton>
     </Stack>

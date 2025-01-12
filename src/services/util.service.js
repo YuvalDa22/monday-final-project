@@ -1,9 +1,12 @@
+import svgs from '../assets/icons-svgs/icons'
+
 export const utilService = {
   makeId,
   saveToStorage,
   loadFromStorage,
   debounce,
   animateCSS,
+  getSvg,
 }
 
 function makeId(length = 5) {
@@ -63,4 +66,18 @@ export function getExistingProperties(obj) {
     }
   }
   return truthyObj
+}
+
+export function getSvg(
+  name,
+  options = { height: '22', width: '22', color: 'currentColor' }
+) {
+  const { height, width, color } = options
+
+  if (!svgs[name]) return ''
+  // return svgs[name];
+  return svgs[name]
+    .replaceAll('fill="currentColor"', `fill="${color}"`)
+    .replaceAll('width=""', `width="${width}"`)
+    .replaceAll('height=""', `height="${height}"`)
 }
