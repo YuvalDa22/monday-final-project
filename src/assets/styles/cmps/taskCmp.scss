@@ -22,3 +22,49 @@
     opacity: 0.8;
   }
   
+ /* Container for the DatePicker */
+.date-picker-container {
+  position: relative;
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Display for the formatted date */
+.date-picker-display {
+  display: inline-block;
+}
+
+/* Dropdown (calendar) container */
+.date-picker-dropdown {
+  position: absolute;
+  top: 100%; /* Position below the displayed text */
+  left: 0;
+  z-index: 10; /* Ensure it appears above other content */
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Custom calendar styling */
+.custom-calendar {
+  border: none;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Styling for the selected day */
+.custom-calendar .react-datepicker__day--selected {
+  background-color: #0073e6; /* Selected day background color */
+  color: white;
+  border-radius: 50%; /* Round shape for selected day */
+}
+
+/* Styling for hover effect on days */
+.custom-calendar .react-datepicker__day:hover {
+  background-color: #f0f0f0; /* Hover effect for days */
+  border-radius: 50%;
+}

@@ -7,6 +7,7 @@ export const utilService = {
   debounce,
   animateCSS,
   getSvg,
+  formatDate,
 }
 
 function makeId(length = 5) {
@@ -81,3 +82,12 @@ export function getSvg(
     .replaceAll('width=""', `width="${width}"`)
     .replaceAll('height=""', `height="${height}"`)
 }
+
+    // Format the date to `dd/mm/yyyy` or return "No date selected"
+    const formatDate = (date) => {
+      if (!date || isNaN(date.getTime())) return 'No date selected'; 
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+  };
