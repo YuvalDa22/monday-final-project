@@ -77,7 +77,7 @@ return task
 
 const board = {
   "_id": "b101",
-  "title": "Robot dev proj",
+  "title": "Board name",
   "isStarred": false,
   "archivedAt": 1589983468418,
   "createdBy": {
