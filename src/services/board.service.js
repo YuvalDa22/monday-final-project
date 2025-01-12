@@ -258,3 +258,34 @@ const cmps = [
     },
   },
 ]
+
+// *. activites - when board is updated, the frontend does not send the activities array within the board 
+//    instead it only sends a new activity object: {txt, boardId, groupId, taskId}
+//    the backend adds this activity to the board with $push and can also emit socket notificatios
+
+const activity = {
+  "id": makeId(),
+  "txt": "Changed Color",
+  "createdAt": Date.now(),
+  "byMember": userService.getLoggedinUser(),
+  "task": task
+}
+
+// Store - saveTask
+function storeSaveTask(task, activity) {
+  
+  board = boardService.saveTask(boardId, groupId, task, activity)
+  // commit(ACTION) // dispatch(ACTION)
+}
+
+// boardService
+function saveTask(boardId, groupId, task, activity) {
+  const board = getById(boardId)
+  // PUT /api/board/b123/task/t678
+
+  // TODO: find the task, and update
+  board.activities.unshift(activity)
+  saveBoard(board)
+  // return board
+  // return task
+}
