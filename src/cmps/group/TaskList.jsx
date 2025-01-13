@@ -1,6 +1,6 @@
 import Input from "@mui/joy/Input";
 import { useEffect, useState } from "react";
-import { updateBoard } from "../../store/board/board.actions";
+import { setCheckedTasks, setFooter, updateBoard } from "../../store/board/board.actions";
 import { TaskPreview } from "../task/TaskPreview";
 import { utilService } from "../../services/util.service";
 import Checkbox from '@mui/material/Checkbox';
@@ -13,26 +13,23 @@ export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
   const [isIndeterminate, setIsIndeterminate] = useState(false);
 
   useEffect(() => {
-    // Update the group checkbox state based on the tasks checkboxes
     const allChecked = group.tasks.length > 0 && tasksChecked.length === group.tasks.length;
     const noneChecked = tasksChecked.length === 0;
 
-    setGroupChecked(allChecked);       // Set group checkbox as checked if all tasks are checked
-    setIsIndeterminate(!allChecked && !noneChecked); // Set indeterminate if some tasks are checked
-    console.log('tasksChecked:', tasksChecked);
+    setGroupChecked(allChecked);       
+    (!allChecked && !noneChecked); 
+    setFooter(tasksChecked.length > 0);
+    setCheckedTasks(tasksChecked);
   }, [tasksChecked, group.tasks]);
 
   const handleGroupChecked = (event) => {
     const isChecked = event.target.checked;
-
-    setGroupChecked(isChecked); // Update the group checkbox state
+    setGroupChecked(isChecked); 
     setIsIndeterminate(false);  // Reset the indeterminate state
 
     if (isChecked) {
-      // Check all tasks
       setTasksChecked([...group.tasks]);
     } else {
-      // Uncheck all tasks
       setTasksChecked([]);
     }
   };

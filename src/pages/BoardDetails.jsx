@@ -7,15 +7,21 @@ import { showErrorMsg } from "../services/event-bus.service"
 import { Button } from "@mui/material";
 import { updateBoard } from "../store/board/board.actions"
 import { utilService } from "../services/util.service"
+import { Footer } from "../cmps/layout/Footer"
 
 
 
 export function BoardDetails() {
 	const allBoards = useSelector((storeState) => storeState.boardModule.boards)
+	const footerDisplayed = useSelector((storeState) => storeState.boardModule.footerDisplayed)
+	const checkedTasks = useSelector((storeState) => storeState.boardModule.checkedTasks)
 
 	useEffect(() => {
 		onLoadBoards()
 	},[])
+
+	useEffect(() => {
+	}, [footerDisplayed, checkedTasks]);
 
 	async function onLoadBoards() {
 		try {
@@ -65,6 +71,7 @@ export function BoardDetails() {
 				>Add new group
 					</Button>
 			</div>
+			{footerDisplayed && <Footer checkedTasks={checkedTasks} />}
 		</>
 	)
 

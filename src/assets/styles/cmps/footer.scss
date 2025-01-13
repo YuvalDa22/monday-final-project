@@ -1,15 +1,105 @@
 .footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem 4rem;
-  background-color: #fff;
-  gap: 10px;
-  width: 100%;
-  position: fixed;
-  bottom: 0;
-  box-shadow: 4px 4px 20px #e8e5e5;
-  img {
-    width: 30px;
+  position: fixed;          /* Sticks the footer to a fixed position */
+  bottom: 3%;               /* Aligns it to the bottom of the viewport */
+  left: 25%;                /* Centers it horizontally */
+  width: 50%;               /* Makes the footer span 50% of the screen width */
+  background-color: #f5f6f8; /* Background color for the footer */
+  color: #333;              /* Text color */
+  border-top: 1px solid #e3e6eb; /* Adds a border to the top of the footer */
+  text-align: center;       /* Centers the content inside the footer */
+  z-index: 100;             /* Ensures the footer is above other content */
+
+  .footer-content {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr); /* Define 12 equal columns for the grid */
+    align-items: center;                    /* Vertically center content */
+    width: 100%;                            /* Ensure full width of the footer content */
+    height: 100%;                           /* Align elements to fill container height */
+
+    .footer-number {
+      grid-column: span 1; /* Take 1 out of 12 columns */
+      text-align: center;
+      background-color: #0073e6;
+      height: 100%;
+      display: flex;             /* Enable flexbox */
+      justify-content: center;   /* Horizontally center the content */
+      align-items: center;       /* Vertically center the content */
+
+      h1 {
+          font-weight: bold;
+          margin: 0;
+          color: white;
+      }
+    }
+
+    .footer-items-selected {
+      grid-column: span 3; /* Take 3 out of 12 columns */
+      text-align: center;  /* Align text to the center */
+      border: 1px solid #5e5e5e; /* Add a border around each list item */
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1rem;
+
+      h1 {
+        font-weight: bold;
+        margin: 0;
+      }
+
+      .footer-balls {
+        display: flex;               /* Enable flex layout */
+        gap: 5px;                    /* Add spacing between balls */
+        justify-content: start;
+        padding-left: 1rem;          /* Center the balls horizontally */
+        align-items: center;         /* Center the balls vertically */
+
+        .ball {
+          width: 10px;               /* Set ball size */
+          height: 10px;
+          border-radius: 50%;        /* Make it circular */
+          background-color: purple;  /* Set ball color */
+        }
+      }
+    }
+    .footer-actions {
+      grid-area: 1 / 5 / 2 / 12; /* Define the grid area for the actions */
+      display: grid;
+      grid-template-columns: repeat(7, 1fr); /* Define 7 equal columns for the grid */
+      gap: 1rem; /* Add spacing between grid items */
+
+      .footer-action {
+      border: 1px solid #5e5e5e; /* Add a border around each list item */
+      display: grid;
+      color: #333;
+      text-decoration: none;
+      justify-content: center; /* Center content vertically */
+      align-items: center; /* Center content horizontally */
+      &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      }
+    }
+
+    .footer-close {
+      grid-column: span 1; /* Take 1 out of 12 columns */
+      text-align: center; /* Align text to the center */
+      height: 100%;
+      display: flex; /* Enable flexbox */
+      justify-content: center;   /* Horizontally center the content */
+      align-items: center;       /* Vertically center the content */
+      margin: 0;
+      border-left: 1px solid #a4a4a4; /* Add a left border to separate visually */
+      div {
+        font-weight: bold;
+        font-size: 1.2rem;        /* Increase font size on hover */
+        padding: 1rem;
+        &:hover {
+          cursor:pointer;           /* Make it clickable */
+          color: #0474e4; 
+        }
+      }
+    }
   }
 }

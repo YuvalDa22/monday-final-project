@@ -1,7 +1,7 @@
 import { showErrorMsg, showSuccessMsg } from '../../services/event-bus.service'
 import { boardService } from '../../services/board.service'
 import { store } from '../store'
-import {  ADD_BOARD,  REMOVE_BOARD,  SET_FILTER_BY,  SET_BOARDS, UPDATE_BOARD} from './board.reducer'
+import {  ADD_BOARD,  REMOVE_BOARD,  SET_FILTER_BY,  SET_BOARDS, UPDATE_BOARD, SET_FOOTER, SET_CHECKED_TASKS} from './board.reducer'
 
 
 
@@ -40,6 +40,15 @@ export async function saveBoard(board) {
 export function setFilterBy(filterBy = {}) {
   store.dispatch({ type: SET_FILTER_BY, filterBy })
   console.log('board actions -> filterBy: ' ,filterBy)
+}
+
+export function setFooter(boolValue) {
+  store.dispatch({ type: SET_FOOTER, footerDisplayed: boolValue })
+  // console.log('board actions -> footerDisplayed: ' ,boolValue);
+}
+
+export function setCheckedTasks(tasks) {
+  store.dispatch({ type: SET_CHECKED_TASKS, checkedTasks: [...tasks] })
 }
 
 export function updateBoard(board, groupId, taskId, { key, value }) {
