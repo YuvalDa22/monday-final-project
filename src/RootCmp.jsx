@@ -21,11 +21,12 @@ function RootCmp() {
       <Routes>
         <Route path='/' element={<HomePage />} />
         {/* <Route path='workspace/board' element={<BoardsIndex />} /> */}
-        <Route path='workspace/board/:boardId' element={<BoardDetails />} />
-        {/* <Route path='workspace/board/:boardId/task/:taskId' element={<TaskDetails />} /> */}
+        <Route path='workspace/board/:boardId' element={<BoardDetails />} >
+          {/* <Route path='workspace/board/:boardId/task/:taskId' element={<TaskDetails />} /> */}
+        </Route>
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<SignUp />} />
-        <Route path='/index' element={<MondayIndex />} />
+        {/* <Route path='/index' element={<MondayIndex />} /> */}
       </Routes>
       
       <UserMsg />

@@ -38,9 +38,9 @@ export function BoardDetails() {
 			tasks: [],
 			style: {},
 		}
-		console.log("New group",newGroup)
+		// console.log("New group",newGroup)
 		const updatedGroups = [...board.groups, newGroup]
-		console.log("updated groups",updatedGroups)
+		// console.log("updated groups",updatedGroups)
 		updateBoard(board, null, null, {key: "groups", value: updatedGroups})
 	}
 

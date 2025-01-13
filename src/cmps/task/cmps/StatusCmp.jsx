@@ -9,29 +9,28 @@ export function StatusCmp({ onUpdate, board, info }) {
 		width: '100%',
 		height: '100%',
 	}
-	const statusLabels = board?.labels?.filter((label) => label.id[1] === '1') // Filter for status labels starting with `l1`
+	const statusLabels = board?.labels?.filter((label) => label.id[1] === '1')
 
 	const handleChange = (selectedOption) => {
-		onUpdate(selectedOption.id) // Pass selected label ID to onUpdate
+		onUpdate(selectedOption.id)
 	}
 
 	const customStyles = {
 		control: (provided) => ({
 			...provided,
-			...style, // Apply your custom style
+			...style,
 			border: 'none',
 			boxShadow: 'none',            
 		}),
 		option: (provided, { data, isFocused, isSelected }) => ({
 			...provided,
 			backgroundColor: data.color,
-			color: isSelected || isFocused ? '#fff' : '#333', // Adjust text color for contrast
+			color: isSelected || isFocused ? '#fff' : '#333',
 			cursor: 'pointer',
-            // margin: '1rem'
 		}),
 		singleValue: (provided) => ({
 			...provided,
-			color: currentLabel?.color || '#333', // Single value text color
+			color: currentLabel?.color || '#333',
 			fontWeight: 'bold',
 		}),
 	}
@@ -45,15 +44,15 @@ export function StatusCmp({ onUpdate, board, info }) {
 						{label.title}
 					</div>
 				)}
-				getOptionValue={(label) => label.id} // Use `id` as the value key
-				value={statusLabels.find((label) => label.id === info)} // Find the current label
+				getOptionValue={(label) => label.id}
+				value={statusLabels.find((label) => label.id === info)}
 				onChange={handleChange}
 				styles={customStyles}
 				isSearchable={true}
-                components={{
-                    DropdownIndicator: () => null, // Removes the arrow icon
-                    IndicatorSeparator: () => null, // Removes the separator line
-                }}
+				components={{
+					DropdownIndicator: () => null,
+					IndicatorSeparator: () => null,
+				}}
 			/>
 		</div>
 	)

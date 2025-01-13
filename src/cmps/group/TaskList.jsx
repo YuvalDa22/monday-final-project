@@ -1,7 +1,3 @@
-// import { AddTask } from './AddTask'
-// import { GroupSummary } from './GroupSummary'
-// import { TaskPreview } from './TaskPreview'
-
 import Input from "@mui/joy/Input";
 import { useState } from "react";
 import { updateBoard } from "../../store/board/board.actions"
@@ -19,7 +15,7 @@ export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
 
   //save updated task name
   const handleSave = (taskId) => {
-    if(tempTitle.trim && tempTitle !== ""){
+    if(tempTitle.trim() && tempTitle !== ""){ //TODO - check functionality
       updateBoard(board, group.id, taskId, {key: "title", value: tempTitle})
     }
     handleCancel();
@@ -108,16 +104,8 @@ export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
 }
 
 
-
-
-        {/* <tr> */}
-					{/* last tr-1 - add task */}
-					{/* <AddTask group={group} /> */}
-				{/* </tr> */}
-				{/* <tr> */}
 					{/* last tr - group summary */}
           {/* TODO - IMPLEMENT SUMMARY */}
 					{/* <GroupSummary group={group} /> */}
-				{/* </tr> */}
 
 

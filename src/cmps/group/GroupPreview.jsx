@@ -13,12 +13,3 @@ export function GroupPreview({ group, cmpTitles, cmpsOrder, board }) {
   );
 
 }
-
-// Yuval & Ofir
-//     <>
-//     // group title
-//     <GroupHeader group={group} />
-//     // tasks list
-//     <TaskList group={group} board={board}/>
-//     </>
-// }
