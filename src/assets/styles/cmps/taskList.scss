@@ -1,31 +1,47 @@
 .custom-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 10px 0;
-    font-size: 16px;
-    text-align: center;
-    margin-left: 25px;
-  }
-  
-  .custom-table td {
-    border: 1px solid #ccc;
-  }
-  
-  .header-cell {
-    background-color: #f4f4f4;
-    font-weight: bold;
-  }
-  
-  .task-cell {
-    background-color: #fafafa;
-    font-weight: bold;
-  }
-  
-  .data-cell {
-    background-color: #fff;
-  }
-  
-  .empty-cell {
-    background-color: #f9f9f9;
-  }
-  
+	width: 100%;
+	border-collapse: collapse;
+	margin: 10px 0;
+	font-size: 16px;
+	text-align: center;
+	margin-left: 25px;
+}
+
+.custom-table td {
+	border: 1px solid #ccc;
+}
+
+.header-cell {
+	background-color: #f4f4f4;
+	font-weight: bold;
+}
+
+.task-row {
+	&.checked {
+		background-color: #cce9ff; // Ensure the background is light blue
+		.task-cell,
+		.data-cell {
+			background-color: #cce9ff;
+      .member-avatars {
+        background-color: #cce9ff;
+		}
+	}
+}
+}
+
+.task-cell {
+	background-color: #fafafa;
+	font-weight: bold;
+}
+
+.data-cell {
+	background-color: #fff;
+}
+
+.empty-cell {
+	background-color: #f9f9f9;
+}
+
+.checkbox-cell {
+	width: 1rem;
+}

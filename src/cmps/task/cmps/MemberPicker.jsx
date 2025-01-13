@@ -7,7 +7,7 @@ export function MemberPicker({ info, onUpdate, board }) {
 	const selectedMembers = info?.map((memberId) => {
 		const member = board?.members?.find((member) => member._id === memberId)
 		return member ? { value: member._id, label: member.fullname } : null
-	})
+	}).filter(Boolean)
 
 	const handleChange = (selected) => {
 		const selectedIds = selected.map((option) => option.value)

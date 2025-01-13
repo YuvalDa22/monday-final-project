@@ -2,8 +2,6 @@
 .label-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-bottom: 20px;
   }
   
   .label-box {
@@ -26,7 +24,6 @@
 .date-picker-container {
   position: relative;
   display: inline-block;
-  padding: 8px 12px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
@@ -86,15 +83,14 @@
   width: 100%;            /* Stretch to fill the parent container's width */
   height: 100%;           /* Stretch to fill the parent container's height */
   cursor: pointer;
-  padding: 8px;
   background-color: #fff;
   box-sizing: border-box; /* Include padding in the width and height calculation */
 }
 
 /* Individual member avatar */
 .member-avatar {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   position: relative;
   border: 2px solid white;
