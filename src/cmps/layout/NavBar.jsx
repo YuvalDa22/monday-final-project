@@ -3,6 +3,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import AppsRoundedIcon from '@mui/icons-material/AppsRounded'
 import Avatar from '@mui/material/Avatar'
+import Divider from '@mui/material/Divider'
 import { getSvg } from '../../services/util.service'
 
 const SvgIcon = ({ iconName, options }) => {
@@ -32,18 +33,22 @@ const NavBar = () => {
         <Link to='/workspace/board/xxx' className='navbar-link'>
           <SvgIcon iconName={'navbar_mondayMarketplace'} />
         </Link>{' '}
+        <Divider
+          orientation='vertical'
+          flexItem
+          sx={{
+            borderColor: 'rgb(164, 164, 164)',
+            borderWidth: '1px',
+            opacity: 0.3,
+            margin: '8px 0px 8px',
+          }}
+        />
         <Link to='/workspace/board/xxx' className='navbar-link'>
           <SvgIcon iconName={'navbar_search'} />
         </Link>
-        <span
-          style={{
-            fontWeight: 'lighter',
-            display: 'flex',
-            top: '5',
-          }}
-        >
-          |
-        </span>
+        <Link to='/workspace/board/xxx' className='navbar-link'>
+          <SvgIcon iconName={'navbar_help'} />
+        </Link>
         <Avatar
           className='navbar-avatar'
           alt='User Avatar'
