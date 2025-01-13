@@ -5,7 +5,7 @@ import Select from 'react-select'
 export function StatusCmp({ onUpdate, board, info }) {
 	const currentLabel = board?.labels?.find((label) => label.id === info)
 	const style = {
-		backgroundColor: currentLabel?.color || '#ccc',
+		backgroundColor: currentLabel?.color || '#fff',
 		width: '100%',
 		height: '100%',
 	}
