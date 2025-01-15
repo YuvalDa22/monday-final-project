@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {
+  addTask,
   removeTask,
   setCheckedTasks,
   setFooter,
@@ -80,9 +81,7 @@ export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
 
   const onAddItem = () => {
     const newTask = { id: utilService.makeId(), title: tempTitle }
-    const updatedTasks = [...group.tasks, newTask]
-
-    updateBoard(board, group.id, null, { key: 'tasks', value: updatedTasks })
+    addTask(board, group, newTask)
     setTempTitle('')
   }
 

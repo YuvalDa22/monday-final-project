@@ -8,6 +8,7 @@ export const SET_FILTER_BY = 'SET_FILTER_BY'
 export const SET_IS_LOADING = 'SET_IS_LOADING'
 export const SET_FOOTER = 'SET_FOOTER'
 export const SET_CHECKED_TASKS = 'SET_CHECKED_TASKS'
+export const ADD_TASK = 'ADD_TASK'
 
 const initialState = {
   boards: [],
@@ -32,6 +33,7 @@ export function boardReducer(state = initialState, cmd) {
     case REMOVE_TASK:
       // currently it checks ALL THE BOARDS and ALL THE GROUPS for the task , and filters it out if found
       // board -> group -> tasks -> task
+      console.log('Removing task from store')
       return {
         ...state,
         boards: state.boards.map((board) => ({
@@ -42,6 +44,25 @@ export function boardReducer(state = initialState, cmd) {
           })),
         })),
       }
+    case ADD_TASK:
+      // needs boardId , groupId , and task
+      console.log('Adding task to store')
+      return {
+        ...state,
+        boards: state.boards.map((board) =>
+          board.id === cmd.boardId
+            ? {
+                ...board,
+                groups: board.groups.map((group) =>
+                  group.id === cmd.groupId
+                    ? { ...group, tasks: [...group.tasks, cmd.task] }
+                    : group
+                ),
+              }
+            : board
+        ),
+      }
+
     case ADD_BOARD:
       return {
         ...state,

@@ -8,6 +8,8 @@ import {
   UPDATE_BOARD,
   SET_FOOTER,
   SET_CHECKED_TASKS,
+  ADD_TASK,
+  REMOVE_TASK,
 } from './board.reducer'
 import { userService } from '../../services/user.service'
 
@@ -49,9 +51,12 @@ export async function removeTask(board, group, task) {
   // )
   // if (!isConfirmed) return
 
-  console.log('Removing task"', task.title, '" From group "', group.title, '"')
+  console.log(
+    'Removing task "' + task.title + '" From group "' + group.title,
+    '"'
+  )
 
-  store.dispatch({ type: 'REMOVE_TASK', taskId: task.id })
+  store.dispatch({ type: REMOVE_TASK, taskId: task.id })
   const newTasks = group.tasks.filter((t) => t.id !== task.id)
   const newGroup = {
     ...group,
@@ -59,6 +64,20 @@ export async function removeTask(board, group, task) {
   }
 
   updateBoard(board, group, null, { key: 'tasks', value: newGroup.tasks })
+}
+
+export async function addTask(board, group, task) {
+  console.log('Adding task "' + task.title + '" To group "' + group.title + '"')
+
+  store.dispatch({
+    type: ADD_TASK,
+    boardId: board._id,
+    groupId: group.id,
+    task: task,
+  })
+
+  const updatedTasks = [...group.tasks, task]
+  updateBoard(board, group, null, { key: 'tasks', value: updatedTasks })
 }
 
 export function setFilterBy(filterBy = {}) {
@@ -128,8 +147,6 @@ export async function updateBoard(board, group, task, { key, value }) {
         ' updated the ' +
         key +
         ' of group ' +
-        board.groups[gIdx].title +
-        ' in ' +
         board.groups[gIdx].title +
         ' to ' +
         value
