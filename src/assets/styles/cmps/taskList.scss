@@ -4,7 +4,6 @@
 	margin: 10px 0;
 	font-size: 16px;
 	text-align: center;
-	margin-left: 25px;
 }
 
 .custom-table td {
@@ -37,10 +36,10 @@ min-height:45px;
 	text-align: start;
 	align-items: center;
 	display: flex;
-
 	padding-left: 15px;
 	height: 45px;
 	justify-content: space-between;
+
   }
   
   .task-cell .open {
@@ -50,16 +49,26 @@ min-height:45px;
 	display: flex;
 	justify-content: flex-end;
 	transition: opacity 0.3s ease-in-out; 
-	padding: 0px 20px;
+	cursor: grab;
 	flex: 1;
 	font-size: 13px;
-	gap:3px;
   }
 
-    
+  .task-cell .open div{
+	align-items: center;
+	display: flex;
+	gap:5px;
+	padding:9px;
+	cursor: pointer;
+
+  }
+  .task-cell .open div span{
+margin-bottom: 2px;
+  }
+
 
 .open:hover {
-	opacity: 0.5;
+	opacity: 0.7;
   }
 
 

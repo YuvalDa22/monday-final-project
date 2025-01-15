@@ -5,9 +5,11 @@ background-color: rgb(200, 205, 227);
 .sa-main-container{
     margin-right: 7px;
     visibility: hidden;
+    position: relative;
+    right:5px
 }
 
 .sa-main-container button{
     position: relative;
-    bottom: 4px;;
+    bottom: 4px;
 }

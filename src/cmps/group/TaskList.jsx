@@ -10,6 +10,10 @@ import { utilService } from '../../services/util.service'
 import Checkbox from '@mui/material/Checkbox'
 import OpenInFullOutlinedIcon from '@mui/icons-material/OpenInFullOutlined'
 import { Link, useParams } from 'react-router-dom'
+import { getSvg } from '../../services/util.service'
+const SvgIcon = ({ iconName, options }) => {
+  return <i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>
+}
 
 export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
   const [editingTaskId, setEditingTaskId] = useState(null)
@@ -128,16 +132,13 @@ export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
                     {task.title}
                   </span>
                 )}
-                <div className='task-cell open'>
-                  <Link to={`task/${task.id}`}>
-                    <OpenInFullOutlinedIcon
-                      sx={{
-                        width: '16px',
-                      }}
-                    />
+
+                <Link to={`task/${task.id}`} className='task-cell open'>
+                  <div>
+                    <SvgIcon iconName={'task_open_icon'} />
                     <span>Open</span>
-                  </Link>
-                </div>
+                  </div>
+                </Link>
               </td>
               <TaskPreview
                 group={group}
