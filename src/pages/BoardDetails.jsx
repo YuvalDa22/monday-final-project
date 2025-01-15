@@ -71,7 +71,7 @@ export function BoardDetails() {
 				>Add new group
 					</Button>
 			</div>
-			{footerDisplayed && <Footer board={allboards[0]} checkedTasks={checkedTasks} />}
+			{footerDisplayed && <Footer board={allBoards[0]} checkedTasks={checkedTasks} />}
 		</>
 	)
 
