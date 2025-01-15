@@ -15,13 +15,12 @@ export function HomePage() {
           <button
             className="hero-btn"
             onClick={() => {
-              navigate("/workspace/board/1234");
+              navigate("/workspace/board/b101");
             }}
           >
             Get Started
           </button>
         </div>
-        <p>Free use, no limit Start your own Friday!</p>
       </div>
       <Footer />
     </div>

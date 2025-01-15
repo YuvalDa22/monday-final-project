@@ -6,14 +6,16 @@ import { loadBoards } from "../store/board/board.actions"
 import { showErrorMsg } from "../services/event-bus.service"
 import { Button } from "@mui/material";
 import { updateBoard } from "../store/board/board.actions"
-import { utilService } from "../services/util.service"
 import { Footer } from "../cmps/layout/Footer"
 import { boardService } from "../services/board.service"
+import { useParams } from "react-router-dom"
 
 
 
 export function BoardDetails() {
+	const { boardId } = useParams()
 	const allBoards = useSelector((storeState) => storeState.boardModule.boards)
+	const board = allBoards.find((board) => board._id === boardId)
 	const footerDisplayed = useSelector((storeState) => storeState.boardModule.footerDisplayed)
 	const checkedTasks = useSelector((storeState) => storeState.boardModule.checkedTasks)
 
@@ -36,7 +38,6 @@ export function BoardDetails() {
 	if (!allBoards || allBoards.length === 0) return <div>Loading...</div>
 	
 	const onAddGroup = () => { 
-		const board = allBoards[0]
 		console.log("board",board)
 		if(!board) return;
 		const newGroup = boardService.getEmptyGroup()
@@ -47,14 +48,14 @@ export function BoardDetails() {
 	return (
 		<>
 			<div className='main-container'>
-				<BoardHeader board={allBoards[0]} />
-				{allBoards[0].groups &&
-					allBoards[0].groups.map((group) => (
+				<BoardHeader board={board} />
+				{board.groups &&
+					board.groups.map((group) => (
 						<GroupPreview
-							board={allBoards[0]}
+							board={board}
 							group={group}
-							cmpTitles={allBoards[0].cmpTitles}
-							cmpsOrder = {allBoards[0].cmpsOrder}
+							cmpTitles={board.cmpTitles}
+							cmpsOrder = {board.cmpsOrder}
 							key={group.id}
 						/>
 					))}
@@ -65,15 +66,7 @@ export function BoardDetails() {
 				>Add new group
 					</Button>
 			</div>
-			{footerDisplayed && <Footer board={allBoards[0]} checkedTasks={checkedTasks} />}
+			{footerDisplayed && <Footer board={board} checkedTasks={checkedTasks} />}
 		</>
 	)
-
-		// Ofir & Yuval
-		// <>
-		// <BoardHeader board={board}/>
-		// {groups && groups.map(group => <GroupPreview group={group} board={board} key={group._id}/>)}
-
-		// <button>add group</button>
-		// </>
 }
