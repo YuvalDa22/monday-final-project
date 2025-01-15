@@ -8,7 +8,7 @@ import { Button } from "@mui/material";
 import { updateBoard } from "../store/board/board.actions"
 import { Footer } from "../cmps/layout/Footer"
 import { boardService } from "../services/board.service"
-import { useParams } from 'react-router-dom'
+import { useParams, Outlet } from 'react-router-dom'
 
 
 
@@ -65,6 +65,7 @@ export function BoardDetails() {
 					</Button>
 			</div>
 			{footerDisplayed && <Footer board={board} checkedTasks={checkedTasks} />}
+			<Outlet context={boardId} /> {/* Task Details ! */}
 		</>
 	)
 }
