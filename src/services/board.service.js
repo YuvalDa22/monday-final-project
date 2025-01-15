@@ -6,10 +6,10 @@ export const boardService = {
   save,
   remove,
   getById,
-  //getCmpInfo,
   createActivityLog,
-  //   getDefaultFilter,
-  //   getFilterFromSearchParams,
+  getEmptyBoard,
+  getEmptyGroup,
+  getEmptyTask,
 }
 
 const STORAGE_KEY = 'boards'
@@ -17,11 +17,6 @@ _createBoards()
 async function query(filterBy = {}) {
   try {
     let boards = await storageService.query(STORAGE_KEY)
-    // if (filterBy.title) {
-    // 	const nameRegex = new RegExp(filterBy.title, 'i')
-    // 	boards = boards.filter((board) => nameRegex.test(board.title))
-    // }
-
     return boards
   } catch (error) {
     console.log('error:', error)
@@ -45,27 +40,54 @@ async function save(boardToSave) {
   }
 }
 
-// function getCmpInfo(cmpType) {
-//   const cmp = cmps.find((cmp) => cmp.type === cmpType)
-//   // console.log('getCmpInfo:', { cmpType, cmp });
-//   return cmp?.info
-// }
+function getEmptyBoard() {
+	  return {
+	title: '',
+	isStarred: false,
+	archivedAt: 0,
+	createdBy: {
+	  _id: '',
+	  fullname: '',
+	  imgUrl: '',
+	},
+	style: {},
+	labels: [],
+	members: [],
+	groups: [],
+	activities: [],
+	cmpsOrder: [],
+	cmpTitles: [],
+	groupSummary: [],
+	  }
+}
 
-// function getDefaultFilter() {
-// 	return {
-// 		title: '',
-// 	}
-// }
+function getEmptyGroup() {
+	  return {
+	title: '',
+	archivedAt: 0,
+	tasks: [],
+	style: {},
+	  }
+}
 
-// function getFilterFromSearchParams(searchParams) {
-// 	const defaultFilter = getDefaultFilter()
-// 	const filterBy = {}
-// 	for (const field in defaultFilter) {
-// 		filterBy[field] = searchParams.get(field) || ''
-// 	}
-// 	return filterBy
-// }
+function getEmptyTask() {
+	  return {	
+	title: '',
+	archivedAt: 0,
+	status: '',
+	priority: '',
+	description: '',
+	comments: [],
+	checklists: [],
+	memberIds: [],
+	labelIds: [],
+	dueDate: 0,
+	byMember: {},
+	style: {},
+	  }
+}
 
+		
 function _createBoards() {
   let boards = utilService.loadFromStorage(STORAGE_KEY)
   if (!boards || !boards.length) {
@@ -257,11 +279,6 @@ const cmps = [
   },
 ]
 
-// *. activites - when board is updated, the frontend does not send the activities array within the board 
-//    instead it only sends a new activity object: {txt, boardId, groupId, taskId}
-//    the backend adds this activity to the board with $push and can also emit socket notificatios
-
-
 
 function createActivityLog(boardId, groupId, taskId, type, value, prevValue) {
   return {
@@ -295,4 +312,25 @@ function createActivityLog(boardId, groupId, taskId, type, value, prevValue) {
 //   saveBoard(board)
 //   // return board
 //   // return task
+// }
+
+// function getCmpInfo(cmpType) {
+//   const cmp = cmps.find((cmp) => cmp.type === cmpType)
+//   // console.log('getCmpInfo:', { cmpType, cmp });
+//   return cmp?.info
+// }
+
+// function getDefaultFilter() {
+// 	return {
+// 		title: '',
+// 	}
+// }
+
+// function getFilterFromSearchParams(searchParams) {
+// 	const defaultFilter = getDefaultFilter()
+// 	const filterBy = {}
+// 	for (const field in defaultFilter) {
+// 		filterBy[field] = searchParams.get(field) || ''
+// 	}
+// 	return filterBy
 // }

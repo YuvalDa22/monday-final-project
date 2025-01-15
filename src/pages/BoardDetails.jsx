@@ -8,6 +8,7 @@ import { Button } from "@mui/material";
 import { updateBoard } from "../store/board/board.actions"
 import { utilService } from "../services/util.service"
 import { Footer } from "../cmps/layout/Footer"
+import { boardService } from "../services/board.service"
 
 
 
@@ -38,15 +39,8 @@ export function BoardDetails() {
 		const board = allBoards[0]
 		console.log("board",board)
 		if(!board) return;
-		const newGroup = {
-			id: utilService.makeId(),
-			title: "New Group",
-			tasks: [],
-			style: {},
-		}
-		// console.log("New group",newGroup)
+		const newGroup = boardService.getEmptyGroup()
 		const updatedGroups = [...board.groups, newGroup]
-		// console.log("updated groups",updatedGroups)
 		updateBoard(board, null, null, {key: "groups", value: updatedGroups})
 	}
 
