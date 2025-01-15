@@ -1,7 +1,7 @@
 
 import { boardService } from '../../services/board.service'
 import { store } from '../store'
-import {  ADD_BOARD,  REMOVE_BOARD,  SET_FILTER_BY,  SET_BOARDS, UPDATE_BOARD} from './board.reducer'
+import {  ADD_BOARD,  REMOVE_BOARD,  SET_FILTER_BY,  SET_BOARDS, UPDATE_BOARD, SET_FOOTER, SET_CHECKED_TASKS} from './board.reducer'
 import { userService } from '../../services/user.service'
 
 
