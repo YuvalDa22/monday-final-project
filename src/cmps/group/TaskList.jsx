@@ -8,6 +8,8 @@ import {
 import { TaskPreview } from '../task/TaskPreview'
 import { utilService } from '../../services/util.service'
 import Checkbox from '@mui/material/Checkbox'
+import OpenInFullOutlinedIcon from '@mui/icons-material/OpenInFullOutlined'
+import { Link, useParams } from 'react-router-dom'
 
 export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
   const [editingTaskId, setEditingTaskId] = useState(null)
@@ -109,6 +111,7 @@ export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
               <td className='task-cell'>
                 {editingTaskId === task.id ? (
                   <Input
+                    autoFocus
                     type='text'
                     value={tempTitle}
                     onChange={(event) => setTempTitle(event.target.value)}
@@ -116,12 +119,25 @@ export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
                       if (event.key === 'Enter') handleSave(task.id)
                       if (event.key === 'Escape') handleCancel()
                     }}
+                    onBlur={() => {
+                      handleCancel()
+                    }}
                   />
                 ) : (
                   <span onClick={() => handleEdit(task.id, task.title)}>
                     {task.title}
                   </span>
                 )}
+                <div className='task-cell open'>
+                  <Link to={`task/${task.id}`}>
+                    <OpenInFullOutlinedIcon
+                      sx={{
+                        width: '16px',
+                      }}
+                    />
+                    <span>Open</span>
+                  </Link>
+                </div>
               </td>
               <TaskPreview
                 group={group}

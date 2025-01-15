@@ -19,7 +19,7 @@ export function BoardDetails() {
   const checkedTasks = useSelector(
     (storeState) => storeState.boardModule.checkedTasks
   )
-  const boardId = useParams()
+  const { boardId } = useParams()
   console.log('boardid', boardId)
 
   useEffect(() => {

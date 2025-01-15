@@ -27,12 +27,42 @@
 		}
 	}
 }
+min-height:45px;
 }
+
 
 .task-cell {
 	background-color: #fafafa;
 	font-weight: bold;
-}
+	text-align: start;
+	align-items: center;
+	display: flex;
+
+	padding-left: 15px;
+	height: 45px;
+	justify-content: space-between;
+  }
+  
+  .task-cell .open {
+	opacity: 0;
+	margin: 3px;
+	height: 40px;
+	display: flex;
+	justify-content: flex-end;
+	transition: opacity 0.3s ease-in-out; 
+	padding: 0px 20px;
+	flex: 1;
+	font-size: 13px;
+	gap:3px;
+  }
+
+    
+
+.open:hover {
+	opacity: 0.5;
+  }
+
+
 
 .data-cell {
 	background-color: #fff;

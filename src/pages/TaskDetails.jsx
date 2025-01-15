@@ -9,6 +9,8 @@ export function TaskDetails() {
   const boardId = useOutletContext()
   const { taskId } = useParams()
   const navigate = useNavigate()
+  console.log(boardId, 'SSSS')
+
   const [isExiting, setIsExiting] = useState(false) // State to control slide-out
   useEffect(() => {
     // To control outlet coming into view
@@ -18,6 +20,8 @@ export function TaskDetails() {
   const handleClose = () => {
     setIsExiting(true) // trigger animation
     setTimeout(() => {
+      console.log('money time', boardId)
+
       navigate(`/workspace/board/${boardId}`)
     }, 250) // the delay is exactly the animation time, when animation end ONLY THEN we navigate back
   }
