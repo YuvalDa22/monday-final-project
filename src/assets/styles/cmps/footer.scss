@@ -101,5 +101,62 @@
         }
       }
     }
+
+    .modal {
+      position: absolute; /* Place the modal relative to the parent */
+      top: -120%; /* Adjust the vertical position to appear above */
+      left: 0; /* Align it with the start of the parent container */
+      width: 200px; /* Set a fixed width for the modal */
+      background-color: white; /* Modal background color */
+      border: 1px solid #ddd; /* Add a subtle border */
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Add a shadow for better visibility */
+      border-radius: 8px; /* Smooth edges */
+      z-index: 200; /* Ensure it is on top of other elements */
+      padding: 10px; /* Add internal spacing */
+    }
+    
+    .modal h2 {
+      font-size: 16px; /* Smaller font size for the title */
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333; /* Standard text color */
+    }
+    
+    .modal button {
+      display: block; /* Stack buttons vertically */
+      width: 100%; /* Full width for buttons */
+      padding: 8px 10px; /* Button padding */
+      margin-bottom: 10px; /* Spacing between buttons */
+      font-size: 14px;
+      background-color: #0073e6; /* Primary button color */
+      color: white; /* White text for contrast */
+      border: none; /* Remove default border */
+      border-radius: 4px; /* Rounded button edges */
+      cursor: pointer; /* Pointer cursor on hover */
+    }
+    
+    .modal button:last-child {
+      background-color: #f5f5f5; /* Cancel button background */
+      color: #333; /* Cancel button text color */
+      border: 1px solid #ddd; /* Border for the cancel button */
+    }
+    
+    .modal button:hover {
+      background-color: #005bb5; /* Slightly darker blue on hover */
+      color: white;
+    }
+    
+    .modal button:last-child:hover {
+      background-color: #e0e0e0; /* Slightly darker gray on hover */
+    }
+    
+    /* Ensure the footer actions container does not clip the modal */
+    .footer-actions {
+      overflow: visible; /* Allow the modal to extend outside the footer actions */
+      position: relative; /* Position relative for correct child placement */
+    }
+    
+
+
   }
 }
