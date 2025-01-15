@@ -41,53 +41,52 @@ async function save(boardToSave) {
 }
 
 function getEmptyBoard() {
-	  return {
-	title: '',
-	isStarred: false,
-	archivedAt: 0,
-	createdBy: {
-	  _id: '',
-	  fullname: '',
-	  imgUrl: '',
-	},
-	style: {},
-	labels: [],
-	members: [],
-	groups: [],
-	activities: [],
-	cmpsOrder: [],
-	cmpTitles: [],
-	groupSummary: [],
-	  }
+  return {
+    title: '',
+    isStarred: false,
+    archivedAt: 0,
+    createdBy: {
+      _id: '',
+      fullname: '',
+      imgUrl: '',
+    },
+    style: {},
+    labels: [],
+    members: [],
+    groups: [],
+    activities: [],
+    cmpsOrder: [],
+    cmpTitles: [],
+    groupSummary: [],
+  }
 }
 
 function getEmptyGroup() {
-	  return {
-	title: '',
-	archivedAt: 0,
-	tasks: [],
-	style: {},
-	  }
+  return {
+    title: '',
+    archivedAt: 0,
+    tasks: [],
+    style: {},
+  }
 }
 
 function getEmptyTask() {
-	  return {	
-	title: '',
-	archivedAt: 0,
-	status: '',
-	priority: '',
-	description: '',
-	comments: [],
-	checklists: [],
-	memberIds: [],
-	labelIds: [],
-	dueDate: 0,
-	byMember: {},
-	style: {},
-	  }
+  return {
+    title: '',
+    archivedAt: 0,
+    status: '',
+    priority: '',
+    description: '',
+    comments: [],
+    checklists: [],
+    memberIds: [],
+    labelIds: [],
+    dueDate: 0,
+    byMember: {},
+    style: {},
+  }
 }
 
-		
 function _createBoards() {
   let boards = utilService.loadFromStorage(STORAGE_KEY)
   if (!boards || !boards.length) {
@@ -279,25 +278,23 @@ const cmps = [
   },
 ]
 
-
 function createActivityLog(boardId, groupId, taskId, type, value, prevValue) {
   return {
-      id: utilService.makeId(),
-      createdAt: Date.now(),
-      byMember: userService.getLoggedinUser(),
-      board: boardId,
-      group: groupId,
-      task: taskId,
-      type,
-      value,
-      prevValue,
+    id: utilService.makeId(),
+    createdAt: Date.now(),
+    byMember: userService.getLoggedinUser(),
+    board: boardId,
+    group: groupId,
+    task: taskId,
+    type,
+    value,
+    prevValue,
   }
 }
 
-
 // // Store - saveTask
 // function storeSaveTask(task, activity) {
-  
+
 //   board = boardService.saveTask(boardId, groupId, task, activity)
 //   // commit(ACTION) // dispatch(ACTION)
 // }

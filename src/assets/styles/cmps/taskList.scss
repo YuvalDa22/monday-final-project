@@ -29,7 +29,6 @@
 min-height:45px;
 }
 
-
 .task-cell {
 	background-color: #fafafa;
 	font-weight: bold;
@@ -54,6 +53,8 @@ min-height:45px;
 	font-size: 13px;
   }
 
+
+
   .task-cell .open div{
 	align-items: center;
 	display: flex;
@@ -67,6 +68,21 @@ margin-bottom: 2px;
   }
 
 
+
+  .task-menu {
+	position: absolute;
+	padding:7px;
+
+	align-content: start;
+	display:flex;
+	transform: translateX(-45px) translateY(-3px);
+	opacity: 0;
+  }
+
+  .task-menu:hover{
+	opacity: 1;
+  }
+  
 .open:hover {
 	opacity: 0.7;
   }

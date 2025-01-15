@@ -1,6 +1,6 @@
-import Input from '@mui/joy/Input'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
+  removeTask,
   setCheckedTasks,
   setFooter,
   updateBoard,
@@ -9,8 +9,13 @@ import { TaskPreview } from '../task/TaskPreview'
 import { utilService } from '../../services/util.service'
 import Checkbox from '@mui/material/Checkbox'
 import OpenInFullOutlinedIcon from '@mui/icons-material/OpenInFullOutlined'
-import { Link, useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { getSvg } from '../../services/util.service'
+import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined'
+import { Menu, MenuItem, IconButton } from '@mui/material'
+import { boardService } from '../../services/board.service'
+import Input from '@mui/joy/Input'
+
 const SvgIcon = ({ iconName, options }) => {
   return <i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>
 }
@@ -22,13 +27,16 @@ export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
   const [groupChecked, setGroupChecked] = useState(false)
   const [isIndeterminate, setIsIndeterminate] = useState(false)
 
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [selectedTask, setSelectedTask] = useState(null)
+
   useEffect(() => {
     const allChecked =
       group.tasks.length > 0 && tasksChecked.length === group.tasks.length
     const noneChecked = tasksChecked.length === 0
 
     setGroupChecked(allChecked)
-    !allChecked && !noneChecked
+    setIsIndeterminate(!allChecked && !noneChecked)
     setFooter(tasksChecked.length > 0)
     setCheckedTasks(tasksChecked)
   }, [tasksChecked, group.tasks])
@@ -36,7 +44,7 @@ export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
   const handleGroupChecked = (event) => {
     const isChecked = event.target.checked
     setGroupChecked(isChecked)
-    setIsIndeterminate(false) // Reset the indeterminate state
+    setIsIndeterminate(false)
 
     if (isChecked) {
       setTasksChecked([...group.tasks])
@@ -46,17 +54,16 @@ export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
   }
 
   const handleTaskChecked = (task) => {
-    setTasksChecked(
-      (prevState) =>
-        prevState.includes(task)
-          ? prevState.filter((t) => t !== task) // Remove task (uncheck)
-          : [...prevState, task] // Add task (check)
+    setTasksChecked((prevState) =>
+      prevState.includes(task)
+        ? prevState.filter((t) => t !== task)
+        : [...prevState, task]
     )
   }
 
   const handleEdit = (taskId, currentTitle) => {
     setEditingTaskId(taskId)
-    setTempTitle(currentTitle) // Optimistic UI change
+    setTempTitle(currentTitle)
   }
 
   const handleSave = (taskId) => {
@@ -79,16 +86,29 @@ export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
     setTempTitle('')
   }
 
+  const handleMenuClick = (event, task) => {
+    setAnchorEl(event.currentTarget)
+    setSelectedTask(task)
+  }
+
+  const handleMenuClose = () => {
+    setAnchorEl(null)
+    setSelectedTask(null)
+  }
+
+  const handleTaskDeleted = (board, group, task) => {
+    // console.log(board, group, task, 'Task deleted')
+    handleMenuClose()
+    removeTask(board, group, task)
+  }
+
   return (
     <div>
       <table className='custom-table'>
         <thead>
           <tr>
             <td className='checkbox-cell'>
-              <Checkbox
-                checked={groupChecked} // Controlled by `groupChecked`
-                onChange={handleGroupChecked} // Toggles all tasks
-              />
+              <Checkbox checked={groupChecked} onChange={handleGroupChecked} />
             </td>
             <td className='empty-cell'></td>
             {cmpTitles.map((title, index) => (
@@ -100,53 +120,84 @@ export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
         </thead>
         <tbody>
           {group.tasks.map((task) => (
-            <tr
-              key={task.id}
-              className={`task-row ${
-                tasksChecked.includes(task) ? 'checked' : ''
-              }`}
-            >
-              <td className='checkbox-cell'>
-                <Checkbox
-                  checked={tasksChecked.includes(task)} // Controlled by `tasksChecked`
-                  onChange={() => handleTaskChecked(task)} // Toggles the task
-                />
-              </td>
-              <td className='task-cell'>
-                {editingTaskId === task.id ? (
-                  <Input
-                    autoFocus
-                    type='text'
-                    value={tempTitle}
-                    onChange={(event) => setTempTitle(event.target.value)}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter') handleSave(task.id)
-                      if (event.key === 'Escape') handleCancel()
-                    }}
-                    onBlur={() => {
-                      handleCancel()
-                    }}
-                  />
-                ) : (
-                  <span onClick={() => handleEdit(task.id, task.title)}>
-                    {task.title}
-                  </span>
-                )}
+            <React.Fragment key={task.id}>
+              <span className='task-menu'>
+                <IconButton onClick={(event) => handleMenuClick(event, task)}>
+                  <MoreHorizOutlinedIcon />
+                </IconButton>
 
-                <Link to={`task/${task.id}`} className='task-cell open'>
-                  <div>
-                    <SvgIcon iconName={'task_open_icon'} />
-                    <span>Open</span>
-                  </div>
-                </Link>
-              </td>
-              <TaskPreview
-                group={group}
-                board={board}
-                task={task}
-                cmpsOrder={cmpsOrder}
-              />
-            </tr>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl) && selectedTask?.id === task.id}
+                  onClose={handleMenuClose}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                >
+                  <MenuItem
+                    onClick={() => {
+                      handleTaskDeleted(board, group, task)
+                    }}
+                  >
+                    Delete task
+                  </MenuItem>
+                </Menu>
+              </span>
+
+              <tr
+                className={`task-row ${
+                  tasksChecked.includes(task) ? 'checked' : ''
+                }`}
+              >
+                <td className='checkbox-cell'>
+                  <Checkbox
+                    checked={tasksChecked.includes(task)}
+                    onChange={() => handleTaskChecked(task)}
+                  />
+                </td>
+                <td className='task-cell'>
+                  {editingTaskId === task.id ? (
+                    <Input
+                      autoFocus
+                      type='text'
+                      value={tempTitle}
+                      onChange={(event) => setTempTitle(event.target.value)}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter') handleSave(task.id)
+                        if (event.key === 'Escape') handleCancel()
+                      }}
+                      onBlur={handleCancel}
+                      sx={{
+                        width: `${tempTitle.length + 1}ch`,
+                        minWidth: '2ch',
+                      }}
+                    />
+                  ) : (
+                    <span onClick={() => handleEdit(task.id, task.title)}>
+                      {task.title}
+                    </span>
+                  )}
+
+                  <Link to={`task/${task.id}`} className='task-cell open'>
+                    <div>
+                      <SvgIcon iconName={'task_open_icon'} />
+                      <span>Open</span>
+                    </div>
+                  </Link>
+                </td>
+                <TaskPreview
+                  group={group}
+                  board={board}
+                  task={task}
+                  cmpsOrder={cmpsOrder}
+                />
+              </tr>
+            </React.Fragment>
           ))}
           <tr>
             <td colSpan={cmpTitles.length + 1} className='add-item-row'>

@@ -20,7 +20,6 @@ export function BoardDetails() {
     (storeState) => storeState.boardModule.checkedTasks
   )
   const { boardId } = useParams()
-  console.log('boardid', boardId)
 
   useEffect(() => {
     onLoadBoards()
@@ -41,7 +40,6 @@ export function BoardDetails() {
 
   const onAddGroup = () => {
     const board = allBoards[0]
-    console.log('board', board)
     if (!board) return
     const newGroup = boardService.getEmptyGroup()
     const updatedGroups = [...board.groups, newGroup]
