@@ -1,6 +1,6 @@
 import React from 'react'
 
-export function Footer({ checkedTasks }) {
+export function Footer({ checkedTasks = [] }) {
 	function handleDuplicate() {
 		console.log('Duplicate')
 	}
@@ -33,7 +33,7 @@ export function Footer({ checkedTasks }) {
 		<footer className='footer'>
 			<div className='footer-content'>
 				<div className='footer-number'>
-					<h1>{checkedTasks.length}</h1>
+					<h1>{checkedTasks?.length}</h1>
 				</div>
 				<div className='footer-items-selected'>
 					<h1>Items Selected</h1>
