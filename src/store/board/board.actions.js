@@ -43,6 +43,15 @@ export function setFilterBy(filterBy = {}) {
   console.log('board actions -> filterBy: ' ,filterBy)
 }
 
+export function setFooter(boolValue) {
+  store.dispatch({ type: SET_FOOTER, footerDisplayed: boolValue })
+  // console.log('board actions -> footerDisplayed: ' ,boolValue);
+}
+
+export function setCheckedTasks(tasks) {
+  store.dispatch({ type: SET_CHECKED_TASKS, checkedTasks: [...tasks] })
+}
+
 export function updateBoard(board, groupId, taskId, { key, value }) {
   console.log(board)
   if (!board) return
