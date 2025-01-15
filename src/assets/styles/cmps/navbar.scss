@@ -9,7 +9,7 @@
   top: 0;
   z-index: 1000;
   height: 50px;
-  font-family: $navbar-font; /* TODO: replace with something more general */
+  font-family: $navbar-font; 
   font-size: large;
 
 }
@@ -40,12 +40,13 @@
   display: flex;
   align-items: center;
   gap: 5px;
+
 }
 
 .navbar-link {
   text-decoration: none;
   transition: scale 0.35s ease;
-  padding: 9px
+  padding: 6px 9px;
 }
 
 .navbar-link:hover {
@@ -55,5 +56,7 @@
 
 
 .navbar-avatar{
-  margin-left: 30px;
+  margin-left: 15px;
+  display: flex;
+  bottom:2px;
 }

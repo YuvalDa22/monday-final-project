@@ -7,7 +7,8 @@ import { SignUp } from './pages/SignUp'
 import { MondayIndex } from './pages/MondayIndex'
 import SideBar from './cmps/layout/SideBar'
 import { BoardDetails } from './pages/BoardDetails'
-import  NavBar   from './cmps/layout/NavBar'
+import NavBar from './cmps/layout/NavBar'
+import { TaskDetails } from './pages/TaskDetails'
 // import { BoardsIndex } from './pages/BoardsIndex'
 // import { TaskDetails } from './pages/TaskDetails'
 
@@ -21,14 +22,14 @@ function RootCmp() {
       <Routes>
         <Route path='/' element={<HomePage />} />
         {/* <Route path='workspace/board' element={<BoardsIndex />} /> */}
-        <Route path='workspace/board/:boardId' element={<BoardDetails />} >
-          {/* <Route path='workspace/board/:boardId/task/:taskId' element={<TaskDetails />} /> */}
+        <Route path='workspace/board/:boardId' element={<BoardDetails />}>
+          <Route path='task/:taskId' element={<TaskDetails />} />
         </Route>
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<SignUp />} />
         {/* <Route path='/index' element={<MondayIndex />} /> */}
       </Routes>
-      
+
       <UserMsg />
     </div>
   )
