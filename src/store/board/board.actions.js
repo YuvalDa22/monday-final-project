@@ -1,7 +1,8 @@
-import { showErrorMsg, showSuccessMsg } from '../../services/event-bus.service'
+
 import { boardService } from '../../services/board.service'
 import { store } from '../store'
-import {  ADD_BOARD,  REMOVE_BOARD,  SET_FILTER_BY,  SET_BOARDS, UPDATE_BOARD, SET_FOOTER, SET_CHECKED_TASKS} from './board.reducer'
+import {  ADD_BOARD,  REMOVE_BOARD,  SET_FILTER_BY,  SET_BOARDS, UPDATE_BOARD} from './board.reducer'
+import { userService } from '../../services/user.service'
 
 
 
@@ -42,15 +43,6 @@ export function setFilterBy(filterBy = {}) {
   console.log('board actions -> filterBy: ' ,filterBy)
 }
 
-export function setFooter(boolValue) {
-  store.dispatch({ type: SET_FOOTER, footerDisplayed: boolValue })
-  // console.log('board actions -> footerDisplayed: ' ,boolValue);
-}
-
-export function setCheckedTasks(tasks) {
-  store.dispatch({ type: SET_CHECKED_TASKS, checkedTasks: [...tasks] })
-}
-
 export function updateBoard(board, groupId, taskId, { key, value }) {
   console.log(board)
   if (!board) return
@@ -63,23 +55,28 @@ export function updateBoard(board, groupId, taskId, { key, value }) {
   let userMsg = ''
 
   if (gIdx !== -1 && tIdx !== -1) {
-      // activity = createActivity(null, groupId, taskId, key, value, board.groups[gIdx].tasks[tIdx][key])
+      activity = boardService.createActivityLog(board._id, groupId, taskId, key, value, board.groups[gIdx].tasks[tIdx][key])
       board.groups[gIdx].tasks[tIdx][key] = value
-      // board.activities.unshift(activity)
+      board.activities.unshift(activity)
       userMsg = 'Task updated successfully'
       console.log('board after update:', board.groups[gIdx]);
+    console.log(userService.getLoggedinUser() + ' updated the ' + key +  ' of task '  + board.groups[gIdx].tasks[tIdx].title +  ' in ' + board.groups[gIdx].title + ' to ' + value)
   } else if (gIdx !== -1 && tIdx === -1) {
-      // activity = createActivity(null, groupId, null, key, value, board.groups[gIdx][key])
+      activity = boardService.createActivityLog(board._id, groupId, null, key, value, board.groups[gIdx][key])
       board.groups[gIdx][key] = value
-      // board.activities.unshift(activity)
+      board.activities.unshift(activity)
       userMsg = 'Group updated successfully'
-  } else {
-      // activity = createActivity(board._id, null, null, key, value, board[key])
+      console.log(board.activities)
+      console.log(userService.getLoggedinUser() + ' updated the ' + key +  ' of group '  + board.groups[gIdx].title +  ' in ' + board.groups[gIdx].title + ' to ' + value)
+    } else {
+      activity = boardService.createActivityLog(board._id, null, null, key, value, board[key])
       board[key] = value
       console.log("update board",board )
-      // board.activities.unshift(activity)
+      board.activities.unshift(activity)
       userMsg = 'Board updated successfully'
-  }
+      console.log(board.activities)
+      console.log(userService.getLoggedinUser() + ' updated the ' + key +  ' of board '  + board.title + ' to ' + value)
+    }
   saveBoard(board)
 }
   
