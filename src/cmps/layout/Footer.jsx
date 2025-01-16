@@ -5,6 +5,12 @@ import { utilService } from '../../services/util.service';
 
 export function Footer({ board, checkedTasks = [] }) {
   const [showDuplicateOptions, setShowDuplicateOptions] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [exportOptions, setExportOptions] = useState({
+    includeUpdates: false,
+    includeSubitems: false,
+    emailCopy: false,
+  });
 
   function getGroupByTask(task) {
     return board.groups.find((group) =>
@@ -48,29 +54,66 @@ export function Footer({ board, checkedTasks = [] }) {
 	});
   }
   
-  
-
-  function handleDuplicate() {
+function handleDuplicate() {
     setShowDuplicateOptions(true);
-  }
+}
 
-  function handleExport() {
-    if (!checkedTasks || checkedTasks.length === 0) {
-      console.warn('No tasks selected for export.');
-      return;
-    }
+const handleExportChange = (option) => {
+    setExportOptions((prevOptions) => ({
+      ...prevOptions,
+      [option]: !prevOptions[option],
+    }));
+  };
 
-    const headers = [...board.cmpTitles];
-    const data = checkedTasks.map((task) =>
-      headers.map((header) => task[header])
-    );
+  const handleExport = () => {
+	const headers = ['Item', ...board.cmpTitles]; 
+	const data = checkedTasks.map((task) => [
+	  task.title, 
+	  ...board.cmpTitles.map((cmpTitle) => {
 
-    const excelData = [headers, ...data];
-    const worksheet = XLSX.utils.aoa_to_sheet(excelData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Checked Tasks');
-    XLSX.writeFile(workbook, 'checked_tasks.xlsx');
-  }
+		switch (cmpTitle) {
+		  case 'Status':
+			return task.status || '';
+		  case 'Priority':
+			return task.priority || '';
+		  case 'Members':
+			return (task.memberIds || []).join(', '); 
+		  case 'Due Date':
+			return task.dueDate ? new Date(task.dueDate).toLocaleDateString() : ''; 
+		  default:
+			return ''; // Fallback for unmapped titles
+		}
+	  }),
+	]);
+
+    // Create the XLSX data
+    const worksheet = XLSX.utils.aoa_to_sheet([headers, ...data]);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, board.title || 'Export');
+
+    // Trigger file download
+    XLSX.writeFile(workbook, `${board.title || 'Export'}.xlsx`);
+
+    // Close the modal
+    setShowExportModal(false);
+  };
+//   function handleExport() {
+//     if (!checkedTasks || checkedTasks.length === 0) {
+//       console.warn('No tasks selected for export.');
+//       return;
+//     }
+
+//     const headers = [...board.cmpTitles];
+//     const data = checkedTasks.map((task) =>
+//       headers.map((header) => task[header])
+//     );
+
+//     const excelData = [headers, ...data];
+//     const worksheet = XLSX.utils.aoa_to_sheet(excelData);
+//     const workbook = XLSX.utils.book_new();
+//     XLSX.utils.book_append_sheet(workbook, worksheet, 'Checked Tasks');
+//     XLSX.writeFile(workbook, 'checked_tasks.xlsx');
+//   }
 
   function handleArchive() {
     console.log('Archive');
@@ -123,10 +166,10 @@ export function Footer({ board, checkedTasks = [] }) {
             <span>...</span>
             <span>Duplicate</span>
           </div>
-          <div onClick={handleExport} className="footer-action">
-            <span>...</span>
-            <span>Export</span>
-          </div>
+          <div onClick={() => setShowExportModal(true)} className="footer-action">
+          <span>...</span>
+          <span>Export</span>
+        </div>
           <div onClick={handleArchive} className="footer-action">
             <span>...</span>
             <span>Archive</span>
@@ -158,6 +201,47 @@ export function Footer({ board, checkedTasks = [] }) {
               Duplicate Items & Updates
             </button>
             <button onClick={() => setShowDuplicateOptions(false)}>Cancel</button>
+          </div>
+        )}
+		
+        {/* Export Modal */}
+        {showExportModal && (
+          <div className="modal">
+            <h2>Export "{board.title}"</h2>
+            <div>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={exportOptions.includeUpdates}
+                  onChange={() => handleExportChange('includeUpdates')}
+                />
+                Include updates
+              </label>
+            </div>
+            <div>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={exportOptions.includeSubitems}
+                  onChange={() => handleExportChange('includeSubitems')}
+                />
+                Include subitems
+              </label>
+            </div>
+            <div>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={exportOptions.emailCopy}
+                  onChange={() => handleExportChange('emailCopy')}
+                />
+                Email me a copy ({board.email || 'example@example.com'})
+              </label>
+            </div>
+            <div className="modal-buttons">
+              <button onClick={handleExport}>Export</button>
+              <button onClick={() => setShowExportModal(false)}>Cancel</button>
+            </div>
           </div>
         )}
         <div className="footer-close">
