@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { updateBoard } from '../../store/board/board.actions';
 import * as XLSX from 'xlsx';
 import { utilService } from '../../services/util.service';
+import { showSuccessMsg } from '../../services/event-bus.service';
 
 export function Footer({ board, checkedTasks = [] }) {
   const [showDuplicateOptions, setShowDuplicateOptions] = useState(false);
@@ -97,27 +98,75 @@ const handleExportChange = (option) => {
     // Close the modal
     setShowExportModal(false);
   };
-//   function handleExport() {
-//     if (!checkedTasks || checkedTasks.length === 0) {
-//       console.warn('No tasks selected for export.');
-//       return;
-//     }
 
-//     const headers = [...board.cmpTitles];
-//     const data = checkedTasks.map((task) =>
-//       headers.map((header) => task[header])
-//     );
-
-//     const excelData = [headers, ...data];
-//     const worksheet = XLSX.utils.aoa_to_sheet(excelData);
-//     const workbook = XLSX.utils.book_new();
-//     XLSX.utils.book_append_sheet(workbook, worksheet, 'Checked Tasks');
-//     XLSX.writeFile(workbook, 'checked_tasks.xlsx');
-//   }
-
-  function handleArchive() {
-    console.log('Archive');
-  }
+  const handleArchive = () => {
+    if (!checkedTasks || checkedTasks.length === 0) {
+      console.warn('No items selected for archiving.');
+      return;
+    }
+  
+    checkedTasks.forEach((checkedItem) => {
+      // Determine if the item is a group
+      const group = board.groups.find((group) => group.id === checkedItem.id);
+  
+      if (group) {
+        // It's a group: Remove it from the groups array
+        board.groups = board.groups.filter((g) => g.id !== group.id);
+  
+        // Add the group to archivedItems
+        board.archivedItems.push({
+          id: group.id,
+          type: 'group',
+          archivedAt: Date.now(),
+        });
+  
+        // Update the board's groups
+        updateBoard(board, null, null, {
+          key: 'groups',
+          value: board.groups,
+        });
+      } else {
+        // It's a task: Find the group it belongs to
+        const parentGroup = board.groups.find((group) =>
+          group.tasks.some((task) => task.id === checkedItem.id)
+        );
+  
+        if (!parentGroup) {
+          console.error('Group not found for task:', checkedItem);
+          return;
+        }
+  
+        // Remove the task from the group's tasks array
+        parentGroup.tasks = parentGroup.tasks.filter(
+          (task) => task.id !== checkedItem.id
+        );
+  
+        // Add the task to archivedItems
+        board.archivedItems.push({
+          id: checkedItem.id,
+          type: 'task',
+          archivedAt: Date.now(),
+        });
+  
+        // Update the group's tasks
+        updateBoard(board, parentGroup.id, null, {
+          key: 'tasks',
+          value: parentGroup.tasks,
+        });
+      }
+    });
+  
+    // Update the board's archivedItems array
+    updateBoard(board, null, null, {
+      key: 'archivedItems',
+      value: board.archivedItems,
+    });
+  
+    // Show success message
+    showSuccessMsg('Items archived successfully');
+  };
+  
+  
 
   function handleDelete() {
     checkedTasks.forEach((checkedTask) => {
@@ -170,10 +219,10 @@ const handleExportChange = (option) => {
           <span>...</span>
           <span>Export</span>
         </div>
-          <div onClick={handleArchive} className="footer-action">
-            <span>...</span>
-            <span>Archive</span>
-          </div>
+        <div onClick={handleArchive} className="footer-action">
+          <span>...</span>
+          <span>Archive</span>
+        </div>
           <div onClick={handleDelete} className="footer-action">
             <span>...</span>
             <span>Delete</span>
@@ -203,8 +252,6 @@ const handleExportChange = (option) => {
             <button onClick={() => setShowDuplicateOptions(false)}>Cancel</button>
           </div>
         )}
-		
-        {/* Export Modal */}
         {showExportModal && (
           <div className="modal">
             <h2>Export "{board.title}"</h2>

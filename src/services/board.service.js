@@ -41,31 +41,34 @@ async function save(boardToSave) {
 }
 
 function getEmptyBoard() {
-	  return {
-	title: '',
-	isStarred: false,
-	archivedAt: 0,
-	createdBy: {
-	  _id: '',
-	  fullname: '',
-	  imgUrl: '',
-	},
-	style: {},
-	labels: [],
-	members: [],
-	groups: [],
-	activities: [],
-	cmpsOrder: [],
-	cmpTitles: [],
-	groupSummary: [],
-	  }
+  return {
+    title: '',
+    isStarred: false,
+    archivedAt: 0,
+    createdBy: {
+      _id: '',
+      fullname: '',
+      imgUrl: '',
+    },
+    style: {},
+    labels: [],
+    members: [],
+    groups: [], 
+    archivedItems: [], //Groups or Tasks
+    activities: [],
+    cmpsOrder: [],
+    cmpTitles: [],
+    groupSummary: [],
+  };
 }
+
 
 function getEmptyGroup() {
 	  return {
 	title: '',
 	archivedAt: 0,
 	tasks: [],
+  archivedItems: [],
 	style: {},
 	  }
 }
@@ -102,6 +105,13 @@ function _createBoards() {
           fullname: 'Abi Abambi',
           imgUrl: 'http://some-img',
         },
+        archivedItems: [
+          {
+            id: 'g103',
+            type: 'group',
+            archivedAt: 1673894400000,
+          }
+        ],
         style: {},
         labels: [
           // Status Labels (l101 - l199)
