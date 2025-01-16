@@ -15,7 +15,7 @@ export function TaskPreview({ task, cmpsOrder, board, group }) {
             info={task[cmp]} // Pass the current value for this key
             onUpdate={(data) => {
               console.log('Updating: ', cmp, 'with data:', data)
-              updateBoard(board, group.id, task.id, { key: cmp, value: data })
+              updateBoard(board, group, task, { key: cmp, value: data })
             }}
           />
         </td>

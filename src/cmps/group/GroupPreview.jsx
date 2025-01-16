@@ -8,6 +8,7 @@ import {
   setCheckedTasks,
   setFooter,
   updateBoard,
+  duplicateTask,
 } from '../../store/board/board.actions'
 import { TaskPreview } from '../task/TaskPreview'
 import { utilService } from '../../services/util.service'
@@ -110,6 +111,10 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
     removeTask(board, group, task)
   }
 
+  const handleTaskDuplicate = (board, group, task) => {
+    handleMenuClose()
+    duplicateTask(board, group, task)
+  }
   return (
     <>
       <div className='gp-main-container' style={{ alignItems: 'baseline' }}>
@@ -180,6 +185,13 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
                         }}
                       >
                         Delete task
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          handleTaskDuplicate(board, group, task)
+                        }}
+                      >
+                        Duplicate task
                       </MenuItem>
                     </Menu>
                   </span>

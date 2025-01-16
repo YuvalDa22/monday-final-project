@@ -43,11 +43,9 @@ export function BoardDetails() {
     if (!board) return
     let newGroup = boardService.getEmptyGroup()
     newGroup = {
-      id: utilService.makeId(), // Generate and add the ID
-      ...newGroup, // Keep the existing properties
+      id: utilService.makeId(), // Generate and add ID to the top of the properties
+      ...newGroup,
     }
-
-    console.log('MY NEW GRP', newGroup)
 
     const updatedGroups = [...board.groups, newGroup]
     updateBoard(board, null, null, { key: 'groups', value: updatedGroups })
