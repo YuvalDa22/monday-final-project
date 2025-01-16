@@ -22,7 +22,6 @@ export function HomePage() {
           </button>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }
