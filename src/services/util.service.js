@@ -8,6 +8,7 @@ export const utilService = {
   animateCSS,
   getSvg,
   formatDate,
+  createUniqueColorPicker
 }
 
 function makeId(length = 5) {
@@ -91,3 +92,28 @@ export function getSvg(
       const year = date.getFullYear();
       return `${day}/${month}/${year}`;
   };
+
+  function createUniqueColorPicker() {
+    const colors = [
+        "red", "blue", "green", "yellow", "purple", "orange", "pink", "brown",
+        "black", "white", "gray", "cyan", "magenta", "teal", "lime", "indigo",
+        "violet", "gold", "silver", "maroon", "navy", "turquoise", "coral",
+        "salmon", "khaki", "plum", "orchid", "tan", "peach", "crimson", "olive"
+        // Add more colors here as needed for a larger list
+    ];
+
+    let remainingColors = [...colors]; // Clone the array initially
+
+    return function getRandomUniqueColor() {
+        if (remainingColors.length === 0) {
+            console.log("All colors have been used. Resetting the color list.");
+            remainingColors = [...colors]; // Reset the remaining colors
+        }
+
+        const randomIndex = Math.floor(Math.random() * remainingColors.length);
+        const color = remainingColors[randomIndex];
+        remainingColors.splice(randomIndex, 1); // Remove the chosen color
+
+        return color;
+    };
+}

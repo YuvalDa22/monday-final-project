@@ -68,7 +68,7 @@ function getEmptyGroup() {
 		archivedAt: 0,
 		tasks: [],
 		archivedItems: [],
-		style: {},
+		style: {color : utilService.createUniqueColorPicker()},
 	}
 }
 
@@ -188,7 +188,7 @@ function _createBoards() {
 								title: 'Add Samples',
 							},
 						],
-						style: {},
+						style: { color: '#ff0000' },
 					},
 					{
 						id: 'g102',
@@ -246,7 +246,7 @@ function _createBoards() {
 								},
 							},
 						],
-						style: {},
+						style: { color: '#800080' },
 					},
 				],
 				activities: [
