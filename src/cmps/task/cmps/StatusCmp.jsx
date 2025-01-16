@@ -40,7 +40,7 @@ export function StatusCmp({ onUpdate, board, info }) {
 			<Select
 				options={statusLabels} 
 				getOptionLabel={(label) => (
-					<div>
+					<div style={{color: 'white'}}>
 						{label.title}
 					</div>
 				)}

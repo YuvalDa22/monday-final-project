@@ -152,25 +152,19 @@ function _createBoards() {
             _id: 'u101',
             fullname: 'Tal Tarablus',
             imgUrl:
-              'https://images.pexels.com/photos/30061809/pexels-photo-30061809/free-photo-of-fashionable-woman-posing-with-colorful-headscarf.jpeg?auto=compress&cs=tinysrgb&w=600',
+              'https://i.pravatar.cc/250?u=mail@ashallendesign.co.uk',
           },
           {
             _id: 'u102',
             fullname: 'Yuval Dadon',
             imgUrl:
-              'https://images.pexels.com/photos/30007901/pexels-photo-30007901/free-photo-of-thoughtful-man-in-grey-coat-outdoors.jpeg?auto=compress&cs=tinysrgb&w=600',
+              'https://eu.ui-avatars.com/api/?name=John+Doe&size=250',
           },
           {
             _id: 'u103',
             fullname: 'Ofir Gady',
             imgUrl:
-              'https://images.pexels.com/photos/28773362/pexels-photo-28773362/free-photo-of-dynamic-black-and-white-portrait-of-young-man-on-phone.jpeg?auto=compress&cs=tinysrgb&w=600',
-          },
-          {
-            _id: 'u104',
-            fullname: 'Gal Israeli',
-            imgUrl:
-              'https://images.pexels.com/photos/30071289/pexels-photo-30071289/free-photo-of-portrait-of-a-bearded-man-outdoors.jpeg?auto=compress&cs=tinysrgb&w=600',
+              'https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250',
           },
         ],
         groups: [
@@ -190,7 +184,7 @@ function _createBoards() {
                 memberIds: ['u101'],
               },
             ],
-            style: {},
+            style: {color: 'red'},
           },
           {
             id: 'g102',
@@ -257,7 +251,7 @@ function _createBoards() {
                 },
               },
             ],
-            style: {},
+            style: {color: 'purple'},
           },
         ],
         activities: [

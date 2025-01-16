@@ -35,12 +35,13 @@
     .footer-items-selected {
       grid-column: span 3; /* Take 3 out of 12 columns */
       text-align: center;  /* Align text to the center */
-      border: 1px solid #5e5e5e; /* Add a border around each list item */
+      // border: 1px solid #5e5e5e; /* Add a border around each list item */
       height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       gap: 1rem;
+      margin-bottom: 1em;
 
       h1 {
         font-weight: bold;
@@ -69,7 +70,7 @@
       gap: 1rem; /* Add spacing between grid items */
 
       .footer-action {
-      border: 1px solid #5e5e5e; /* Add a border around each list item */
+      // border: 1px solid #5e5e5e; /* Add a border around each list item */
       display: grid;
       color: #333;
       text-decoration: none;

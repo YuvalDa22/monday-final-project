@@ -7,6 +7,7 @@ export function PriorityPicker({ onUpdate, board, info }) {
         backgroundColor: currentLabel?.color || '#fff', // Use the color of the current label or a default gray
         width: '100%',
         height: '100%',
+        color: 'white'
     };
 
     // Filter priority labels (IDs start with "l2")
@@ -43,7 +44,7 @@ export function PriorityPicker({ onUpdate, board, info }) {
             <Select
                 options={priorityLabels} // Pass the priority labels as options
                 getOptionLabel={(label) => (
-                    <div>
+                    <div style={{color: 'white'}}>
                         {label.title} {/* Display label title */}
                     </div>
                 )}

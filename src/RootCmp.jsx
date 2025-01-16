@@ -16,24 +16,23 @@ function RootCmp() {
   const location = useLocation()
   const showSidebarAndNavBar = location.pathname.startsWith('/workspace')
   return (
-    <div className='app-container'>
-      {showSidebarAndNavBar && <SideBar />}
-      {showSidebarAndNavBar && <NavBar />}
-      <div className="main-container">
-      <Routes>
-        <Route path='/' element={<HomePage />} />
-        {/* <Route path='workspace/board' element={<BoardsIndex />} /> */}
-        <Route path='workspace/board/:boardId' element={<BoardDetails />}>
-          <Route path='task/:taskId' element={<TaskDetails />} />
-        </Route>
-        <Route path='/login' element={<Login />} />
-        <Route path='/signup' element={<SignUp />} />
-        {/* <Route path='/index' element={<MondayIndex />} /> */}
-      </Routes>
+    <>
+      {location.pathname === '/' && <HomePage />}
+      <div className='app-container'>
+        {showSidebarAndNavBar && <SideBar />}
+        {showSidebarAndNavBar && <NavBar />}
+        <div className="main-container">
+          <Routes>
+            <Route path='/workspace/board/:boardId' element={<BoardDetails />}>
+              <Route path='task/:taskId' element={<TaskDetails />} />
+            </Route>
+            <Route path='/login' element={<Login />} />
+            <Route path='/signup' element={<SignUp />} />
+          </Routes>
+        </div>
+        <UserMsg />
       </div>
-
-      <UserMsg />
-    </div>
+    </>
   )
 }
 
