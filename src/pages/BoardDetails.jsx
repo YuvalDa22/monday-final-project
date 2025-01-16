@@ -47,31 +47,39 @@ export function BoardDetails() {
       ...newGroup,
     }
 
-    const updatedGroups = [...board.groups, newGroup]
+    const updatedGroups = [...board?.groups, newGroup]
     updateBoard(board, null, null, { key: 'groups', value: updatedGroups })
     console.log(board, ' UPDATD BOARD')
   }
 
   return (
     <>
-      <div className='main-container'>
-        <BoardHeader board={board} />
-        {board.groups &&
-          board.groups.map((group) => (
-            <GroupPreview
-              board={board}
-              group={group}
-              cmpTitles={board.cmpTitles}
-              cmpsOrder={board.cmpsOrder}
-              key={group.id}
-            />
-          ))}
-        <Button variant='contained' color='primary' onClick={onAddGroup}>
-          Add new group
-        </Button>
+      <div className='board-details-container'>
+        <div className='board-details-header'>
+          <BoardHeader board={board} />
+        </div>
+        <div className='board-details-groups-container'>
+          {board?.groups &&
+            board?.groups.map((group) => (
+              <GroupPreview
+                board={board}
+                group={group}
+                cmpTitles={board.cmpTitles}
+                cmpsOrder={board.cmpsOrder}
+                key={group.id}
+              />
+            ))}
+        </div>
+        <div className='add-group-button-container'>
+          <Button variant='contained' color='primary' onClick={onAddGroup}>
+            Add new group
+          </Button>
+        </div>
+        {footerDisplayed && (
+          <Footer board={board} checkedTasks={checkedTasks} />
+        )}
+        <Outlet context={boardId} /> {/* Task Details ! */}
       </div>
-      {footerDisplayed && <Footer board={board} checkedTasks={checkedTasks} />}
-      <Outlet context={boardId} /> {/* Task Details ! */}
     </>
   )
 }

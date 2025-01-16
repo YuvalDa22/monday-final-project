@@ -1,6 +1,7 @@
 /* src/Navbar.css */
 
 .navbar {
+  grid-area: navbar;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -8,11 +9,11 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  height: 50px;
   font-family: $navbar-font; 
   font-size: large;
 
 }
+
 
 .navbar-logo img {
   height: 30px;

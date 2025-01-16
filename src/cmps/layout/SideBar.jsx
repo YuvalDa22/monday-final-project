@@ -5,7 +5,7 @@ import { getSvg } from '../../services/util.service'
 import { StarBorderOutlined } from '@mui/icons-material'
 
 const SvgIcon = ({ iconName, options }) => {
-  return <i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>
+	return <i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>
 }
 // sidebar_home:
 // '<svg viewBox="0 0 20 20" fill="currentColor" width="" height="" aria-hidden="true" tabindex="-1" class="icon_a812034417" data-testid="icon"><path d="M9.56992 2.1408C9.82591 1.95307 10.1741 1.95307 10.4301 2.1408L17.7028 7.47413C17.8896 7.61113 18 7.82894 18 8.06061V16.7879C18 17.1895 17.6744 17.5152 17.2727 17.5152H11.9394C11.5377 17.5152 11.2121 17.1895 11.2121 16.7879V13.1515H8.78788V16.7879C8.78788 17.1895 8.46227 17.5152 8.06061 17.5152H2.72727C2.32561 17.5152 2 17.1895 2 16.7879V8.06061C2 7.82894 2.11037 7.61113 2.29719 7.47413L9.56992 2.1408ZM3.45455 8.42914V16.0606H7.33333V12.4242C7.33333 12.0226 7.65894 11.697 8.06061 11.697H11.9394C12.3411 11.697 12.6667 12.0226 12.6667 12.4242V16.0606H16.5455V8.42914L10 3.62914L3.45455 8.42914Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path></svg>',
@@ -19,47 +19,44 @@ const SvgIcon = ({ iconName, options }) => {
 // '<svg viewBox="0 0 20 20" fill="currentColor" width="" height="" aria-hidden="true" class="icon_35c1b9ef14" data-testid="icon"><path d="M7.5 4.5H16C16.2761 4.5 16.5 4.72386 16.5 5V15C16.5 15.2761 16.2761 15.5 16 15.5H7.5L7.5 4.5ZM6 4.5H4C3.72386 4.5 3.5 4.72386 3.5 5V15C3.5 15.2761 3.72386 15.5 4 15.5H6L6 4.5ZM2 5C2 3.89543 2.89543 3 4 3H16C17.1046 3 18 3.89543 18 5V15C18 16.1046 17.1046 17 16 17H4C2.89543 17 2 16.1046 2 15V5Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path></svg>',
 // }
 
-function Sidebar() {
-  return (
-    <div className='sidebar'>
-      {/* Navigation Links */}
-      <ul className='sidebar-links'>
-        <li className='sidebar-item'>
-          <SvgIcon iconName={'sidebar_home'} /> <span>Home</span>
-        </li>
-        <li className='sidebar-item'>
-          <SvgIcon iconName={'sidebar_myWork'} /> <span>My Work</span>
-        </li>{' '}
-        <Divider />
-        <li className='sidebar-item'>
-          <StarBorderOutlined />
-          <span>Favorites</span>
-        </li>
-        <Divider />
-        <br />
-        <li className='sidebar-item'>
-          <SvgIcon iconName={'sidebar_workspaces'} />
-          <span>Workspaces</span>
-        </li>
-      </ul>
-
-      {/* Workspace Section */}
-      <div className='workspace-section'>
-        <ul className='workspace-links'>
-          <li
-            className='workspace-item active'
-            style={{ display: 'flex', alignItems: 'center' }}
-          >
-            <SvgIcon
-              iconName={'sidebar_workspace_projectIcon'}
-              options={{ height: '17', width: '17' }}
-            />
-            <span>Main Workspace</span>
-          </li>
-        </ul>
-      </div>
-    </div>
-  )
+export default function Sidebar() {
+	return (
+		<div className='sidebar'>
+			{/* Navigation Links */}
+			<ul className='sidebar-links'>
+				<li className='sidebar-item'>
+					<SvgIcon iconName={'sidebar_home'} /> <span>Home</span>
+				</li>
+				<li className='sidebar-item'>
+					<SvgIcon iconName={'sidebar_myWork'} /> <span>My Work</span>
+				</li>
+			</ul>
+			<Divider className='divider' />
+			<ul className='sidebar-links'>
+				<li className='sidebar-item'>
+					<StarBorderOutlined />
+					<span>Favorites</span>
+				</li>
+			</ul>
+			<Divider className='divider' />
+			<ul className='sidebar-links'>
+				<li className='sidebar-item'>
+					<SvgIcon iconName={'sidebar_workspaces'} />
+					<span>Workspaces</span>
+				</li>
+			</ul>
+			{/* Workspace Section */}
+			<div className='workspace-section'>
+				<ul className='workspace-links'>
+					<li className='workspace-item active' style={{ display: 'flex', alignItems: 'center' }}>
+						<SvgIcon
+							iconName={'sidebar_workspace_projectIcon'}
+							options={{ height: '17', width: '17' }}
+						/>
+						<span>Main Workspace</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	)
 }
-
-export default Sidebar

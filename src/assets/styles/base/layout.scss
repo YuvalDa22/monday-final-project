@@ -1,0 +1,24 @@
+.app-container {
+    display: grid; 
+    grid-template-columns: 0.3fr 1.7fr; 
+    grid-template-rows: auto 1fr ; 
+    gap: 1em 1em; 
+    grid-template-areas: 
+      "navbar navbar"
+      "sidebar main-container";
+    height: 100vh;
+}
+
+.main-container {
+    display: grid; 
+    grid-template-columns: 4em 1fr; 
+    grid-template-rows: 1fr; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+      "board-details-container board-details-container"; 
+    grid-area: main-container; 
+  }
+
+// .main-container {
+// 	grid-area: 2 / 2 / 4 / 4;
+// }

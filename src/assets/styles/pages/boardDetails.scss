@@ -1,8 +1,22 @@
-.main-container{
-    margin-left: 260px;  /* Add margin equal to the sidebar's width */
-    padding: 18px 30px 0px 38px;
-    border-radius: 8px 0px;
+.board-details-container {
+    display: grid; 
+    grid-template-columns: 4em 1fr; 
+    grid-template-rows: 0.1fr 0.4fr auto; 
+    gap: 2em 0px; 
+    grid-template-areas: 
+      ". board-details-header"
+      "board-details-groups-container board-details-groups-container"
+      ". add-group-button-container"; 
+    grid-area: board-details-container; 
     background-color: white;
-    height: 100vh;
-    transition: margin-left 0.2s ease; /* smooth transition */
-}
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); 
+    border-radius: 8px;
+  }
+  .board-details-header { grid-area: board-details-header; }
+  .board-details-groups-container {
+    display: grid; 
+    grid-template-rows: auto; 
+    gap: 3em 0px; 
+    grid-area: board-details-groups-container; 
+  }
+  .add-group-button-container { grid-area: add-group-button-container; }

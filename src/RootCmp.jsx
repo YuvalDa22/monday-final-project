@@ -16,9 +16,10 @@ function RootCmp() {
   const location = useLocation()
   const showSidebarAndNavBar = location.pathname.startsWith('/workspace')
   return (
-    <div>
+    <div className='app-container'>
       {showSidebarAndNavBar && <SideBar />}
       {showSidebarAndNavBar && <NavBar />}
+      <div className="main-container">
       <Routes>
         <Route path='/' element={<HomePage />} />
         {/* <Route path='workspace/board' element={<BoardsIndex />} /> */}
@@ -29,6 +30,7 @@ function RootCmp() {
         <Route path='/signup' element={<SignUp />} />
         {/* <Route path='/index' element={<MondayIndex />} /> */}
       </Routes>
+      </div>
 
       <UserMsg />
     </div>
