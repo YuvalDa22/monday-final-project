@@ -53,44 +53,42 @@ function getEmptyBoard() {
     style: {},
     labels: [],
     members: [],
-    groups: [], 
+    groups: [],
     archivedItems: [], //Groups or Tasks
     activities: [],
     cmpsOrder: [],
     cmpTitles: [],
     groupSummary: [],
-  };
+  }
 }
 
-
 function getEmptyGroup() {
-	  return {
-	title: '',
-	archivedAt: 0,
-	tasks: [],
-  archivedItems: [],
-	style: {},
-	  }
+  return {
+    title: '',
+    archivedAt: 0,
+    tasks: [],
+    archivedItems: [],
+    style: {},
+  }
 }
 
 function getEmptyTask() {
-	  return {	
-	title: '',
-	archivedAt: 0,
-	status: '',
-	priority: '',
-	description: '',
-	comments: [],
-	checklists: [],
-	memberIds: [],
-	labelIds: [],
-	dueDate: 0,
-	byMember: {},
-	style: {},
-	  }
+  return {
+    title: '',
+    archivedAt: 0,
+    status: '',
+    priority: '',
+    description: '',
+    comments: [],
+    checklists: [],
+    memberIds: [],
+    labelIds: [],
+    dueDate: 0,
+    byMember: {},
+    style: {},
+  }
 }
 
-		
 function _createBoards() {
   let boards = utilService.loadFromStorage(STORAGE_KEY)
   if (!boards || !boards.length) {
@@ -110,7 +108,7 @@ function _createBoards() {
             id: 'g103',
             type: 'group',
             archivedAt: 1673894400000,
-          }
+          },
         ],
         style: {},
         labels: [
@@ -289,25 +287,23 @@ const cmps = [
   },
 ]
 
-
 function createActivityLog(boardId, groupId, taskId, type, value, prevValue) {
   return {
-      id: utilService.makeId(),
-      createdAt: Date.now(),
-      byMember: userService.getLoggedinUser(),
-      board: boardId,
-      group: groupId,
-      task: taskId,
-      type,
-      value,
-      prevValue,
+    id: utilService.makeId(),
+    createdAt: Date.now(),
+    byMember: userService.getLoggedinUser(),
+    board: boardId,
+    group: groupId,
+    task: taskId,
+    type,
+    value,
+    prevValue,
   }
 }
 
-
 // // Store - saveTask
 // function storeSaveTask(task, activity) {
-  
+
 //   board = boardService.saveTask(boardId, groupId, task, activity)
 //   // commit(ACTION) // dispatch(ACTION)
 // }

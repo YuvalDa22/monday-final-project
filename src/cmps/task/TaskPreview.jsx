@@ -5,23 +5,21 @@ import { useEffect } from 'react'
 import { updateBoard } from '../../store/board/board.actions'
 
 export function TaskPreview({ task, cmpsOrder, board, group }) {
-	// console.log('TaskPreview -> task:', task);
-	return (
-		<>
-			{cmpsOrder.map((cmp, idx) => (
-
-					<td key={idx} className='data-cell'>
-					<DynamicCmp
-						cmp={cmp}
-						board={board}
-						info={task[cmp]} // Pass the current value for this key
-						onUpdate={(data) => {
-							console.log('Updating: ', cmp, 'with data:', data)
-							updateBoard(board, group.id, task.id, { key: cmp, value: data})
-						}}
-						/>
-				</td>
-			))}
-		</>
-	)
+  return (
+    <>
+      {cmpsOrder.map((cmp, idx) => (
+        <td key={idx} className='data-cell'>
+          <DynamicCmp
+            cmp={cmp}
+            board={board}
+            info={task[cmp]} // Pass the current value for this key
+            onUpdate={(data) => {
+              console.log('Updating: ', cmp, 'with data:', data)
+              updateBoard(board, group.id, task.id, { key: cmp, value: data })
+            }}
+          />
+        </td>
+      ))}
+    </>
+  )
 }
