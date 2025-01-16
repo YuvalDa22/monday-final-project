@@ -137,7 +137,7 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
 				<span className='gh-how-many-tasks'>{group.tasks.length} Tasks</span>
 			</div>
 		</div>
-        <div>
+        <div className='gp-table'>
           <table className='custom-table'>
             <thead>
               <tr>
