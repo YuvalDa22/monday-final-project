@@ -8,7 +8,7 @@ export function BoardHeader({ board }) {
   return (
     <div className='boardHeader_main-container'>
       <div className='boardHeader_title_and_additionalBoardActions'>
-        <h1>{board.title}</h1> {/* <AdditionalBoardActions /> */}
+        <h1>{board?.title}</h1> {/* <AdditionalBoardActions /> */}
         <AdditionalBoardActions />
       </div>
       <BoardNavBar />

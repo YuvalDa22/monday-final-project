@@ -49,7 +49,7 @@ export function BoardDetails() {
 
     console.log('MY NEW GRP', newGroup)
 
-    const updatedGroups = [...board.groups, newGroup]
+    const updatedGroups = [...board?.groups, newGroup]
     updateBoard(board, null, null, { key: 'groups', value: updatedGroups })
     console.log(board, ' UPDATD BOARD')
   }
@@ -58,8 +58,7 @@ export function BoardDetails() {
     <>
       <div className='main-container'>
         <BoardHeader board={board} />
-        {board.groups &&
-          board.groups.map((group) => (
+        {board?.groups &&  board?.groups.map((group) => (
             <GroupPreview
               board={board}
               group={group}
