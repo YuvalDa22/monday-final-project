@@ -4,17 +4,21 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import { Divider } from '@mui/material'
+import { removeGroup } from '../store/board/board.actions'
 
-export function SuggestedActions() {
+export function SuggestedActions({ board, group }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
   }
-  const handleClose = () => {
+  const handleMenuClose = () => {
     setAnchorEl(null)
   }
-
+  const handleRemoveGroup = () => {
+    removeGroup(board, group)
+    // handleMenuClose()
+  }
   return (
     <div className='sa-main-container'>
       <Button
@@ -39,17 +43,23 @@ export function SuggestedActions() {
         id='basic-menu'
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
+        onClose={handleMenuClose}
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleClose}>Remove Group</MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleRemoveGroup()
+          }}
+        >
+          Remove Group
+        </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>Remove Task</MenuItem>
+        <MenuItem onClick={handleMenuClose}>Remove Task</MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>Add Label</MenuItem>
-        <MenuItem onClick={handleClose}>Remove Label</MenuItem>
+        <MenuItem onClick={handleMenuClose}>Add Label</MenuItem>
+        <MenuItem onClick={handleMenuClose}>Remove Label</MenuItem>
       </Menu>
     </div>
   )

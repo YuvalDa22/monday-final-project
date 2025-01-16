@@ -52,6 +52,11 @@ export async function duplicateTask(board, group, task) {
   updateBoard(board, group, null, { key: 'tasks', value: newGroup.tasks })
 }
 
+export async function removeGroup(board, group) {
+  const newGroups = board.groups.filter((g) => g.id !== group.id)
+  updateBoard(board, null, null, { key: 'groups', value: newGroups })
+}
+
 export async function removeTask(board, group, task) {
   // const isConfirmed = window.confirm(
   //   'Are you sure you want to remove this task?'
