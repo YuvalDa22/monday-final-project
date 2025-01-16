@@ -31,20 +31,19 @@ export function Footer({ board, checkedTasks = [] }) {
   
 	  const newTask = {
 		...checkedTask,
-		id: utilService.makeId(), // Generate a new unique ID
+		id: utilService.makeId(), 
 		title: `${checkedTask.title} (copy)`,
 	  };
   
 	  if (option === 'withUpdates') {
-		newTask.updates = checkedTask.updates || []; // Retain updates if present
+		newTask.updates = checkedTask.updates || []; 
 	  }
   
 	  group.tasks.push(newTask);
   
 	  console.log('Updated group:', group);
   
-	  // Pass the updated board and group to updateBoard
-	  try {
+    try {
 		updateBoard(board, group.id, null, {
 		  key: 'tasks',
 		  value: group.tasks,
@@ -87,7 +86,7 @@ const handleExportChange = (option) => {
 	  }),
 	]);
 
-    // Create the XLSX data
+    
     const worksheet = XLSX.utils.aoa_to_sheet([headers, ...data]);
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, board.title || 'Export');
@@ -95,7 +94,7 @@ const handleExportChange = (option) => {
     // Trigger file download
     XLSX.writeFile(workbook, `${board.title || 'Export'}.xlsx`);
 
-    // Close the modal
+    
     setShowExportModal(false);
   };
 
@@ -106,27 +105,24 @@ const handleExportChange = (option) => {
     }
   
     checkedTasks.forEach((checkedItem) => {
-      // Determine if the item is a group
+      
       const group = board.groups.find((group) => group.id === checkedItem.id);
   
       if (group) {
-        // It's a group: Remove it from the groups array
         board.groups = board.groups.filter((g) => g.id !== group.id);
-  
-        // Add the group to archivedItems
+
         board.archivedItems.push({
           id: group.id,
           type: 'group',
           archivedAt: Date.now(),
         });
   
-        // Update the board's groups
         updateBoard(board, null, null, {
           key: 'groups',
           value: board.groups,
         });
       } else {
-        // It's a task: Find the group it belongs to
+       
         const parentGroup = board.groups.find((group) =>
           group.tasks.some((task) => task.id === checkedItem.id)
         );
@@ -136,19 +132,17 @@ const handleExportChange = (option) => {
           return;
         }
   
-        // Remove the task from the group's tasks array
+        
         parentGroup.tasks = parentGroup.tasks.filter(
           (task) => task.id !== checkedItem.id
         );
-  
-        // Add the task to archivedItems
+
         board.archivedItems.push({
           id: checkedItem.id,
           type: 'task',
           archivedAt: Date.now(),
         });
   
-        // Update the group's tasks
         updateBoard(board, parentGroup.id, null, {
           key: 'tasks',
           value: parentGroup.tasks,
@@ -156,13 +150,11 @@ const handleExportChange = (option) => {
       }
     });
   
-    // Update the board's archivedItems array
     updateBoard(board, null, null, {
       key: 'archivedItems',
       value: board.archivedItems,
     });
   
-    // Show success message
     showSuccessMsg('Items archived successfully');
   };
   
