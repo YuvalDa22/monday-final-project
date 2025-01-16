@@ -113,26 +113,30 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
   return (
     <>
       <div className='gp-main-container' style={{ alignItems: 'baseline' }}>
-        <div className='gh-main-container' style={{ alignItems: 'baseline' }}>
-          <SuggestedActions />
-          <div onClick={handleClick} style={{ cursor: 'pointer' }}>
-            {/* TODO: Implement expand/collapse logic to the group */}
-            <ExpandMoreIcon
-              style={{
-                transition: 'transform 0.3s ease',
-                transform: isRotated ? 'rotate(-90deg)' : 'rotate(0deg)',
-                fontSize: '24px',
-                marginRight: '10px',
-                position: 'relative',
-                top: '4',
-              }}
-            />
-          </div>
-          {/* group title - contentEditable TODO - UNDERSTAND IT  */}
-          {/*TODO: make it <ContentEditable> */}
-          <h2 style={{ marginRight: 8 }}>{group.title}</h2>{' '}
-          <span className='gh-how-many-tasks'>{group.tasks.length} Tasks</span>
-        </div>
+      <div className='gh-main-container' style={{ alignItems: 'baseline' }}>
+			<div className='gh-suggested-actions-icon'>
+				<SuggestedActions />
+      </div>
+      <div className='gh-title'>
+				<div onClick={handleClick} style={{ cursor: 'pointer' }}>
+					{/* TODO: Implement expand/collapse logic to the group */}
+					<ExpandMoreIcon
+						style={{
+							transition: 'transform 0.3s ease',
+							transform: isRotated ? 'rotate(-90deg)' : 'rotate(0deg)',
+							fontSize: '24px',
+							marginRight: '10px',
+							position: 'relative',
+							top: '4',
+						}}
+					/>
+				</div>
+			{/* group title - contentEditable TODO - UNDERSTAND IT  */}
+			{/*TODO: make it <ContentEditable> */}
+				<h2>{group.title}</h2>
+				<span className='gh-how-many-tasks'>{group.tasks.length} Tasks</span>
+			</div>
+		</div>
         <div>
           <table className='custom-table'>
             <thead>

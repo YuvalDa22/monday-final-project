@@ -22,22 +22,22 @@ export function BoardDetails() {
     (storeState) => storeState.boardModule.checkedTasks
   )
 
-  useEffect(() => {
-    onLoadBoards()
-  }, [])
+	useEffect(() => {
+		onLoadBoards()
+	}, [])
 
-  useEffect(() => {}, [footerDisplayed, checkedTasks])
+	useEffect(() => {}, [footerDisplayed, checkedTasks])
 
-  async function onLoadBoards() {
-    try {
-      await loadBoards()
-    } catch (error) {
-      showErrorMsg('Cannot load boards')
-      console.error(error)
-    }
-  }
+	async function onLoadBoards() {
+		try {
+			await loadBoards()
+		} catch (error) {
+			showErrorMsg('Cannot load boards')
+			console.error(error)
+		}
+	}
 
-  if (!allBoards || allBoards.length === 0) return <div>Loading...</div>
+	if (!allBoards || allBoards.length === 0) return <div>Loading...</div>
 
   const onAddGroup = () => {
     if (!board) return
@@ -54,12 +54,15 @@ export function BoardDetails() {
     console.log(board, ' UPDATD BOARD')
   }
 
-  return (
-    <>
-      <div className='main-container'>
-        <BoardHeader board={board} />
+	return (
+		<>
+			<div className='board-details-container'>
+				<div className='board-details-header'>
+					<BoardHeader board={board} />
+				</div>
+				<div className='board-details-groups-container'>
         {board?.groups &&  board?.groups.map((group) => (
-            <GroupPreview
+							<GroupPreview
               board={board}
               group={group}
               cmpTitles={board.cmpTitles}
@@ -67,12 +70,15 @@ export function BoardDetails() {
               key={group.id}
             />
           ))}
-        <Button variant='contained' color='primary' onClick={onAddGroup}>
-          Add new group
-        </Button>
-      </div>
-      {footerDisplayed && <Footer board={board} checkedTasks={checkedTasks} />}
-      <Outlet context={boardId} /> {/* Task Details ! */}
-    </>
-  )
+				</div>
+				<div className='add-group-button-container'>
+					<Button variant='contained' color='primary' onClick={onAddGroup}>
+						Add new group
+					</Button>
+				</div>
+				{footerDisplayed && <Footer board={board} checkedTasks={checkedTasks} />}
+				<Outlet context={boardId} /> {/* Task Details ! */}
+			</div>
+		</>
+	)
 }
