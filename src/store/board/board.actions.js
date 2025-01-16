@@ -46,6 +46,16 @@ export async function saveBoard(board) {
 }
 
 export async function removeTask(board, group, task) {
+  // const isConfirmed = window.confirm(
+  //   'Are you sure you want to remove this task?'
+  // )
+  // if (!isConfirmed) return
+
+  console.log(
+    'Removing task "' + task.title + '" From group "' + group.title,
+    '"'
+  )
+
   store.dispatch({ type: REMOVE_TASK, taskId: task.id })
   const newTasks = group.tasks.filter((t) => t.id !== task.id)
   const newGroup = {
