@@ -6,8 +6,6 @@ export function StatusCmp({ onUpdate, board, info }) {
 	const currentLabel = board?.labels?.find((label) => label.id === info)
 	const style = {
 		backgroundColor: currentLabel?.color || '#fff',
-		width: '100%',
-		height: '100%',
 	}
 	const statusLabels = board?.labels?.filter((label) => label.id[1] === '1')
 
@@ -20,7 +18,9 @@ export function StatusCmp({ onUpdate, board, info }) {
 			...provided,
 			...style,
 			border: 'none',
-			boxShadow: 'none',            
+			boxShadow: 'none', 
+			minHeight: '3rem',
+           
 		}),
 		option: (provided, { data, isFocused, isSelected }) => ({
 			...provided,

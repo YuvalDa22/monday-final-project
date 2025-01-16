@@ -11,7 +11,7 @@
 }
 
 .header-cell {
-	font-weight: bold;
+	width: 16rem;
 }
 
 .task-row {
@@ -25,15 +25,14 @@
 			}
 		}
 	}
-	min-height: 45px;
 }
 
 .task-cell {
-	align-items: center;
 	display: flex;
+	align-items: center;
 	padding-left: 15px;
-	height: 45px;
-	font-weight: bold;
+	min-height: 3rem;
+	
 
 	.open {
 		opacity: 0;
@@ -79,6 +78,7 @@
 }
 
 .empty-cell {
+	width: 20rem;
 }
 
 .checkbox-cell {

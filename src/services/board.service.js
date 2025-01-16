@@ -64,7 +64,7 @@ function getEmptyBoard() {
 
 function getEmptyGroup() {
 	return {
-		title: '',
+		title: 'New Group',
 		archivedAt: 0,
 		tasks: [],
 		archivedItems: [],
