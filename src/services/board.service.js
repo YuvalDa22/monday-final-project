@@ -63,13 +63,13 @@ function getEmptyBoard() {
 }
 
 function getEmptyGroup() {
-  return {
-    title: '',
-    archivedAt: 0,
-    tasks: [],
-    archivedItems: [],
-    style: {},
-  }
+	return {
+		title: '',
+		archivedAt: 0,
+		tasks: [],
+		archivedItems: [],
+		style: {color : utilService.createUniqueColorPicker()},
+	}
 }
 
 function getEmptyTask() {

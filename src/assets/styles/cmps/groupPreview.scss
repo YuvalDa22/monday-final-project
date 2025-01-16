@@ -6,8 +6,52 @@
     grid-template-areas:
       "gh-main-container gh-main-container"
       ". gp-table";
+      
+
+    .gh-main-container {
+      grid-area: gh-main-container;
+      display: grid;
+      grid-template-columns: 4em 1fr;
+      grid-template-rows: 1fr;
+      gap: 0px 0px;
+      grid-template-areas: 'gh-suggested-actions-icon gh-title';
+    }
+    
+    .gh-suggested-actions-icon {
+        grid-area: gh-suggested-actions-icon;
+        justify-self: center;
+        color: var(--group-color);
+    }
+    
+    .gh-title {
+        grid-area: gh-title;
+        display: flex;
+        gap: 0.7rem;
+        width: max-content;
+        color: var(--group-color);
+    }
+    
+    .gh-how-many-tasks {
+      visibility: hidden;
+      opacity: 0;
+        align-self: flex-end;
+      transition: opacity 0.3s ease, visibility 0s 0.5s; /* Smooth fade-in and fade-out */
+      color: black;
+    }
+    
+    .gh-main-container:hover .sa-main-container,
+    .gh-main-container:hover .gh-how-many-tasks {
+      visibility: visible;
+      opacity: 1;
+      transition: opacity 0.3s ease, visibility 0s 0s; /* Smooth fade-in */
+    }
+    
+    .gh-expand-icon {
+    }
+    
 
     .gp-table {
       grid-area: gp-table;
+      border-radius: 8px 0 0 8px;
     }
   }

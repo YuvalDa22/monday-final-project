@@ -1,17 +1,16 @@
 .custom-table {
 	width: 100%;
-	border-collapse: collapse;
-	margin: 0 0;
+	border-spacing: 0;
 	font-size: 16px;
 	text-align: center;
+	color: #4f4f4f;
 }
 
 .custom-table td {
-	border: 1px solid #ccc;
+	border: 1px solid #e0e0e0;
 }
 
 .header-cell {
-	background-color: #f4f4f4;
 	font-weight: bold;
 }
 
@@ -21,80 +20,65 @@
 		.task-cell,
 		.data-cell {
 			background-color: #cce9ff;
-      .member-avatars {
-        background-color: #cce9ff;
+			.member-avatars {
+				background-color: #cce9ff;
+			}
 		}
 	}
-}
-min-height:45px;
+	min-height: 45px;
 }
 
 .task-cell {
-	background-color: #fafafa;
-	font-weight: bold;
-	text-align: start;
 	align-items: center;
 	display: flex;
 	padding-left: 15px;
 	height: 45px;
-	justify-content: space-between;
+	font-weight: bold;
 
-  }
-  
-  .task-cell .open {
-	opacity: 0;
-	margin: 3px;
-	height: 40px;
-	display: flex;
-	justify-content: flex-end;
-	transition: opacity 0.3s ease-in-out; 
-	cursor: grab;
-	flex: 1;
-	font-size: 13px;
-  }
+	.open {
+		opacity: 0;
+		display: flex;
+		justify-content: flex-end;
+		transition: opacity 0.3s ease-in-out;
+		cursor: grab;
+		flex: 1;
+		font-size: 13px;
 
+		div {
+			align-items: center;
+			display: flex;
+			cursor: pointer;
 
+			span {
+				margin-bottom: 2px;
+			}
+		}
+	}
+}
 
-  .task-cell .open div{
-	align-items: center;
-	display: flex;
-	gap:5px;
-	padding:9px;
-	cursor: pointer;
-
-  }
-  .task-cell .open div span{
-margin-bottom: 2px;
-  }
-
-
-
-  .task-menu {
+.task-menu {
 	position: absolute;
-	padding:7px;
+	padding: 7px;
 
 	align-content: start;
-	display:flex;
+	display: flex;
 	transform: translateX(-45px) translateY(-3px);
 	opacity: 0;
-  }
+}
 
-  .task-menu:hover{
+.task-menu:hover {
 	opacity: 1;
-  }
-  
+}
+
 .open:hover {
 	opacity: 0.7;
-  }
-
-
+}
 
 .data-cell {
-	background-color: #fff;
+	
 }
 
 .empty-cell {
-	background-color: #f9f9f9;
 }
 
 .checkbox-cell {
