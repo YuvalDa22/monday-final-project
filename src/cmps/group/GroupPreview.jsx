@@ -37,6 +37,8 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
 
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedTask, setSelectedTask] = useState(null)
+  const [isEditingGroupTitle, setIsEditingGroupTitle] = useState(false)
+  const [groupTempTitle, setGroupTempTitle] = useState(group.title)
 
   useEffect(() => {
     const allChecked =
@@ -115,6 +117,17 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
     handleMenuClose()
     duplicateTask(board, group, task)
   }
+
+  const handleGroupTitleSave = () => {
+    if (groupTempTitle.trim() && groupTempTitle !== group.title) {
+      updateBoard(board, group, null, {
+        key: 'title',
+        value: groupTempTitle,
+      })
+    } else setGroupTempTitle(group.title) // sync the state with actual group title incase first if failed
+    setIsEditingGroupTitle(false)
+  }
+
   return (
     <>
       <div className='gp-main-container' style={{ alignItems: 'baseline' }}>
@@ -124,7 +137,6 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
           </div>
           <div className='gh-title'>
             <div onClick={handleClick} style={{ cursor: 'pointer' }}>
-              {/* TODO: Implement expand/collapse logic to the group */}
               <ExpandMoreIcon
                 style={{
                   transition: 'transform 0.3s ease',
@@ -136,9 +148,27 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
                 }}
               />
             </div>
-            {/* group title - contentEditable TODO - UNDERSTAND IT  */}
-            {/*TODO: make it <ContentEditable> */}
-            <h2>{group.title}</h2>
+            {isEditingGroupTitle ? (
+              <Input
+                autoFocus
+                type='text'
+                value={groupTempTitle}
+                onChange={(event) => setGroupTempTitle(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') handleGroupTitleSave()
+                  if (event.key === 'Escape') setIsEditingGroupTitle(false)
+                }}
+                onBlur={handleGroupTitleSave}
+                sx={{
+                  width: `${groupTempTitle.length + 2.5}ch`,
+                  minWidth: '2ch',
+                }}
+              />
+            ) : (
+              <h2 onClick={() => setIsEditingGroupTitle(true)}>
+                {group.title}
+              </h2>
+            )}
             <span className='gh-how-many-tasks'>
               {group.tasks.length} Tasks
             </span>

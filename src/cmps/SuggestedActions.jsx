@@ -55,11 +55,8 @@ export function SuggestedActions({ board, group }) {
         >
           Remove Group
         </MenuItem>
-        <Divider />
-        <MenuItem onClick={handleMenuClose}>Remove Task</MenuItem>
-        <Divider />
-        <MenuItem onClick={handleMenuClose}>Add Label</MenuItem>
-        <MenuItem onClick={handleMenuClose}>Remove Label</MenuItem>
+        {/* <Divider />
+        <MenuItem onClick={handleMenuClose}>...</MenuItem> */}
       </Menu>
     </div>
   )
