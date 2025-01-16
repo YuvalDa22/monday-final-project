@@ -9,6 +9,7 @@ import { updateBoard } from '../store/board/board.actions'
 import { Footer } from '../cmps/layout/Footer'
 import { boardService } from '../services/board.service'
 import { useParams, Outlet } from 'react-router-dom'
+import { utilService } from '../services/util.service'
 
 export function BoardDetails() {
   const { boardId } = useParams()
@@ -40,9 +41,17 @@ export function BoardDetails() {
 
   const onAddGroup = () => {
     if (!board) return
-    const newGroup = boardService.getEmptyGroup()
+    let newGroup = boardService.getEmptyGroup()
+    newGroup = {
+      id: utilService.makeId(), // Generate and add the ID
+      ...newGroup, // Keep the existing properties
+    }
+
+    console.log('MY NEW GRP', newGroup)
+
     const updatedGroups = [...board.groups, newGroup]
     updateBoard(board, null, null, { key: 'groups', value: updatedGroups })
+    console.log(board, ' UPDATD BOARD')
   }
 
   return (

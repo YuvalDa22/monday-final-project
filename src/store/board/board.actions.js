@@ -100,7 +100,6 @@ export async function updateBoard(board, group, task, { key, value }) {
     (groupItem) => groupItem.id === group?.id
   )
   const tIdx = board?.groups[gIdx]?.tasks.findIndex((t) => t.id === task?.id)
-
   let activity = null
   let userMsg = ''
 
