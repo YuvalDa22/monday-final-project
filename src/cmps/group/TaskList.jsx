@@ -23,7 +23,8 @@ const SvgIcon = ({ iconName, options }) => {
 
 export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
   const [editingTaskId, setEditingTaskId] = useState(null)
-  const [tempTitle, setTempTitle] = useState('')
+  const [existingItemTempTitle, setExistingItemTempTitle] = useState('')
+  const [newItemTempTitle, setNewItemTempTitle] = useState('')
   const [tasksChecked, setTasksChecked] = useState([])
   const [groupChecked, setGroupChecked] = useState(false)
   const [isIndeterminate, setIsIndeterminate] = useState(false)
@@ -64,25 +65,29 @@ export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
 
   const handleEdit = (taskId, currentTitle) => {
     setEditingTaskId(taskId)
-    setTempTitle(currentTitle)
+    setExistingItemTempTitle(currentTitle)
   }
 
-  const handleSave = (taskId) => {
-    if (tempTitle.trim() && tempTitle !== '') {
-      updateBoard(board, group.id, taskId, { key: 'title', value: tempTitle })
+  const handleSave = (task) => {
+    if (existingItemTempTitle.trim() && existingItemTempTitle !== '') {
+      updateBoard(board, group, task, {
+        key: 'title',
+        value: existingItemTempTitle,
+      })
     }
     handleCancel()
   }
 
   const handleCancel = () => {
     setEditingTaskId(null)
-    setTempTitle('')
+    setNewItemTempTitle('')
+    setExistingItemTempTitle('')
   }
 
   const onAddItem = () => {
-    const newTask = { id: utilService.makeId(), title: tempTitle }
+    const newTask = { id: utilService.makeId(), title: newItemTempTitle }
     addTask(board, group, newTask)
-    setTempTitle('')
+    setNewItemTempTitle('')
   }
 
   const handleMenuClick = (event, task) => {
@@ -96,7 +101,6 @@ export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
   }
 
   const handleTaskDeleted = (board, group, task) => {
-    // console.log(board, group, task, 'Task deleted')
     handleMenuClose()
     removeTask(board, group, task)
   }
@@ -164,15 +168,17 @@ export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
                     <Input
                       autoFocus
                       type='text'
-                      value={tempTitle}
-                      onChange={(event) => setTempTitle(event.target.value)}
+                      value={existingItemTempTitle}
+                      onChange={(event) =>
+                        setExistingItemTempTitle(event.target.value)
+                      }
                       onKeyDown={(event) => {
-                        if (event.key === 'Enter') handleSave(task.id)
+                        if (event.key === 'Enter') handleSave(task)
                         if (event.key === 'Escape') handleCancel()
                       }}
                       onBlur={handleCancel}
                       sx={{
-                        width: `${tempTitle.length + 1}ch`,
+                        width: `${existingItemTempTitle.length + 2.5}ch`,
                         minWidth: '2ch',
                       }}
                     />
@@ -207,8 +213,8 @@ export function TaskList({ board, group, cmpTitles, cmpsOrder }) {
                 <Input
                   type='text'
                   placeholder='+ Add item'
-                  value={tempTitle}
-                  onChange={(event) => setTempTitle(event.target.value)}
+                  value={newItemTempTitle}
+                  onChange={(event) => setNewItemTempTitle(event.target.value)}
                   onKeyDown={(event) => {
                     if (event.key === 'Enter') onAddItem()
                     if (event.key === 'Escape') handleCancel()
