@@ -12,72 +12,72 @@ import { boardService } from '../services/board.service'
 import { Outlet, useParams } from 'react-router-dom'
 
 export function BoardDetails() {
-  const allBoards = useSelector((storeState) => storeState.boardModule.boards)
-  const footerDisplayed = useSelector(
-    (storeState) => storeState.boardModule.footerDisplayed
-  )
-  const checkedTasks = useSelector(
-    (storeState) => storeState.boardModule.checkedTasks
-  )
-  const boardId = useParams()
-  console.log('boardid', boardId)
+	const allBoards = useSelector((storeState) => storeState.boardModule.boards)
+	const footerDisplayed = useSelector((storeState) => storeState.boardModule.footerDisplayed)
+	const checkedTasks = useSelector((storeState) => storeState.boardModule.checkedTasks)
+	const boardId = useParams()
+	console.log('boardid', boardId)
 
-  useEffect(() => {
-    onLoadBoards()
-  }, [])
+	useEffect(() => {
+		onLoadBoards()
+	}, [])
 
-  useEffect(() => {}, [footerDisplayed, checkedTasks])
+	useEffect(() => {}, [footerDisplayed, checkedTasks])
 
-  async function onLoadBoards() {
-    try {
-      await loadBoards()
-    } catch (error) {
-      showErrorMsg('Cannot load boards')
-      console.error(error)
-    }
-  }
+	async function onLoadBoards() {
+		try {
+			await loadBoards()
+		} catch (error) {
+			showErrorMsg('Cannot load boards')
+			console.error(error)
+		}
+	}
 
-  if (!allBoards || allBoards.length === 0) return <div>Loading...</div>
+	if (!allBoards || allBoards.length === 0) return <div>Loading...</div>
 
-  const onAddGroup = () => {
-    const board = allBoards[0]
-    console.log('board', board)
-    if (!board) return
-    const newGroup = boardService.getEmptyGroup()
-    const updatedGroups = [...board.groups, newGroup]
-    updateBoard(board, null, null, { key: 'groups', value: updatedGroups })
-  }
+	const onAddGroup = () => {
+		const board = allBoards[0]
+		console.log('board', board)
+		if (!board) return
+		const newGroup = boardService.getEmptyGroup()
+		const updatedGroups = [...board.groups, newGroup]
+		updateBoard(board, null, null, { key: 'groups', value: updatedGroups })
+	}
 
-  return (
-    <>
-      <div className='main-container'>
-        <BoardHeader board={allBoards[0]} />
-        {allBoards[0].groups &&
-          allBoards[0].groups.map((group) => (
-            <GroupPreview
-              board={allBoards[0]}
-              group={group}
-              cmpTitles={allBoards[0].cmpTitles}
-              cmpsOrder={allBoards[0].cmpsOrder}
-              key={group.id}
-            />
-          ))}
-        <Button variant='contained' color='primary' onClick={onAddGroup}>
-          Add new group
-        </Button>
-      </div>
-      {footerDisplayed && (
-        <Footer board={allBoards[0]} checkedTasks={checkedTasks} />
-      )}
-      <Outlet context={boardId} /> {/* Task Details ! */}
-    </>
-  )
+	return (
+		<>
+			<div className='board-details-container'>
+				<div className='board-details-header'>
+					<BoardHeader board={allBoards[0]} />
+				</div>
+				<div className='board-details-groups-container'>
+					{allBoards[0].groups &&
+						allBoards[0].groups.map((group) => (
+							<GroupPreview
+								board={allBoards[0]}
+								group={group}
+								cmpTitles={allBoards[0].cmpTitles}
+								cmpsOrder={allBoards[0].cmpsOrder}
+								key={group.id}
+							/>
+						))}
+				</div>
+				<div className='add-group-button-container'>
+					<Button variant='contained' color='primary' onClick={onAddGroup}>
+						Add new group
+					</Button>
+				</div>
+				{footerDisplayed && <Footer board={allBoards[0]} checkedTasks={checkedTasks} />}
+				<Outlet context={boardId} /> {/* Task Details ! */}
+			</div>
+		</>
+	)
 
-  // Ofir & Yuval
-  // <>
-  // <BoardHeader board={board}/>
-  // {groups && groups.map(group => <GroupPreview group={group} board={board} key={group._id}/>)}
+	// Ofir & Yuval
+	// <>
+	// <BoardHeader board={board}/>
+	// {groups && groups.map(group => <GroupPreview group={group} board={board} key={group._id}/>)}
 
-  // <button>add group</button>
-  // </>
+	// <button>add group</button>
+	// </>
 }

@@ -1,4 +1,13 @@
-.gp-main-container{
-    margin-bottom: 50px;
-    width: auto;
-}
+.gp-main-container {
+    display: grid;
+    grid-template-columns: 4em 1fr;
+    grid-template-rows: auto auto;
+    gap: 1em 0px; 
+    grid-template-areas:
+      "gh-main-container gh-main-container"
+      ". gp-table";
+
+    .gp-table {
+      grid-area: gp-table;
+    }
+  }

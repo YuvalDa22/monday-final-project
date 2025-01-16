@@ -1,24 +1,39 @@
 @use 'suggestedactions';
 
-.gh-main-container{
+.gh-main-container {
+	grid-area: gh-main-container;
+	display: grid;
+	grid-template-columns: 4em 1fr;
+	grid-template-rows: 1fr;
+	gap: 0px 0px;
+	grid-template-areas: 'gh-suggested-actions-icon gh-title';
+}
+
+.gh-suggested-actions-icon {
+    grid-area: gh-suggested-actions-icon;
+    justify-self: center
+}
+
+.gh-title {
+    grid-area: gh-title;
     display: flex;
-    align-items: center;
-    margin-top: 20px;
+    gap: 0.7rem;
+    width: max-content;
 }
 
-.gh-how-many-tasks{
-    visibility: hidden;
-    opacity: 0;     
-    transition: opacity 0.3s ease, visibility 0s 0.5s; /* Smooth fade-in and fade-out */
+.gh-how-many-tasks {
+	visibility: hidden;
+	opacity: 0;
+    align-self: flex-end;
+	transition: opacity 0.3s ease, visibility 0s 0.5s; /* Smooth fade-in and fade-out */
 }
 
-.gh-main-container:hover .sa-main-container ,.gh-main-container:hover .gh-how-many-tasks{
-    visibility: visible;
-    opacity: 1; /* Fully visible */
-    transition: opacity 0.3s ease, visibility 0s 0s; /* Smooth fade-in */
+.gh-main-container:hover .sa-main-container,
+.gh-main-container:hover .gh-how-many-tasks {
+	visibility: visible;
+	opacity: 1; /* Fully visible */
+	transition: opacity 0.3s ease, visibility 0s 0s; /* Smooth fade-in */
 }
 
-.gh-expand-icon{
-    
+.gh-expand-icon {
 }
-
