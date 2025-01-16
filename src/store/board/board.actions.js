@@ -12,6 +12,7 @@ import {
   REMOVE_TASK,
 } from './board.reducer'
 import { userService } from '../../services/user.service'
+import { utilService } from '../../services/util.service'
 
 export async function loadBoards(filterBy) {
   try {
@@ -43,6 +44,17 @@ export async function saveBoard(board) {
     console.log('board actions -> Cannot save board:', err)
     throw err
   }
+}
+
+export async function duplicateTask(board, group, task) {
+  const newTask = { ...task, id: utilService.makeId() }
+  const newGroup = { ...group, tasks: [...group.tasks, newTask] }
+  updateBoard(board, group, null, { key: 'tasks', value: newGroup.tasks })
+}
+
+export async function removeGroup(board, group) {
+  const newGroups = board.groups.filter((g) => g.id !== group.id)
+  updateBoard(board, null, null, { key: 'groups', value: newGroups })
 }
 
 export async function removeTask(board, group, task) {

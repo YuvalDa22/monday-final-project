@@ -22,63 +22,64 @@ export function BoardDetails() {
     (storeState) => storeState.boardModule.checkedTasks
   )
 
-	useEffect(() => {
-		onLoadBoards()
-	}, [])
+  useEffect(() => {
+    onLoadBoards()
+  }, [])
 
-	useEffect(() => {}, [footerDisplayed, checkedTasks])
+  useEffect(() => {}, [footerDisplayed, checkedTasks])
 
-	async function onLoadBoards() {
-		try {
-			await loadBoards()
-		} catch (error) {
-			showErrorMsg('Cannot load boards')
-			console.error(error)
-		}
-	}
+  async function onLoadBoards() {
+    try {
+      await loadBoards()
+    } catch (error) {
+      showErrorMsg('Cannot load boards')
+      console.error(error)
+    }
+  }
 
-	if (!allBoards || allBoards.length === 0) return <div>Loading...</div>
+  if (!allBoards || allBoards.length === 0) return <div>Loading...</div>
 
   const onAddGroup = () => {
     if (!board) return
     let newGroup = boardService.getEmptyGroup()
     newGroup = {
-      id: utilService.makeId(), // Generate and add the ID
-      ...newGroup, // Keep the existing properties
+      id: utilService.makeId(), // Generate and add ID to the top of the properties
+      ...newGroup,
     }
-
-    console.log('MY NEW GRP', newGroup)
 
     const updatedGroups = [...board?.groups, newGroup]
     updateBoard(board, null, null, { key: 'groups', value: updatedGroups })
     console.log(board, ' UPDATD BOARD')
   }
 
-	return (
-		<>
-			<div className='board-details-container'>
-				<div className='board-details-header'>
-					<BoardHeader board={board} />
-				</div>
-				<div className='board-details-groups-container'>
-        {board?.groups &&  board?.groups.map((group) => (
-							<GroupPreview
-              board={board}
-              group={group}
-              cmpTitles={board.cmpTitles}
-              cmpsOrder={board.cmpsOrder}
-              key={group.id}
-            />
-          ))}
-				</div>
-				<div className='add-group-button-container'>
-					<Button variant='contained' color='primary' onClick={onAddGroup}>
-						Add new group
-					</Button>
-				</div>
-				{footerDisplayed && <Footer board={board} checkedTasks={checkedTasks} />}
-				<Outlet context={boardId} /> {/* Task Details ! */}
-			</div>
-		</>
-	)
+  return (
+    <>
+      <div className='board-details-container'>
+        <div className='board-details-header'>
+          <BoardHeader board={board} />
+        </div>
+        <div className='board-details-groups-container'>
+          {board?.groups &&
+            board?.groups.map((group) => (
+              <GroupPreview
+                board={board}
+                group={group}
+                cmpTitles={board.cmpTitles}
+                cmpsOrder={board.cmpsOrder}
+                key={group.id}
+              />
+            ))}
+        </div>
+        <div className='add-group-button-container'>
+          <Button variant='contained' color='primary' onClick={onAddGroup}>
+            Add new group
+          </Button>
+        </div>
+        {footerDisplayed && (
+          <Footer board={board} checkedTasks={checkedTasks} />
+        )}
+        <Outlet context={boardId} /> {/* Task Details ! */}
+      </div>
+    </>
+  )
 }

@@ -8,6 +8,7 @@ import {
   setCheckedTasks,
   setFooter,
   updateBoard,
+  duplicateTask,
 } from '../../store/board/board.actions'
 import { TaskPreview } from '../task/TaskPreview'
 import { utilService } from '../../services/util.service'
@@ -36,6 +37,8 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
 
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedTask, setSelectedTask] = useState(null)
+  const [isEditingGroupTitle, setIsEditingGroupTitle] = useState(false)
+  const [groupTempTitle, setGroupTempTitle] = useState(group.title)
 
   useEffect(() => {
     const allChecked =
@@ -110,33 +113,67 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
     removeTask(board, group, task)
   }
 
+  const handleTaskDuplicate = (board, group, task) => {
+    handleMenuClose()
+    duplicateTask(board, group, task)
+  }
+
+  const handleGroupTitleSave = () => {
+    if (groupTempTitle.trim() && groupTempTitle !== group.title) {
+      updateBoard(board, group, null, {
+        key: 'title',
+        value: groupTempTitle,
+      })
+    } else setGroupTempTitle(group.title) // sync the state with actual group title incase first if failed
+    setIsEditingGroupTitle(false)
+  }
+
   return (
     <>
       <div className='gp-main-container' style={{ alignItems: 'baseline' }}>
-      <div className='gh-main-container' style={{ alignItems: 'baseline' }}>
-			<div className='gh-suggested-actions-icon'>
-				<SuggestedActions />
-      </div>
-      <div className='gh-title'>
-				<div onClick={handleClick} style={{ cursor: 'pointer' }}>
-					{/* TODO: Implement expand/collapse logic to the group */}
-					<ExpandMoreIcon
-						style={{
-							transition: 'transform 0.3s ease',
-							transform: isRotated ? 'rotate(-90deg)' : 'rotate(0deg)',
-							fontSize: '24px',
-							marginRight: '10px',
-							position: 'relative',
-							top: '4',
-						}}
-					/>
-				</div>
-			{/* group title - contentEditable TODO - UNDERSTAND IT  */}
-			{/*TODO: make it <ContentEditable> */}
-				<h2>{group.title}</h2>
-				<span className='gh-how-many-tasks'>{group.tasks.length} Tasks</span>
-			</div>
-		</div>
+        <div className='gh-main-container' style={{ alignItems: 'baseline' }}>
+          <div className='gh-suggested-actions-icon'>
+            <SuggestedActions board={board} group={group} />
+          </div>
+          <div className='gh-title'>
+            <div onClick={handleClick} style={{ cursor: 'pointer' }}>
+              <ExpandMoreIcon
+                style={{
+                  transition: 'transform 0.3s ease',
+                  transform: isRotated ? 'rotate(-90deg)' : 'rotate(0deg)',
+                  fontSize: '24px',
+                  marginRight: '10px',
+                  position: 'relative',
+                  top: '4',
+                }}
+              />
+            </div>
+            {isEditingGroupTitle ? (
+              <Input
+                autoFocus
+                type='text'
+                value={groupTempTitle}
+                onChange={(event) => setGroupTempTitle(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') handleGroupTitleSave()
+                  if (event.key === 'Escape') setIsEditingGroupTitle(false)
+                }}
+                onBlur={handleGroupTitleSave}
+                sx={{
+                  width: `${groupTempTitle.length + 2.5}ch`,
+                  minWidth: '2ch',
+                }}
+              />
+            ) : (
+              <h2 onClick={() => setIsEditingGroupTitle(true)}>
+                {group.title}
+              </h2>
+            )}
+            <span className='gh-how-many-tasks'>
+              {group.tasks.length} Tasks
+            </span>
+          </div>
+        </div>
         <div className='gp-table'>
           <table className='custom-table'>
             <thead>
@@ -184,6 +221,13 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
                         }}
                       >
                         Delete task
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          handleTaskDuplicate(board, group, task)
+                        }}
+                      >
+                        Duplicate task
                       </MenuItem>
                     </Menu>
                   </span>
