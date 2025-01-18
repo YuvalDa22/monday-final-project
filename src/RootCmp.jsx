@@ -15,6 +15,7 @@ import { BoardIndex } from './pages/BoardIndex'
 function RootCmp() {
   const location = useLocation()
   const showSidebarAndNavBar = location.pathname.startsWith('/workspace')
+  //test
   return (
     <div className='app-container'>
       {showSidebarAndNavBar && <SideBar />}
