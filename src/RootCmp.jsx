@@ -34,3 +34,4 @@ function RootCmp() {
     </div>
   )
 }
+export default RootCmp
