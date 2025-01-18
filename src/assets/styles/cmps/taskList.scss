@@ -57,13 +57,12 @@
 
 .task-menu {
 	position: absolute;
-	padding: 7px;
-
+	padding:7px;
 	align-content: start;
 	display: flex;
 	transform: translateX(-45px) translateY(-3px);
 	opacity: 0;
-}
+  }
 
 .task-menu:hover {
 	opacity: 1;

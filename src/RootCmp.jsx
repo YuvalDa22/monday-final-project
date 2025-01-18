@@ -9,31 +9,26 @@ import SideBar from './cmps/layout/SideBar'
 import { BoardDetails } from './pages/BoardDetails'
 import NavBar from './cmps/layout/NavBar'
 import { TaskDetails } from './pages/TaskDetails'
-// import { BoardsIndex } from './pages/BoardsIndex'
+import { BoardIndex } from './pages/BoardIndex'
 // import { TaskDetails } from './pages/TaskDetails'
 
 function RootCmp() {
   const location = useLocation()
   const showSidebarAndNavBar = location.pathname.startsWith('/workspace')
   return (
-    <>
-      {location.pathname === '/' && <HomePage />}
-      <div className='app-container'>
-        {showSidebarAndNavBar && <SideBar />}
-        {showSidebarAndNavBar && <NavBar />}
-        <div className="main-container">
-          <Routes>
-            <Route path='/workspace/board/:boardId' element={<BoardDetails />}>
-              <Route path='task/:taskId' element={<TaskDetails />} />
-            </Route>
-            <Route path='/login' element={<Login />} />
-            <Route path='/signup' element={<SignUp />} />
-          </Routes>
-        </div>
-        <UserMsg />
+    <div className='app-container'>
+      {showSidebarAndNavBar && <SideBar />}
+      {showSidebarAndNavBar && <NavBar />}
+      <div>
+        <Routes>
+          <Route path='/' element={<HomePage />} />
+          <Route path='/workspace' element={<BoardIndex />} />
+          <Route path='/workspace/board/:boardId' element={<BoardDetails />}>
+            <Route path='task/:taskId' element={<TaskDetails />} />
+          </Route>
+        </Routes>
       </div>
-    </>
+    </div>
   )
 }
-
 export default RootCmp

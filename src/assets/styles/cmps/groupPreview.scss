@@ -1,57 +1,11 @@
 .gp-main-container {
-    display: grid;
-    grid-template-columns: 3em 1fr;
-    grid-template-rows: auto auto;
-    gap: 1em 0px; 
-    grid-template-areas:
-      "gh-main-container gh-main-container"
-      ". gp-table";
-      
-
-    .gh-main-container {
-      grid-area: gh-main-container;
-      display: grid;
-      grid-template-columns: 3em 1fr;
-      grid-template-rows: 1fr;
-      gap: 0px 0px;
-      grid-template-areas: 'gh-suggested-actions-icon gh-title';
-    }
-    
-    .gh-suggested-actions-icon {
-        grid-area: gh-suggested-actions-icon;
-        justify-self: center;
-        color: var(--group-color);
-    }
-    
-    .gh-title {
-        grid-area: gh-title;
-        display: flex;
-        gap: 0.7rem;
-        width: max-content;
-        color: var(--group-color);
-    }
-    
-    .gh-how-many-tasks {
-      visibility: hidden;
-      opacity: 0;
-        align-self: flex-end;
-      transition: opacity 0.3s ease, visibility 0s 0.5s; /* Smooth fade-in and fade-out */
-      color: black;
-    }
-    
-    .gh-main-container:hover .sa-main-container,
-    .gh-main-container:hover .gh-how-many-tasks {
-      visibility: visible;
-      opacity: 1;
-      transition: opacity 0.3s ease, visibility 0s 0s; /* Smooth fade-in */
-    }
-    
-    .gh-expand-icon {
-    }
-    
-
-    .gp-table {
-      grid-area: gp-table;
-      border-radius: 8px 0 0 8px;
-    }
+  display: flex;
+  flex-direction: column;
+  gap:10px;
   }
+
+
+.gp-table{
+   /*TODO: This is temporary and should be removed in the future once we add more style to the table*/
+  width:  calc(100vw - 322px); // Side bar is 270 , gap is 12 , boardDetails padding left is 40 , so 270+12+40 = 322
+}

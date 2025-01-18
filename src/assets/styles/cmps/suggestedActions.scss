@@ -3,13 +3,9 @@ background-color: rgb(200, 205, 227);
 }
 
 .sa-main-container{
-    margin-right: 7px;
-    visibility: hidden;
+    opacity:0;
     position: relative;
-    right:5px
-}
-
-.sa-main-container button{
-    position: relative;
-    bottom: 4px;
+    width: 40px; // Because we moved the whole line 40px to the left, the width of the 3 dots should be exactly 40
+    display: flex; 
+    justify-content: center;
 }

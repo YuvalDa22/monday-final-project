@@ -3,12 +3,12 @@ import { SuggestedActions } from '../SuggestedActions.jsx'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Input from '@mui/joy/Input'
 import {
-	addTask,
-	removeTask,
-	setCheckedTasks,
-	setFooter,
-	updateBoard,
-	duplicateTask,
+  addTask,
+  removeTask,
+  setCheckedTasks,
+  setFooter,
+  updateBoard,
+  duplicateTask,
 } from '../../store/board/board.actions'
 import { TaskPreview } from '../task/TaskPreview'
 import { utilService } from '../../services/util.service'
@@ -19,273 +19,310 @@ import { getSvg } from '../../services/util.service'
 import { Menu, MenuItem, IconButton } from '@mui/material'
 
 export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
-	const [isRotated, setIsRotated] = useState(false)
-	const handleClick = () => {
-		setIsRotated(!isRotated)
-	}
-	const SvgIcon = ({ iconName, options }) => {
-		return <i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>
-	}
-	const [editingTaskId, setEditingTaskId] = useState(null)
-	const [existingItemTempTitle, setExistingItemTempTitle] = useState('')
-	const [newItemTempTitle, setNewItemTempTitle] = useState('')
-	const [tasksChecked, setTasksChecked] = useState([])
-	const [groupChecked, setGroupChecked] = useState(false)
-	const [isIndeterminate, setIsIndeterminate] = useState(false)
+  const [isRotated, setIsRotated] = useState(false)
+  const handleClick = () => {
+    setIsRotated(!isRotated)
+  }
+  const SvgIcon = ({ iconName, options }) => {
+    return (
+      <i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>
+    )
+  }
+  const [editingTaskId, setEditingTaskId] = useState(null)
+  const [existingItemTempTitle, setExistingItemTempTitle] = useState('')
+  const [newItemTempTitle, setNewItemTempTitle] = useState('')
+  const [tasksChecked, setTasksChecked] = useState([])
+  const [groupChecked, setGroupChecked] = useState(false)
+  const [isIndeterminate, setIsIndeterminate] = useState(false)
 
-	const [anchorEl, setAnchorEl] = useState(null)
-	const [selectedTask, setSelectedTask] = useState(null)
-	const [isEditingGroupTitle, setIsEditingGroupTitle] = useState(false)
-	const [groupTempTitle, setGroupTempTitle] = useState(group.title)
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [selectedTask, setSelectedTask] = useState(null)
+  const [isEditingGroupTitle, setIsEditingGroupTitle] = useState(false)
+  const [groupTempTitle, setGroupTempTitle] = useState(group.title)
 
-	useEffect(() => {
-		const allChecked = group.tasks.length > 0 && tasksChecked.length === group.tasks.length
-		const noneChecked = tasksChecked.length === 0
+  useEffect(() => {
+    const allChecked =
+      group.tasks.length > 0 && tasksChecked.length === group.tasks.length
+    const noneChecked = tasksChecked.length === 0
 
-		setGroupChecked(allChecked)
-		setIsIndeterminate(!allChecked && !noneChecked)
-		setFooter(tasksChecked.length > 0)
-		setCheckedTasks(tasksChecked)
-	}, [tasksChecked, group.tasks])
+    setGroupChecked(allChecked)
+    setIsIndeterminate(!allChecked && !noneChecked)
+    setFooter(tasksChecked.length > 0)
+    setCheckedTasks(tasksChecked)
+  }, [tasksChecked, group.tasks])
 
-	const handleGroupChecked = (event) => {
-		const isChecked = event.target.checked
-		setGroupChecked(isChecked)
-		setIsIndeterminate(false)
+  const handleGroupChecked = (event) => {
+    const isChecked = event.target.checked
+    setGroupChecked(isChecked)
+    setIsIndeterminate(false)
 
-		if (isChecked) {
-			setTasksChecked([...group.tasks])
-		} else {
-			setTasksChecked([])
-		}
-	}
+    if (isChecked) {
+      setTasksChecked([...group.tasks])
+    } else {
+      setTasksChecked([])
+    }
+  }
 
-	const handleTaskChecked = (task) => {
-		setTasksChecked((prevState) =>
-			prevState.includes(task) ? prevState.filter((t) => t !== task) : [...prevState, task]
-		)
-	}
+  const handleTaskChecked = (task) => {
+    setTasksChecked((prevState) =>
+      prevState.includes(task)
+        ? prevState.filter((t) => t !== task)
+        : [...prevState, task]
+    )
+  }
 
-	const handleEdit = (taskId, currentTitle) => {
-		setEditingTaskId(taskId)
-		setExistingItemTempTitle(currentTitle)
-	}
+  const handleEdit = (taskId, currentTitle) => {
+    setEditingTaskId(taskId)
+    setExistingItemTempTitle(currentTitle)
+  }
 
-	const handleSave = (task) => {
-		if (existingItemTempTitle.trim() && existingItemTempTitle !== '') {
-			updateBoard(board, group, task, {
-				key: 'title',
-				value: existingItemTempTitle,
-			})
-		}
-		handleCancel()
-	}
+  const handleSave = (task) => {
+    if (existingItemTempTitle.trim() && existingItemTempTitle !== '') {
+      updateBoard(board, group, task, {
+        key: 'title',
+        value: existingItemTempTitle,
+      })
+    }
+    handleCancel()
+  }
 
-	const handleCancel = () => {
-		setEditingTaskId(null)
-		setNewItemTempTitle('')
-		setExistingItemTempTitle('')
-	}
+  const handleCancel = () => {
+    setEditingTaskId(null)
+    setNewItemTempTitle('')
+    setExistingItemTempTitle('')
+  }
 
-	const onAddItem = () => {
-		const newTask = { id: utilService.makeId(), title: newItemTempTitle }
-		addTask(board, group, newTask)
-		setNewItemTempTitle('')
-	}
+  const onAddItem = () => {
+    const newTask = { id: utilService.makeId(), title: newItemTempTitle }
+    addTask(board, group, newTask)
+    setNewItemTempTitle('')
+  }
 
-	const handleMenuClick = (event, task) => {
-		setAnchorEl(event.currentTarget)
-		setSelectedTask(task)
-	}
+  const handleMenuClick = (event, task) => {
+    setAnchorEl(event.currentTarget)
+    setSelectedTask(task)
+  }
 
-	const handleMenuClose = () => {
-		setAnchorEl(null)
-		setSelectedTask(null)
-	}
+  const handleMenuClose = () => {
+    setAnchorEl(null)
+    setSelectedTask(null)
+  }
 
-	const handleTaskDeleted = (board, group, task) => {
-		handleMenuClose()
-		removeTask(board, group, task)
-	}
+  const handleTaskDeleted = (board, group, task) => {
+    handleMenuClose()
+    removeTask(board, group, task)
+  }
 
-	const handleTaskDuplicate = (board, group, task) => {
-		handleMenuClose()
-		duplicateTask(board, group, task)
-	}
+  const handleTaskDuplicate = (board, group, task) => {
+    handleMenuClose()
+    duplicateTask(board, group, task)
+  }
 
-	const handleGroupTitleSave = () => {
-		if (groupTempTitle.trim() && groupTempTitle !== group.title) {
-			updateBoard(board, group, null, {
-				key: 'title',
-				value: groupTempTitle,
-			})
-		} else setGroupTempTitle(group.title) // sync the state with actual group title incase first if failed
-		setIsEditingGroupTitle(false)
-	}
+  const handleGroupTitleSave = () => {
+    if (groupTempTitle.trim() && groupTempTitle !== group.title) {
+      updateBoard(board, group, null, {
+        key: 'title',
+        value: groupTempTitle,
+      })
+    } else setGroupTempTitle(group.title) // sync the state with actual group title incase first if failed
+    setIsEditingGroupTitle(false)
+  }
 
-	return (
-		<>
-			<div className='gp-main-container'>
-				<div
-					className='gh-main-container'
-					style={{ '--group-color': group?.style?.color || '#000' }}>
-					<div className='gh-suggested-actions-icon'>
-						<SuggestedActions board={board} group={group} />
-					</div>
-					<div className='gh-title'>
-						<div onClick={handleClick} style={{ cursor: 'pointer' }}>
-							<ExpandMoreIcon
-								style={{
-									transition: 'transform 0.3s ease',
-									transform: isRotated ? 'rotate(-90deg)' : 'rotate(0deg)',
-									fontSize: '24px',
-									marginLeft: '12px',
-									position: 'relative',
-									top: '4',
-								}}
-							/>
-						</div>
-						{isEditingGroupTitle ? (
-							<Input
-								autoFocus
-								type='text'
-								value={groupTempTitle}
-								onChange={(event) => setGroupTempTitle(event.target.value)}
-								onKeyDown={(event) => {
-									if (event.key === 'Enter') handleGroupTitleSave()
-									if (event.key === 'Escape') setIsEditingGroupTitle(false)
-								}}
-								onBlur={handleGroupTitleSave}
-								sx={{
-									width: `${groupTempTitle.length + 2.5}ch`,
-									minWidth: '2ch',
-								}}
-							/>
-						) : (
-							<h2 onClick={() => setIsEditingGroupTitle(true)}>{group.title}</h2>
-						)}
-						<span className='gh-how-many-tasks'>{group.tasks.length} Tasks</span>
-					</div>
-				</div>
-				<div className='gp-table'>
-					<table className='custom-table'>
-						<thead>
-							<tr>
-								<td className='checkbox-cell'>
-									<Checkbox checked={groupChecked} onChange={handleGroupChecked} />
-								</td>
-								<td className='empty-cell'></td>
-								{cmpTitles.map((title, index) => (
-									<td key={index} className='header-cell'>
-										{title}
-									</td>
-								))}
-							</tr>
-						</thead>
-						<tbody>
-							{group.tasks.map((task) => (
-								<React.Fragment key={task.id}>
-									<span className='task-menu'>
-										<IconButton onClick={(event) => handleMenuClick(event, task)}>
-											<MoreHorizOutlinedIcon />
-										</IconButton>
+  return (
+    <>
+      <div className='gp-main-container' style={{ alignItems: 'baseline' }}>
+        <div
+          className='gh-main-container'
+          style={{
+            alignItems: 'baseline',
+            '--group-color': group?.style?.color || '#000',
+          }}
+        >
+          <div className='gh-title'>
+            <SuggestedActions board={board} group={group} />
+            <div
+              onClick={handleClick}
+              style={{ cursor: 'pointer' }}
+              className='gh-title-expandMoreIcon'
+            >
+              <ExpandMoreIcon
+                style={{
+                  transition: 'transform 0.3s ease',
+                  transform: isRotated ? 'rotate(-90deg)' : 'rotate(0deg)',
+                }}
+              />
+            </div>
+            {isEditingGroupTitle ? (
+              <Input
+                autoFocus
+                type='text'
+                value={groupTempTitle}
+                onChange={(event) => setGroupTempTitle(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') handleGroupTitleSave()
+                  if (event.key === 'Escape') setIsEditingGroupTitle(false)
+                }}
+                onBlur={handleGroupTitleSave}
+                sx={{
+                  width: `${groupTempTitle.length + 2.5}ch`,
+                  minWidth: '2ch',
+                }}
+              />
+            ) : (
+              <h3 onClick={() => setIsEditingGroupTitle(true)}>
+                {group.title || 'New Group'}
+              </h3>
+            )}
+            <span className='gh-how-many-tasks'>
+              {group.tasks.length} Tasks
+            </span>
+          </div>
+        </div>
+        <div className='gp-table'>
+          <table className='custom-table'>
+            <thead>
+              <tr>
+                <td className='checkbox-cell'>
+                  <Checkbox
+                    checked={groupChecked}
+                    onChange={handleGroupChecked}
+                  />
+                </td>
+                <td className='empty-cell'></td>
+                {cmpTitles.map((title, index) => (
+                  <td key={index} className='header-cell'>
+                    {title}
+                  </td>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {group.tasks.map((task) => (
+                <React.Fragment key={task.id}>
+                  <span className='task-menu'>
+                    <IconButton
+                      onClick={(event) => handleMenuClick(event, task)}
+                    >
+                      <MoreHorizOutlinedIcon sx={{ width: '20px' }} />
+                    </IconButton>
 
-										<Menu
-											anchorEl={anchorEl}
-											open={Boolean(anchorEl) && selectedTask?.id === task.id}
-											onClose={handleMenuClose}
-											anchorOrigin={{
-												vertical: 'bottom',
-												horizontal: 'right',
-											}}
-											transformOrigin={{
-												vertical: 'top',
-												horizontal: 'right',
-											}}>
-											<MenuItem
-												onClick={() => {
-													handleTaskDeleted(board, group, task)
-												}}>
-												Delete task
-											</MenuItem>
-											<MenuItem
-												onClick={() => {
-													handleTaskDuplicate(board, group, task)
-												}}>
-												Duplicate task
-											</MenuItem>
-										</Menu>
-									</span>
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl) && selectedTask?.id === task.id}
+                      onClose={handleMenuClose}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                    >
+                      <MenuItem
+                        onClick={() => {
+                          handleTaskDeleted(board, group, task)
+                        }}
+                      >
+                        Delete task
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          handleTaskDuplicate(board, group, task)
+                        }}
+                      >
+                        Duplicate task
+                      </MenuItem>
+                    </Menu>
+                  </span>
 
-									<tr className={`task-row ${tasksChecked.includes(task) ? 'checked' : ''}`}>
-										<td className='checkbox-cell'>
-											<Checkbox
-												checked={tasksChecked.includes(task)}
-												onChange={() => handleTaskChecked(task)}
-											/>
-										</td>
-										<td className='task-cell'>
-											{editingTaskId === task.id ? (
-												<Input
-													autoFocus
-													type='text'
-													value={existingItemTempTitle}
-													onChange={(event) => setExistingItemTempTitle(event.target.value)}
-													onKeyDown={(event) => {
-														if (event.key === 'Enter') handleSave(task)
-														if (event.key === 'Escape') handleCancel()
-													}}
-													onBlur={handleCancel}
-													sx={{
-														width: `${existingItemTempTitle.length + 2.5}ch`,
-														minWidth: '2ch',
-													}}
-												/>
-											) : (
-												<span onClick={() => handleEdit(task.id, task.title)}>{task.title}</span>
-											)}
+                  <tr
+                    className={`task-row ${
+                      tasksChecked.includes(task) ? 'checked' : ''
+                    }`}
+                  >
+                    <td className='checkbox-cell'>
+                      <Checkbox
+                        checked={tasksChecked.includes(task)}
+                        onChange={() => handleTaskChecked(task)}
+                      />
+                    </td>
+                    <td className='task-cell'>
+                      {editingTaskId === task.id ? (
+                        <Input
+                          autoFocus
+                          type='text'
+                          value={existingItemTempTitle}
+                          onChange={(event) =>
+                            setExistingItemTempTitle(event.target.value)
+                          }
+                          onKeyDown={(event) => {
+                            if (event.key === 'Enter') handleSave(task)
+                            if (event.key === 'Escape') handleCancel()
+                          }}
+                          onBlur={handleCancel}
+                          sx={{
+                            width: `${existingItemTempTitle.length + 2.5}ch`,
+                            minWidth: '2ch',
+                          }}
+                        />
+                      ) : (
+                        <span onClick={() => handleEdit(task.id, task.title)}>
+                          {task.title}
+                        </span>
+                      )}
 
-											<Link to={`task/${task.id}`} className='task-cell open'>
-												<div>
-													<SvgIcon iconName={'task_open_icon'} />
-													<span>Open</span>
-												</div>
-											</Link>
-										</td>
-										<TaskPreview group={group} board={board} task={task} cmpsOrder={cmpsOrder} />
-									</tr>
-								</React.Fragment>
-							))}
-							<tr>
-								<td colSpan={cmpTitles.length + 1} className='add-item-row'>
-									<td className='checkbox-cell'>
-										<Checkbox disabled sx={{ border: 0, width: '3rem', height: '3rem' }} />
-									</td>
-									<td style={{border: 'none', boxShadow: 'none'}}>
-										<Input
-											type='text'
-											placeholder='+ Add item'
-											value={newItemTempTitle}
-											onChange={(event) => setNewItemTempTitle(event.target.value)}
-											onKeyDown={(event) => {
-												if (event.key === 'Enter') onAddItem()
-												if (event.key === 'Escape') handleCancel()
-											}}
-											sx={{
-												border: 'none',
-												outline: 'none',
-												background: 'transparent',
-												width: '12rem',
-												boxShadow: 'none'
-											}}
-										/>
-									</td>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</>
-	)
+                      <Link to={`task/${task.id}`} className='task-cell open'>
+                        <div>
+                          <SvgIcon iconName={'task_open_icon'} />
+                          <span>Open</span>
+                        </div>
+                      </Link>
+                    </td>
+                    <TaskPreview
+                      group={group}
+                      board={board}
+                      task={task}
+                      cmpsOrder={cmpsOrder}
+                    />
+                  </tr>
+                </React.Fragment>
+              ))}
+              <tr>
+                <td colSpan={cmpTitles.length + 1} className='add-item-row'>
+                  <td className='checkbox-cell'>
+                    <Checkbox
+                      disabled
+                      sx={{ border: 0, width: '3rem', height: '3rem' }}
+                    />
+                  </td>
+                  <td style={{ border: 'none', boxShadow: 'none' }}>
+                    <Input
+                      type='text'
+                      placeholder='+ Add item'
+                      value={newItemTempTitle}
+                      onChange={(event) =>
+                        setNewItemTempTitle(event.target.value)
+                      }
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter') onAddItem()
+                        if (event.key === 'Escape') handleCancel()
+                      }}
+                      sx={{
+                        border: 'none',
+                        outline: 'none',
+                        background: 'transparent',
+                        width: '12rem',
+                        boxShadow: 'none',
+                      }}
+                    />
+                  </td>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </>
+  )
 }

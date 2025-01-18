@@ -164,7 +164,7 @@ export function TaskDetails_NavBar() {
                   textTransform: 'none',
                   padding: '4px 12px',
                   minHeight: '32px',
-                  lineHeight: '0',
+
                   '&:hover': {
                     backgroundColor: '#eaeefb',
                     borderRadius: '5px',

@@ -1,24 +1,11 @@
 .app-container {
     display: grid; 
-    grid-template-columns: 0.3fr 1.7fr; 
-    grid-template-rows: auto 1fr ; 
-    gap: 1em 1em; 
+    grid-template-columns: 270px 1fr;     // Sidebar 270px main rest
+    gap: 0px 12px; 
     grid-template-areas: 
       "navbar navbar"
       "sidebar main-container";
-    height: 100vh;
+    height: 0px; // Temporary fix to keep the navbar from movingdown when scrolling down the page (in the future the page will not be scrollable , only the area with the table will be scrollable)
 }
 
-.main-container {
-    display: grid; 
-    grid-template-columns: 3em 1fr; 
-    grid-template-rows: 1fr; 
-    gap: 0px 0px; 
-    grid-template-areas: 
-      "board-details-container board-details-container"; 
-    grid-area: main-container; 
-  }
 
-// .main-container {
-// 	grid-area: 2 / 2 / 4 / 4;
-// }
