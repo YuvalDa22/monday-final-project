@@ -1,14 +1,13 @@
 .boardHeader_main-container{
-    display:grid;
-    gap: 1em;
+  display: flex;
+  flex-direction: column;
+  gap:1rem
 }
 
 .boardHeader_title_and_additionalBoardActions{
-  display: grid;
-  grid-template-columns: auto auto;
-  grid-template-rows: 1fr;
+  display: flex;
   justify-content: space-between;
-  padding-top: 1em;
+  padding-top: 17px;
 }
 
 .additional_board_actions{

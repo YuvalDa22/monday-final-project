@@ -72,11 +72,11 @@ margin-bottom: 2px;
   .task-menu {
 	position: absolute;
 	padding:7px;
-
 	align-content: start;
 	display:flex;
 	transform: translateX(-45px) translateY(-3px);
-	opacity: 0;
+	opacity: 1;
+	background-color: green;
   }
 
   .task-menu:hover{

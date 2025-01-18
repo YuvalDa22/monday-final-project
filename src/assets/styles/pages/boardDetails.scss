@@ -1,22 +1,17 @@
 .board-details-container {
-    display: grid; 
-    grid-template-columns: 4em 1fr; 
-    grid-template-rows: 0.1fr 0.4fr auto; 
-    gap: 2em 0px; 
-    grid-template-areas: 
-      ". board-details-header"
-      "board-details-groups-container board-details-groups-container"
-      ". add-group-button-container"; 
-    grid-area: board-details-container; 
-    background-color: white;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); 
-    border-radius: 8px;
+  background-color: white;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); 
+  border-radius: 8px;
+  padding-left: 40px;
   }
-  .board-details-header { grid-area: board-details-header; }
+  .board-details-header {
+    
+  }
   .board-details-groups-container {
-    display: grid; 
-    grid-template-rows: auto; 
-    gap: 3em 0px; 
-    grid-area: board-details-groups-container; 
+    display: flex; 
+    flex-direction: column;
+    gap: 4em;
+    margin-top: 28px;
   }
-  .add-group-button-container { grid-area: add-group-button-container; }
+  .add-group-button-container {    
+   }

@@ -3,8 +3,9 @@
   background-image: url('https://agenda.agami-network.com/static/media/home-bg-img.6c3461523da0a635bd77.jpg');
   background-repeat: no-repeat;
   background-position: center;
-  object-fit: cover;
-  height: 1200px;
+  background-size: cover; // stretch bg-image to fill
+  height: 100vh; // This is a hack to escape from the grid that coomes from .app-container
+  width:100vw
 }
 
 .hero-layout {

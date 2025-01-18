@@ -132,19 +132,17 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
     <>
       <div className='gp-main-container' style={{ alignItems: 'baseline' }}>
         <div className='gh-main-container' style={{ alignItems: 'baseline' }}>
-          <div className='gh-suggested-actions-icon'>
-            <SuggestedActions board={board} group={group} />
-          </div>
           <div className='gh-title'>
-            <div onClick={handleClick} style={{ cursor: 'pointer' }}>
+            <SuggestedActions board={board} group={group} />
+            <div
+              onClick={handleClick}
+              style={{ cursor: 'pointer' }}
+              className='gh-title-expandMoreIcon'
+            >
               <ExpandMoreIcon
                 style={{
                   transition: 'transform 0.3s ease',
                   transform: isRotated ? 'rotate(-90deg)' : 'rotate(0deg)',
-                  fontSize: '24px',
-                  marginRight: '10px',
-                  position: 'relative',
-                  top: '4',
                 }}
               />
             </div>
@@ -165,9 +163,9 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
                 }}
               />
             ) : (
-              <h2 onClick={() => setIsEditingGroupTitle(true)}>
-                {group.title}
-              </h2>
+              <h3 onClick={() => setIsEditingGroupTitle(true)}>
+                {group.title || 'New Group'}
+              </h3>
             )}
             <span className='gh-how-many-tasks'>
               {group.tasks.length} Tasks
@@ -198,8 +196,9 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
                   <span className='task-menu'>
                     <IconButton
                       onClick={(event) => handleMenuClick(event, task)}
+                      sx={{ borderRadius: 2, backgroundColor: 'blue' }}
                     >
-                      <MoreHorizOutlinedIcon />
+                      <MoreHorizOutlinedIcon sx={{ backgroundColor: 'red' }} />
                     </IconButton>
 
                     <Menu

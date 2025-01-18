@@ -28,14 +28,14 @@ export function SuggestedActions({ board, group }) {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
         sx={{
-          padding: '2px',
-          minWidth: 0,
-          minHeight: 0,
+          padding: 0,
+          minWidth: '0px',
         }}
       >
         <MoreHorizIcon
           sx={{
-            fontSize: 20,
+            height: '20px',
+            width: '20px',
           }}
         />
       </Button>

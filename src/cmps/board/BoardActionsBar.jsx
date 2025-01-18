@@ -10,7 +10,7 @@ const SvgIcon = ({ iconName, options }) => {
   return (
     <i
       dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}
-      style={{ display: 'flex', opacity: 0.62 }}
+      style={{ display: 'flex', opacity: 0.6 }}
     ></i>
   )
 }
@@ -22,7 +22,7 @@ export function BoardActionsBar() {
   return (
     <Stack
       direction={'row'}
-      spacing={'25px'}
+      spacing={'15px'}
       style={{ display: 'flex', alignItems: 'center' }}
     >
       <Button
@@ -30,7 +30,7 @@ export function BoardActionsBar() {
         endIcon={<ArrowDropDown sx={{ fill: 'white' }} />} // Updated to use MUI's sx prop
         onClick={handleMenuOpen}
         className='new-task-button'
-        sx={{ textTransform: 'none', padding: '5px 10px', fontSize: '15px' }}
+        sx={{ textTransform: 'none', padding: '5px 12px', fontSize: '15px' }}
       >
         New task
       </Button>
@@ -45,45 +45,46 @@ export function BoardActionsBar() {
       <IconButton
         sx={{
           borderRadius: '5px',
-          fontSize: '18px',
-          gap: 1,
+          fontSize: '15px',
+          gap: 0.5,
+          opacity: 1,
         }}
       >
-        <SearchOutlinedIcon style={{ opacity: 0.62, height: 20, width: 20 }} />
+        <SearchOutlinedIcon style={{ opacity: 1, height: 22, width: 22 }} />
         Search
       </IconButton>
-      <IconButton sx={{ borderRadius: '5px', fontSize: '18px', gap: 1 }}>
+      <IconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
         <SvgIcon
           iconName={'boardActionsBar_person'}
-          options={{ height: 20, width: 20 }}
+          options={{ height: 22, width: 22 }}
         />
         Person
       </IconButton>
-      <IconButton sx={{ borderRadius: '5px', fontSize: '18px', gap: 1 }}>
+      <IconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
         <SvgIcon
           iconName={'boardActionsBar_filter'}
-          options={{ height: 20, width: 20 }}
+          options={{ height: 22, width: 22 }}
         />
         Filter
       </IconButton>
-      <IconButton sx={{ borderRadius: '5px', fontSize: '18px', gap: 1 }}>
+      <IconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
         <SvgIcon
           iconName={'boardActionsBar_sort'}
-          options={{ height: 20, width: 20 }}
+          options={{ height: 22, width: 22 }}
         />
         Sort
       </IconButton>
-      <IconButton sx={{ borderRadius: '5px', fontSize: '18px', gap: 1 }}>
+      <IconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
         <SvgIcon
           iconName={'boardActionsBar_hide'}
-          options={{ height: 20, width: 20 }}
+          options={{ height: 22, width: 22 }}
         />
         Hide
       </IconButton>
-      <IconButton sx={{ borderRadius: '5px', fontSize: '18px', gap: 1 }}>
+      <IconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
         <SvgIcon
           iconName={'boardActionsBar_groupBy'}
-          options={{ height: 16, width: 16 }}
+          options={{ height: 17, width: 17 }}
         />
         Group by
       </IconButton>

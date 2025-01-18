@@ -111,6 +111,7 @@ export function BoardNavBar() {
       sx={{
         width: '100%',
         borderBottom: '1px solid #e0e0e0',
+        height: '30px',
         display: 'flex',
       }}
     >
@@ -123,6 +124,7 @@ export function BoardNavBar() {
           TabIndicatorProps={{
             sx: {
               height: '2px',
+              bottom: 9.5,
               backgroundColor: '#1976d2',
             },
           }}
@@ -150,8 +152,7 @@ export function BoardNavBar() {
               sx={{
                 textTransform: 'none',
                 padding: '4px 12px',
-                minHeight: '32px',
-                lineHeight: '2.7',
+                minHeight: '10px',
                 '&:hover': {
                   backgroundColor: '#eaeefb',
                   borderRadius: '5px',
@@ -167,6 +168,7 @@ export function BoardNavBar() {
             padding: '6px',
             borderRadius: '5px',
             marginLeft: '8px',
+            bottom: 7,
             '&:hover': {
               backgroundColor: '#eaeefb',
             },

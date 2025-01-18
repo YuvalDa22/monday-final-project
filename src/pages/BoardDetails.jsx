@@ -69,11 +69,19 @@ export function BoardDetails() {
                 key={group.id}
               />
             ))}
-        </div>
-        <div className='add-group-button-container'>
-          <Button variant='contained' color='primary' onClick={onAddGroup}>
-            Add new group
-          </Button>
+          <div className='add-group-button-container'>
+            <Button
+              variant='outlined'
+              onClick={onAddGroup}
+              sx={{
+                color: 'black',
+                borderColor: 'gray',
+                textTransform: 'none',
+              }}
+            >
+              Add new group
+            </Button>
+          </div>
         </div>
         {footerDisplayed && (
           <Footer board={board} checkedTasks={checkedTasks} />
