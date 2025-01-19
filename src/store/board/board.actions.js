@@ -78,8 +78,10 @@ export async function removeTask(board, group, task) {
   updateBoard(board, group, null, { key: 'tasks', value: newGroup.tasks })
 }
 
-export async function addTask(board, group, task) {
-  console.log('Adding task "' + task.title + '" To group "' + group.title + '"')
+export async function addTask(board, group, task, fromHeader) {
+  console.log('task', task);
+  console.log('task title', task.title);
+  // console.log('Adding task "' + task.title + '" To group "' + group.title + '"')
 
   store.dispatch({
     type: ADD_TASK,
@@ -88,7 +90,7 @@ export async function addTask(board, group, task) {
     task: task,
   })
 
-  const updatedTasks = [...group.tasks, task]
+  const updatedTasks = fromHeader ? [task , ...group.tasks] : [...group.tasks, task]
   updateBoard(board, group, null, { key: 'tasks', value: updatedTasks })
 }
 

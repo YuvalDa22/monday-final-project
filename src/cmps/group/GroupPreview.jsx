@@ -18,7 +18,7 @@ import { Link, useParams } from 'react-router-dom'
 import { getSvg } from '../../services/util.service'
 import { Menu, MenuItem, IconButton } from '@mui/material'
 
-export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
+export function GroupPreview({ board, group, cmpTitles, cmpsOrder, onAddTask }) {
   const [isRotated, setIsRotated] = useState(false)
   const handleClick = () => {
     setIsRotated(!isRotated)
@@ -92,9 +92,8 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
     setExistingItemTempTitle('')
   }
 
-  const onAddItem = () => {
-    const newTask = { id: utilService.makeId(), title: newItemTempTitle }
-    addTask(board, group, newTask)
+  const handleAddItem = () => {
+    onAddTask(group, newItemTempTitle, false)
     setNewItemTempTitle('')
   }
 
@@ -188,7 +187,7 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
                     onChange={handleGroupChecked}
                   />
                 </td>
-                <td className='empty-cell'></td>
+                <td className='empty-cell'>Task</td>
                 {cmpTitles.map((title, index) => (
                   <td key={index} className='header-cell'>
                     {title}
@@ -305,7 +304,7 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
                         setNewItemTempTitle(event.target.value)
                       }
                       onKeyDown={(event) => {
-                        if (event.key === 'Enter') onAddItem()
+                        if (event.key === 'Enter') handleAddItem()
                         if (event.key === 'Escape') handleCancel()
                       }}
                       sx={{

@@ -3,15 +3,16 @@
   margin: 0;
   box-sizing: border-box;
   color:black;
+  
 }
 
 html{
-
   background-color: $bg-color;
+  
 }
 
 body {
-  font-family: 'Quicksand';
+  font-family: $font-family;
 }
 
 
@@ -37,4 +38,5 @@ body {
   width: 250px;
   z-index: 1001;
 }
+
 

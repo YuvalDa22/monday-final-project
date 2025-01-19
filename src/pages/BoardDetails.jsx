@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux'
 import { BoardHeader } from '../cmps/board/BoardHeader'
 import { GroupPreview } from '../cmps/group/GroupPreview'
 import { useEffect } from 'react'
-import { loadBoards } from '../store/board/board.actions'
+import { addTask, loadBoards } from '../store/board/board.actions'
 import { showErrorMsg } from '../services/event-bus.service'
 import { Button } from '@mui/material'
 import { updateBoard } from '../store/board/board.actions'
@@ -39,24 +39,28 @@ export function BoardDetails() {
 
   if (!allBoards || allBoards.length === 0) return <div>Loading...</div>
 
-  const onAddGroup = () => {
+  function onAddTask ( group, initialTitle = 'New Task', fromHeader) {
+    const newTask = { id: utilService.makeId(), title: initialTitle }
+    addTask(board, group, newTask, fromHeader)
+  }
+
+  const onAddGroup = (fromHeader) => {
     if (!board) return
     let newGroup = boardService.getEmptyGroup()
     newGroup = {
       id: utilService.makeId(), // Generate and add ID to the top of the properties
       ...newGroup,
     }
-
-    const updatedGroups = [...board?.groups, newGroup]
+    const updatedGroups = fromHeader ? [newGroup , ...board?.groups] : [...board?.groups, newGroup]
     updateBoard(board, null, null, { key: 'groups', value: updatedGroups })
-    console.log(board, ' UPDATD BOARD')
+    console.log(board, ' UPDATED BOARD')
   }
 
   return (
     <>
       <div className='board-details-container'>
         <div className='board-details-header'>
-          <BoardHeader board={board} />
+          <BoardHeader board={board} onAddTask={onAddTask} onAddGroup={onAddGroup} />
         </div>
         <div className='board-details-groups-container'>
           {board?.groups &&
@@ -67,12 +71,13 @@ export function BoardDetails() {
                 cmpTitles={board.cmpTitles}
                 cmpsOrder={board.cmpsOrder}
                 key={group.id}
+                onAddTask={onAddTask}
               />
             ))}
           <div className='add-group-button-container'>
             <Button
               variant='outlined'
-              onClick={onAddGroup}
+              onClick={() => onAddGroup(false)}
               sx={{
                 color: 'black',
                 borderColor: 'gray',
