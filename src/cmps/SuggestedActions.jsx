@@ -6,7 +6,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import { Divider } from '@mui/material'
 import { removeGroup } from '../store/board/board.actions'
 
-export function SuggestedActions({ board, group }) {
+export function SuggestedActions({ board, group,updateFooterGroupRemoved }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -16,8 +16,9 @@ export function SuggestedActions({ board, group }) {
     setAnchorEl(null)
   }
   const handleRemoveGroup = () => {
+    updateFooterGroupRemoved(null,group)
     removeGroup(board, group)
-    // handleMenuClose()
+
   }
   return (
     <div className='sa-main-container'>

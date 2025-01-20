@@ -80,6 +80,7 @@ export function getSvg(
   // return svgs[name];
   return svgs[name]
     .replaceAll('fill="currentColor"', `fill="${color}"`)
+    .replaceAll('stroke="currentColor"', `stroke="${color}"`)
     .replaceAll('width=""', `width="${width}"`)
     .replaceAll('height=""', `height="${height}"`)
 }

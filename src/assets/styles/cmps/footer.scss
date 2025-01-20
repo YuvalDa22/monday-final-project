@@ -1,163 +1,90 @@
-.footer {
-  position: fixed;          /* Sticks the footer to a fixed position */
-  bottom: 3%;               /* Aligns it to the bottom of the viewport */
-  left: 25%;                /* Centers it horizontally */
-  width: 50%;               /* Makes the footer span 50% of the screen width */
-  background-color: #f5f6f8; /* Background color for the footer */
-  color: #333;              /* Text color */
-  border-top: 1px solid #e3e6eb; /* Adds a border to the top of the footer */
-  text-align: center;       /* Centers the content inside the footer */
-  z-index: 100;             /* Ensures the footer is above other content */
+.board-details_footer {
+  position: fixed;
+  opacity: 0; /* Fully transparent */
+  bottom: 0;
+  width: 800px;
+  background-color: white;
+  box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.05), 0px 0px 34px rgba(0, 0, 0, 0.36); 
+  border-radius: 5px;
+  margin: 0px 100px;
+  z-index: 2000;
+  display: flex;
+  height: 65px;
+  transform: translateY(-28px); 
+  transition: opacity 0.1s ease-in, transform 0.1s ease-in; 
+}
 
-  .footer-content {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr); /* Define 12 equal columns for the grid */
-    align-items: center;                    /* Vertically center content */
-    width: 100%;                            /* Ensure full width of the footer content */
-    height: 100%;                           /* Align elements to fill container height */
+.show_footer {
+  opacity: 1;
+  transform: translateY(-35px); // 7px jump seemed the most like monday.com
+}
 
-    .footer-number {
-      grid-column: span 1; /* Take 1 out of 12 columns */
-      text-align: center;
-      background-color: #0073e6;
-      height: 100%;
-      display: flex;             /* Enable flexbox */
-      justify-content: center;   /* Horizontally center the content */
-      align-items: center;       /* Vertically center the content */
+.hide_footer {
+  opacity: 0;
+  transition: none; // for instant close
+  visibility: hidden; // so buttons wont be invisibly clickable
+}
 
-      h1 {
-          font-weight: bold;
-          margin: 0;
-          color: white;
-      }
+
+.footer_rest-of-footer{
+  display:flex;
+}
+
+.footer_blue-number{
+  background-color: rgb(8,116,236);
+  border-radius: 5px 0px 0px 5px;
+  min-width: 65px;
+  align-content: center;
+  text-align: center;
+}
+
+.footer_blue-number span{
+  font-weight: 550;
+  font-size: 30px;
+  color:white;
+}
+
+
+.footer_item-selected_container{
+  padding:5px 15px;
+  span{
+  font-size: 25px;
+  white-space: nowrap;
+  font-weight: 350;
+}
+
+  .footer_colored-dots{
+    font-weight: 600;
+    font-size: 50px;
+    line-height: 0;
     }
-
-    .footer-items-selected {
-      grid-column: span 3; /* Take 3 out of 12 columns */
-      text-align: center;  /* Align text to the center */
-      // border: 1px solid #5e5e5e; /* Add a border around each list item */
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 1rem;
-      margin-bottom: 1em;
-
-      h1 {
-        font-weight: bold;
-        margin: 0;
-      }
-
-      .footer-balls {
-        display: flex;               /* Enable flex layout */
-        gap: 5px;                    /* Add spacing between balls */
-        justify-content: start;
-        padding-left: 1rem;          /* Center the balls horizontally */
-        align-items: center;         /* Center the balls vertically */
-
-        .ball {
-          width: 10px;               /* Set ball size */
-          height: 10px;
-          border-radius: 50%;        /* Make it circular */
-          background-color: purple;  /* Set ball color */
-        }
-      }
-    }
-    .footer-actions {
-      grid-area: 1 / 5 / 2 / 12; /* Define the grid area for the actions */
-      display: grid;
-      grid-template-columns: repeat(7, 1fr); /* Define 7 equal columns for the grid */
-      gap: 1rem; /* Add spacing between grid items */
-
-      .footer-action {
-      // border: 1px solid #5e5e5e; /* Add a border around each list item */
-      display: grid;
-      color: #333;
-      text-decoration: none;
-      justify-content: center; /* Center content vertically */
-      align-items: center; /* Center content horizontally */
-      &:hover {
-        text-decoration: underline;
-        cursor: pointer;
-      }
-      }
-    }
-
-    .footer-close {
-      grid-column: span 1; /* Take 1 out of 12 columns */
-      text-align: center; /* Align text to the center */
-      height: 100%;
-      display: flex; /* Enable flexbox */
-      justify-content: center;   /* Horizontally center the content */
-      align-items: center;       /* Vertically center the content */
-      margin: 0;
-      border-left: 1px solid #a4a4a4; /* Add a left border to separate visually */
-      div {
-        font-weight: bold;
-        font-size: 1.2rem;        /* Increase font size on hover */
-        padding: 1rem;
-        &:hover {
-          cursor:pointer;           /* Make it clickable */
-          color: #0474e4; 
-        }
-      }
-    }
-
-    .modal {
-      position: absolute; /* Place the modal relative to the parent */
-      top: -120%; /* Adjust the vertical position to appear above */
-      left: 0; /* Align it with the start of the parent container */
-      width: 200px; /* Set a fixed width for the modal */
-      background-color: white; /* Modal background color */
-      border: 1px solid #ddd; /* Add a subtle border */
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Add a shadow for better visibility */
-      border-radius: 8px; /* Smooth edges */
-      z-index: 200; /* Ensure it is on top of other elements */
-      padding: 10px; /* Add internal spacing */
-    }
-    
-    .modal h2 {
-      font-size: 16px; /* Smaller font size for the title */
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: #333; /* Standard text color */
-    }
-    
-    .modal button {
-      display: block; /* Stack buttons vertically */
-      width: 100%; /* Full width for buttons */
-      padding: 8px 10px; /* Button padding */
-      margin-bottom: 10px; /* Spacing between buttons */
-      font-size: 14px;
-      background-color: #0073e6; /* Primary button color */
-      color: white; /* White text for contrast */
-      border: none; /* Remove default border */
-      border-radius: 4px; /* Rounded button edges */
-      cursor: pointer; /* Pointer cursor on hover */
-    }
-    
-    .modal button:last-child {
-      background-color: #f5f5f5; /* Cancel button background */
-      color: #333; /* Cancel button text color */
-      border: 1px solid #ddd; /* Border for the cancel button */
-    }
-    
-    .modal button:hover {
-      background-color: #005bb5; /* Slightly darker blue on hover */
-      color: white;
-    }
-    
-    .modal button:last-child:hover {
-      background-color: #e0e0e0; /* Slightly darker gray on hover */
-    }
-    
-    /* Ensure the footer actions container does not clip the modal */
-    .footer-actions {
-      overflow: visible; /* Allow the modal to extend outside the footer actions */
-      position: relative; /* Position relative for correct child placement */
-    }
-    
+}
 
 
-  }
+.footer_option{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+  cursor: pointer; /* Adds pointer behavior */
+  padding: 0px 9.5px;
+  white-space: nowrap;
+  
+}
+
+.footer_option:hover{
+  scale: 1.05;
+  transition: scale 0.2s ease-in-out;  
+}
+
+.footer_options_container{
+  display:flex;
+  padding: 5px 0px 5px 18px;
+  font-size: 14px;
+}
+
+.reres{
+  background-color: red;
+  padding: 20px;
+  color:red;
 }

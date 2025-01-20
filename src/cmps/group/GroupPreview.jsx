@@ -18,7 +18,7 @@ import { Link, useParams } from 'react-router-dom'
 import { getSvg } from '../../services/util.service'
 import { Menu, MenuItem, IconButton } from '@mui/material'
 
-export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
+export function GroupPreview({ board, group, cmpTitles, cmpsOrder,onTasksCheckedChange }) {
   const [isRotated, setIsRotated] = useState(false)
   const handleClick = () => {
     setIsRotated(!isRotated)
@@ -31,45 +31,27 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
   const [editingTaskId, setEditingTaskId] = useState(null)
   const [existingItemTempTitle, setExistingItemTempTitle] = useState('')
   const [newItemTempTitle, setNewItemTempTitle] = useState('')
-  const [tasksChecked, setTasksChecked] = useState([])
-  const [groupChecked, setGroupChecked] = useState(false)
-  const [isIndeterminate, setIsIndeterminate] = useState(false)
 
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedTask, setSelectedTask] = useState(null)
   const [isEditingGroupTitle, setIsEditingGroupTitle] = useState(false)
   const [groupTempTitle, setGroupTempTitle] = useState(group.title)
 
-  useEffect(() => {
-    const allChecked =
-      group.tasks.length > 0 && tasksChecked.length === group.tasks.length
-    const noneChecked = tasksChecked.length === 0
-
-    setGroupChecked(allChecked)
-    setIsIndeterminate(!allChecked && !noneChecked)
-    setFooter(tasksChecked.length > 0)
-    setCheckedTasks(tasksChecked)
-  }, [tasksChecked, group.tasks])
-
-  const handleGroupChecked = (event) => {
-    const isChecked = event.target.checked
-    setGroupChecked(isChecked)
-    setIsIndeterminate(false)
-
-    if (isChecked) {
-      setTasksChecked([...group.tasks])
-    } else {
-      setTasksChecked([])
+  const handleGroupChecked = (event,group) => {
+    // if event=null, it means that the callback function that was sent to SuggestedActions was triggered
+    if (event?.target.checked)
+    { 
+      const tasksToAdd = group.tasks.map((task) => ({groupId: group.id, taskId: task.id })) // TODO: Add group color 
+      onTasksCheckedChange(tasksToAdd,'add')
     }
+    else
+    {
+      const tasksToRemove = group.tasks.map((task) => ({groupId: group.id, taskId: task.id })) // TODO: Add group color 
+      onTasksCheckedChange(tasksToRemove,'remove')
+    }
+
   }
 
-  const handleTaskChecked = (task) => {
-    setTasksChecked((prevState) =>
-      prevState.includes(task)
-        ? prevState.filter((t) => t !== task)
-        : [...prevState, task]
-    )
-  }
 
   const handleEdit = (taskId, currentTitle) => {
     setEditingTaskId(taskId)
@@ -139,7 +121,7 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
           }}
         >
           <div className='gh-title'>
-            <SuggestedActions board={board} group={group} />
+            <SuggestedActions board={board} group={group} updateFooterGroupRemoved={handleGroupChecked}/>
             <div
               onClick={handleClick}
               style={{ cursor: 'pointer' }}
@@ -184,8 +166,7 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
               <tr>
                 <td className='checkbox-cell'>
                   <Checkbox
-                    checked={groupChecked}
-                    onChange={handleGroupChecked}
+                   onChange={(event) => {handleGroupChecked(event,group)}}
                   />
                 </td>
                 <td className='empty-cell'></td>
@@ -236,15 +217,11 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder }) {
                     </Menu>
                   </span>
 
-                  <tr
-                    className={`task-row ${
-                      tasksChecked.includes(task) ? 'checked' : ''
-                    }`}
-                  >
+                  <tr                  >
                     <td className='checkbox-cell'>
                       <Checkbox
-                        checked={tasksChecked.includes(task)}
-                        onChange={() => handleTaskChecked(task)}
+                        // checked={tasksChecked.includes(task)}
+                        // onChange={() => handleTaskChecked(task)}
                       />
                     </td>
                     <td className='task-cell'>

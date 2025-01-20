@@ -1,5 +1,4 @@
 import { AppHeader } from "../cmps/layout/AppHeader";
-import { Footer } from "../cmps/layout/Footer";
 import { useNavigate } from "react-router-dom";
 export function HomePage() {
   const navigate = useNavigate();
