@@ -9,6 +9,7 @@ import { updateBoard } from '../store/board/board.actions'
 import { boardService } from '../services/board.service'
 import { useParams, Outlet } from 'react-router-dom'
 import { utilService,getSvg } from '../services/util.service'
+import CloseIcon from '@mui/icons-material/Close';
 
 
 
@@ -54,13 +55,23 @@ export function BoardDetails() {
 
 
   const handleTasksChecked = (newArrayOfTasks,action) => {
-    if (action === 'add')
-    {
-      setCheckedTasksList(prev => [...prev,...newArrayOfTasks])
+    if (action === 'add') {
+      setCheckedTasksList((prev) => {
+        // first combine existing and new tasks
+        const combined = [...prev, ...newArrayOfTasks];
+        // then remove duplicates
+        return combined.filter(
+          (task, index, self) =>
+            index ===
+            self.findIndex(
+              (t) => t.groupId === task.groupId && t.taskId === task.taskId
+            )
+        );
+      });
     }
       else{
         // Here we remove tasks from the array of checked-tasks
-        // So we go through all the tasks and if the a task appears SOMEWHERE in newArrayOfTasks , it should be filtered out
+        // So we go through all the tasks and if a task appears SOMEWHERE in newArrayOfTasks , it should be filtered out
         const filteredTasks = checkedTasksList.filter((taskInList) => 
           !newArrayOfTasks.some((newTask) => 
             newTask.groupId === taskInList.groupId && newTask.taskId === taskInList.taskId
@@ -89,6 +100,7 @@ export function BoardDetails() {
                 cmpsOrder={board.cmpsOrder}
                 key={group.id}
                 onTasksCheckedChange={handleTasksChecked}
+                checkedTasksList={checkedTasksList}
               />
             ))}
           <div className='add-group-button-container'>
@@ -115,7 +127,17 @@ export function BoardDetails() {
               <span>{checkedTasksList.length>1?"Items":"Item"} selected</span>
             </div>
             <div>
-                  <span className='footer_colored-dots'>{checkedTasksList.map((task)=>('.'))}</span>
+            <span className='footer_colored-dots'>
+  {checkedTasksList.length > 13 ? (
+    <>
+      {'.'.repeat(13)}
+      <span style={{fontSize:'11px'}}> + {checkedTasksList.length-13}</span>
+    </>
+  ) : (
+    '.'.repeat(checkedTasksList.length)
+  )}
+</span>
+
             </div>
            </div>
            <div className='footer_options_container'>
@@ -149,8 +171,9 @@ export function BoardDetails() {
            </div>
           
            </div>
-           <IconButton sx={{borderLeft:"2px solid gray",borderRadius:'0px',opacity:0.4,display:'flex',width:"62px",textAlign:'center'}}>
-             X
+           <span style={{borderLeft:"2px solid gray",borderRadius:'0px',opacity:0.4,marginLeft:10}}></span>
+           <IconButton className='footer_close-icon_container' sx={{borderRadius:"2px"}}  onClick={() => {setCheckedTasksList([])}}>
+           <CloseIcon className='footer_close-icon'/>
            </IconButton>
 
            </div>

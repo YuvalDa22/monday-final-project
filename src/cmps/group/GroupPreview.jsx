@@ -18,7 +18,7 @@ import { Link, useParams } from 'react-router-dom'
 import { getSvg } from '../../services/util.service'
 import { Menu, MenuItem, IconButton } from '@mui/material'
 
-export function GroupPreview({ board, group, cmpTitles, cmpsOrder,onTasksCheckedChange }) {
+export function GroupPreview({ board, group, cmpTitles, cmpsOrder,onTasksCheckedChange, checkedTasksList }) {
   const [isRotated, setIsRotated] = useState(false)
   const handleClick = () => {
     setIsRotated(!isRotated)
@@ -49,6 +49,16 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder,onTasksChecked
       const tasksToRemove = group.tasks.map((task) => ({groupId: group.id, taskId: task.id })) // TODO: Add group color 
       onTasksCheckedChange(tasksToRemove,'remove')
     }
+
+  }
+
+  const handleTaskChecked = (event,task)=>{
+    if (event.target.checked)
+      onTasksCheckedChange([{groupId: group.id, taskId: task.id }],'add')
+    else
+    onTasksCheckedChange([{groupId: group.id, taskId: task.id }],'remove')
+    
+
 
   }
 
@@ -166,6 +176,11 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder,onTasksChecked
               <tr>
                 <td className='checkbox-cell'>
                   <Checkbox
+                  checked={group.tasks.every(task =>
+                    checkedTasksList.some(checkedTask =>
+                      checkedTask.groupId === group.id && checkedTask.taskId === task.id
+                    )
+                  )}
                    onChange={(event) => {handleGroupChecked(event,group)}}
                   />
                 </td>
@@ -220,8 +235,10 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder,onTasksChecked
                   <tr                  >
                     <td className='checkbox-cell'>
                       <Checkbox
-                        // checked={tasksChecked.includes(task)}
-                        // onChange={() => handleTaskChecked(task)}
+                         checked={checkedTasksList.some(checkedTask =>
+                             checkedTask.groupId === group.id && checkedTask.taskId === task.id
+                           )}
+                         onChange={(event) => handleTaskChecked(event,task)}
                       />
                     </td>
                     <td className='task-cell'>
