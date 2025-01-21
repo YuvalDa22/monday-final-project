@@ -44,7 +44,48 @@ export async function saveBoard(board) {
   }
 }
 
-// Add 'Duplicate multiple tasks' func!!
+export async function duplicateMultipleTasks(board, tasksToDuplicate) {
+  // read function removeMultipleTasks for comments about this deep cloning
+  const updatedGroups = structuredClone(board.groups)
+
+  // iterate through the tasks to be duplicated
+  tasksToDuplicate.forEach(({ groupId, taskId }) => {
+    // Find the group containing the task
+    const groupIndex = updatedGroups.findIndex((group) => group.id === groupId)
+    if (groupIndex === -1) {
+      console.warn(`Group with id ${groupId} not found`)
+      return
+    }
+
+    const group = updatedGroups[groupIndex]
+    const taskIndex = group.tasks.findIndex((task) => task.id === taskId)
+    if (taskIndex === -1) {
+      console.warn(`Task with id ${taskId} not found in group ${groupId}`)
+      return
+    }
+
+    // Create the duplicated task
+    const taskToDuplicate = group.tasks[taskIndex]
+    const duplicatedTask = {
+      ...taskToDuplicate,
+      id: utilService.makeId(),
+      title: `${taskToDuplicate.title} (copy)`,
+    }
+
+    // Insert the duplicated task right below the original
+    group.tasks.splice(taskIndex + 1, 0, duplicatedTask)
+
+    // Update the group in the updatedGroups array
+    updatedGroups[groupIndex] = group
+  })
+
+  // Update the board with the modified groups
+  return updateBoard(board, null, null, {
+    key: 'groups',
+    value: updatedGroups,
+  })
+}
+
 export async function duplicateTask(board, group, task) {
   const newTask = {
     ...task,
@@ -80,7 +121,7 @@ export async function moveMultipleTasksIntoSpecificGroup(
   targetGroupId
 ) {
   /* Logic here is to grab and isolate the group were gonna move stuff into, and then
-     push the tasks that were checked by user into that group while removing them from their original group*/
+     push the tasks that were checked by the user into that group while removing them from their original group*/
 
   // read function removeMultipleTasks for comments about this deep cloning
   let updatedGroups = structuredClone(board.groups)

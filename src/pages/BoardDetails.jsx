@@ -8,6 +8,7 @@ import {
   duplicateTask,
   removeMultipleTasks,
   moveMultipleTasksIntoSpecificGroup,
+  duplicateMultipleTasks,
 } from '../store/board/board.actions'
 import { showErrorMsg } from '../services/event-bus.service'
 import { Button, IconButton, Menu, MenuItem } from '@mui/material'
@@ -97,18 +98,7 @@ export function BoardDetails() {
   const handleFooterAction = async (action, groupTargetId) => {
     switch (action) {
       case 'duplicate':
-        const allTasks = checkedTasksList.map((checkedTask) =>
-          boardService.getTaskById(checkedTask.groupId, checkedTask.taskId)
-        )
-        console.log(allTasks)
-
-        for (const [index, task] of allTasks.entries()) {
-          const group = boardService.getGroupById(
-            checkedTasksList[index].groupId
-          )
-          await duplicateTask(board, group, task) // Await here to ensure sequential execution
-        }
-
+        duplicateMultipleTasks(board, checkedTasksList)
         break
       case 'export':
         console.log('CLicked')
