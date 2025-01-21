@@ -11,6 +11,7 @@
   display: flex;
   height: 65px;
   transform: translateY(-28px); 
+  left: 25%; // TODO: Fix this hack
   transition: opacity 0.1s ease-in, transform 0.1s ease-in; 
 }
 

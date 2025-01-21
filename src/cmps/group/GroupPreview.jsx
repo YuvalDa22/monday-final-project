@@ -102,6 +102,7 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder,onTasksChecked
 
   const handleTaskDeleted = (board, group, task) => {
     handleMenuClose()
+    onTasksCheckedChange([{groupId: group.id, taskId: task.id }],'remove')
     removeTask(board, group, task)
   }
 

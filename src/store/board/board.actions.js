@@ -46,11 +46,24 @@ export async function saveBoard(board) {
   }
 }
 
+
 export async function duplicateTask(board, group, task) {
-  const newTask = { ...task, id: utilService.makeId() }
-  const newGroup = { ...group, tasks: [...group.tasks, newTask] }
-  updateBoard(board, group, null, { key: 'tasks', value: newGroup.tasks })
+  const newTask = { ...task, id: utilService.makeId() };
+
+  // Insert new task below the duplicated one
+  const taskIndex = group.tasks.findIndex((t) => t.id === task.id);
+  const updatedTasks = [
+    ...group.tasks.slice(0, taskIndex + 1),
+    newTask,
+    ...group.tasks.slice(taskIndex + 1),
+  ];
+
+  const newGroup = { ...group, tasks: updatedTasks };
+
+  // Await the asynchronous update
+  return updateBoard(board, group, null, { key: 'tasks', value: newGroup.tasks });
 }
+
 
 export async function removeGroup(board, group) {
   const newGroups = board.groups.filter((g) => g.id !== group.id)

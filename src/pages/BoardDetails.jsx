@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux'
 import { BoardHeader } from '../cmps/board/BoardHeader'
 import { GroupPreview } from '../cmps/group/GroupPreview'
 import { useEffect,useState } from 'react'
-import { loadBoards } from '../store/board/board.actions'
+import { loadBoards,duplicateTask } from '../store/board/board.actions'
 import { showErrorMsg } from '../services/event-bus.service'
 import { Button,IconButton } from '@mui/material'
 import { updateBoard } from '../store/board/board.actions'
@@ -54,7 +54,7 @@ export function BoardDetails() {
 
 
 
-  const handleTasksChecked = (newArrayOfTasks,action) => {
+  const handleTasksChecked = (newArrayOfTasks,action) => {    
     if (action === 'add') {
       setCheckedTasksList((prev) => {
         // first combine existing and new tasks
@@ -80,9 +80,44 @@ export function BoardDetails() {
         setCheckedTasksList(filteredTasks);
         
       }
-
-    
   };
+  
+  const handleFooterAction = async (action) => {
+      switch (action) {
+        case 'duplicate':                
+        const allTasks = checkedTasksList.map((checkedTask) =>boardService.getTaskById(checkedTask.groupId,checkedTask.taskId))  
+        console.log(allTasks);
+        
+        for (const [index, task] of allTasks.entries()) {         
+          const group = boardService.getGroupById(checkedTasksList[index].groupId);
+          await duplicateTask(board, group, task); // Await here to ensure sequential execution
+        }
+  
+          break;
+        case 'export':
+          console.log("CLicked");
+          break;
+        case 'archive':
+          console.log("CLicked");
+          break;
+        case 'delete':
+          console.log("CLicked");
+          break;
+        case 'convert':
+          console.log("CLicked");
+          break;
+        case 'move_to':
+          console.log("CLicked");
+          break;
+        case 'apps':
+          console.log("CLicked");
+          
+          break;
+        default:
+          console.warn(`Unknown action: ${action}`);
+      }
+    };
+    
 
   return (
     <>
@@ -141,32 +176,32 @@ export function BoardDetails() {
             </div>
            </div>
            <div className='footer_options_container'>
-           <div className='footer_option'>
-              <SvgIcon iconName="duplicate"></SvgIcon>
+           <div className='footer_option' onClick={()=>{handleFooterAction("duplicate")}}>
+              <SvgIcon iconName="duplicate" ></SvgIcon>
               <span>Duplicate</span>
            </div>
-           <div className='footer_option'>
-              <SvgIcon iconName="export"></SvgIcon>
+           <div className='footer_option' onClick={()=>{handleFooterAction("export")}}>
+              <SvgIcon iconName="export" ></SvgIcon>
               <span>Export</span>
            </div>
-           <div className='footer_option'>
-              <SvgIcon iconName="archive"></SvgIcon>
+           <div className='footer_option' onClick={()=>{handleFooterAction("archive")}}>
+              <SvgIcon iconName="archive" ></SvgIcon>
               <span>Archive</span>
            </div>
-           <div className='footer_option'>
-              <SvgIcon iconName="delete"></SvgIcon>
+           <div className='footer_option' onClick={()=>{handleFooterAction("delete")}}>
+              <SvgIcon iconName="delete" ></SvgIcon>
               <span>Delete</span>
            </div>
-           <div className='footer_option'>
-              <SvgIcon iconName="convert"></SvgIcon>
+           <div className='footer_option' onClick={()=>{handleFooterAction("convert")}}>
+              <SvgIcon iconName="convert" ></SvgIcon>
               <span>Convert</span>
            </div>
-           <div className='footer_option'>
-              <SvgIcon iconName="move_to"></SvgIcon>
+           <div className='footer_option' onClick={()=>{handleFooterAction("move_to")}}>
+              <SvgIcon iconName="move_to" ></SvgIcon>
               <span>Move to</span>
            </div>
-           <div className='footer_option'>
-              <SvgIcon iconName="apps"></SvgIcon>
+           <div className='footer_option' onClick={()=>{handleFooterAction("apps")}}>
+              <SvgIcon iconName="apps" ></SvgIcon>
               <span>Apps</span>
            </div>
           

@@ -10,6 +10,8 @@ export const boardService = {
   getEmptyBoard,
   getEmptyGroup,
   getEmptyTask,
+  getTaskById,
+  getGroupById
 }
 
 const STORAGE_KEY = 'boards'
@@ -23,6 +25,31 @@ async function query(filterBy = {}) {
     throw error
   }
 }
+
+function getGroupById(/*boardId !@!@!@@!@!*/ groupId) {
+  const boards = JSON.parse(localStorage.getItem('boards'));
+  if (!boards) throw new Error('No boards found in local storage');
+
+  const board = boards[0] // TODO: THIS ONLY GETS BOARD[0] !!@!@!@!@!@!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@@@@@@@
+  if (!board) throw new Error(`Board with ID ${boardId} not found`);
+
+  const group = board.groups.find((group) => group.id === groupId);
+  if (!group) throw new Error(`Group with ID ${groupId} not found`);
+
+  return group;
+}
+
+function getTaskById(groupId,taskId) {
+  const boards = JSON.parse(localStorage.getItem('boards')) || [];
+  const board = boards[0] // TODO: THIS ONLY GETS BOARD[0] !!@!@!@!@!@!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@@@@@@@
+  if (!board) return null;
+
+  const group = board.groups.find((group) => group.id === groupId);
+  if (!group) return null;
+
+  const task = group.tasks.find((task) => task.id === taskId);
+  return task || null;
+};
 
 async function getById(id) {
   return await storageService.get(STORAGE_KEY, id)
