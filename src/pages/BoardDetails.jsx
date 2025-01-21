@@ -99,6 +99,7 @@ export function BoardDetails() {
     switch (action) {
       case 'duplicate':
         duplicateMultipleTasks(board, checkedTasksList)
+        handleTasksChecked(checkedTasksList, 'delete') // to clean checkboxes after action is done
         break
       case 'export':
         console.log('CLicked')
