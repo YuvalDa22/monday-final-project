@@ -6,16 +6,12 @@ export const SET_FILTER = 'SET_FILTER'
 export const REMOVE_TASK = 'REMOVE_TASK'
 export const SET_FILTER_BY = 'SET_FILTER_BY'
 export const SET_IS_LOADING = 'SET_IS_LOADING'
-export const SET_FOOTER = 'SET_FOOTER'
-export const SET_CHECKED_TASKS = 'SET_CHECKED_TASKS'
 export const ADD_TASK = 'ADD_TASK'
 
 const initialState = {
   boards: [],
   filterBy: {},
   isLoading: false,
-  footerDisplayed: false,
-  checkedTasks: [],
 }
 
 export function boardReducer(state = initialState, cmd) {
@@ -86,22 +82,6 @@ export function boardReducer(state = initialState, cmd) {
       return {
         ...state,
         isLoading: cmd.isLoading,
-      }
-
-    case SET_FOOTER:
-      return {
-        ...state,
-        footerDisplayed: cmd.footerDisplayed,
-      }
-    case SET_CHECKED_TASKS:
-      return {
-        ...state,
-        checkedTasks: [
-          ...state.checkedTasks.filter(
-            (task) => !cmd.checkedTasks.includes(task)
-          ),
-          ...cmd.checkedTasks,
-        ],
       }
     default:
       return state

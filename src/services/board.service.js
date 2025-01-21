@@ -95,7 +95,7 @@ function getEmptyGroup() {
 		archivedAt: 0,
 		tasks: [],
 		archivedItems: [],
-		style: {color : utilService.createUniqueColorPicker()},
+		style: {color : 'red'},
 	}
 }
 

@@ -2,15 +2,14 @@ import { useSelector } from 'react-redux'
 import { BoardHeader } from '../cmps/board/BoardHeader'
 import { GroupPreview } from '../cmps/group/GroupPreview'
 import { useEffect,useState } from 'react'
-import { loadBoards,duplicateTask } from '../store/board/board.actions'
+import { updateBoard,loadBoards,duplicateTask,removeMultipleTasks,moveMultipleTasksIntoSpecificGroup } from '../store/board/board.actions'
 import { showErrorMsg } from '../services/event-bus.service'
 import { Button,IconButton } from '@mui/material'
-import { updateBoard } from '../store/board/board.actions'
 import { boardService } from '../services/board.service'
 import { useParams, Outlet } from 'react-router-dom'
 import { utilService,getSvg } from '../services/util.service'
 import CloseIcon from '@mui/icons-material/Close';
-
+import { MenuRoot, MenuTrigger, MenuContent, MenuItem } from "@/components/ui/menu";
 
 
 const SvgIcon = ({ iconName, options }) => {
@@ -101,13 +100,14 @@ export function BoardDetails() {
           console.log("CLicked");
           break;
         case 'delete':
-          console.log("CLicked");
+          handleTasksChecked(checkedTasksList,'delete') 
+          removeMultipleTasks(board,checkedTasksList);// TODO: get return value and check if user confirmed he wants to delete tasks
           break;
         case 'convert':
           console.log("CLicked");
           break;
         case 'move_to':
-          console.log("CLicked");
+          moveMultipleTasksIntoSpecificGroup(board,checkedTasksList,"g101")
           break;
         case 'apps':
           console.log("CLicked");
@@ -197,8 +197,20 @@ export function BoardDetails() {
               <span>Convert</span>
            </div>
            <div className='footer_option' onClick={()=>{handleFooterAction("move_to")}}>
-              <SvgIcon iconName="move_to" ></SvgIcon>
-              <span>Move to</span>
+           <MenuRoot positioning={{ placement: "right-start" }}>
+      <MenuTrigger asChild>
+      <SvgIcon iconName="move_to" ></SvgIcon>
+      <span>Move to</span>
+      </MenuTrigger>
+      <MenuContent>
+        <MenuItem value="new-txt">New Text File</MenuItem>
+        <MenuItem value="new-file">New File...</MenuItem>
+        <MenuItem value="new-win">New Window</MenuItem>
+        <MenuItem value="open-file">Open File...</MenuItem>
+        <MenuItem value="export">Export</MenuItem>
+      </MenuContent>
+    </MenuRoot>
+
            </div>
            <div className='footer_option' onClick={()=>{handleFooterAction("apps")}}>
               <SvgIcon iconName="apps" ></SvgIcon>

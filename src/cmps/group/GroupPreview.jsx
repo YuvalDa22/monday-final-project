@@ -5,8 +5,6 @@ import Input from '@mui/joy/Input'
 import {
   addTask,
   removeTask,
-  setCheckedTasks,
-  setFooter,
   updateBoard,
   duplicateTask,
 } from '../../store/board/board.actions'
@@ -177,7 +175,7 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder,onTasksChecked
               <tr>
                 <td className='checkbox-cell'>
                   <Checkbox
-                  checked={group.tasks.every(task =>
+                  checked={group.tasks.length>0 && group.tasks.every(task =>
                     checkedTasksList.some(checkedTask =>
                       checkedTask.groupId === group.id && checkedTask.taskId === task.id
                     )
