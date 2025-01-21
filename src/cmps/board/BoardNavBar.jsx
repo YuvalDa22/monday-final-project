@@ -22,6 +22,8 @@ const SvgIcon = ({ iconName, options }) => {
         height: 17,
         width: 17,
         alignItems: 'center',
+        //color: '#020101 !important',
+
       }}
     ></i>
   )
@@ -64,6 +66,7 @@ export function BoardNavBar() {
     return (
       <>
         <span
+          className = "border-nav-bar-menu"
           id='basic-button'
           aria-controls={open ? 'basic-menu' : undefined}
           aria-haspopup='true'
