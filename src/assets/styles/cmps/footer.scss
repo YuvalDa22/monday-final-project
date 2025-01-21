@@ -7,13 +7,15 @@
   border-radius: 5px;
   z-index: 2000;
   display: flex;
-  transform: translateY(-28px);
-  transition: opacity 0.1s ease-in, transform 0.1s ease-in;
+  margin-bottom: 20px;
+  transform: translateX(-32.5%);
 }
 
 .show_footer {
   opacity: 1;
-  transform: translateY(-35px); // 7px jump seemed the most like monday.com
+  margin-bottom: 25px;
+  left: 50%;
+  transition: opacity 0.1s ease-in, margin-bottom 0.1s ease-in;
 }
 
 .hide_footer {
