@@ -1,17 +1,13 @@
 .board-details_footer {
   position: fixed;
-  opacity: 0; /* Fully transparent */
+  opacity: 0;
   bottom: 0;
-  width: 800px;
   background-color: white;
   box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.05), 0px 0px 34px rgba(0, 0, 0, 0.36);
   border-radius: 5px;
-  margin: 0px 100px;
   z-index: 2000;
   display: flex;
-  height: 65px;
   transform: translateY(-28px);
-  left: 25%; // TODO: Fix this hack
   transition: opacity 0.1s ease-in, transform 0.1s ease-in;
 }
 
@@ -28,6 +24,7 @@
 
 .footer_rest-of-footer {
   display: flex;
+  justify-content: space-between;
 }
 
 .footer_blue-number {
@@ -46,7 +43,9 @@
 
 .footer_item-selected_container {
   width: 190px;
-  padding: 5px 15px;
+  padding-left: 18px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   span {
     font-size: 25px;
     white-space: nowrap;
@@ -66,29 +65,40 @@
   align-items: center;
   align-self: center;
   cursor: pointer;
-  padding: 0px 9.5px;
   white-space: nowrap;
   font-weight: 450;
+  padding-left: 5px;
 }
 
 .footer_option:hover {
-  scale: 1.03;
-  transition: scale 0.2s ease-in-out;
+  scale: 1.06;
+  transition: scale 0.2s ease-in;
+  padding-left: 4px;
 
   span {
     color: rgb(8, 116, 236);
-    font-weight: bold;
+    font-weight: 600;
   }
 }
 
 .footer_options_container {
   display: flex;
-  padding-left: 5px;
+  margin-left: 20px;
   font-size: 14px;
+  width: 460px;
+  gap: 15px;
 }
 
 .footer_close-icon_container {
   width: 60px;
+  opacity: 0.68;
+}
+
+.footer_close-icon_container:hover .footer_close-icon {
+  stroke: rgb(8, 116, 236);
+  fill: rgb(8, 116, 236);
+  scale: 0.85;
+  transition: scale 0.2s ease-in-out;
 }
 
 .dropdown-item {

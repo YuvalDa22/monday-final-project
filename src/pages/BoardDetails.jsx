@@ -306,14 +306,16 @@ export function BoardDetails() {
             <span
               style={{
                 borderLeft: '2px solid gray',
-                borderRadius: '0px',
                 opacity: 0.4,
-                marginLeft: 10,
+                marginLeft: '15px',
               }}
             ></span>
             <IconButton
               className="footer_close-icon_container"
-              sx={{ borderRadius: '2px' }}
+              sx={{
+                borderRadius: '2px',
+                '&:hover': { backgroundColor: 'white' },
+              }}
               onClick={() => {
                 setCheckedTasksList([])
               }}
