@@ -1,4 +1,4 @@
-.new-task-buttons .MuiButton-root {
+.new-task-buttons {
     outline: none;
     border: none;
     height: auto;
@@ -7,8 +7,7 @@
     white-space: nowrap;
     text-transform:none;
     font-family: $font-family;
-
-    
+    color: white;
     transition: $motion-productive-short transform, $motion-productive-medium $motion-timing-transition min-width;
     background-color: $primary-color;
 
@@ -19,29 +18,3 @@
         box-shadow: none;
     }
 }
-
-
-
-
-.button {
-    --loader-padding: 8px;
-    outline: none;
-    border: none;
-    height: auto;
-    border-radius: $border-radius-small;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: var(--motion-productive-short) transform, var(--motion-productive-medium) var(--motion-timing-transition) min-width;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    /* Prevent text selection */
-    user-select: none;
-    min-width: auto;
-  }
-  .button:focus-visible, .button.focus-visible_6d1dc60b18 {
-    outline: none;
-    z-index: 11;
-    border-radius: 4px;
-    box-shadow: 0 0 0 3px hsla(209, 100%, 50%, 0.5), 0 0 0 1px var(--primary-hover-color) inset;
-  }

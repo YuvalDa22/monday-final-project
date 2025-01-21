@@ -3,14 +3,14 @@ import RootCmp from './RootCmp.jsx'
 import { Provider } from 'react-redux'
 import { store } from './store/store.js'
 import { HashRouter as Router } from 'react-router-dom'
-import { ProviderChakra } from './cmps/ui/provider-chakra.jsx'
+import { ChakraProvider, defaultSystem } from '@chakra-ui/react'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 	<Provider store={store}>
-		<ProviderChakra>
+		<ChakraProvider value={defaultSystem}>
 			<Router>
 				<RootCmp />
 			</Router>
-		</ProviderChakra>
+		</ChakraProvider>
 	</Provider>
 )

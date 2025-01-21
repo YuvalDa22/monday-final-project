@@ -25,7 +25,6 @@ export function PriorityPicker({ onUpdate, board, info }) {
             ...style, // Apply custom style
             border: 'none',
             boxShadow: 'none',
-            minHeight: '3rem',
         }),
         option: (provided, { data, isFocused, isSelected }) => ({
             ...provided,
