@@ -16,7 +16,8 @@ const NavBar = () => {
       {/* Logo */}
       <div className='navbar-logo'>
         <img src='./icon.svg' alt='Logo' />
-        <span>monday </span> work management
+        <span className="navBar-company-name">monday</span> 
+        <span className="navBar-logo-title">work management</span>
       </div>
 
       {/* Navigation Links */}

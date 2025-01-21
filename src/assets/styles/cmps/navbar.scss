@@ -10,11 +10,21 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  font-family: $navbar-font; 
-  font-size: large;
-
+  line-height: 16x;
+  font-family: $h1-font-family;
+  color: #323338;
+  font-size: 16px;
+  word-spacing: 0.7px;
 }
 
+.navBar-logo-title{
+  
+}
+
+.navBar-company-name{
+  font-weight: 900;
+  
+}
 
 .navbar-logo img {
   height: 30px;
@@ -24,12 +34,7 @@
 .navbar-logo {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-weight: 150;
-}
-.navbar-logo span {
-  font-weight: bold;
-  opacity: 0.8;
+  gap: 6px;  
 }
 
 
