@@ -2,18 +2,17 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  color:black;
+  color: black;
+  pointer-events: auto; // helps with keeping backgrnd interactive while menus are open, without this for example "Move to" footer menu wouldn't work
 }
 
-html{
-
+html {
   background-color: $bg-color;
 }
 
 body {
   font-family: 'Quicksand';
 }
-
 
 .modal-backdrop {
   position: fixed;
@@ -37,4 +36,3 @@ body {
   width: 250px;
   z-index: 1001;
 }
-

@@ -46,82 +46,102 @@ export async function saveBoard(board) {
 
 // Add 'Duplicate multiple tasks' func!!
 export async function duplicateTask(board, group, task) {
-  const newTask = { ...task, id: utilService.makeId(),title: `${task.title} (copy)` };
+  const newTask = {
+    ...task,
+    id: utilService.makeId(),
+    title: `${task.title} (copy)`,
+  }
 
   // Insert new task below the duplicated one
-  const taskIndex = group.tasks.findIndex((t) => t.id === task.id);
+  const taskIndex = group.tasks.findIndex((t) => t.id === task.id)
   const updatedTasks = [
     ...group.tasks.slice(0, taskIndex + 1),
     newTask,
     ...group.tasks.slice(taskIndex + 1),
-  ];
+  ]
 
-  const newGroup = { ...group, tasks: updatedTasks };
+  const newGroup = { ...group, tasks: updatedTasks }
 
   // Await the asynchronous update
-  return updateBoard(board, group, null, { key: 'tasks', value: newGroup.tasks });
+  return updateBoard(board, group, null, {
+    key: 'tasks',
+    value: newGroup.tasks,
+  })
 }
-
 
 export async function removeGroup(board, group) {
   const newGroups = board.groups.filter((g) => g.id !== group.id)
   updateBoard(board, null, null, { key: 'groups', value: newGroups })
 }
 
-export async function moveMultipleTasksIntoSpecificGroup(board, checkedTasks, targetGroupId) {
-
+export async function moveMultipleTasksIntoSpecificGroup(
+  board,
+  checkedTasks,
+  targetGroupId
+) {
   /* Logic here is to grab and isolate the group were gonna move stuff into, and then
      push the tasks that were checked by user into that group while removing them from their original group*/
 
   // read function removeMultipleTasks for comments about this deep cloning
-  let updatedGroups = structuredClone(board.groups);
+  let updatedGroups = structuredClone(board.groups)
 
   // find the target group index in board.groups
-  const targetGroupIndex = updatedGroups.findIndex((group) => group.id === targetGroupId);
+  const targetGroupIndex = updatedGroups.findIndex(
+    (group) => group.id === targetGroupId
+  )
   if (targetGroupIndex === -1) {
-    console.error(`Target group with id ${targetGroupId} not found`);
-    return;
+    console.error(`Target group with id ${targetGroupId} not found`)
+    return
   }
 
   // extract the target group (the one we gonna move tasks into) from the array of all groups
-  const targetGroup = { ...updatedGroups[targetGroupIndex], tasks: [...updatedGroups[targetGroupIndex].tasks] };
+  const targetGroup = {
+    ...updatedGroups[targetGroupIndex],
+    tasks: [...updatedGroups[targetGroupIndex].tasks],
+  }
 
   // iterate through each task in checkedTasks
   checkedTasks.forEach(({ groupId, taskId }) => {
-    const sourceGroupIndex = updatedGroups.findIndex((group) => group.id === groupId);
+    const sourceGroupIndex = updatedGroups.findIndex(
+      (group) => group.id === groupId
+    )
     if (sourceGroupIndex === -1) {
-      console.warn(`Source group with id ${groupId} not found`);
-      return;
+      console.warn(`Source group with id ${groupId} not found`)
+      return
     }
+    // if the selected task is already in target group.. skip it
+    if (sourceGroupIndex === targetGroupIndex) return
+
     // extract the group that contains the task were currently working on in our forEach loop
-    const sourceGroup = { ...updatedGroups[sourceGroupIndex], tasks: [...updatedGroups[sourceGroupIndex].tasks] };
+    const sourceGroup = {
+      ...updatedGroups[sourceGroupIndex],
+      tasks: [...updatedGroups[sourceGroupIndex].tasks],
+    }
 
     // find the index of the task to move
-    const taskIndex = sourceGroup.tasks.findIndex((task) => task.id === taskId);
+    const taskIndex = sourceGroup.tasks.findIndex((task) => task.id === taskId)
     if (taskIndex === -1) {
-      console.warn(`Task with id ${taskId} not found in group ${groupId}`);
-      return;
+      console.warn(`Task with id ${taskId} not found in group ${groupId}`)
+      return
     }
 
     // remove the task from the source group
-    const [taskToMove] = sourceGroup.tasks.splice(taskIndex, 1);
+    const [taskToMove] = sourceGroup.tasks.splice(taskIndex, 1)
 
     // add the task to the target group
-    targetGroup.tasks.push(taskToMove);
+    targetGroup.tasks.push(taskToMove)
 
     // update the source group
-    updatedGroups[sourceGroupIndex] = sourceGroup;
-  });
+    updatedGroups[sourceGroupIndex] = sourceGroup
+  })
 
   // update the target group
-  updatedGroups[targetGroupIndex] = targetGroup;
+  updatedGroups[targetGroupIndex] = targetGroup
 
-
-  updateBoard(board, null, null, { key: 'groups', value: updatedGroups });
+  updateBoard(board, null, null, { key: 'groups', value: updatedGroups })
 }
 
-
-export async function removeMultipleTasks(board,checkedTasks){
+export async function removeMultipleTasks(board, checkedTasks) {
   // Todo : Add 'are you sure' and notify caller if user was sure or not about deleting checked tasks
 
   /* **Reminder**
@@ -132,29 +152,29 @@ export async function removeMultipleTasks(board,checkedTasks){
   // then the tasks-arrays inside updatedGroups will be the exact tasks as in the redux store..
   // and if we make changes to them , like removing task from group
   // it could cause a change in our board.. which were not supp to do.. TODO: Verify this
-  let updatedGroups = structuredClone(board.groups);
+  let updatedGroups = structuredClone(board.groups)
   // go through each group in the board
   updatedGroups = updatedGroups.map((group) => {
     // find tasks to remove that belong to the current group
-    const tasksToRemove = checkedTasks.filter((checkedTask) => checkedTask.groupId === group.id);
+    const tasksToRemove = checkedTasks.filter(
+      (checkedTask) => checkedTask.groupId === group.id
+    )
 
     // if there are tasks to remove from this group
     if (tasksToRemove.length > 0) {
       const updatedTasks = group.tasks.filter(
         (task) =>
           !tasksToRemove.some((checkedTask) => checkedTask.taskId === task.id)
-      );
+      )
 
       // Return the updated group with filtered tasks
-      return { ...group, tasks: updatedTasks };
-    }
-    else{ return group;}// If theres no tasks to remove, just return original group
-  });
-  
-  updateBoard(board,null,null,{key:'groups',value:updatedGroups})
-  
+      return { ...group, tasks: updatedTasks }
+    } else {
+      return group
+    } // If theres no tasks to remove, just return original group
+  })
 
-
+  updateBoard(board, null, null, { key: 'groups', value: updatedGroups })
 }
 
 export async function removeTask(board, group, task) {

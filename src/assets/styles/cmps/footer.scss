@@ -4,15 +4,15 @@
   bottom: 0;
   width: 800px;
   background-color: white;
-  box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.05), 0px 0px 34px rgba(0, 0, 0, 0.36); 
+  box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.05), 0px 0px 34px rgba(0, 0, 0, 0.36);
   border-radius: 5px;
   margin: 0px 100px;
   z-index: 2000;
   display: flex;
   height: 65px;
-  transform: translateY(-28px); 
+  transform: translateY(-28px);
   left: 25%; // TODO: Fix this hack
-  transition: opacity 0.1s ease-in, transform 0.1s ease-in; 
+  transition: opacity 0.1s ease-in, transform 0.1s ease-in;
 }
 
 .show_footer {
@@ -26,43 +26,41 @@
   visibility: hidden; // so buttons wont be invisibly clickable
 }
 
-
-.footer_rest-of-footer{
-  display:flex;
+.footer_rest-of-footer {
+  display: flex;
 }
 
-.footer_blue-number{
-  background-color: rgb(8,116,236);
+.footer_blue-number {
+  background-color: rgb(8, 116, 236);
   border-radius: 5px 0px 0px 5px;
   min-width: 65px;
   align-content: center;
   text-align: center;
 }
 
-.footer_blue-number span{
+.footer_blue-number span {
   font-weight: 550;
   font-size: 30px;
-  color:white;
+  color: white;
 }
 
+.footer_item-selected_container {
+  width: 190px;
+  padding: 5px 15px;
+  span {
+    font-size: 25px;
+    white-space: nowrap;
+    font-weight: 350;
+  }
 
-.footer_item-selected_container{
-  padding:5px 15px;
-  span{
-  font-size: 25px;
-  white-space: nowrap;
-  font-weight: 350;
-}
-
-  .footer_colored-dots{
+  .footer_colored-dots {
     font-weight: 600;
     font-size: 50px;
     line-height: 0;
-    }
+  }
 }
 
-
-.footer_option{
+.footer_option {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -71,27 +69,51 @@
   padding: 0px 9.5px;
   white-space: nowrap;
   font-weight: 450;
-  
 }
 
-.footer_option:hover{
-  scale: 1.05;
-  transition: scale 0.2s ease-in-out;  
+.footer_option:hover {
+  scale: 1.03;
+  transition: scale 0.2s ease-in-out;
 
-  span{
-    color:rgb(8,116,236);
-    font-weight:bold;
+  span {
+    color: rgb(8, 116, 236);
+    font-weight: bold;
   }
 }
 
-.footer_options_container{
-  display:flex;
+.footer_options_container {
+  display: flex;
   padding-left: 5px;
   font-size: 14px;
-  
 }
 
-.footer_close-icon_container{
-  width:60px;
+.footer_close-icon_container {
+  width: 60px;
 }
 
+.dropdown-item {
+  padding: 6px 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 14px;
+  border: none;
+}
+
+.dropdown-item:hover {
+  background-color: #dcdfec;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* Start slightly below */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* End at normal position */
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.2s ease-out;
+}
