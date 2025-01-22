@@ -87,7 +87,6 @@
       }
       
       .data-cell {
-        // Add any additional styling for .data-cell here
       }
       
       .task-title {
@@ -95,7 +94,7 @@
       }
       
       .checkbox-cell {
-        position: relative; // Required for ::before to work properly
+        position: relative; 
         width: 1rem;
 
         ::before{
@@ -108,7 +107,6 @@
         }
         
         &.header {
-          background-color: #f4f4f4; // Example header background color
           font-weight: bold;
   
             ::before {
@@ -118,7 +116,7 @@
               width: 6px;
               height: 103%;
               background-color: var(--group-color);
-              border-top-left-radius: 8px; // Header top-left border radius
+              border-top-left-radius: 8px; 
             }
           
         }
@@ -132,7 +130,7 @@
               width: 6px;
               height: 103%;
               background-color: var(--group-color);
-              border-bottom-left-radius: 8px; // Bottom-left border radius for the last row
+              border-bottom-left-radius: 8px;
             }
           
         }
