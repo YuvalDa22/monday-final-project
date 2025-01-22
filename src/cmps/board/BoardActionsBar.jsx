@@ -3,18 +3,18 @@ import { IconButton as MuiIconButton, Stack as MuiStack } from '@mui/material'
 
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 
-import {
-	Box,
-	Group,
-	IconButton as ChakraIconButton,
-	MenuContent,
-	MenuItem,
-	MenuRoot,
-	MenuTrigger,
-	Button as ChakraButton
-} from '@chakra-ui/react'
+// import {
+// 	Box,
+// 	Group,
+// 	IconButton as ChakraIconButton,
+// 	MenuContent,
+// 	MenuItem,
+// 	MenuRoot,
+// 	MenuTrigger,
+// 	Button as ChakraButton
+// } from '@chakra-ui/react'
 
-import { LuChevronDown } from 'react-icons/lu'
+// import { LuChevronDown } from 'react-icons/lu'
 import { getSvg } from '../../services/util.service'
 
 
@@ -50,7 +50,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup }) {
 
 	return (
 		<MuiStack direction='row' spacing='15px' style={{ alignItems: 'center' }}>
-			<Group css={customButtonsStyles}attached borderRadius='sm'>
+			{/* <Group css={customButtonsStyles}attached borderRadius='sm'>
 				<ChakraButton style={{ borderRightColor: '#0060b9' , padding: '4px 8px'}} css={customButtonsStyles} size='sm' onClick={() => handleAddTask(true)}>
 				New Task
 				</ChakraButton>
@@ -68,7 +68,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup }) {
 						</MenuContent>
 					</MenuRoot>
 				</Box>
-			</Group>
+			</Group> */}
 
 			<MuiIconButton
 				sx={{

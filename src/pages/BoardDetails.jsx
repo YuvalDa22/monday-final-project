@@ -39,6 +39,10 @@ export function BoardDetails() {
   }
 
   useEffect(() => {
+    console.log('checkedTasksList', checkedTasksList);
+  }, [checkedTasksList]);
+
+  useEffect(() => {
     onLoadBoards()
   }, [])
 
@@ -63,6 +67,7 @@ export function BoardDetails() {
     let newGroup = boardService.getEmptyGroup()
     newGroup = {
       id: utilService.makeId(), // Generate and add ID to the top of the properties
+  
       ...newGroup,
     }
     const updatedGroups = fromHeader ? [newGroup , ...board?.groups] : [...board?.groups, newGroup]

@@ -1,11 +1,144 @@
 .gp-main-container {
   display: flex;
   flex-direction: column;
-  gap:10px;
+  gap: 10px;
+  align-items: baseline;
+
+  .gp-table {
+    width: calc(100vw - 322px);
+
+
+    .custom-table {
+      width: 100%;
+      border-spacing: 0;
+      border-collapse: collapse;
+      font-size: 16px;
+      text-align: center;
+
+
+      td, th {
+        border: 1px solid #e0e0e0;
+      }
+
+      
+      .header-cell {
+        min-width: 7rem;
+      }
+      
+      .task-row {
+        
+        
+        &.checked {
+          background-color: #cce9ff;
+          
+          .task-cell,
+          .data-cell {
+            background-color: #cce9ff;
+            
+            .member-avatars {
+              background-color: #cce9ff;
+            }
+          }
+        }
+      }
+      
+      .task-cell {
+        display: flex;
+        align-items: center;
+        padding-left: 15px;
+        height: 100%;
+        
+        .open {
+          opacity: 0;
+          display: flex;
+          justify-content: flex-end;
+          transition: opacity 0.3s ease-in-out;
+          cursor: grab;
+          flex: 1;
+          font-size: 13px;
+          
+          div {
+            align-items: center;
+            display: flex;
+            cursor: pointer;
+            
+            span {
+              margin-bottom: 2px;
+            }
+          }
+        }
+        
+        &:hover .open {
+          opacity: 0.7;
+        }
+      }
+      
+      .task-menu {
+        position: absolute;
+        padding: 7px;
+        align-content: start;
+        display: flex;
+        transform: translateX(-45px) translateY(-3px);
+        opacity: 0;
+        
+        &:hover {
+          opacity: 1;
+        }
+      }
+      
+      .data-cell {
+        // Add any additional styling for .data-cell here
+      }
+      
+      .task-title {
+        min-width: 10rem;
+      }
+      
+      .checkbox-cell {
+        position: relative; // Required for ::before to work properly
+        width: 1rem;
+
+        ::before{
+          content: '';
+              position: absolute;
+              left: -3px;
+              width: 6px;
+              height: 103%;
+              background-color: var(--group-color);
+        }
+        
+        &.header {
+          background-color: #f4f4f4; // Example header background color
+          font-weight: bold;
+  
+            ::before {
+              content: '';
+              position: absolute;
+              left: -3px;
+              width: 6px;
+              height: 103%;
+              background-color: var(--group-color);
+              border-top-left-radius: 8px; // Header top-left border radius
+            }
+          
+        }
+  
+        &.last {
+
+            ::before {
+              content: '';
+              position: absolute;
+              left: -4px;
+              width: 6px;
+              height: 103%;
+              background-color: var(--group-color);
+              border-bottom-left-radius: 8px; // Bottom-left border radius for the last row
+            }
+          
+        }
+        
+      }
+      
+    }
   }
-
-
-.gp-table{
-   /*TODO: This is temporary and should be removed in the future once we add more style to the table*/
-  width:  calc(100vw - 322px); // Side bar is 270 , gap is 12 , boardDetails padding left is 40 , so 270+12+40 = 322
 }

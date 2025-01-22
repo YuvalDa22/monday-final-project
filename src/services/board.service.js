@@ -1,6 +1,7 @@
 import { storageService } from './async-storage.service.js'
 import { utilService } from './util.service.js'
 
+
 export const boardService = {
   query,
   save,
@@ -11,11 +12,12 @@ export const boardService = {
   getEmptyGroup,
   getEmptyTask,
   getTaskById,
-  getGroupById
+  getGroupById,
 }
 
 const STORAGE_KEY = 'boards'
 _createBoards()
+
 async function query(filterBy = {}) {
   try {
     let boards = await storageService.query(STORAGE_KEY)
@@ -96,7 +98,7 @@ function getEmptyGroup() {
 		archivedAt: 0,
 		tasks: [],
 		archivedItems: [],
-		style: {color : 'red'},
+		style: { color: _setNewGroupColor()},
 	}
 }
 
@@ -116,6 +118,53 @@ function getEmptyTask() {
     style: {},
   }
 }
+
+
+function createActivityLog(boardId, groupId, taskId, type, value, prevValue) {
+  return {
+    id: utilService.makeId(),
+    createdAt: Date.now(),
+    byMember: userService.getLoggedinUser(),
+    board: boardId,
+    group: groupId,
+    task: taskId,
+    type,
+    value,
+    prevValue,
+  }
+}
+
+const groupColors = new Map([
+  ['red', '#bb3354'],
+  ['green', '#037f4c'],
+  ['lightGreen', '#00c875'],
+  ['lime', '#9cd326'],
+  ['yellow', '#cab641'],
+  ['gold', '#ffcb00'],
+  ['purple', '#784bd1'],
+  ['violet', '#9d50dd'],
+  ['blue', '#007eb5'],
+  ['lightBlue', '#579bfc'],
+  ['skyBlue', '#66ccff'],
+  ['pink', '#df2f4a'],
+  ['hotPink', '#ff007f'],
+  ['lightPink', '#ff5ac4'],
+  ['orange', '#ff642e'],
+  ['amber', '#fdab3d'],
+  ['brown', '#7f5347'],
+  ['gray', '#c4c4c4'],
+  ['darkGray', '#757575'],
+]);
+
+
+function _setNewGroupColor() {
+  const colors = Array.from(groupColors.values())
+	const randomIndex = Math.floor(Math.random() * colors.length)
+	const randomColor = colors[randomIndex]
+	return randomColor
+}
+
+
 
 function _createBoards() {
   let boards = utilService.loadFromStorage(STORAGE_KEY)
@@ -308,90 +357,3 @@ function _createBoards() {
     utilService.saveToStorage(STORAGE_KEY, boards)
   }
 }
-
-const cmps = [
-  {
-    type: 'status',
-    info: {
-      selectedStatus: 'pending',
-      statuses: [{}, {}],
-    },
-  },
-
-  {
-    type: 'byMember',
-    info: {
-      selectedMembers: ['m1', 'm2'],
-      members: ['m1', 'm2', 'm3'],
-    },
-  },
-
-  {
-    type: 'priority',
-    info: {
-      selectedPriority: 'low',
-      priorities: [{}, {}],
-    },
-  },
-
-  {
-    type: 'date',
-    info: {
-      selectedDate: '2022-09-07',
-    },
-  },
-]
-
-function createActivityLog(boardId, groupId, taskId, type, value, prevValue) {
-  return {
-    id: utilService.makeId(),
-    createdAt: Date.now(),
-    byMember: userService.getLoggedinUser(),
-    board: boardId,
-    group: groupId,
-    task: taskId,
-    type,
-    value,
-    prevValue,
-  }
-}
-
-// // Store - saveTask
-// function storeSaveTask(task, activity) {
-
-//   board = boardService.saveTask(boardId, groupId, task, activity)
-//   // commit(ACTION) // dispatch(ACTION)
-// }
-
-// // boardService
-// function saveTask(boardId, groupId, task, activity) {
-//   const board = getById(boardId)
-//   // PUT /api/board/b123/task/t678
-
-//   // TODO: find the task, and update
-//   board.activities.unshift(activity)
-//   saveBoard(board)
-//   // return board
-//   // return task
-// }
-
-// function getCmpInfo(cmpType) {
-//   const cmp = cmps.find((cmp) => cmp.type === cmpType)
-//   // console.log('getCmpInfo:', { cmpType, cmp });
-//   return cmp?.info
-// }
-
-// function getDefaultFilter() {
-// 	return {
-// 		title: '',
-// 	}
-// }
-
-// function getFilterFromSearchParams(searchParams) {
-// 	const defaultFilter = getDefaultFilter()
-// 	const filterBy = {}
-// 	for (const field in defaultFilter) {
-// 		filterBy[field] = searchParams.get(field) || ''
-// 	}
-// 	return filterBy
-// }

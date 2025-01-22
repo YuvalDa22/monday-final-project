@@ -29,6 +29,7 @@ export function SuggestedActions({ board, group,updateFooterGroupRemoved }) {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
         sx={{
+          color: 'rgb(50, 51, 56)',
           padding: 0,
           minWidth: '0px',
         }}
