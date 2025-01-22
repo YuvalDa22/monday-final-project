@@ -16,7 +16,7 @@ import { Link, useParams } from 'react-router-dom'
 import { getSvg } from '../../services/util.service'
 import { Menu, MenuItem, IconButton } from '@mui/material'
 
-export function GroupPreview({ board, group, cmpTitles, cmpsOrder,onTasksCheckedChange, checkedTasksList }) {
+export function GroupPreview({ board, group, cmpTitles, cmpsOrder,onTasksCheckedChange, checkedTasksList, onAddTask }) {
   const [isRotated, setIsRotated] = useState(false)
   const handleClick = () => {
     setIsRotated(!isRotated)

@@ -224,10 +224,10 @@ export async function removeTask(board, group, task) {
   // )
   // if (!isConfirmed) return
 
-  console.log(
-    'Removing task "' + task.title + '" From group "' + group.title,
-    '"'
-  )
+  // console.log(
+  //   'Removing task "' + task.title + '" From group "' + group.title,
+  //   '"'
+  // )
 
   store.dispatch({ type: REMOVE_TASK, taskId: task.id })
   const newTasks = group.tasks.filter((t) => t.id !== task.id)
@@ -283,17 +283,17 @@ export async function updateBoard(board, group, task, { key, value }) {
     board.activities.unshift(activity)
     userMsg = 'Task updated successfully'
     console.log('board after update:', board.groups[gIdx])
-    console.log(
-      userService.getLoggedinUser() +
-        ' updated the ' +
-        key +
-        ' of task ' +
-        board.groups[gIdx].tasks[tIdx].title +
-        ' in ' +
-        board.groups[gIdx].title +
-        ' to ' +
-        value
-    )
+    // console.log(
+    //   userService.getLoggedinUser() +
+    //     ' updated the ' +
+    //     key +
+    //     ' of task ' +
+    //     board.groups[gIdx].tasks[tIdx].title +
+    //     ' in ' +
+    //     board.groups[gIdx].title +
+    //     ' to ' +
+    //     value
+    // )
   } else if (gIdx !== -1 && tIdx === -1) {
     activity = boardService.createActivityLog(
       board._id,
@@ -308,15 +308,15 @@ export async function updateBoard(board, group, task, { key, value }) {
 
     board.activities.unshift(activity)
     userMsg = 'Group updated successfully'
-    console.log(
-      userService.getLoggedinUser() +
-        ' updated the ' +
-        key +
-        ' of group ' +
-        board.groups[gIdx].title +
-        ' to ' +
-        value
-    )
+    // console.log(
+    //   userService.getLoggedinUser() +
+    //     ' updated the ' +
+    //     key +
+    //     ' of group ' +
+    //     board.groups[gIdx].title +
+    //     ' to ' +
+    //     value
+    // )
   } else {
     activity = boardService.createActivityLog(
       board._id,
@@ -329,15 +329,15 @@ export async function updateBoard(board, group, task, { key, value }) {
     board[key] = value
     board.activities.unshift(activity)
     userMsg = 'Board updated successfully'
-    console.log(
-      userService.getLoggedinUser() +
-        ' updated the ' +
-        key +
-        ' of board ' +
-        board.title +
-        ' to ' +
-        value
-    )
+    // console.log(
+    //   userService.getLoggedinUser() +
+    //     ' updated the ' +
+    //     key +
+    //     ' of board ' +
+    //     board.title +
+    //     ' to ' +
+    //     value
+    // )
   }
 
   try {

@@ -67,7 +67,7 @@ export function BoardDetails() {
     }
     const updatedGroups = fromHeader ? [newGroup , ...board?.groups] : [...board?.groups, newGroup]
     updateBoard(board, null, null, { key: 'groups', value: updatedGroups })
-    console.log(board, ' UPDATD BOARD')
+    console.log(board, ' UPDATED BOARD')
   }
 
   const handleTasksChecked = (newArrayOfTasks, action) => {
@@ -139,7 +139,7 @@ export function BoardDetails() {
     <>
       <div className="board-details-container">
         <div className="board-details-header">
-          <BoardHeader board={board} />
+        <BoardHeader board={board} onAddTask={onAddTask} onAddGroup={onAddGroup} />
         </div>
         <div className="board-details-groups-container">
           {board?.groups &&
@@ -152,12 +152,13 @@ export function BoardDetails() {
                 key={group.id}
                 onTasksCheckedChange={handleTasksChecked}
                 checkedTasksList={checkedTasksList}
+                onAddTask={onAddTask}
               />
             ))}
           <div className="add-group-button-container">
             <Button
               variant="outlined"
-              onClick={onAddGroup}
+              onClick={() => onAddGroup(false)}
               sx={{
                 color: 'black',
                 borderColor: 'gray',
