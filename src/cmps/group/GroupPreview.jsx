@@ -30,10 +30,10 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder,onTasksChecked
   const [existingItemTempTitle, setExistingItemTempTitle] = useState('')
   const [newItemTempTitle, setNewItemTempTitle] = useState('')
 
-  const [anchorEl, setAnchorEl] = useState(null)
-  const [selectedTask, setSelectedTask] = useState(null)
-  const [isEditingGroupTitle, setIsEditingGroupTitle] = useState(false)
-  const [groupTempTitle, setGroupTempTitle] = useState(group.title)
+	const [anchorEl, setAnchorEl] = useState(null)
+	const [selectedTask, setSelectedTask] = useState(null)
+	const [isEditingGroupTitle, setIsEditingGroupTitle] = useState(false)
+	const [groupTempTitle, setGroupTempTitle] = useState(group.title)
 
   const handleGroupChecked = (event,group) => {
     // if event=null, it means that the callback function that was sent to SuggestedActions was triggered
@@ -61,42 +61,41 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder,onTasksChecked
   }
 
 
-  const handleEdit = (taskId, currentTitle) => {
-    setEditingTaskId(taskId)
-    setExistingItemTempTitle(currentTitle)
-  }
+	const handleEdit = (taskId, currentTitle) => {
+		setEditingTaskId(taskId)
+		setExistingItemTempTitle(currentTitle)
+	}
 
-  const handleSave = (task) => {
-    if (existingItemTempTitle.trim() && existingItemTempTitle !== '') {
-      updateBoard(board, group, task, {
-        key: 'title',
-        value: existingItemTempTitle,
-      })
-    }
-    handleCancel()
-  }
+	const handleSave = (task) => {
+		if (existingItemTempTitle.trim() && existingItemTempTitle !== '') {
+			updateBoard(board, group, task, {
+				key: 'title',
+				value: existingItemTempTitle,
+			})
+		}
+		handleCancel()
+	}
 
-  const handleCancel = () => {
-    setEditingTaskId(null)
-    setNewItemTempTitle('')
-    setExistingItemTempTitle('')
-  }
+	const handleCancel = () => {
+		setEditingTaskId(null)
+		setNewItemTempTitle('')
+		setExistingItemTempTitle('')
+	}
 
-  const onAddItem = () => {
-    const newTask = { id: utilService.makeId(), title: newItemTempTitle }
-    addTask(board, group, newTask)
-    setNewItemTempTitle('')
-  }
+	const handleAddItem = () => {
+		onAddTask(group, newItemTempTitle, false)
+		setNewItemTempTitle('')
+	}
 
-  const handleMenuClick = (event, task) => {
-    setAnchorEl(event.currentTarget)
-    setSelectedTask(task)
-  }
+	const handleMenuClick = (event, task) => {
+		setAnchorEl(event.currentTarget)
+		setSelectedTask(task)
+	}
 
-  const handleMenuClose = () => {
-    setAnchorEl(null)
-    setSelectedTask(null)
-  }
+	const handleMenuClose = () => {
+		setAnchorEl(null)
+		setSelectedTask(null)
+	}
 
   const handleTaskDeleted = (board, group, task) => {
     handleMenuClose()
@@ -104,20 +103,20 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder,onTasksChecked
     removeTask(board, group, task)
   }
 
-  const handleTaskDuplicate = (board, group, task) => {
-    handleMenuClose()
-    duplicateTask(board, group, task)
-  }
+	const handleTaskDuplicate = (board, group, task) => {
+		handleMenuClose()
+		duplicateTask(board, group, task)
+	}
 
-  const handleGroupTitleSave = () => {
-    if (groupTempTitle.trim() && groupTempTitle !== group.title) {
-      updateBoard(board, group, null, {
-        key: 'title',
-        value: groupTempTitle,
-      })
-    } else setGroupTempTitle(group.title) // sync the state with actual group title incase first if failed
-    setIsEditingGroupTitle(false)
-  }
+	const handleGroupTitleSave = () => {
+		if (groupTempTitle.trim() && groupTempTitle !== group.title) {
+			updateBoard(board, group, null, {
+				key: 'title',
+				value: groupTempTitle,
+			})
+		} else setGroupTempTitle(group.title) // sync the state with actual group title incase first if failed
+		setIsEditingGroupTitle(false)
+	}
 
   return (
     <>
@@ -201,35 +200,32 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder,onTasksChecked
                       <MoreHorizOutlinedIcon sx={{ width: '20px' }} />
                     </IconButton>
 
-                    <Menu
-                      anchorEl={anchorEl}
-                      open={Boolean(anchorEl) && selectedTask?.id === task.id}
-                      onClose={handleMenuClose}
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'right',
-                      }}
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                      }}
-                    >
-                      <MenuItem
-                        onClick={() => {
-                          handleTaskDeleted(board, group, task)
-                        }}
-                      >
-                        Delete task
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          handleTaskDuplicate(board, group, task)
-                        }}
-                      >
-                        Duplicate task
-                      </MenuItem>
-                    </Menu>
-                  </span>
+										<Menu
+											anchorEl={anchorEl}
+											open={Boolean(anchorEl) && selectedTask?.id === task.id}
+											onClose={handleMenuClose}
+											anchorOrigin={{
+												vertical: 'bottom',
+												horizontal: 'right',
+											}}
+											transformOrigin={{
+												vertical: 'top',
+												horizontal: 'right',
+											}}>
+											<MenuItem
+												onClick={() => {
+													handleTaskDeleted(board, group, task)
+												}}>
+												Delete task
+											</MenuItem>
+											<MenuItem
+												onClick={() => {
+													handleTaskDuplicate(board, group, task)
+												}}>
+												Duplicate task
+											</MenuItem>
+										</Menu>
+									</span>
 
                   <tr                  >
                     <td className='checkbox-cell'>
@@ -265,57 +261,46 @@ export function GroupPreview({ board, group, cmpTitles, cmpsOrder,onTasksChecked
                         </span>
                       )}
 
-                      <Link to={`task/${task.id}`} className='task-cell open'>
-                        <div>
-                          <SvgIcon iconName={'task_open_icon'} />
-                          <span>Open</span>
-                        </div>
-                      </Link>
-                    </td>
-                    <TaskPreview
-                      group={group}
-                      board={board}
-                      task={task}
-                      cmpsOrder={cmpsOrder}
-                    />
-                  </tr>
-                </React.Fragment>
-              ))}
-              <tr>
-                <td colSpan={cmpTitles.length + 1} className='add-item-row'>
-                  <td className='checkbox-cell'>
-                    <Checkbox
-                      disabled
-                      sx={{ border: 0, width: '3rem', height: '3rem' }}
-                    />
-                  </td>
-                  <td style={{ border: 'none', boxShadow: 'none' }}>
-                    <Input
-                      type='text'
-                      placeholder='+ Add item'
-                      value={newItemTempTitle}
-                      onChange={(event) =>
-                        setNewItemTempTitle(event.target.value)
-                      }
-                      onKeyDown={(event) => {
-                        if (event.key === 'Enter') onAddItem()
-                        if (event.key === 'Escape') handleCancel()
-                      }}
-                      sx={{
-                        border: 'none',
-                        outline: 'none',
-                        background: 'transparent',
-                        width: '12rem',
-                        boxShadow: 'none',
-                      }}
-                    />
-                  </td>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </>
-  )
+											<Link to={`task/${task.id}`} className='open'>
+												<div>
+													<SvgIcon iconName={'task_open_icon'} />
+													<span>Open</span>
+												</div>
+											</Link>
+										</td>
+										<TaskPreview group={group} board={board} task={task} cmpsOrder={cmpsOrder} />
+									</tr>
+								</React.Fragment>
+							))}
+							<tr>
+								<td colSpan={cmpTitles.length + 1} className='add-item-row'>
+									<td className='checkbox-cell'>
+										<Checkbox size='small' disabled />
+									</td>
+									<td style={{ border: 'none', boxShadow: 'none' }}>
+										<Input
+											type='text'
+											placeholder='+ Add item'
+											value={newItemTempTitle}
+											onChange={(event) => setNewItemTempTitle(event.target.value)}
+											onKeyDown={(event) => {
+												if (event.key === 'Enter') handleAddItem()
+												if (event.key === 'Escape') handleCancel()
+											}}
+											sx={{
+												border: 'none',
+												outline: 'none',
+												background: 'transparent',
+												boxShadow: 'none',
+											}}
+										/>
+									</td>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</>
+	)
 }

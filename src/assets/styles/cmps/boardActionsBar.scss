@@ -1,0 +1,20 @@
+.new-task-buttons {
+    outline: none;
+    border: none;
+    height: auto;
+    border-radius: $border-radius-small;
+    cursor: pointer;
+    white-space: nowrap;
+    text-transform:none;
+    font-family: $font-family;
+    color: white;
+    transition: $motion-productive-short transform, $motion-productive-medium $motion-timing-transition min-width;
+    background-color: $primary-color;
+
+    &:hover {
+        outline: none;
+        z-index: 11;
+        background-color: $primary-hover-color;
+        box-shadow: none;
+    }
+}

@@ -67,6 +67,7 @@ async function save(boardToSave) {
   }
 }
 
+
 function getEmptyBoard() {
   return {
     title: '',

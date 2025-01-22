@@ -28,7 +28,7 @@ export default function Sidebar() {
           <SvgIcon iconName={'sidebar_home'} /> <span>Home</span>
         </li>
         <li className='sidebar-item'>
-          <SvgIcon iconName={'sidebar_myWork'} /> <span>My Work</span>
+          <SvgIcon iconName={'sidebar_myWork'} /> <span>My work</span>
         </li>
       </ul>
       <Divider className='divider' />

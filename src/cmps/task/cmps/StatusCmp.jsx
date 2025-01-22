@@ -19,7 +19,7 @@ export function StatusCmp({ onUpdate, board, info }) {
 			...style,
 			border: 'none',
 			boxShadow: 'none', 
-			minHeight: '3rem',
+			// minHeight: '3rem',
            
 		}),
 		option: (provided, { data, isFocused, isSelected }) => ({

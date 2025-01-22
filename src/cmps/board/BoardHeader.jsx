@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { updateBoard } from '../../store/board/board.actions'
 
 // Note : We can ignore the props validation error for now
-export function BoardHeader({ board }) {
+export function BoardHeader({ board, onAddGroup, onAddTask }) {
   const [isEditingBoardTitle, setIsEditingBoardTitle] = useState(false)
   const [boardTempTitle, setBoardTempTitle] = useState(board?.title || '')
 
@@ -43,7 +43,7 @@ export function BoardHeader({ board }) {
         <AdditionalBoardActions />
       </div>
       <BoardNavBar />
-      <BoardActionsBar />
+      <BoardActionsBar board={board} onAddTask={onAddTask} onAddGroup={onAddGroup} />
     </div>
   )
 }

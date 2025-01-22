@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux'
 import { BoardHeader } from '../cmps/board/BoardHeader'
 import { GroupPreview } from '../cmps/group/GroupPreview'
 import { useEffect, useState } from 'react'
-import {
+import { addTask,
   updateBoard,
   loadBoards,
   duplicateTask,
@@ -53,15 +53,19 @@ export function BoardDetails() {
 
   if (!allBoards || allBoards.length === 0) return <div>Loading...</div>
 
-  const onAddGroup = () => {
+  function onAddTask ( group, initialTitle = 'New Task', fromHeader) {
+    const newTask = { id: utilService.makeId(), title: initialTitle }
+    addTask(board, group, newTask, fromHeader)
+  }
+
+  const onAddGroup = (fromHeader) => {
     if (!board) return
     let newGroup = boardService.getEmptyGroup()
     newGroup = {
       id: utilService.makeId(), // Generate and add ID to the top of the properties
       ...newGroup,
     }
-
-    const updatedGroups = [...board?.groups, newGroup]
+    const updatedGroups = fromHeader ? [newGroup , ...board?.groups] : [...board?.groups, newGroup]
     updateBoard(board, null, null, { key: 'groups', value: updatedGroups })
     console.log(board, ' UPDATD BOARD')
   }
