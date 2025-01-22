@@ -37,10 +37,6 @@ export function GroupPreview({
 	const [isEditingGroupTitle, setIsEditingGroupTitle] = useState(false)
 	const [groupTempTitle, setGroupTempTitle] = useState(group.title)
 
-	useEffect(() => {
-		console.log('group color ', group.style.color)
-		return () => {}
-	}, [])
 
 	const handleGroupChecked = (event, group) => {
 		// if event=null, it means that the callback function that was sent to SuggestedActions was triggered
