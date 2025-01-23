@@ -34,34 +34,6 @@ button {
 			}
 		}
 	}
-	/* Dropdown Menu */
-
-	.dropdown-content {
-		background: white;
-		border: 1px solid #ccc;
-		border-radius: 5px;
-		padding: 8px;
-		margin-bottom: 20px;
-		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-		position: absolute;
-		z-index: 1;
-		animation-duration: 400ms;
-		animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-		will-change: transform, opacity;
-	}
-
-	.dropdown-content[data-side='top'] {
-		animation-name: slideDownAndFade;
-	}
-	.dropdown-content[data-side='right'] {
-		animation-name: slideLeftAndFade;
-	}
-	.dropdown-content[data-side='bottom'] {
-		animation-name: slideUpAndFade;
-	}
-	.dropdown-content[data-side='left'] {
-		animation-name: slideRightAndFade;
-	}
 
 	.dropdown-item {
 		font-size: 13px;
@@ -70,10 +42,11 @@ button {
 		border-radius: 3px;
 		display: flex;
 		align-items: center;
+		gap: 1rem;
 		height: 25px;
-		padding: 0 5px;
+		// padding: 0 5px;
 		position: relative;
-		padding-left: 25px;
+		// padding-left: 25px;
 		user-select: none;
 		outline: none;
 		cursor: pointer;
@@ -81,69 +54,31 @@ button {
 		&:hover {
 			background-color: #f0f0f0;
 		}
+
+		i {
+		}
 	}
 
+	.icon-button {
+		border-radius: 5px;
+		font-size: 15px;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
 
-@keyframes slideUpAndFade {
-	from {
-		opacity: 0;
-		transform: translateY(2px);
+		.icon {
+			height: 22px;
+			width: 22px;
+			opacity: 1;
+		}
 	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
 
-@keyframes slideRightAndFade {
-	from {
-		opacity: 0;
-		transform: translateX(-2px);
-	}
-	to {
-		opacity: 1;
-		transform: translateX(0);
-	}
-}
+	.svg-icon {
+		display: flex;
+		opacity: 0.6;
 
-@keyframes slideDownAndFade {
-	from {
-		opacity: 0;
-		transform: translateY(-2px);
+		&.arrow-icon {
+			opacity: 1;
+		}
 	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-@keyframes slideLeftAndFade {
-	from {
-		opacity: 0;
-		transform: translateX(2px);
-	}
-	to {
-		opacity: 1;
-		transform: translateX(0);
-	}
-}
-
-.icon-button {
-	border-radius: 5px;
-	font-size: 15px;
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-
-	.icon {
-		height: 22px;
-		width: 22px;
-		opacity: 1;
-	}
-}
-
-.svg-icon {
-	display: flex;
-	opacity: 0.6;
-}
 }

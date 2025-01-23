@@ -3,13 +3,14 @@ import { Button, ButtonGroup, IconButton as MuiIconButton, Stack as MuiStack } f
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import { getSvg } from '../../services/util.service'
 
-const SvgIcon = ({ iconName, options }) => {
+const SvgIcon = ({ iconName, options, className }) => {
 	return (
-		<i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }} className='svg-icon'></i>
+		<i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }} className={`svg-icon ${className || ''}`}></i>
 	)
 }
 
 export function BoardActionsBar({ board, onAddTask, onAddGroup }) {
+
 	function handleAddTask(fromHeader) {
 		onAddTask(board.groups[0], 'New Task', fromHeader)
 	}
@@ -17,16 +18,16 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup }) {
 	return (
 		<MuiStack direction='row' spacing='15px' className='board-actions-bar'>
 			<ButtonGroup variant='contained' className='new-task-buttons'>
-				{/* Button to add a new task */}
+
 				<Button onClick={() => handleAddTask(true)} className='add-task-button'>
 					New Task
 				</Button>
 
-				{/* Dropdown Menu for more options */}
 				<DropdownMenu.Root>
 					<DropdownMenu.Trigger asChild>
 						<Button className='dropdown-button'>
 							<SvgIcon
+								className='arrow-icon'
 								iconName='arrow_dropDown'
 								options={{ height: 22, width: 22, color: 'white' }}
 							/>
@@ -35,43 +36,52 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup }) {
 
 					<DropdownMenu.Portal>
 						<DropdownMenu.Content
+						className='dropdown-content'
 							side='bottom' 
 							align='start' 
 							sideOffset={5}
 							style={{
 								backgroundColor: 'white',
 								border: '1px solid #ccc',
-								borderRadius: '5px',
-								padding: '8px',
-								boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+								borderRadius: '8px',
+								padding: '6px',
+								boxShadow: '0 4px 17px 6px rgba(0, 0, 0, 0.1);',
 								animationDuration: '400ms',
 								animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
 								willChange: 'transform, opacity',
-							}}>
+								width: '12rem'
+							}}
+							>
 							
-							<DropdownMenu.Item
-								style={{
-									fontSize: '13px',
-									lineHeight: 1,
-									color: '#6b7280',
-									borderRadius: '3px',
-									display: 'flex',
-									alignItems: 'center',
-									height: '25px',
-									padding: '0 5px',
-									cursor: 'pointer',
-								}}
+							<DropdownMenu.Item className='dropdown-item'
+							style={{
+								fontSize: '14px',
+								color: '#323338',
+								borderRadius: '3px',
+								display: 'flex',
+								alignItems: 'center',
+								gap: '0.5rem',
+								height: '25px',
+								width: '100%',
+								padding: '0 8px',
+								position: 'relative',
+								userSelect: 'none',
+								outline: 'none',
+								cursor: 'pointer',
+							}}
 								onMouseEnter={(e) => (e.target.style.backgroundColor = '#f3f4f6')}
 								onMouseLeave={(e) => (e.target.style.backgroundColor = 'transparent')}
 								onClick={() => onAddGroup(true)}>
-								Add Group of Tasks
+									<SvgIcon iconName='boardActionsBar_groupBy' options={{ height: 16, width: 16, color: '#676879'}} />
+								<span style={{paddingBottom: '4px'}}>
+									 Add group of tasks
+									</span>
 							</DropdownMenu.Item>
 						</DropdownMenu.Content>
 					</DropdownMenu.Portal>
 				</DropdownMenu.Root>
 			</ButtonGroup>
 
-			{/* Other Actions */}
 			<MuiIconButton className='icon-button'>
 				<SearchOutlinedIcon className='icon' />
 				Search
