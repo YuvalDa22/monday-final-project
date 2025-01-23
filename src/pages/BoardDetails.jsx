@@ -104,7 +104,6 @@ export function BoardDetails() {
 				groups[task.groupColor] = []
 			}
 			groups[task.groupColor].push(task)
-			console.log(groups)
 			return groups
 		}, {})
 	}
