@@ -1,80 +1,86 @@
-import { useSelector } from 'react-redux'
-import { BoardHeader } from '../cmps/board/BoardHeader'
-import { GroupPreview } from '../cmps/group/GroupPreview'
-import { useEffect, useState } from 'react'
-import { addTask,
+import { useSelector } from 'react-redux';
+import { BoardHeader } from '../cmps/board/BoardHeader';
+import { GroupPreview } from '../cmps/group/GroupPreview';
+import { useEffect, useState } from 'react';
+import {
+  addTask,
   updateBoard,
   loadBoards,
   duplicateTask,
   removeMultipleTasks,
   moveMultipleTasksIntoSpecificGroup,
   duplicateMultipleTasks,
-} from '../store/board/board.actions'
-import { showErrorMsg } from '../services/event-bus.service'
-import { Button, IconButton, Menu, MenuItem } from '@mui/material'
-import { boardService } from '../services/board.service'
-import { useParams, Outlet } from 'react-router-dom'
-import { utilService, getSvg } from '../services/util.service'
-import CloseIcon from '@mui/icons-material/Close'
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
+} from '../store/board/board.actions';
+import { showErrorMsg } from '../services/event-bus.service';
+import { Button, IconButton, Menu, MenuItem } from '@mui/material';
+import { boardService } from '../services/board.service';
+import { useParams, Outlet } from 'react-router-dom';
+import { utilService, getSvg } from '../services/util.service';
+import CloseIcon from '@mui/icons-material/Close';
+import * as XLSX from 'xlsx';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
 const SvgIcon = ({ iconName, options }) => {
-  return <i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>
-}
+  return (
+    <i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>
+  );
+};
 
 export function BoardDetails() {
-  const { boardId } = useParams()
-  const allBoards = useSelector((storeState) => storeState.boardModule.boards)
-  const board = allBoards.find((board) => board._id === boardId)
-  const [checkedTasksList, setCheckedTasksList] = useState([])
+  const { boardId } = useParams();
+  const allBoards = useSelector((storeState) => storeState.boardModule.boards);
+  const board = allBoards.find((board) => board._id === boardId);
+  const [checkedTasksList, setCheckedTasksList] = useState([]);
 
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget) // Set the clicked element as the anchor
-  }
+    setAnchorEl(event.currentTarget); // Set the clicked element as the anchor
+  };
 
   const handleClose = () => {
-    setAnchorEl(null) // Close the menu
-  }
+    setAnchorEl(null); // Close the menu
+  };
 
   useEffect(() => {
-    onLoadBoards()
-  }, [])
+    onLoadBoards();
+  }, []);
 
   async function onLoadBoards() {
     try {
-      await loadBoards()
+      await loadBoards();
     } catch (error) {
-      showErrorMsg('Cannot load boards')
-      console.error(error)
+      showErrorMsg('Cannot load boards');
+      console.error(error);
     }
   }
 
-  if (!allBoards || allBoards.length === 0) return <div>Loading...</div>
+  if (!allBoards || allBoards.length === 0) return <div>Loading...</div>;
 
-  function onAddTask ( group, initialTitle = 'New Task', fromHeader) {
-    const newTask = { id: utilService.makeId(), title: initialTitle }
-    addTask(board, group, newTask, fromHeader)
+  function onAddTask(group, initialTitle = 'New Task', fromHeader) {
+    const newTask = { id: utilService.makeId(), title: initialTitle };
+    addTask(board, group, newTask, fromHeader);
   }
 
   const onAddGroup = (fromHeader) => {
-    if (!board) return
-    let newGroup = boardService.getEmptyGroup()
+    if (!board) return;
+    let newGroup = boardService.getEmptyGroup();
     newGroup = {
       id: utilService.makeId(), // Generate and add ID to the top of the properties
       ...newGroup,
-    }
-    const updatedGroups = fromHeader ? [newGroup , ...board?.groups] : [...board?.groups, newGroup]
-    updateBoard(board, null, null, { key: 'groups', value: updatedGroups })
-    console.log(board, ' UPDATED BOARD')
-  }
+    };
+    const updatedGroups = fromHeader
+      ? [newGroup, ...board?.groups]
+      : [...board?.groups, newGroup];
+    updateBoard(board, null, null, { key: 'groups', value: updatedGroups });
+    console.log(board, ' UPDATED BOARD');
+  };
 
   const handleTasksChecked = (newArrayOfTasks, action) => {
     if (action === 'add') {
       setCheckedTasksList((prev) => {
         // first combine existing and new tasks
-        const combined = [...prev, ...newArrayOfTasks]
+        const combined = [...prev, ...newArrayOfTasks];
         // then remove duplicates
         return combined.filter(
           (task, index, self) =>
@@ -82,8 +88,8 @@ export function BoardDetails() {
             self.findIndex(
               (t) => t.groupId === task.groupId && t.taskId === task.taskId
             )
-        )
-      })
+        );
+      });
     } else {
       // Here we remove tasks from the array of checked-tasks
       // So we go through all the tasks and if a task appears SOMEWHERE in newArrayOfTasks , it should be filtered out
@@ -94,52 +100,92 @@ export function BoardDetails() {
               newTask.groupId === taskInList.groupId &&
               newTask.taskId === taskInList.taskId
           )
-      )
-      setCheckedTasksList(filteredTasks)
+      );
+      setCheckedTasksList(filteredTasks);
     }
-  }
+  };
 
   const handleFooterAction = async (action, groupTargetId) => {
     switch (action) {
       case 'duplicate':
-        duplicateMultipleTasks(board, checkedTasksList)
-        handleTasksChecked(checkedTasksList, 'delete') // to clean checkboxes after action is done
-        break
+        duplicateMultipleTasks(board, checkedTasksList);
+        handleTasksChecked(checkedTasksList, 'delete'); // to clean checkboxes after action is done
+        break;
       case 'export':
-        console.log('CLicked')
-        break
+        console.log('balony');
+
+        const headers = ['Item', ...board.cmpTitles];
+        const tasksWithAllTheDetails = checkedTasksList.map((task) =>
+          boardService.getTaskById(task.groupId, task.taskId)
+        );
+        const data = tasksWithAllTheDetails.map((task) => [
+          task.title,
+          ...board.cmpTitles.map((cmpTitle) => {
+            switch (cmpTitle) {
+              case 'Status':
+                return task.status || '';
+              case 'Priority':
+                return task.priority || '';
+              case 'Members':
+                return (task.memberIds || []).join(', ');
+              case 'Due Date':
+                return task.dueDate
+                  ? new Date(task.dueDate).toLocaleDateString()
+                  : '';
+              default:
+                return ''; // Fallback for unmapped titles
+            }
+          }),
+        ]);
+
+        const worksheet = XLSX.utils.aoa_to_sheet([headers, ...data]);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(
+          workbook,
+          worksheet,
+          board.title || 'Export'
+        );
+
+        // Trigger file download
+        XLSX.writeFile(workbook, `${board.title || 'Export'}.xlsx`);
+
+        break;
       case 'archive':
-        console.log('CLicked')
-        break
+        console.log('CLicked');
+        break;
       case 'delete':
-        handleTasksChecked(checkedTasksList, 'delete')
-        removeMultipleTasks(board, checkedTasksList) // TODO: get return value and check if user confirmed he wants to delete tasks
-        break
+        handleTasksChecked(checkedTasksList, 'delete');
+        removeMultipleTasks(board, checkedTasksList); // TODO: get return value and check if user confirmed he wants to delete tasks
+        break;
       case 'convert':
-        console.log('CLicked')
-        break
+        console.log('CLicked');
+        break;
       case 'move_to':
         await moveMultipleTasksIntoSpecificGroup(
           board,
           checkedTasksList,
           groupTargetId
-        )
-        handleTasksChecked(checkedTasksList, 'delete')
-        break
+        );
+        handleTasksChecked(checkedTasksList, 'delete');
+        break;
       case 'apps':
-        console.log('CLicked')
+        console.log('CLicked');
 
-        break
+        break;
       default:
-        console.warn(`Unknown action: ${action}`)
+        console.warn(`Unknown action: ${action}`);
     }
-  }
+  };
 
   return (
     <>
       <div className="board-details-container">
         <div className="board-details-header">
-        <BoardHeader board={board} onAddTask={onAddTask} onAddGroup={onAddGroup} />
+          <BoardHeader
+            board={board}
+            onAddTask={onAddTask}
+            onAddGroup={onAddGroup}
+          />
         </div>
         <div className="board-details-groups-container">
           {board?.groups &&
@@ -204,7 +250,7 @@ export function BoardDetails() {
               <div
                 className="footer_option"
                 onClick={() => {
-                  handleFooterAction('duplicate')
+                  handleFooterAction('duplicate');
                 }}
               >
                 <SvgIcon iconName="duplicate"></SvgIcon>
@@ -213,7 +259,7 @@ export function BoardDetails() {
               <div
                 className="footer_option"
                 onClick={() => {
-                  handleFooterAction('export')
+                  handleFooterAction('export');
                 }}
               >
                 <SvgIcon iconName="export"></SvgIcon>
@@ -222,7 +268,7 @@ export function BoardDetails() {
               <div
                 className="footer_option"
                 onClick={() => {
-                  handleFooterAction('archive')
+                  handleFooterAction('archive');
                 }}
               >
                 <SvgIcon iconName="archive"></SvgIcon>
@@ -231,7 +277,7 @@ export function BoardDetails() {
               <div
                 className="footer_option"
                 onClick={() => {
-                  handleFooterAction('delete')
+                  handleFooterAction('delete');
                 }}
               >
                 <SvgIcon iconName="delete"></SvgIcon>
@@ -240,7 +286,7 @@ export function BoardDetails() {
               <div
                 className="footer_option"
                 onClick={() => {
-                  handleFooterAction('convert')
+                  handleFooterAction('convert');
                 }}
               >
                 <SvgIcon iconName="convert"></SvgIcon>
@@ -302,7 +348,7 @@ export function BoardDetails() {
               <div
                 className="footer_option"
                 onClick={() => {
-                  handleFooterAction('apps')
+                  handleFooterAction('apps');
                 }}
               >
                 <SvgIcon iconName="apps"></SvgIcon>
@@ -323,7 +369,7 @@ export function BoardDetails() {
                 '&:hover': { backgroundColor: 'white' },
               }}
               onClick={() => {
-                setCheckedTasksList([])
+                setCheckedTasksList([]);
               }}
             >
               <CloseIcon className="footer_close-icon" />
@@ -333,5 +379,5 @@ export function BoardDetails() {
         <Outlet context={boardId} /> {/* Task Details ! */}
       </div>
     </>
-  )
+  );
 }

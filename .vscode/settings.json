@@ -1,10 +1,6 @@
 {
-    "cSpell.words": [
-        "Chakra",
-        "cmps"
-    ]
-}
-  "cSpell.words": ["cmps"],
+  "cSpell.words": ["Chakra", "cmps"],
+
   // Set Prettier as the default formatter
   "editor.defaultFormatter": "esbenp.prettier-vscode",
 
