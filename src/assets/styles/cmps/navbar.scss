@@ -1,72 +1,62 @@
 /* src/Navbar.css */
 
 .navbar {
-  grid-area: navbar;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  padding-top: 10px;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  line-height: 16x;
-  font-family: $h1-font-family;
-  color: #323338;
-  font-size: 16px;
-  word-spacing: 0.7px;
+	grid-area: navbar;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 20px;
+	padding-top: 10px;
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+	line-height: 16x;
+	font-family: $h1-font-family;
+	color: #323338;
+	font-size: 16px;
+	word-spacing: 0.7px;
 }
 
-.navBar-logo-title{
-  
+.navBar-logo-title {
 }
 
-.navBar-company-name{
-  font-weight: 900;
-  
+.navBar-company-name {
+	font-weight: 900;
 }
 
 .navbar-logo img {
-  height: 30px;
-  width: 30px;
-  height: 25px;
-  width: 25px;
+	height: 30px;
+	width: 30px;
+	height: 25px;
+	width: 25px;
 }
 
 .navbar-logo {
-  display: flex;
-  align-items: center;
-  gap: 6px;  
+	display: flex;
+	align-items: center;
+	gap: 6px;
 }
-
-
-.appsroundedicon{
-  margin-top: 4px; // Ugly adaptaion to center the icon...
-}
-
 
 .navbar-links {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-
+	display: flex;
+	align-items: center;
+	gap: 5px;
 }
 
 .navbar-link {
-  text-decoration: none;
-  transition: scale 0.35s ease;
-  padding: 6px 9px;
+	text-decoration: none;
+	transition: scale 0.35s ease;
+	padding: 6px 9px;
+	color: $primary-text-color;
 }
 
 .navbar-link:hover {
-  background-color: #e1e1e1;
-  border-radius: 10px;
+	background-color: #e1e1e1;
+	border-radius: 10px;
 }
 
-
-.navbar-avatar{
-  margin-left: 15px;
-  display: flex;
-  bottom:2px;
+.navbar-avatar {
+	margin-left: 15px;
+	display: flex;
+	bottom: 2px;
 }
-

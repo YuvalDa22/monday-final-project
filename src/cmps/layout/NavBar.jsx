@@ -1,7 +1,6 @@
 // src/Navbar.jsx
 import React from 'react'
 import { Link } from 'react-router-dom'
-import AppsRoundedIcon from '@mui/icons-material/AppsRounded'
 import Avatar from '@mui/material/Avatar'
 import Divider from '@mui/material/Divider'
 import { getSvg } from '../../services/util.service'
@@ -16,8 +15,8 @@ const NavBar = () => {
       {/* Logo */}
       <div className='navbar-logo'>
         <img src='./icon.svg' alt='Logo' />
-        <span className="navBar-company-name">monday</span> 
-        <span className="navBar-logo-title">work management</span>
+        <span className='navBar-company-name'>monday</span>
+        <span className='navBar-logo-title'>work management</span>
       </div>
 
       {/* Navigation Links */}
@@ -50,12 +49,7 @@ const NavBar = () => {
         <Link to='/workspace/board/xxx' className='navbar-link'>
           <SvgIcon iconName={'navbar_help'} />
         </Link>
-        <Avatar
-          className='navbar-avatar'
-          alt='User Avatar'
-          src=''
-          sx={{ width: 32, height: 32 }}
-        />
+        <Avatar className='navbar-avatar' alt='User Avatar' src='' sx={{ width: 32, height: 32 }} />
       </div>
     </nav>
   )

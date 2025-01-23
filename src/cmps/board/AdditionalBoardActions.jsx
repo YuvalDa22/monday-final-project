@@ -28,14 +28,14 @@ export function AdditionalBoardActions() {
           iconName={'additionalBoardActions_integrate'}
           options={{ height: 20, width: 20 }}
         />
-        <span style={{ opacity: 0.8 }}>Integrate</span>
+        <span>Integrate</span>
       </IconButton>
       <IconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
         <SvgIcon
           iconName={'additionalBoardActions_automate'}
           options={{ height: 20, width: 20 }}
         />
-        <span style={{ opacity: 0.8 }}>Automate / 1</span>
+        <span>Automate / 1</span>
       </IconButton>
       <IconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
         <SvgIcon
@@ -67,11 +67,10 @@ export function AdditionalBoardActions() {
             textTransform: 'none',
             color: '#3f51b5',
             fontSize: '14px',
-            fontWeight: 500,
             borderRadius: 0,
           }}
         >
-          <span>Invite / 1</span>
+          <span className='additionalBoardActions_invite'>Invite / 1</span>
         </Button>
 
         <Divider

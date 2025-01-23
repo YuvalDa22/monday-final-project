@@ -1,84 +1,88 @@
 button {
-	all: unset;
+  all: unset;
 }
 
 .board-actions-bar {
-	display: flex;
-	align-items: center;
+  display: flex;
+  align-items: center;
 
-	.new-task-buttons {
-		border-radius: 8px;
+  .new-task-buttons {
+    border-radius: 8px;
 
-		.add-task-button {
-			background-color: $primary-color;
-			text-transform: none;
-			padding: 4px 10px 4px 10px;
-			font-weight: $font-weight-very-light;
-			font-size: $font-size-10;
+    .add-task-button {
+      background-color: $primary-color;
+      text-transform: none;
+      padding: 4px 10px 4px 10px;
+      font-weight: $font-weight-very-light;
+      font-size: $font-size-10;
 
-			&:hover {
-				box-shadow: none;
-				background-color: $primary-hover-color;
-			}
-		}
+      &:hover {
+        box-shadow: none;
+        background-color: $primary-hover-color;
+      }
+    }
 
-		.dropdown-button {
-			background-color: $primary-color;
-			text-transform: none;
-			min-width: 0;
-			padding: 4px 3px 4px 3px;
+    .dropdown-button {
+      background-color: $primary-color;
+      text-transform: none;
+      min-width: 0;
+      padding: 4px 3px 4px 3px;
 
-			&:hover {
-				box-shadow: none;
-				background-color: $primary-hover-color;
-			}
-		}
-	}
+      &:hover {
+        box-shadow: none;
+        background-color: $primary-hover-color;
+      }
+    }
+  }
 
-	.dropdown-item {
-		font-size: 13px;
-		line-height: 1;
-		color: #333;
-		border-radius: 3px;
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		height: 25px;
-		// padding: 0 5px;
-		position: relative;
-		// padding-left: 25px;
-		user-select: none;
-		outline: none;
-		cursor: pointer;
+  .dropdown-item {
+    font-size: 13px;
+    line-height: 1;
+    color: #333;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 25px;
+    // padding: 0 5px;
+    position: relative;
+    // padding-left: 25px;
+    user-select: none;
+    outline: none;
+    cursor: pointer;
 
-		&:hover {
-			background-color: #f0f0f0;
-		}
+    &:hover {
+      background-color: #f0f0f0;
+    }
 
-		i {
-		}
-	}
+    i {
+    }
+  }
 
-	.icon-button {
-		border-radius: 5px;
-		font-size: 15px;
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
+  .icon-button {
+    border-radius: 5px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 
-		.icon {
-			height: 22px;
-			width: 22px;
-			opacity: 1;
-		}
-	}
+    span {
+      color: $primary-text-color;
+    }
 
-	.svg-icon {
-		display: flex;
-		opacity: 0.6;
+    .icon {
+      height: 22px;
+      width: 22px;
+      opacity: 1;
+    }
+  }
 
-		&.arrow-icon {
-			opacity: 1;
-		}
-	}
+  .svg-icon {
+    display: flex;
+    opacity: 0.6;
+
+    &.arrow-icon {
+      opacity: 1;
+    }
+  }
 }
