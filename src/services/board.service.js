@@ -184,17 +184,17 @@ function _createBoards() {
 				style: {},
 				labels: [
 					// Status Labels (l101 - l199)
-					{ id: 'l101', title: 'Done', color: '#61bd4f' },
-					{ id: 'l102', title: 'In Progress', color: '#ff9f1a' },
-					{ id: 'l103', title: 'Stuck', color: '#eb5a46' },
-					{ id: 'l104', title: 'Ready', color: '#00c875' },
-					{ id: 'l105', title: 'Waiting for Review', color: '#faa53d' },
+					{ id: 'l101', title: 'Done', color: '#00c875' },
+					{ id: 'l102', title: 'In Progress', color: '#fdab3d' },
+					{ id: 'l103', title: 'Stuck', color: '#df2f4a' },
+					{ id: 'l104', title: 'Ready', color: '#9cd326' },
+					{ id: 'l105', title: 'Waiting for Review', color: '#ffcb00' },
 
 					// Priority Labels (l201 - l299)
-					{ id: 'l201', title: 'High', color: '#e2445c' },
-					{ id: 'l202', title: 'Medium', color: '#fbbc04' },
-					{ id: 'l203', title: 'Low', color: '#cab641' },
-					{ id: 'l204', title: 'Critical', color: '#a0250f' },
+					{ id: 'l201', title: 'High', color: '#401694' },
+					{ id: 'l202', title: 'Medium', color: '#5559df' },
+					{ id: 'l203', title: 'Low', color: '#579bfc' },
+					{ id: 'l204', title: 'Critical', color: '#333333' },
 					{ id: 'l205', title: 'Optional', color: '#9d99ff' },
 
 					// Member Labels (l301 - l399)
