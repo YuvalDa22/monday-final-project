@@ -194,7 +194,7 @@ function _createBoards() {
 					{ id: 'l201', title: 'High', color: '#401694' },
 					{ id: 'l202', title: 'Medium', color: '#5559df' },
 					{ id: 'l203', title: 'Low', color: '#579bfc' },
-					{ id: 'l204', title: 'Critical', color: '#333333' },
+					{ id: 'l204', title: 'Critical ⚠️', color: '#333333' },
 					{ id: 'l205', title: 'Optional', color: '#9d99ff' },
 
 					// Member Labels (l301 - l399)
