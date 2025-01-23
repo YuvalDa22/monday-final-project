@@ -1,251 +1,111 @@
-import { useRef, useState } from 'react'
-import { IconButton as MuiIconButton, Stack as MuiStack } from '@mui/material'
-
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
+import { Button, ButtonGroup, IconButton as MuiIconButton, Stack as MuiStack } from '@mui/material'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
-
-import {
-	Box,
-	Group,
-	IconButton as ChakraIconButton,
-	MenuContent,
-	MenuItem,
-	MenuRoot,
-	MenuTrigger,
-	Button as ChakraButton
-} from '@chakra-ui/react'
-
-import { LuChevronDown } from 'react-icons/lu'
 import { getSvg } from '../../services/util.service'
 
-
-const SvgIcon = ({ iconName, options }) => {
+const SvgIcon = ({ iconName, options, className }) => {
 	return (
-		<i
-			dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}
-			style={{ display: 'flex', opacity: 0.6 }}></i>
+		<i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }} className={`svg-icon ${className || ''}`}></i>
 	)
 }
 
 export function BoardActionsBar({ board, onAddTask, onAddGroup }) {
+
 	function handleAddTask(fromHeader) {
 		onAddTask(board.groups[0], 'New Task', fromHeader)
 	}
 
-	const customButtonsStyles = {
-        borderRadius: '8px',
-        cursor: 'pointer',
-        whiteSpace: 'nowrap',
-		outline: 'none',
-        fontFamily: 'figtree, sans-serif', 
-        color: 'white',
-        backgroundColor: '#0073ea', 
-        transition: 'all 0.2s ease',
-        _hover: {
-            zIndex: 11,
-            backgroundColor: '#0060b9',
-            boxShadow: 'none',
-        },
-    };
-
-
 	return (
-		<MuiStack direction='row' spacing='15px' style={{ alignItems: 'center' }}>
-			<Group css={customButtonsStyles}attached borderRadius='sm'>
-				<ChakraButton style={{ borderRightColor: '#0060b9' , padding: '4px 8px'}} css={customButtonsStyles} size='sm' onClick={() => handleAddTask(true)}>
-				New Task
-				</ChakraButton>
-				<Box position='relative' outline='none'>
-					<MenuRoot positioning={{ placement: 'bottom-start' }}>
-						<MenuTrigger asChild>
-							<ChakraIconButton size='sm' style={{borderBottomLeftRadius: 0 , borderTopLeftRadius: 0, color: 'white'}} css={customButtonsStyles} >
-								<LuChevronDown  />
-							</ChakraIconButton>
-						</MenuTrigger>
-						<MenuContent style={{ zIndex: 999, position: 'absolute' }}>
-							<MenuItem value='new-group' onClick={() => onAddGroup(true)}>
-								New Group of Tasks
-							</MenuItem>
-						</MenuContent>
-					</MenuRoot>
-				</Box>
-			</Group>
+		<MuiStack direction='row' spacing='15px' className='board-actions-bar'>
+			<ButtonGroup variant='contained' className='new-task-buttons'>
 
-			<MuiIconButton
-				sx={{
-					borderRadius: '5px',
-					fontSize: '15px',
-					gap: 0.5,
-					opacity: 1,
-				}}>
-				<SearchOutlinedIcon style={{ opacity: 1, height: 22, width: 22 }} />
+				<Button onClick={() => handleAddTask(true)} className='add-task-button'>
+					New Task
+				</Button>
+
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger asChild>
+						<Button className='dropdown-button'>
+							<SvgIcon
+								className='arrow-icon'
+								iconName='arrow_dropDown'
+								options={{ height: 22, width: 22, color: 'white' }}
+							/>
+						</Button>
+					</DropdownMenu.Trigger>
+
+					<DropdownMenu.Portal>
+						<DropdownMenu.Content
+						className='dropdown-content'
+							side='bottom' 
+							align='start' 
+							sideOffset={5}
+							style={{
+								backgroundColor: 'white',
+								border: '1px solid #ccc',
+								borderRadius: '8px',
+								padding: '6px',
+								boxShadow: '0 4px 17px 6px rgba(0, 0, 0, 0.1);',
+								animationDuration: '400ms',
+								animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+								willChange: 'transform, opacity',
+								width: '12rem'
+							}}
+							>
+							
+							<DropdownMenu.Item className='dropdown-item'
+							style={{
+								fontSize: '14px',
+								color: '#323338',
+								borderRadius: '3px',
+								display: 'flex',
+								alignItems: 'center',
+								gap: '0.5rem',
+								height: '25px',
+								width: '100%',
+								padding: '0 8px',
+								position: 'relative',
+								userSelect: 'none',
+								outline: 'none',
+								cursor: 'pointer',
+							}}
+								onMouseEnter={(e) => (e.target.style.backgroundColor = '#f3f4f6')}
+								onMouseLeave={(e) => (e.target.style.backgroundColor = 'transparent')}
+								onClick={() => onAddGroup(true)}>
+									<SvgIcon iconName='boardActionsBar_groupBy' options={{ height: 16, width: 16, color: '#676879'}} />
+								<span style={{paddingBottom: '4px'}}>
+									 Add group of tasks
+									</span>
+							</DropdownMenu.Item>
+						</DropdownMenu.Content>
+					</DropdownMenu.Portal>
+				</DropdownMenu.Root>
+			</ButtonGroup>
+
+			<MuiIconButton className='icon-button'>
+				<SearchOutlinedIcon className='icon' />
 				Search
 			</MuiIconButton>
-			<MuiIconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
+			<MuiIconButton className='icon-button'>
 				<SvgIcon iconName='boardActionsBar_person' options={{ height: 22, width: 22 }} />
 				Person
 			</MuiIconButton>
-			<MuiIconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
+			<MuiIconButton className='icon-button'>
 				<SvgIcon iconName='boardActionsBar_filter' options={{ height: 22, width: 22 }} />
 				Filter
 			</MuiIconButton>
-			<MuiIconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
+			<MuiIconButton className='icon-button'>
 				<SvgIcon iconName='boardActionsBar_sort' options={{ height: 22, width: 22 }} />
 				Sort
 			</MuiIconButton>
-			<MuiIconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
+			<MuiIconButton className='icon-button'>
 				<SvgIcon iconName='boardActionsBar_hide' options={{ height: 22, width: 22 }} />
 				Hide
 			</MuiIconButton>
-			<MuiIconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
+			<MuiIconButton className='icon-button'>
 				<SvgIcon iconName='boardActionsBar_groupBy' options={{ height: 17, width: 17 }} />
 				Group by
 			</MuiIconButton>
 		</MuiStack>
 	)
 }
-
-// import { useRef, useState } from 'react';
-// import {
-// 	Button as MuiButton,
-// 	ButtonGroup as MuiButtonGroup,
-// 	ClickAwayListener,
-// 	colors,
-// 	Grow,
-// 	IconButton as MuiIconButton,
-// 	MenuItem as MuiMenuItem,
-// 	MenuList as MuiMenuList,
-// 	Paper,
-// 	Popper,
-// 	Stack as MuiStack,
-// } from '@mui/material';
-// import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-// import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-
-// import {
-// 	Box as Box,
-// 	Group as Group,
-// 	IconButton as ChakraIconButton,
-// 	MenuContent as MenuContent,
-// 	MenuItem as MenuItem,
-// 	MenuRoot as MenuRoot,
-// 	MenuTrigger as MenuTrigger,
-// } from '@chakra-ui/react';
-// import { Button as ChakraButton } from '../ui/button';
-
-// import { LuChevronDown } from 'react-icons/lu';
-
-// import { getSvg } from '../../services/util.service';
-// import zIndex from '@mui/material/styles/zIndex';
-
-// const SvgIcon = ({ iconName, options }) => {
-// 	return (
-// 		<i
-// 			dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}
-// 			style={{ display: 'flex', opacity: 0.6 }}></i>
-// 	)
-// }
-
-// export function BoardActionsBar({ board, onAddTask, onAddGroup }) {
-// 	const [anchorEl, setAnchorEl] = useState(null)
-// 	const handleMenuOpen = (event) => setAnchorEl(event.currentTarget)
-// 	const handleMenuClose = () => setAnchorEl(null)
-// 	const anchorRef = useRef(null)
-
-// 	function handleAddTask(fromHeader) {
-// 		onAddTask(board.groups[0], 'New Task', fromHeader)
-// 	}
-
-// 	return (
-// 		<Stack direction={'row'} spacing={'15px'} style={{ alignItems: 'center' }}>
-// 			<Group attached>
-// 				<Button variant='outline' size='sm'>
-// 					Button
-// 				</Button>
-// 				<Box position='relative'>
-// 					<MenuRoot positioning={{ placement: 'bottom-start' }}>
-// 						<MenuTrigger asChild>
-// 							<IconButton variant='outline' size='sm'>
-// 								<LuChevronDown />
-// 							</IconButton>
-// 						</MenuTrigger>
-// 						<MenuContent style={{ zIndex: 999, position: 'absolute' }}>
-// 							<MenuItem value='new-group'>New Text File</MenuItem>
-// 						</MenuContent>
-// 					</MenuRoot>
-// 				</Box>
-// 			</Group>
-
-// 			{/* <ButtonGroup
-// 				variant='contained'
-// 				ref={anchorRef}
-// 				className='new-task-buttons'
-// 				>
-// 				<Button
-// 					className='new-task-button'
-// 					onClick={() => handleAddTask(true)}
-// 				>
-// 					New task
-// 				</Button>
-// 				<Button
-// 					size='small'
-// 					onClick={handleMenuOpen}
-// 					className='new-task-button-arrow'>
-// 					<SvgIcon iconName={'arrow_dropDown'} options={{color: 'white'}}/>
-// 				</Button>
-// 			</ButtonGroup>
-// 			<Popper
-// 				sx={{ zIndex: 1 }}
-// 				open={Boolean(anchorEl)}
-// 				anchorEl={anchorEl}
-// 				transition
-// 				placement='bottom-start'
-// 				onClose={handleMenuClose}>
-// 				{({ TransitionProps }) => (
-// 					<Grow
-// 						{...TransitionProps}>
-// 						<Paper>
-// 							<ClickAwayListener
-// 								anchorEl={anchorEl}
-// 								onClickAway={handleMenuClose}>
-// 								<MenuList id='split-button-menu' autoFocusItem onClose={handleMenuClose}>
-// 									<MenuItem onClick={() => onAddGroup(true)}>New Group of Tasks</MenuItem>
-// 								</MenuList>
-// 							</ClickAwayListener>
-// 						</Paper>
-// 					</Grow>
-// 				)}
-// 			</Popper> */}
-// 			<IconButton
-// 				sx={{
-// 					borderRadius: '5px',
-// 					fontSize: '15px',
-// 					gap: 0.5,
-// 					opacity: 1,
-// 				}}
-// 				>
-// 				<SearchOutlinedIcon style={{ opacity: 1, height: 22, width: 22 }} />
-// 				Search
-// 			</IconButton>
-// 			<IconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
-// 				<SvgIcon iconName={'boardActionsBar_person'} options={{ height: 22, width: 22 }} />
-// 				Person
-// 			</IconButton>
-// 			<IconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
-// 				<SvgIcon iconName={'boardActionsBar_filter'} options={{ height: 22, width: 22 }} />
-// 				Filter
-// 			</IconButton>
-// 			<IconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
-// 				<SvgIcon iconName={'boardActionsBar_sort'} options={{ height: 22, width: 22 }} />
-// 				Sort
-// 			</IconButton>
-// 			<IconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
-// 				<SvgIcon iconName={'boardActionsBar_hide'} options={{ height: 22, width: 22 }} />
-// 				Hide
-// 			</IconButton>
-// 			<IconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
-// 				<SvgIcon iconName={'boardActionsBar_groupBy'} options={{ height: 17, width: 17 }} />
-// 				Group by
-// 			</IconButton>
-// 		</Stack>
-// 	)
-// }

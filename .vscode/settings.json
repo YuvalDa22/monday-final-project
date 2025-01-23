@@ -1,33 +1,33 @@
 {
-  "cSpell.words": ["Chakra", "cmps"],
+	"cSpell.words": ["Chakra", "cmps"],
 
-  // Set Prettier as the default formatter
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+	// Set Prettier as the default formatter
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
 
-  // Enable format on save globally
-  "editor.formatOnSave": true,
+	// Enable format on save globally
+	"editor.formatOnSave": true,
 
-  // Specify file types to format with Prettier
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[css]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[scss]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
+	// Specify file types to format with Prettier
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[html]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[css]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[scss]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
 
-  // Prettier specific configurations
-  "prettier.tabWidth": 2,
-  "prettier.singleQuote": true
+	// Prettier specific configurations
+	"prettier.tabWidth": 2,
+	"prettier.singleQuote": true
 }

@@ -1,35 +1,43 @@
 @use 'suggestedactions';
 
 .gh-main-container {
-// This is so the whole line is hoverable (show 3 dots and show "X Tasks")
-width: 100%; 
-display: block; 
+	// This is so the whole line is hoverable (show 3 dots and show "X Tasks")
+	width: 100%;
+	display: block;
+	align-items: baseline;
 }
 
-
-
 .gh-title {
-    display: flex;
+	display: flex;
 	// This is for suggestedActions !! for the three dots that appear to the left of the group when hovering
 	position: relative;
-    left: -40px; 
+	left: -40px;
 	//
 	align-items: center;
-	gap:10px;
+	gap: 10px;
 }
 
 .gh-how-many-tasks {
 	opacity: 0;
-    align-self: center;
+	align-self: center;
 	transition: opacity 0.3s ease;
 	margin-left: 5px;
 }
 
 .gh-main-container:hover .sa-main-container,
 .gh-main-container:hover .gh-how-many-tasks {
-	opacity: 1; 
+	opacity: 1;
 }
 
-.gh-title-expandMoreIcon{
+.gh-title-expandMoreIcon {
 	display: flex; // Align the icon with group title etc etc
+	cursor: 'pointer';
+}
+
+.colored-area {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	color: var(--group-color);
+	letter-spacing: 0.1px;
 }
