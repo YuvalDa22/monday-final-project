@@ -191,6 +191,8 @@ export function GroupPreview({
 																	value: { color: color.hex },
 																})
 																setIsPopoverOpen(false)
+																handleGroupTitleSave()
+																
 															}}
 														/>
 													</Box>{' '}

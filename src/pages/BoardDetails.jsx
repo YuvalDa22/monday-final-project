@@ -98,13 +98,13 @@ export function BoardDetails() {
 	}
 
 	function groupCheckedTasksByColor(tasks) {
-    // reducer that returns a Map of [color : checkedTaskObj] so the checked taskss will be grouped together when selected
+		// reducer that returns a Map of [color : checkedTaskObj] so the checked taskss will be grouped together when selected
 		return tasks.reduce((groups, task) => {
 			if (!groups[task.groupColor]) {
 				groups[task.groupColor] = []
 			}
 			groups[task.groupColor].push(task)
-      console.log(groups);
+			console.log(groups)
 			return groups
 		}, {})
 	}
@@ -188,16 +188,13 @@ export function BoardDetails() {
 							</div>
 							<div>
 								<div className='footer_colored-dots'>
-									{Object.entries(groupCheckedTasksByColor(checkedTasksList)).map(
-										([color, tasks]) => (
-											<span key={color}>
-												{tasks.map((_, idx) => (
-													<span key={idx} style={{ color }}>
-														•
-													</span>
-												))}
-											</span>
-										)
+									{Object.entries(groupCheckedTasksByColor(checkedTasksList)).flatMap(
+										([color, tasks]) =>
+											tasks.slice(0, 13).map((_, idx) => (
+												<span key={`${color}-${idx}`} style={{ color }}>
+													•
+												</span>
+											))
 									)}
 									{checkedTasksList.length > 13 && (
 										<span style={{ fontSize: '11px' }}> + {checkedTasksList.length - 13}</span>
@@ -323,7 +320,7 @@ export function BoardDetails() {
 						</IconButton>
 					</div>
 				</div>
-				<Outlet context={boardId} /> {/* Task Details ! */}
+				<Outlet context={boardId} />
 			</div>
 		</>
 	)
