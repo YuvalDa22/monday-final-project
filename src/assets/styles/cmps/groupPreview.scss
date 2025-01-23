@@ -1,142 +1,144 @@
 .gp-main-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: baseline;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	align-items: baseline;
 
-  .gp-table {
-    width: calc(100vw - 322px);
+	.color-picker-btn {
+		width: 10px;
+		height: 10px;
+		border-radius: 1;
+		background-color: var(--group-color);
 
+		&:hover {
+			background-color: red;
+		}
+	}
 
-    .custom-table {
-      width: 100%;
-      border-spacing: 0;
-      border-collapse: collapse;
-      font-size: 16px;
-      text-align: center;
+	.gp-table {
+		width: calc(100vw - 322px);
 
+		.custom-table {
+			width: 100%;
+			border-spacing: 0;
+			border-collapse: collapse;
+			font-size: 16px;
+			text-align: center;
 
-      td, th {
-        border: 1px solid #e0e0e0;
-      }
+			td,
+			th {
+				border: 1px solid #e0e0e0;
+			}
 
-      
-      .header-cell {
-        min-width: 7rem;
-      }
-      
-      .task-row {
-        
-        
-        &.checked {
-          background-color: #cce9ff;
-          
-          .task-cell,
-          .data-cell {
-            background-color: #cce9ff;
-            
-            .member-avatars {
-              background-color: #cce9ff;
-            }
-          }
-        }
-      }
-      
-      .task-cell {
-        display: flex;
-        align-items: center;
-        padding-left: 15px;
-        height: 100%;
-        
-        .open {
-          opacity: 0;
-          display: flex;
-          justify-content: flex-end;
-          transition: opacity 0.3s ease-in-out;
-          cursor: grab;
-          flex: 1;
-          font-size: 13px;
-          
-          div {
-            align-items: center;
-            display: flex;
-            cursor: pointer;
-            
-            span {
-              margin-bottom: 2px;
-            }
-          }
-        }
-        
-        &:hover .open {
-          opacity: 0.7;
-        }
-      }
-      
-      .task-menu {
-        position: absolute;
-        padding: 7px;
-        align-content: start;
-        display: flex;
-        transform: translateX(-45px) translateY(-3px);
-        opacity: 0;
-        
-        &:hover {
-          opacity: 1;
-        }
-      }
-      
-      .data-cell {
-      }
-      
-      .task-title {
-        min-width: 10rem;
-      }
-      
-      .checkbox-cell {
-        position: relative; 
-        width: 1rem;
+			.header-cell {
+				min-width: 7rem;
+			}
 
-        ::before{
-          content: '';
-              position: absolute;
-              left: -3px;
-              width: 6px;
-              height: 103%;
-              background-color: var(--group-color);
-        }
-        
-        &.header {
-          font-weight: bold;
-  
-            ::before {
-              content: '';
-              position: absolute;
-              left: -3px;
-              width: 6px;
-              height: 103%;
-              background-color: var(--group-color);
-              border-top-left-radius: 8px; 
-            }
-          
-        }
-  
-        &.last {
+			.task-row {
+				&.checked {
+					background-color: #cce9ff;
 
-            ::before {
-              content: '';
-              position: absolute;
-              left: -4px;
-              width: 6px;
-              height: 103%;
-              background-color: var(--group-color);
-              border-bottom-left-radius: 8px;
-            }
-          
-        }
-        
-      }
-      
-    }
-  }
+					.task-cell,
+					.data-cell {
+						background-color: #cce9ff;
+
+						.member-avatars {
+							background-color: #cce9ff;
+						}
+					}
+				}
+			}
+
+			.task-cell {
+				display: flex;
+				align-items: center;
+				padding-left: 15px;
+				height: 100%;
+
+				.open {
+					opacity: 0;
+					display: flex;
+					justify-content: flex-end;
+					transition: opacity 0.3s ease-in-out;
+					cursor: grab;
+					flex: 1;
+					font-size: 13px;
+
+					div {
+						align-items: center;
+						display: flex;
+						cursor: pointer;
+
+						span {
+							margin-bottom: 2px;
+						}
+					}
+				}
+
+				&:hover .open {
+					opacity: 0.7;
+				}
+			}
+
+			.task-menu {
+				position: absolute;
+				padding: 7px;
+				align-content: start;
+				display: flex;
+				transform: translateX(-45px) translateY(-3px);
+				opacity: 0;
+
+				&:hover {
+					opacity: 1;
+				}
+			}
+
+			.data-cell {
+			}
+
+			.task-title {
+				min-width: 10rem;
+			}
+
+			.checkbox-cell {
+				position: relative;
+				width: 1rem;
+
+				::before {
+					content: '';
+					position: absolute;
+					left: -3px;
+					width: 6px;
+					height: 103%;
+					background-color: var(--group-color);
+				}
+
+				&.header {
+					font-weight: bold;
+
+					::before {
+						content: '';
+						position: absolute;
+						left: -3px;
+						width: 6px;
+						height: 103%;
+						background-color: var(--group-color);
+						border-top-left-radius: 8px;
+					}
+				}
+
+				&.last {
+					::before {
+						content: '';
+						position: absolute;
+						left: -4px;
+						width: 6px;
+						height: 103%;
+						background-color: var(--group-color);
+						border-bottom-left-radius: 8px;
+					}
+				}
+			}
+		}
+	}
 }
