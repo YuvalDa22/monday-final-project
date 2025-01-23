@@ -11,7 +11,7 @@ import { Link, useParams } from 'react-router-dom'
 import { getSvg } from '../../services/util.service'
 import { Menu, MenuItem, IconButton, Box } from '@mui/material'
 import { boardService } from '../../services/board.service.js'
-import { CirclePicker } from 'react-color'
+import { BlockPicker, CirclePicker } from 'react-color'
 import * as Popover from '@radix-ui/react-popover'
 export function GroupPreview({
 	board,
@@ -127,22 +127,6 @@ export function GroupPreview({
 		setIsPopoverOpen(false)
 	}
 
-	const handlePopoverToggle = () => {
-		setIsPopoverOpen(!isPopoverOpen)
-	}
-
-	const MyColorPicker = () => (
-		<Box sx={{ p: 2, border: '1px solid #ccc', borderRadius: 2 }}>
-			<CirclePicker 
-				colors={Array.from(boardService.groupColors.values())} 
-				onChangeComplete={(clr) => {
-					updateBoard(board, group, null, {key: 'style', value: {color : clr.hex}})
-					setIsPopoverOpen(false)
-				}}
-			/>
-		</Box>
-	)
-
 	return (
 		<>
 			<div className='gp-main-container' style={{ '--group-color': group.style.color || '#000' }}>
@@ -171,13 +155,9 @@ export function GroupPreview({
 											gap: '8px',
 											position: 'relative',
 										}}>
-										
 										<Popover.Root open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
 											<Popover.Trigger asChild>
-												<Box
-													className='color-picker-btn'
-													onMouseDown={(e) => e.preventDefault()} // Prevent blur on input
-												/>
+												<Box className='color-picker-btn' onMouseDown={(e) => e.preventDefault()} />
 											</Popover.Trigger>
 											<Popover.Portal>
 												<Popover.Content
@@ -186,19 +166,41 @@ export function GroupPreview({
 													sideOffset={5}
 													className='popover-content'
 													style={{
-														padding: '8px',
-														border: '1px solid #ccc',
 														borderRadius: '8px',
 														backgroundColor: '#fff',
 														boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
 													}}>
-														<MyColorPicker />
+													<Box className='color-picker-content' sx={{ p: 1, borderRadius: 2 }}>
+														<BlockPicker
+															colors={Array.from(boardService.groupColors.values())}
+															styles={{
+																default: {
+																	card: {
+																		boxShadow: 'none',
+																		padding: '0',
+																	},
+																	head: { display: 'none' },
+																	triangle: { display: 'none' },
+																	label: { display: 'none' },
+																	input: { display: 'none' },
+																},
+															}}
+															onChangeComplete={(color) => {
+																updateBoard(board, group, null, {
+																	key: 'style',
+																	value: { color: color.hex },
+																})
+																setIsPopoverOpen(false)
+															}}
+														/>
+													</Box>{' '}
 												</Popover.Content>
 											</Popover.Portal>
 										</Popover.Root>
 										<Input
 											autoFocus
 											type='text'
+											className='title-input'
 											value={groupTempTitle}
 											onChange={(e) => setGroupTempTitle(e.target.value)}
 											onKeyDown={(e) => {
