@@ -65,10 +65,20 @@
         span {
           white-space: nowrap;
           overflow: hidden;
+          border: 1px solid transparent;
+          border-radius: 5px;
+          padding: 3px;
+        }
+
+        span:hover {
+          border: 1px solid rgba(0, 0, 0, 0.2);
         }
       }
       .task-title {
         min-width: 30rem; // This is so task column is by default little bigger than the rest of the columns
+      }
+
+      .task-row {
       }
 
       .task-row:hover {

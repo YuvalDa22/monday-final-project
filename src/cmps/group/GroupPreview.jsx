@@ -266,7 +266,16 @@ export function GroupPreview({
                   <tr
                     className='task-row'
                     style={{
-                      backgroundColor: editingTaskId === task.id ? 'rgb(208,228,252)' : '', // Correct syntax
+                      // This line says : if task title is being edited OR task is checked , apply the blue backgrnd
+                      // note: we can apply it to a class and move the styling logic to a scss file if we rly want to
+                      backgroundColor:
+                        editingTaskId === task.id ||
+                        checkedTasksList.some(
+                          (checkedTask) =>
+                            checkedTask.groupId === group.id && checkedTask.taskId === task.id
+                        )
+                          ? 'rgb(208,228,252)'
+                          : '',
                     }}
                   >
                     {' '}
