@@ -142,201 +142,199 @@ export function BoardDetails() {
   }
 
   return (
-    <>
-      <div className='board-details-container'>
-        <div className='board-details-header'>
-          <BoardHeader board={board} onAddTask={onAddTask} onAddGroup={onAddGroup} />
+    <div className='board-details-container'>
+      <div className='board-details-header'>
+        <BoardHeader board={board} onAddTask={onAddTask} onAddGroup={onAddGroup} />
+      </div>
+      <div className='board-details-groups-container'>
+        {board?.groups &&
+          board?.groups.map((group) => (
+            <GroupPreview
+              board={board}
+              group={group}
+              cmpTitles={board.cmpTitles}
+              cmpsOrder={board.cmpsOrder}
+              key={group.id}
+              onTasksCheckedChange={handleTasksChecked}
+              checkedTasksList={checkedTasksList}
+              onAddTask={onAddTask}
+            />
+          ))}
+        <div className='add-group-button-container'>
+          <Button
+            variant='outlined'
+            onClick={() => onAddGroup(false)}
+            sx={{
+              color: 'black',
+              borderColor: 'gray',
+              textTransform: 'none',
+            }}
+          >
+            Add new group
+          </Button>
         </div>
-        <div className='board-details-groups-container'>
-          {board?.groups &&
-            board?.groups.map((group) => (
-              <GroupPreview
-                board={board}
-                group={group}
-                cmpTitles={board.cmpTitles}
-                cmpsOrder={board.cmpsOrder}
-                key={group.id}
-                onTasksCheckedChange={handleTasksChecked}
-                checkedTasksList={checkedTasksList}
-                onAddTask={onAddTask}
-              />
-            ))}
-          <div className='add-group-button-container'>
-            <Button
-              variant='outlined'
-              onClick={() => onAddGroup(false)}
-              sx={{
-                color: 'black',
-                borderColor: 'gray',
-                textTransform: 'none',
-              }}
-            >
-              Add new group
-            </Button>
-          </div>
+      </div>
+      <div
+        className={`board-details_footer ${
+          checkedTasksList.length > 0 ? 'show_footer' : 'hide_footer'
+        }`}
+      >
+        <div className='footer_blue-number'>
+          <span>{checkedTasksList.length}</span>
         </div>
-        <div
-          className={`board-details_footer ${
-            checkedTasksList.length > 0 ? 'show_footer' : 'hide_footer'
-          }`}
-        >
-          <div className='footer_blue-number'>
-            <span>{checkedTasksList.length}</span>
-          </div>
-          <div className={'footer_rest-of-footer'}>
-            <div className='footer_item-selected_container'>
-              <div>
-                <span>{checkedTasksList.length > 1 ? 'Items' : 'Item'} selected</span>
-              </div>
-              <div>
-                <div className='footer_colored-dots'>
-                  {Object.entries(groupCheckedTasksByColor(checkedTasksList)).flatMap(
-                    ([color, tasks]) =>
-                      tasks.slice(0, 13).map((_, idx) => (
-                        <span key={`${color}-${idx}`} style={{ color }}>
-                          •
-                        </span>
-                      ))
-                  )}
-                  {checkedTasksList.length > 13 && (
-                    <span style={{ fontSize: '11px' }}> + {checkedTasksList.length - 13}</span>
-                  )}
-                </div>
+        <div className={'footer_rest-of-footer'}>
+          <div className='footer_item-selected_container'>
+            <div>
+              <span>{checkedTasksList.length > 1 ? 'Items' : 'Item'} selected</span>
+            </div>
+            <div>
+              <div className='footer_colored-dots'>
+                {Object.entries(groupCheckedTasksByColor(checkedTasksList)).flatMap(
+                  ([color, tasks]) =>
+                    tasks.slice(0, 13).map((_, idx) => (
+                      <span key={`${color}-${idx}`} style={{ color }}>
+                        •
+                      </span>
+                    ))
+                )}
+                {checkedTasksList.length > 13 && (
+                  <span style={{ fontSize: '11px' }}> + {checkedTasksList.length - 13}</span>
+                )}
               </div>
             </div>
-            <div className='footer_options_container'>
-              <div
-                className='footer_option'
-                onClick={() => {
-                  handleFooterAction('duplicate')
-                }}
-              >
-                <SvgIcon iconName='duplicate'></SvgIcon>
-                <span>Duplicate</span>
-              </div>
-              <div
-                className='footer_option'
-                onClick={() => {
-                  handleFooterAction('export')
-                }}
-              >
-                <SvgIcon iconName='export'></SvgIcon>
-                <span>Export</span>
-              </div>
-              <div
-                className='footer_option'
-                onClick={() => {
-                  handleFooterAction('archive')
-                }}
-              >
-                <SvgIcon iconName='archive'></SvgIcon>
-                <span>Archive</span>
-              </div>
-              <div
-                className='footer_option'
-                onClick={() => {
-                  handleFooterAction('delete')
-                }}
-              >
-                <SvgIcon iconName='delete'></SvgIcon>
-                <span>Delete</span>
-              </div>
-              <div
-                className='footer_option'
-                onClick={() => {
-                  handleFooterAction('convert')
-                }}
-              >
-                <SvgIcon iconName='convert'></SvgIcon>
-                <span>Convert</span>
-              </div>
-              <div className='footer_option'>
-                <DropdownMenu.Root sx={{ backgroundColor: 'red' }}>
-                  <DropdownMenu.Trigger asChild>
-                    <div
-                      style={{
-                        alignItems: 'center',
-                        display: 'flex',
-                        flexDirection: 'column',
-                      }}
-                    >
-                      <SvgIcon iconName='move_to'></SvgIcon>
-                      <span>Move to</span>
-                    </div>
-                  </DropdownMenu.Trigger>
-
-                  <DropdownMenu.Content
-                    className='fade-in-up' // animation like monday
+          </div>
+          <div className='footer_options_container'>
+            <div
+              className='footer_option'
+              onClick={() => {
+                handleFooterAction('duplicate')
+              }}
+            >
+              <SvgIcon iconName='duplicate'></SvgIcon>
+              <span>Duplicate</span>
+            </div>
+            <div
+              className='footer_option'
+              onClick={() => {
+                handleFooterAction('export')
+              }}
+            >
+              <SvgIcon iconName='export'></SvgIcon>
+              <span>Export</span>
+            </div>
+            <div
+              className='footer_option'
+              onClick={() => {
+                handleFooterAction('archive')
+              }}
+            >
+              <SvgIcon iconName='archive'></SvgIcon>
+              <span>Archive</span>
+            </div>
+            <div
+              className='footer_option'
+              onClick={() => {
+                handleFooterAction('delete')
+              }}
+            >
+              <SvgIcon iconName='delete'></SvgIcon>
+              <span>Delete</span>
+            </div>
+            <div
+              className='footer_option'
+              onClick={() => {
+                handleFooterAction('convert')
+              }}
+            >
+              <SvgIcon iconName='convert'></SvgIcon>
+              <span>Convert</span>
+            </div>
+            <div className='footer_option'>
+              <DropdownMenu.Root sx={{ backgroundColor: 'red' }}>
+                <DropdownMenu.Trigger asChild>
+                  <div
                     style={{
-                      background: 'white',
-                      border: '1px solid #ccc',
-                      borderRadius: '5px',
-                      padding: '8px',
-                      marginBottom: '20px',
-                      boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-                      position: 'relative',
+                      alignItems: 'center',
+                      display: 'flex',
+                      flexDirection: 'column',
                     }}
                   >
-                    <div
-                      // this is for the triangle that points down , at the bottom of the menu
-                      style={{
-                        position: 'absolute',
-                        bottom: '-5px',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        width: '0',
-                        height: '0',
-                        borderLeft: '8px solid transparent',
-                        borderRight: '8px solid transparent',
-                        borderTop: '8px solid white',
-                      }}
-                    ></div>
-                    {board.groups.map((group) => (
-                      <DropdownMenu.Item
-                        onClick={() => handleFooterAction('move_to', group.id)}
-                        className='dropdown-item'
-                        key={group.id}
-                      >
-                        {group.title}
-                      </DropdownMenu.Item>
-                    ))}
-                  </DropdownMenu.Content>
-                </DropdownMenu.Root>
-              </div>
+                    <SvgIcon iconName='move_to'></SvgIcon>
+                    <span>Move to</span>
+                  </div>
+                </DropdownMenu.Trigger>
 
-              <div
-                className='footer_option'
-                onClick={() => {
-                  handleFooterAction('apps')
-                }}
-              >
-                <SvgIcon iconName='apps'></SvgIcon>
-                <span>Apps</span>
-              </div>
+                <DropdownMenu.Content
+                  className='fade-in-up' // animation like monday
+                  style={{
+                    background: 'white',
+                    border: '1px solid #ccc',
+                    borderRadius: '5px',
+                    padding: '8px',
+                    marginBottom: '20px',
+                    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+                    position: 'relative',
+                  }}
+                >
+                  <div
+                    // this is for the triangle that points down , at the bottom of the menu
+                    style={{
+                      position: 'absolute',
+                      bottom: '-5px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      width: '0',
+                      height: '0',
+                      borderLeft: '8px solid transparent',
+                      borderRight: '8px solid transparent',
+                      borderTop: '8px solid white',
+                    }}
+                  ></div>
+                  {board.groups.map((group) => (
+                    <DropdownMenu.Item
+                      onClick={() => handleFooterAction('move_to', group.id)}
+                      className='dropdown-item'
+                      key={group.id}
+                    >
+                      {group.title}
+                    </DropdownMenu.Item>
+                  ))}
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
             </div>
-            <span
-              style={{
-                borderLeft: '2px solid gray',
-                opacity: 0.4,
-                marginLeft: '15px',
-              }}
-            ></span>
-            <IconButton
-              className='footer_close-icon_container'
-              sx={{
-                borderRadius: '2px',
-                '&:hover': { backgroundColor: 'white' },
-              }}
+
+            <div
+              className='footer_option'
               onClick={() => {
-                setCheckedTasksList([])
+                handleFooterAction('apps')
               }}
             >
-              <CloseIcon className='footer_close-icon' />
-            </IconButton>
+              <SvgIcon iconName='apps'></SvgIcon>
+              <span>Apps</span>
+            </div>
           </div>
+          <span
+            style={{
+              borderLeft: '2px solid gray',
+              opacity: 0.4,
+              marginLeft: '15px',
+            }}
+          ></span>
+          <IconButton
+            className='footer_close-icon_container'
+            sx={{
+              borderRadius: '2px',
+              '&:hover': { backgroundColor: 'white' },
+            }}
+            onClick={() => {
+              setCheckedTasksList([])
+            }}
+          >
+            <CloseIcon className='footer_close-icon' />
+          </IconButton>
         </div>
-        <Outlet context={boardId} />
       </div>
-    </>
+      <Outlet context={boardId} />
+    </div>
   )
 }

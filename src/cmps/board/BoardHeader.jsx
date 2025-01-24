@@ -34,11 +34,13 @@ export function BoardHeader({ board, onAddGroup, onAddTask }) {
             onBlur={handleBoardTitleSave}
             sx={{
               width: `${boardTempTitle.length + 2.5}ch`,
-              minWidth: '5ch',
+              minWidth: '6ch',
             }}
           />
         ) : (
-          <h1 onClick={() => setIsEditingBoardTitle(true)}>{board?.title}</h1>
+          <span className='boardHeader_boardName' onClick={() => setIsEditingBoardTitle(true)}>
+            {board?.title}
+          </span>
         )}
         <AdditionalBoardActions />
       </div>

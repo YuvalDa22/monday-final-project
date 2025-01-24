@@ -13,14 +13,8 @@
   .gp-table {
     width: calc(100vw - 322px);
 
-    .custom-table th:nth-child(2),
-    .custom-table td:nth-child(2) {
-      width: 60%;
-      min-width: 300px;
-    }
-
     .custom-table {
-      width: 100%;
+      //  width: 100%;
       border-collapse: collapse;
       text-align: center;
 
@@ -36,13 +30,16 @@
 
       .header-cell {
         min-width: 10rem;
+        width: 10rem;
       }
 
       .openTaskDetails_container {
-        padding-right: 15px;
         display: none;
         gap: 5px;
+
+        //  background-color: lightblue;
         align-items: center;
+        padding: 0px 10px 0px 5px;
 
         .svgOpenIcon {
           margin-top: 5px;
@@ -54,12 +51,24 @@
         display: none !important; /* had to use important to override the display property*/
       }
 
-      .task-cell {
+      .task-cell-container {
         padding-left: 15px;
+        position: relative;
         align-items: center;
+        justify-content: center;
+        text-align: start;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        max-width: 30rem; // This is so the content inside the cell wont dictate .task-title width . NOTE FOR SELF : make sure this is synced with .task-title width !
+
+        span {
+          white-space: nowrap;
+          overflow: hidden;
+        }
+      }
+      .task-title {
+        min-width: 30rem; // This is so task column is by default little bigger than the rest of the columns
       }
 
       .task-row:hover {
@@ -67,17 +76,6 @@
         .openTaskDetails_container {
           display: flex;
         }
-      }
-
-      .task-cell span {
-        border: 1px solid transparent;
-        padding: 3px;
-        border-radius: 5px;
-        transition: border-color 0.3s ease;
-      }
-
-      .task-cell span:hover {
-        border-color: rgb(172, 172, 172);
       }
 
       .task-menu {
@@ -92,15 +90,6 @@
         &:hover {
           opacity: 1;
         }
-      }
-
-      .data-cell {
-        height: 100%;
-        width: 100%;
-      }
-
-      .task-title {
-        min-width: 10rem;
       }
 
       .add-item {

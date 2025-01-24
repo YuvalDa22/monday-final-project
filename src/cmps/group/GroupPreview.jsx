@@ -279,49 +279,55 @@ export function GroupPreview({
                         onChange={(event) => handleTaskChecked(event, task)}
                       />
                     </td>
-                    <td>
-                      <Link to={`task/${task.id}`}>
-                        <div className='task-cell'>
-                          {editingTaskId === task.id ? (
-                            <Input
-                              className='taskTitleInput '
-                              autoFocus
-                              type='text'
-                              value={existingItemTempTitle}
-                              onChange={(event) => setExistingItemTempTitle(event.target.value)}
-                              onKeyDown={(event) => {
-                                if (event.key === 'Enter') handleSave(task)
-                                if (event.key === 'Escape') handleCancel()
-                              }}
-                              onBlur={handleCancel}
-                              sx={{
-                                width: '100%',
-                                marginRight: '15px',
-                                minWidth: '2ch',
-                                transform: 'translateX(-8px)', // help create the illusion that stuff didnt move when clicking on edit task name
-                              }}
-                            />
-                          ) : (
-                            <span
-                              onClick={(event) => {
-                                // these two ensure that clicking on task name = input (to change task name), and NOT to open task details.
-                                event.preventDefault()
-                                event.stopPropagation()
-                                handleEdit(task.id, task.title)
-                              }}
-                            >
-                              {task.title}
-                            </span>
-                          )}
-
-                          <div
-                            className={`openTaskDetails_container ${
-                              editingTaskId === task.id ? 'hide_open' : ''
-                            }`}
+                    <td className='testzzz'>
+                      <Link
+                        to={`task/${task.id}`}
+                        className='task-cell-container'
+                        style={{ display: editingTaskId === task.id ? 'block' : undefined }} // Input was being annoying because it didn't fit well when its container was flex , so the logic was if input is rendered , make its father not flex , and it fixed the annoying gap
+                      >
+                        {editingTaskId === task.id ? (
+                          <Input
+                            className='taskTitleInput'
+                            autoFocus
+                            type='text'
+                            value={existingItemTempTitle}
+                            onChange={(event) => setExistingItemTempTitle(event.target.value)}
+                            onKeyDown={(event) => {
+                              if (event.key === 'Enter') handleSave(task)
+                              if (event.key === 'Escape') handleCancel()
+                            }}
+                            onClick={(event) => {
+                              event.preventDefault() // without this , if we click on the editable text inside <input> we get sent to task details, not good
+                            }}
+                            onBlur={handleCancel}
+                            sx={{
+                              width: '100%',
+                              marginRight: '15px',
+                              minWidth: '2ch',
+                              alignContent: 'center',
+                              transform: 'translateX(-8px)', // help create the illusion that stuff didnt move when clicking on edit task name
+                            }}
+                          />
+                        ) : (
+                          <span
+                            onClick={(event) => {
+                              // these two ensure that clicking on task name = input (to change task name), and NOT to open task details.
+                              event.preventDefault()
+                              event.stopPropagation()
+                              handleEdit(task.id, task.title)
+                            }}
                           >
-                            <SvgIcon iconName={'task_open_icon'} className={'svgOpenIcon'} />
-                            <div>Open</div>
-                          </div>
+                            {task.title}
+                          </span>
+                        )}
+
+                        <div
+                          className={`openTaskDetails_container ${
+                            editingTaskId === task.id ? 'hide_open' : ''
+                          }`}
+                        >
+                          <SvgIcon iconName={'task_open_icon'} className={'svgOpenIcon'} />
+                          <div>Open</div>
                         </div>
                       </Link>
                     </td>

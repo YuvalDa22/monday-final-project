@@ -8,6 +8,13 @@
   display: flex;
   justify-content: space-between;
   padding-top: 17px;
+  white-space: nowrap;
+}
+
+.boardHeader_boardName {
+  font-weight: 501; // 500 seems too little , 501 seems too much , :_) , TODO: deal with this later (fonts are not exactly the same , look at the letter "M")
+  font-size: 25px;
+  align-content: center;
 }
 
 .additional_board_actions {

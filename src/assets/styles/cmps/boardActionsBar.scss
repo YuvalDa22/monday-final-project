@@ -5,6 +5,7 @@ button {
 .board-actions-bar {
   display: flex;
   align-items: center;
+  white-space: nowrap;
 
   .new-task-buttons {
     border-radius: 8px;
