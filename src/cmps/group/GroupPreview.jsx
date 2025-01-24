@@ -26,8 +26,10 @@ export function GroupPreview({
   const handleClick = () => {
     setIsRotated(!isRotated)
   }
-  const SvgIcon = ({ iconName, options }) => {
-    return <i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>
+  const SvgIcon = ({ iconName, options, className }) => {
+    return (
+      <i className={className} dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>
+    )
   }
   const [editingTaskId, setEditingTaskId] = useState(null)
   const [existingItemTempTitle, setExistingItemTempTitle] = useState('')
@@ -252,52 +254,23 @@ export function GroupPreview({
                 </th>
                 <th className='task-title'>Task</th>
                 {cmpTitles.map((title, index) => (
-                  <th key={index} className='header-cell'>
+                  <th key={`header-${index}`} className='header-cell'>
                     {title}
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {group.tasks.map((task) => (
-                <React.Fragment key={task.id}>
-                  <span className='task-menu'>
-                    <IconButton onClick={(event) => handleMenuClick(event, task)}>
-                      <MoreHorizOutlinedIcon sx={{ width: '20px' }} />
-                    </IconButton>
-
-                    <Menu
-                      anchorEl={anchorEl}
-                      open={Boolean(anchorEl) && selectedTask?.id === task.id}
-                      onClose={handleMenuClose}
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'right',
-                      }}
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                      }}
-                    >
-                      <MenuItem
-                        onClick={() => {
-                          handleTaskDeleted(board, group, task)
-                        }}
-                      >
-                        Delete task
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          handleTaskDuplicate(board, group, task)
-                        }}
-                      >
-                        Duplicate task
-                      </MenuItem>
-                    </Menu>
-                  </span>
-
-                  <tr>
-                    <td className='checkbox-cell'>
+              {group.tasks.map((task, index) => (
+                <React.Fragment key={`task-${task.id}`}>
+                  <tr
+                    className='task-row'
+                    style={{
+                      backgroundColor: editingTaskId === task.id ? 'rgb(208,228,252)' : '', // Correct syntax
+                    }}
+                  >
+                    {' '}
+                    <td className={'checkbox-cell'}>
                       <Checkbox
                         checked={checkedTasksList.some(
                           (checkedTask) =>
@@ -306,44 +279,113 @@ export function GroupPreview({
                         onChange={(event) => handleTaskChecked(event, task)}
                       />
                     </td>
-                    <td className='task-cell'>
-                      {editingTaskId === task.id ? (
-                        <Input
-                          autoFocus
-                          type='text'
-                          value={existingItemTempTitle}
-                          onChange={(event) => setExistingItemTempTitle(event.target.value)}
-                          onKeyDown={(event) => {
-                            if (event.key === 'Enter') handleSave(task)
-                            if (event.key === 'Escape') handleCancel()
-                          }}
-                          onBlur={handleCancel}
-                          sx={{
-                            width: `${existingItemTempTitle.length + 2.5}ch`,
-                            minWidth: '2ch',
-                          }}
-                        />
-                      ) : (
-                        <span onClick={() => handleEdit(task.id, task.title)}>{task.title}</span>
-                      )}
+                    <td>
+                      <Link to={`task/${task.id}`}>
+                        <div className='task-cell'>
+                          {editingTaskId === task.id ? (
+                            <Input
+                              className='taskTitleInput '
+                              autoFocus
+                              type='text'
+                              value={existingItemTempTitle}
+                              onChange={(event) => setExistingItemTempTitle(event.target.value)}
+                              onKeyDown={(event) => {
+                                if (event.key === 'Enter') handleSave(task)
+                                if (event.key === 'Escape') handleCancel()
+                              }}
+                              onBlur={handleCancel}
+                              sx={{
+                                width: '100%',
+                                marginRight: '15px',
+                                minWidth: '2ch',
+                                transform: 'translateX(-8px)', // help create the illusion that stuff didnt move when clicking on edit task name
+                              }}
+                            />
+                          ) : (
+                            <span
+                              onClick={(event) => {
+                                // these two ensure that clicking on task name = input (to change task name), and NOT to open task details.
+                                event.preventDefault()
+                                event.stopPropagation()
+                                handleEdit(task.id, task.title)
+                              }}
+                            >
+                              {task.title}
+                            </span>
+                          )}
 
-                      <Link to={`task/${task.id}`} className='open'>
-                        <div>
-                          <SvgIcon iconName={'task_open_icon'} />
-                          <span>Open</span>
+                          <div
+                            className={`openTaskDetails_container ${
+                              editingTaskId === task.id ? 'hide_open' : ''
+                            }`}
+                          >
+                            <SvgIcon iconName={'task_open_icon'} className={'svgOpenIcon'} />
+                            <div>Open</div>
+                          </div>
                         </div>
                       </Link>
                     </td>
-                    <TaskPreview group={group} board={board} task={task} cmpsOrder={cmpsOrder} />
+                    <TaskPreview
+                      key={`preview-${task.id}`}
+                      group={group}
+                      board={board}
+                      task={task}
+                      cmpsOrder={cmpsOrder}
+                    />
+                  </tr>
+                  <tr>
+                    <td colSpan={cmpTitles.length + 2}>
+                      <div className='task-menu'>
+                        <IconButton
+                          onClick={(event) => handleMenuClick(event, task)}
+                          sx={{
+                            borderRadius: 1,
+                            padding: '0px 5px',
+                            '&:hover': { backgroundColor: '#d8d4e4' },
+                          }}
+                        >
+                          <MoreHorizOutlinedIcon sx={{ width: '15px' }} />
+                        </IconButton>
+
+                        <Menu
+                          anchorEl={anchorEl}
+                          open={Boolean(anchorEl) && selectedTask?.id === task.id}
+                          onClose={handleMenuClose}
+                          anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'right',
+                          }}
+                          transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                          }}
+                        >
+                          <MenuItem
+                            onClick={() => {
+                              handleTaskDeleted(board, group, task)
+                            }}
+                          >
+                            Delete task
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => {
+                              handleTaskDuplicate(board, group, task)
+                            }}
+                          >
+                            Duplicate task
+                          </MenuItem>
+                        </Menu>
+                      </div>
+                    </td>
                   </tr>
                 </React.Fragment>
               ))}
               <tr>
+                <td className='checkbox-cell lastone'>
+                  <Checkbox disabled />
+                </td>
                 <td colSpan={cmpTitles.length + 2} className='add-item-row'>
-                  <td className='checkbox-cell last'>
-                    <Checkbox disabled />
-                  </td>
-                  <td style={{ border: 'none', boxShadow: 'none' }}>
+                  <div className='add-item'>
                     <Input
                       type='text'
                       placeholder='+ Add item'
@@ -358,9 +400,10 @@ export function GroupPreview({
                         outline: 'none',
                         background: 'transparent',
                         boxShadow: 'none',
+                        width: '100%',
                       }}
                     />
-                  </td>
+                  </div>
                 </td>
               </tr>
             </tbody>
