@@ -1,5 +1,5 @@
 .sidebar {
-  display:flex;
+  display: flex;
   flex-direction: column;
   border-radius: 0px 8px;
   height: calc(100vh - 60px); // 60 is the height of the navbar
@@ -9,13 +9,11 @@
 
 .sidebar-links,
 .workspace-section {
-
 }
 
-
 .divider {
-  height: 1px; 
-  background-color: #d0d4e4; 
+  height: 1px;
+  background-color: #d0d4e4;
 }
 
 .sidebar-item,

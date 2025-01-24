@@ -22,8 +22,7 @@ const SvgIcon = ({ iconName, options }) => {
         height: 17,
         width: 17,
         alignItems: 'center',
-        //color: '#020101 !important',
-
+        pointerEvents: 'none', // So clicking directly on the SVG won't create an ugly black background
       }}
     ></i>
   )
@@ -66,10 +65,10 @@ export function BoardNavBar() {
     return (
       <>
         <span
-          className = "border-nav-bar-menu"
-          id='basic-button'
+          className="border-nav-bar-menu"
+          id="basic-button"
           aria-controls={open ? 'basic-menu' : undefined}
-          aria-haspopup='true'
+          aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
           style={{
@@ -85,7 +84,7 @@ export function BoardNavBar() {
         </span>
 
         <Menu
-          id='basic-menu'
+          id="basic-menu"
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
@@ -111,6 +110,7 @@ export function BoardNavBar() {
 
   return (
     <Box
+      className="BoardNavBar"
       sx={{
         width: '100%',
         borderBottom: '1px solid #e0e0e0',
@@ -122,8 +122,8 @@ export function BoardNavBar() {
         <Tabs
           value={value}
           onChange={handleChange}
-          aria-label='tabs'
-          variant='scrollable'
+          aria-label="tabs"
+          variant="scrollable"
           TabIndicatorProps={{
             sx: {
               height: '2px',
@@ -138,11 +138,11 @@ export function BoardNavBar() {
               value={tab.value}
               label={
                 <Box
+                  className={'BoardNavBar_text'}
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: '3px',
-                    opacity: 0.8,
                   }}
                 >
                   {/* the icon for the first tab */}
@@ -177,7 +177,7 @@ export function BoardNavBar() {
             },
           }}
         >
-          <AddIcon sx={{ fontSize: '15px', opacity: 0.6 }} />
+          <AddIcon className="BoardNavBar_add-icon" sx={{ fontSize: '15px' }} />
         </IconButton>
       </Box>
     </Box>

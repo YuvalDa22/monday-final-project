@@ -17,13 +17,11 @@
   word-spacing: 0.7px;
 }
 
-.navBar-logo-title{
-  
+.navBar-logo-title {
 }
 
-.navBar-company-name{
+.navBar-company-name {
   font-weight: 900;
-  
 }
 
 .navbar-logo img {
@@ -36,26 +34,20 @@
 .navbar-logo {
   display: flex;
   align-items: center;
-  gap: 6px;  
+  gap: 6px;
 }
-
-
-.appsroundedicon{
-  margin-top: 4px; // Ugly adaptaion to center the icon...
-}
-
 
 .navbar-links {
   display: flex;
   align-items: center;
   gap: 5px;
-
 }
 
 .navbar-link {
   text-decoration: none;
   transition: scale 0.35s ease;
   padding: 6px 9px;
+  color: $primary-text-color;
 }
 
 .navbar-link:hover {
@@ -63,10 +55,8 @@
   border-radius: 10px;
 }
 
-
-.navbar-avatar{
+.navbar-avatar {
   margin-left: 15px;
   display: flex;
-  bottom:2px;
+  bottom: 2px;
 }
-
