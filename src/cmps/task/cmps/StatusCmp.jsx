@@ -5,7 +5,7 @@ import Select from 'react-select'
 export function StatusCmp({ onUpdate, board, info }) {
 	const currentLabel = board?.labels?.find((label) => label.id === info)
 	const style = {
-		backgroundColor: currentLabel?.color || '#fff',
+		backgroundColor: currentLabel?.color,
 	}
 	const statusLabels = board?.labels?.filter((label) => label.id[1] === '1')
 
@@ -19,7 +19,6 @@ export function StatusCmp({ onUpdate, board, info }) {
 			...style,
 			border: 'none',
 			boxShadow: 'none', 
-			// minHeight: '3rem',
            
 		}),
 		option: (provided, { data, isFocused, isSelected }) => ({
@@ -30,13 +29,12 @@ export function StatusCmp({ onUpdate, board, info }) {
 		}),
 		singleValue: (provided) => ({
 			...provided,
-			color: currentLabel?.color || '#333',
-			fontWeight: 'bold',
+			// add styles for individual labels in list
 		}),
 	}
 
 	return (
-		<div style={style}>
+		<>
 			<Select
 				options={statusLabels} 
 				getOptionLabel={(label) => (
@@ -48,12 +46,11 @@ export function StatusCmp({ onUpdate, board, info }) {
 				value={statusLabels.find((label) => label.id === info)}
 				onChange={handleChange}
 				styles={customStyles}
-				isSearchable={true}
 				components={{
 					DropdownIndicator: () => null,
 					IndicatorSeparator: () => null,
 				}}
 			/>
-		</div>
+		</>
 	)
 }

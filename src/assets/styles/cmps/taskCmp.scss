@@ -27,11 +27,6 @@
   font-size: 14px;
 }
 
-/* Display for the formatted date */
-.date-picker-display {
-  display: inline-block;
-}
-
 /* Dropdown (calendar) container */
 .date-picker-dropdown {
   position: absolute;
@@ -40,16 +35,8 @@
   z-index: 10; 
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  overflow: hidden;
 }
 
-/* Custom calendar styling */
-.custom-calendar {
-  border: none;
-  border-radius: 8px;
-  overflow: hidden;
-}
 
 /* Styling for the selected day */
 .custom-calendar .react-datepicker__day--selected {

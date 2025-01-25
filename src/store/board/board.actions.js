@@ -91,7 +91,8 @@ export async function addTask(board, group, task, fromHeader) {
 		groupId: group.id,
 		task: task,
 	})
-	const updatedTasks = fromHeader ? [task, ...group.tasks] : [...group.tasks, task]
+	const updatedTask = {...boardService.getEmptyTask() , ...task}
+	const updatedTasks = fromHeader ? [updatedTask, ...group.tasks] : [...group.tasks, updatedTask]
 	updateBoard(board, group, null, { key: 'tasks', value: updatedTasks })
 }
 

@@ -126,8 +126,8 @@ function getEmptyTask() {
 	return {
 		title: '',
 		archivedAt: 0,
-		status: '',
-		priority: '',
+		status: 'l101',
+		priority: 'l201',
 		description: '',
 		comments: [],
 		checklists: [],
@@ -165,162 +165,210 @@ function _createBoards() {
 	if (!boards || !boards.length) {
 		const boards = [
 			{
-				_id: 'b101',
-				title: 'Board Name',
-				isStarred: false,
-				archivedAt: 1589983468418,
-				createdBy: {
+			  _id: 'b101',
+			  title: 'Board Name',
+			  isStarred: true,
+			  archivedAt: 1589983468418,
+			  createdBy: {
+				_id: 'u101',
+				fullname: 'Abi Abambi',
+				imgUrl: 'http://some-img',
+			  },
+			  archivedItems: [
+				{
+				  id: 'g103',
+				  type: 'group',
+				  archivedAt: 1673894400000,
+				},
+			  ],
+			  style: { backgroundColor: '#f5f5f5' },
+			  labels: [
+				{ id: 'l101', title: '', color: '#c4c4c4' },
+				{ id: 'l102', title: 'Done', color: '#00c875' },
+				{ id: 'l103', title: 'Working on it', color: '#fdab3d' },
+				{ id: 'l104', title: 'Stuck', color: '#df2f4a' },
+				{ id: 'l201', title: '', color: '#c4c4c4' },
+				{ id: 'l202', title: 'Critical ⚠️', color: '#333333' },
+				{ id: 'l203', title: 'High', color: '#401694' },
+				{ id: 'l204', title: 'Medium', color: '#5559df' },
+				{ id: 'l205', title: 'Low', color: '#579bfc' },
+			  ],
+			  members: [
+				{
+				  _id: 'u101',
+				  fullname: 'Tal Tarablus',
+				  imgUrl: 'https://i.pravatar.cc/250?u=mail@ashallendesign.co.uk',
+				},
+				{
+				  _id: 'u102',
+				  fullname: 'Yuval Dadon',
+				  imgUrl: 'https://eu.ui-avatars.com/api/?name=John+Doe&size=250',
+				},
+				{
+				  _id: 'u103',
+				  fullname: 'Ofir Gady',
+				  imgUrl: 'https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250',
+				},
+			  ],
+			  groups: [
+				{
+				  id: 'g101',
+				  title: 'Group 1',
+				  archivedAt: 1589983468418,
+				  tasks: [
+					{
+					  id: 'c101',
+					  title: 'Replace logo',
+					  status: 'l103',
+					  priority: 'l202',
+					  description: 'Update the logo across all marketing materials.',
+					  comments: [
+						{
+						  id: 'ZdPnm1',
+						  txt: 'Please finalize the design.',
+						  createdAt: 1590999817436,
+						  byMember: {
+							_id: 'u102',
+							fullname: 'Yuval Dadon',
+							imgUrl:
+							  'https://eu.ui-avatars.com/api/?name=John+Doe&size=250',
+						  },
+						},
+					  ],
+					  checklists: [
+						{
+						  id: 'YEhmF1',
+						  title: 'Checklist 1',
+						  todos: [
+							{ id: '212jX1', title: 'Design Draft', isDone: true },
+							{ id: '212jX2', title: 'Approval', isDone: false },
+						  ],
+						},
+					  ],
+					  memberIds: ['u102'],
+					  labelIds: ['l103', 'l202'],
+					  dueDate: 16156215211,
+					  style: { bgColor: '#f8d7da' },
+					},
+					{
+					  id: 'c102',
+					  title: 'Add Samples',
+					  status: 'l104',
+					  priority: 'l201',
+					  description: 'Collect and upload new sample files.',
+					  comments: [],
+					  checklists: [],
+					  memberIds: ['u101'],
+					  labelIds: ['l101'],
+					  dueDate: null,
+					  style: { bgColor: '#d1ecf1' },
+					},
+				  ],
+				  style: { color: 'red' },
+				},
+				{
+				  id: 'g102',
+				  title: 'Group 2',
+				  tasks: [
+					{
+					  id: 'c103',
+					  title: 'Do that',
+					  status: 'l102',
+					  priority: 'l204',
+					  description: 'Complete task as requested.',
+					  comments: [
+						{
+						  id: 'ZdPnm2',
+						  txt: 'Looks good, proceed.',
+						  createdAt: 1590999817436,
+						  byMember: {
+							_id: 'u101',
+							fullname: 'Tal Tarablus',
+							imgUrl:
+							  'https://i.pravatar.cc/250?u=mail@ashallendesign.co.uk',
+						  },
+						},
+					  ],
+					  checklists: [
+						{
+						  id: 'YEhmF2',
+						  title: 'Steps',
+						  todos: [
+							{ id: '212jX3', title: 'Gather resources', isDone: true },
+							{ id: '212jX4', title: 'Implement', isDone: false },
+						  ],
+						},
+					  ],
+					  memberIds: ['u103'],
+					  labelIds: ['l102', 'l204'],
+					  dueDate: 16156215211,
+					  style: { bgColor: '#fff3cd' },
+					},
+					{
+					  id: 'c104',
+					  title: 'Help me',
+					  status: 'l103',
+					  priority: 'l202',
+					  description: 'Urgent task requires support.',
+					  comments: [
+						{
+						  id: 'ZdPnm3',
+						  txt: 'I will handle this today.',
+						  createdAt: 1590999817436,
+						  byMember: {
+							_id: 'u102',
+							fullname: 'Yuval Dadon',
+							imgUrl:
+							  'https://eu.ui-avatars.com/api/?name=John+Doe&size=250',
+						  },
+						},
+					  ],
+					  checklists: [],
+					  memberIds: ['u101', 'u102', 'u103'],
+					  labelIds: ['l104'],
+					  dueDate: 16256215211,
+					  style: { bgColor: '#cce5ff' },
+					},
+				  ],
+				  style: { color: 'purple' },
+				},
+			  ],
+			  activities: [
+				{
+				  id: 'a101',
+				  txt: 'Changed Color',
+				  createdAt: 154514,
+				  byMember: {
 					_id: 'u101',
 					fullname: 'Abi Abambi',
 					imgUrl: 'http://some-img',
+				  },
+				  task: {
+					id: 'c101',
+					title: 'Replace Logo',
+				  },
 				},
-				archivedItems: [
-					{
-						id: 'g103',
-						type: 'group',
-						archivedAt: 1673894400000,
-					},
-				],
-				style: {},
-				labels: [
-					// Status Labels (l101 - l199)
-					{ id: 'l101', title: '', color: '#c4c4c4' },
-					{ id: 'l102', title: 'Done', color: '#00c875' },
-					{ id: 'l103', title: 'Working on it', color: '#fdab3d' },
-					{ id: 'l104', title: 'Stuck', color: '#df2f4a' },
-
-					// Priority Labels (l201 - l299)
-					{ id: 'l201', title: 'Critical ⚠️', color: '#333333' },
-					{ id: 'l202', title: 'High', color: '#401694' },
-					{ id: 'l203', title: 'Medium', color: '#5559df' },
-					{ id: 'l204', title: 'Low', color: '#579bfc' },
-				],
-				members: [
-					{
-						_id: 'u101',
-						fullname: 'Tal Tarablus',
-						imgUrl: 'https://i.pravatar.cc/250?u=mail@ashallendesign.co.uk',
-					},
-					{
-						_id: 'u102',
-						fullname: 'Yuval Dadon',
-						imgUrl: 'https://eu.ui-avatars.com/api/?name=John+Doe&size=250',
-					},
-					{
-						_id: 'u103',
-						fullname: 'Ofir Gady',
-						imgUrl: 'https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250',
-					},
-				],
-				groups: [
-					{
-						id: 'g101',
-						title: 'Group 1',
-						archivedAt: 1589983468418,
-						tasks: [
-							{
-								id: 'c101',
-								title: 'Replace logo',
-								memberIds: ['u102'],
-							},
-							{
-								id: 'c102',
-								title: 'Add Samples',
-								memberIds: ['u101'],
-							},
-						],
-						style: { color: 'red' },
-					},
-					{
-						id: 'g102',
-						title: 'Group 2',
-						tasks: [
-							{
-								id: 'c103',
-								title: 'Do that',
-								archivedAt: 1589983468418,
-								memberIds: ['u103'],
-								byMember: {
-									_id: 'u101',
-									username: 'Tal',
-									fullname: 'Tal Tarablus',
-									imgUrl:
-										'http://res.cloudinary.com/shaishar9/image/upload/v1590850482/j1glw3c9jsoz2py0miol.jpg',
-								},
-							},
-
-							{
-								id: 'c104',
-								title: 'Help me',
-								status: 'l101', // monday
-								priority: 'l201',
-								description: 'description',
-								comments: [
-									{
-										id: 'ZdPnm',
-										txt: 'also @yaronb please CR this',
-										createdAt: 1590999817436,
-										byMember: {
-											_id: 'u101',
-											fullname: 'Tal Tarablus',
-											imgUrl:
-												'http://res.cloudinary.com/shaishar9/image/upload/v1590850482/j1glw3c9jsoz2py0miol.jpg',
-										},
-									},
-								],
-								checklists: [
-									{
-										id: 'YEhmF',
-										title: 'Checklist',
-										todos: [
-											{
-												id: '212jX',
-												title: 'To Do 1',
-												isDone: false,
-											},
-										],
-									},
-								],
-								memberIds: ['u101', 'u102', 'u103'],
-								labelIds: ['l101', 'l102'],
-								dueDate: 16156215211,
-								byMember: {
-									_id: 'u101',
-									username: 'Tal',
-									fullname: 'Tal Tarablus',
-									imgUrl:
-										'http://res.cloudinary.com/shaishar9/image/upload/v1590850482/j1glw3c9jsoz2py0miol.jpg',
-								},
-								style: {
-									bgColor: '#26de81',
-								},
-							},
-						],
-						style: { color: 'purple' },
-					},
-				],
-				activities: [
-					{
-						id: 'a101',
-						txt: 'Changed Color',
-						createdAt: 154514,
-						byMember: {
-							_id: 'u101',
-							fullname: 'Abi Abambi',
-							imgUrl: 'http://some-img',
-						},
-						task: {
-							id: 'c101',
-							title: 'Replace Logo',
-						},
-					},
-				],
-
-				cmpsOrder: ['status', 'priority', 'memberIds', 'dueDate'],
-				cmpTitles: ['Status', 'Priority', 'Members', 'Due Date'],
-				groupSummary: [null, null, null],
+				{
+				  id: 'a102',
+				  txt: 'Archived a task',
+				  createdAt: 164514,
+				  byMember: {
+					_id: 'u103',
+					fullname: 'Ofir Gady',
+					imgUrl:
+					  'https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250',
+				  },
+				  task: {
+					id: 'c103',
+					title: 'Do that',
+				  },
+				},
+			  ],
+			  cmpsOrder: ['status', 'priority', 'memberIds', 'dueDate'],
+			  cmpTitles: ['Status', 'Priority', 'Members', 'Due Date'],
+			  groupSummary: [null, null, null],
 			},
-		]
+		  ];
 
 		utilService.saveToStorage(STORAGE_KEY, boards)
 	}

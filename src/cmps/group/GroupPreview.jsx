@@ -3,7 +3,6 @@ import { SuggestedActions } from '../SuggestedActions.jsx'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Input from '@mui/joy/Input'
 import { addTask, removeTask, updateBoard, duplicateTask } from '../../store/board/board.actions'
-import { TaskPreview } from '../task/TaskPreview'
 import { utilService } from '../../services/util.service'
 import Checkbox from '@mui/material/Checkbox'
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined'
@@ -12,6 +11,7 @@ import { getSvg } from '../../services/util.service'
 import { Menu, MenuItem, IconButton, Box, Paper, InputBase } from '@mui/material'
 import { boardService } from '../../services/board.service.js'
 import { BlockPicker, CirclePicker } from 'react-color'
+import {DynamicCmp} from '../task/DynamicCmp.jsx'
 import * as Popover from '@radix-ui/react-popover'
 export function GroupPreview({
 	board,
@@ -155,7 +155,7 @@ export function GroupPreview({
 								{isEditingGroupTitle ? (
 									<Paper
 										component='form'
-                    className='gh-title-input-container flex align-center input'>
+										className='gh-title-input-container flex align-center input'>
 										<Popover.Root open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
 											<Popover.Trigger asChild>
 												<Box className='color-picker-btn' onMouseDown={(e) => e.preventDefault()} />
@@ -218,7 +218,9 @@ export function GroupPreview({
 										/>
 									</Paper>
 								) : (
-									<h4 className='gh-title-h4' onClick={() => setIsEditingGroupTitle(true)}>{group.title || 'New Group'}</h4>
+									<h4 className='gh-title-h4' onClick={() => setIsEditingGroupTitle(true)}>
+										{group.title || 'New Group'}
+									</h4>
 								)}
 							</div>
 						</div>
@@ -301,13 +303,13 @@ export function GroupPreview({
 															event.preventDefault() // without this , if we click on the editable text inside <input> we get sent to task details, not good
 														}}
 														onBlur={handleCancel}
-                            sx={{
-                              width: '100%',
-                              marginRight: '15px',
-                              minWidth: '2ch',
-                              alignContent: 'center',
-                              transform: 'translateX(-8px)', // help create the illusion that stuff didnt move when clicking on edit task name
-                            }}
+														sx={{
+															width: '100%',
+															marginRight: '15px',
+															minWidth: '2ch',
+															alignContent: 'center',
+															transform: 'translateX(-8px)', // help create the illusion that stuff didnt move when clicking on edit task name
+														}}
 													/>
 												) : (
 													<span
@@ -330,13 +332,19 @@ export function GroupPreview({
 												</div>
 											</Link>
 										</td>
-										<TaskPreview
-											key={`preview-${task.id}`}
-											group={group}
-											board={board}
-											task={task}
-											cmpsOrder={cmpsOrder}
-										/>
+										{cmpsOrder.map((cmp, idx) => (
+											<td key={idx} className='data-cell'>
+												<DynamicCmp
+													cmp={cmp}
+													board={board}
+													info={task[cmp]} // Pass the current value for this key
+													onUpdate={(data) => {
+														console.log('Updating: ', cmp, 'with data:', data)
+														updateBoard(board, group, task, { key: cmp, value: data })
+													}}
+												/>
+											</td>
+										))}
 									</tr>
 									<tr>
 										<td colSpan={cmpTitles.length + 2}>
@@ -388,7 +396,7 @@ export function GroupPreview({
 								<td colSpan={cmpTitles.length + 2} className='add-item-row'>
 									<div className='add-item'>
 										<Input
-                    className='input'
+											className='input'
 											type='text'
 											placeholder='+ Add item'
 											value={newItemTempTitle}
