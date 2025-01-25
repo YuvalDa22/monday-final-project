@@ -184,39 +184,16 @@ function _createBoards() {
 				style: {},
 				labels: [
 					// Status Labels (l101 - l199)
-					{ id: 'l101', title: 'Done', color: '#00c875' },
-					{ id: 'l102', title: 'In Progress', color: '#fdab3d' },
-					{ id: 'l103', title: 'Stuck', color: '#df2f4a' },
-					{ id: 'l104', title: 'Ready', color: '#9cd326' },
-					{ id: 'l105', title: 'Waiting for Review', color: '#ffcb00' },
+					{ id: 'l101', title: '', color: '#c4c4c4' },
+					{ id: 'l102', title: 'Done', color: '#00c875' },
+					{ id: 'l103', title: 'Working on it', color: '#fdab3d' },
+					{ id: 'l104', title: 'Stuck', color: '#df2f4a' },
 
 					// Priority Labels (l201 - l299)
-					{ id: 'l201', title: 'High', color: '#401694' },
-					{ id: 'l202', title: 'Medium', color: '#5559df' },
-					{ id: 'l203', title: 'Low', color: '#579bfc' },
-					{ id: 'l204', title: 'Critical ⚠️', color: '#333333' },
-					{ id: 'l205', title: 'Optional', color: '#9d99ff' },
-
-					// Member Labels (l301 - l399)
-					{ id: 'l301', title: 'Frontend Team', color: '#579bfc' },
-					{ id: 'l302', title: 'Backend Team', color: '#bbd676' },
-					{ id: 'l303', title: 'QA Team', color: '#f5dd29' },
-					{ id: 'l304', title: 'Product Team', color: '#fdab3d' },
-					{ id: 'l305', title: 'Design Team', color: '#ff642e' },
-
-					// Task Type Labels (l401 - l499)
-					{ id: 'l401', title: 'Bug', color: '#a25ddc' },
-					{ id: 'l402', title: 'Feature', color: '#7f5347' },
-					{ id: 'l403', title: 'Chore', color: '#d3d3d3' },
-					{ id: 'l404', title: 'Epic', color: '#ffadad' },
-					{ id: 'l405', title: 'Improvement', color: '#29cc8e' },
-
-					// Custom Labels (l501 - l599)
-					{ id: 'l501', title: 'Customer Request', color: '#ff9d76' },
-					{ id: 'l502', title: 'Blocked', color: '#4eccc6' },
-					{ id: 'l503', title: 'Research', color: '#b3bac5' },
-					{ id: 'l504', title: 'Planning', color: '#2a71d0' },
-					{ id: 'l505', title: 'Delayed', color: '#ff0000' },
+					{ id: 'l201', title: 'Critical ⚠️', color: '#333333' },
+					{ id: 'l202', title: 'High', color: '#401694' },
+					{ id: 'l203', title: 'Medium', color: '#5559df' },
+					{ id: 'l204', title: 'Low', color: '#579bfc' },
 				],
 				members: [
 					{
