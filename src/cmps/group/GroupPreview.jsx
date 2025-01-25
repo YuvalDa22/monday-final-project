@@ -123,7 +123,7 @@ export function GroupPreview({
 
   const handleGroupTitleSave = () => {
     if (groupTempTitle.trim() && groupTempTitle !== group.title) {
-      updateBoard(null, group, null, {
+      updateBoard(board, group, null, {
         key: 'title',
         value: groupTempTitle,
       })
