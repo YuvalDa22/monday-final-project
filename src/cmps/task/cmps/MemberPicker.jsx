@@ -3,13 +3,19 @@ import Select from 'react-select';
 import { getSvg } from '../../../services/util.service';
 
 const SvgIcon = ({ iconName, options, className }) => {
-  return <i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }} className={`svg-icon ${className || ''}`}></i>;
+  return (
+    <i
+      dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}
+      className={`svg-icon ${className || ''}`}
+    ></i>
+  );
 };
 
 export function MemberPicker({ info, onUpdate, board }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+  // Extract selected members for the dropdown
   const selectedMembers = info
     ?.map((memberId) => {
       const member = board?.members?.find((member) => member._id === memberId);
@@ -59,40 +65,29 @@ export function MemberPicker({ info, onUpdate, board }) {
   ];
 
   const customComponents = {
+    // Customize Group rendering
     Group: (props) => (
       <div className="custom-group">
         <div className="group-heading">{props.children}</div>
       </div>
     ),
-    Menu: (props) => (
-      <div className="custom-menu">
-        {props.children}
-      </div>
-    ),
-    MenuList: (props) => (
-      <div className="custom-menu-list">
-        {props.children}
-      </div>
-    ),
+    // Customize Menu rendering
+    Menu: (props) => <div className="custom-menu">{props.children}</div>,
+    // Customize MenuList for additional wrapping styles
+    MenuList: (props) => <div className="custom-menu-list">{props.children}</div>,
+    // Customize individual option rendering
     Option: (props) => (
-      <div
-        {...props.innerRef}
-        {...props.innerProps}
-        className="custom-option"
-      >
+      <div {...props.innerRef} {...props.innerProps} className="custom-option">
         {props.data.label}
       </div>
     ),
     MultiValueContainer: (props) => (
-      <div className='member-selected-name-container'>
-        {props.children}
-      </div>
+      <div className="member-selected-name-container">{props.children}</div>
     ),
     ClearIndicator: null,
     DropdownIndicator: null,
   };
 
-  // ClickAwayListener implementation
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -113,10 +108,7 @@ export function MemberPicker({ info, onUpdate, board }) {
 
   return (
     <div className="member-picker" ref={dropdownRef}>
-      <div
-        className="member-avatars"
-        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-      >
+      <div className="member-avatars" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
         {info?.length > 0 ? (
           renderAvatars()
         ) : (
@@ -143,7 +135,6 @@ export function MemberPicker({ info, onUpdate, board }) {
               }),
               menu: (base) => ({
                 ...base,
-                backgroundColor: 'salmon',
               }),
               menuList: (base) => ({
                 ...base,
@@ -156,6 +147,3 @@ export function MemberPicker({ info, onUpdate, board }) {
     </div>
   );
 }
-
-
-
