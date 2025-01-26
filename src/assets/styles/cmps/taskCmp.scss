@@ -1,102 +1,217 @@
+.label-picker-cmp {
+	position: relative;
+	width: 100%;
+}
 
-.label-list {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .label-box {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    color: white;
-  }
-  
-  .label-box:hover {
-    opacity: 0.8;
-  }
-  
- /* Container for the DatePicker */
+.label-trigger {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	padding: 8px;
+	border-radius: 4px;
+	text-align: center;
+	color: white;
+
+	&:hover {
+		opacity: 0.8;
+	}
+}
+
+.label-box {
+	color: white;
+}
+
+/* General Date Picker Container */
 .date-picker-container {
-  position: relative;
-  display: inline-block;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
+	position: relative;
+	display: inline-block;
+	font-family: 'Roboto', sans-serif;
 }
 
 /* Dropdown (calendar) container */
 .date-picker-dropdown {
-  position: absolute;
-  top: 100%; 
-  left: 0;
-  z-index: 10; 
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	position: absolute;
+	top: 100%;
+	left: 0;
+	z-index: 10;
+	background-color: #fff;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
+/* Modern Calendar Styling */
+.modern-calendar {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
 
-/* Styling for the selected day */
-.custom-calendar .react-datepicker__day--selected {
-  background-color: #0073e6;
-  color: white;
-  border-radius: 50%; 
+/* Custom Header */
+.custom-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 8px;
+	border-radius: 8px;
+
+	button {
+		border: none;
+		background-color: transparent;
+		font-size: 1rem;
+		cursor: pointer;
+		color: $primary-text-color;
+
+		&:disabled {
+			color: #ccc;
+		}
+
+		&:hover:not(:disabled) {
+			color: #005bb5;
+		}
+	}
+
+	span {
+		font-weight: bold;
+		font-size: 1.1rem;
+		color: #333;
+	}
+}
+
+.react-datepicker__aria-live {
+	border: none !important;
+}
+
+.react-datepicker__header {
+	background-color: #e1eefd !important;
+	border: none;
+}
+
+/* Styling for selected day */
+.react-datepicker__day--selected {
+	background-color: #0073e6 !important;
+	color: white !important;
+	border-radius: 50% !important;
+	font-weight: bold;
 }
 
 /* Styling for hover effect on days */
-.custom-calendar .react-datepicker__day:hover {
-  background-color: #f0f0f0;
-  border-radius: 50%;
+.react-datepicker__day:hover {
+	background-color: #abd6ff !important;
+	border-radius: 50% !important;
 }
 
+/* Today Indicator */
+.react-datepicker__day--today {
+	font-weight: bold;
+	border: 1px solid #0073e6;
+	border-radius: 50%;
+	color: #0073e6;
+}
 
+/* Month Navigation */
+.react-datepicker__navigation {
+	top: 16px !important;
+	line-height: 1.8 !important;
+	background: transparent !important;
+	outline: none;
+	border: none;
+
+	&::before {
+		content: '';
+		display: inline-block;
+		border: solid #0073e6;
+		border-width: 0 3px 3px 0;
+		padding: 6px;
+		transform: rotate(-135deg);
+		margin: auto;
+	}
+
+	&:hover::before {
+		border-color: #005bb5;
+	}
+}
 /* Styling for the MemberPicker */
-
-//* Container for the entire MemberPicker */
 .member-picker {
-  position: relative;
-  width: 100%; /* Stretch the container to fit the full width of the parent td */
-  height: 100%; /* Stretch to fit the full height of the parent td */
-}
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: relative;
 
-.member-avatars {
-  display: flex;
-  justify-content: center; /* Center content horizontally */
-  align-items: center;    /* Center content vertically */
-  width: 100%;            /* Stretch to fill the parent container's width */
-  height: 100%;           /* Stretch to fill the parent container's height */
-  cursor: pointer;
-  background-color: #fff;
-}
+	.member-avatars {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 36px;
+		width: 100%;
+		position: relative; /* Allows absolute positioning within */
 
-/* Individual member avatar */
-.member-avatar {
-  width: 36px;
-  border-radius: 50%;
-  position: relative;
-  border: 2px solid white;
-}
+		.member-avatar {
+			height: 100%;
+			max-width: 36px;
+			border-radius: 50%;
+			object-fit: cover;
+			position: absolute; /* Centering the avatar */
+			left: 50%;
+			transform: translateX(-50%);
+		}
+	}
 
-/* Dropdown container */
-.dropdown-container {
-  position: absolute;
-  top: 50px;
-  left: 0;
-  z-index: 1000;
-  width:inherit;
-}
+	.dropdown-container {
+		position: absolute;
+		top: 110%;
+		z-index: 10;
+		box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+		padding: 1em;
+		background-color: white;
+		border-radius: 8px;
+		min-width: 20rem;
 
-/* Dropdown option */
-.member-option {
-  display: flex;
-  align-items: center;
-}
+		.member-selected-name-container {
+			background-color: rgb(229, 244, 255);
+			border-radius: 20px;
+			white-space: nowrap;
+			width: auto;
+			margin: 3px;
+			display: flex;
+			align-items: center;
+		}
 
-/* Dropdown option image */
-.member-option-img {
-  height: 20px;
-  border-radius: 50%;
-  margin-right: 8px;
+		.custom-menu {
+			border-top: 1px solid black;
+			// box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		}
+
+		.custom-menu-list {
+			max-height: 200px;
+			overflow-y: auto;
+		}
+
+		.custom-option {
+			transition: background-color 0.2s;
+			padding: 4px;
+			border-radius: 8px;
+
+			&:hover {
+				background-color: rgba(196, 196, 196, 0.2);
+			}
+			.member-option {
+				display: flex;
+				align-items: center;
+				white-space: nowrap;
+			}
+
+			.member-option-img {
+				border-radius: 50%;
+				width: 30px;
+				height: 30px;
+				margin-right: 10px;
+			}
+		}
+
+		.custom-group {
+			.group-heading {
+				margin-top: 1rem;
+			}
+		}
+	}
 }

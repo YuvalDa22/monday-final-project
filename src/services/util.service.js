@@ -8,7 +8,6 @@ export const utilService = {
 	animateCSS,
 	getSvg,
 	formatDate,
-	createUniqueColorPicker,
 }
 
 function makeId(length = 5) {
@@ -22,6 +21,7 @@ function makeId(length = 5) {
 
 function saveToStorage(key, value) {
 	localStorage[key] = JSON.stringify(value)
+	localStorage[key] = JSON.stringify(value)
 }
 
 function loadFromStorage(key, defaultValue = null) {
@@ -31,6 +31,7 @@ function loadFromStorage(key, defaultValue = null) {
 
 function animateCSS(el, animation, options = {}) {
 	const { isRemoveClass = true } = options
+
 
 	const prefix = 'animate__'
 	return new Promise((resolve) => {
@@ -45,6 +46,7 @@ function animateCSS(el, animation, options = {}) {
 
 		el.addEventListener('animationend', handleAnimationEnd, { once: true })
 	})
+		
 }
 
 export function debounce(func, delay) {
@@ -59,6 +61,7 @@ export function debounce(func, delay) {
 }
 
 export function getExistingProperties(obj) {
+
 	const truthyObj = {}
 	for (const key in obj) {
 		const val = obj[key]
@@ -69,9 +72,9 @@ export function getExistingProperties(obj) {
 	return truthyObj
 }
 
+
 export function getSvg(name, options = { height: '22', width: '22', color: 'currentColor' }) {
 	const { height, width, color } = options
-
 	if (!svgs[name]) return ''
 	// return svgs[name];
 	return svgs[name]
