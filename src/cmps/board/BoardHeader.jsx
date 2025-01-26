@@ -13,6 +13,9 @@ export function BoardHeader({ board, onAddGroup, onAddTask }) {
 
   const handleBoardTitleSave = () => {
     if (boardTempTitle.trim() && boardTempTitle !== board?.title) {
+      board.activities.unshift(
+        createActivityLog(board._id, null, null, 'Board Name Changed', ``, board.title) // prevValue = board.title
+      )
       updateBoard(board, null, null, { key: 'title', value: boardTempTitle })
     }
     setIsEditingBoardTitle(false)

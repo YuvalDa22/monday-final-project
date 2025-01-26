@@ -18,11 +18,7 @@ const SvgIcon = ({ iconName, options, customStyle }) => {
 
 export function AdditionalBoardActions() {
   return (
-    <Stack
-      direction={'row'}
-      gap={'10px'}
-      style={{ display: 'flex', alignItems: 'center' }}
-    >
+    <Stack direction={'row'} gap={'10px'} style={{ display: 'flex', alignItems: 'center' }}>
       <IconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
         <SvgIcon
           iconName={'additionalBoardActions_integrate'}
@@ -31,10 +27,7 @@ export function AdditionalBoardActions() {
         <span>Integrate</span>
       </IconButton>
       <IconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
-        <SvgIcon
-          iconName={'additionalBoardActions_automate'}
-          options={{ height: 20, width: 20 }}
-        />
+        <SvgIcon iconName={'additionalBoardActions_automate'} options={{ height: 20, width: 20 }} />
         <span>Automate / 1</span>
       </IconButton>
       <IconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>

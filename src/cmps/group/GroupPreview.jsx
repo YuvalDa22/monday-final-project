@@ -81,6 +81,9 @@ export function GroupPreview({
 
   const handleSave = (task) => {
     if (existingItemTempTitle.trim() && existingItemTempTitle !== '') {
+      board.activities.unshift(
+        createActivityLog(board._id, group.id, task.id, 'Task Name Changed', ``, task.title) // prevValue = task.title
+      )
       updateBoard(board, group, task, {
         key: 'title',
         value: existingItemTempTitle,
@@ -123,13 +126,16 @@ export function GroupPreview({
 
   const handleGroupTitleSave = () => {
     if (groupTempTitle.trim() && groupTempTitle !== group.title) {
-      updateBoard(null, group, null, {
+      board.activities.unshift(
+        createActivityLog(board._id, group.id, null, 'Group Name Changed', ``, group.title) // prevValue = group.title
+      )
+      updateBoard(board, group, null, {
         key: 'title',
         value: groupTempTitle,
       })
-    }
+    } else setGroupTempTitle(group.title) // sync the state with actual group title incase first if failed
     setIsEditingGroupTitle(false)
-    setIsPopoverOpen(false)
+    setIsPopoverOpen(false) // what is this
   }
 
   return (
@@ -193,6 +199,16 @@ export function GroupPreview({
                                 },
                               }}
                               onChangeComplete={(color) => {
+                                board.activities.unshift(
+                                  createActivityLog(
+                                    board._id,
+                                    group.id,
+                                    null,
+                                    'Group Color Changed',
+                                    ``,
+                                    group.style.color
+                                  ) // prevValue = group.style.color
+                                )
                                 updateBoard(board, group, null, {
                                   key: 'style',
                                   value: { color: color.hex },

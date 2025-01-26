@@ -13,7 +13,7 @@ export function MemberPicker({ info, onUpdate, board }) {
 
   const handleChange = (selected) => {
     const selectedIds = selected.map((option) => option.value)
-    onUpdate(selectedIds)
+    onUpdate({ title: selectedIds })
   }
 
   const renderAvatars = () =>

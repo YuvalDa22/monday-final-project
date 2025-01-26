@@ -29,10 +29,7 @@ export function TaskDetails() {
   return (
     <div className={`task-details ${isExiting ? 'notActive' : ''}`}>
       <div>
-        <IconButton
-          sx={{ padding: '2px', borderRadius: '5px' }}
-          onClick={handleClose}
-        >
+        <IconButton sx={{ padding: '2px', borderRadius: '5px' }} onClick={handleClose}>
           <CloseOutlinedIcon sx={{ opacity: 0.5 }} />
         </IconButton>
       </div>
@@ -40,7 +37,7 @@ export function TaskDetails() {
       <div className='task-details-title'>Task ID : {taskId}</div>
 
       <div>
-        <TaskDetails_NavBar />
+        <TaskDetails_NavBar taskId={taskId} />
       </div>
     </div>
   )

@@ -16,6 +16,7 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import ListIcon from '@mui/icons-material/List'
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined'
+import { SingleTaskActivityLog } from './cmps/SingleTaskActivityLog'
 
 const SvgIcon = ({ iconName, options }) => {
   return (
@@ -32,7 +33,7 @@ const SvgIcon = ({ iconName, options }) => {
   )
 }
 
-export function TaskDetails_NavBar() {
+export function TaskDetails_NavBar({ taskId }) {
   const [value, setValue] = useState('1')
   const [tabs, setTabs] = useState([
     { value: '1', label: 'Updates / 1' },
@@ -296,8 +297,7 @@ export function TaskDetails_NavBar() {
               Drag & drop or add files here
             </Typography>
             <Typography variant='h7' color='gray' sx={{ fontSize: 13 }}>
-              Upload, comment and review all files in this item to easily
-              collaborate in context
+              Upload, comment and review all files in this item to easily collaborate in context
             </Typography>
           </Box>
           <Button
@@ -313,7 +313,7 @@ export function TaskDetails_NavBar() {
         </Box>
       </TabPanel>
       <TabPanel value='3'>
-        <h2>Not yet implemented</h2>
+        <SingleTaskActivityLog taskId={taskId} />
       </TabPanel>
     </TabContext>
   )
