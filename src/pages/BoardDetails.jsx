@@ -70,7 +70,7 @@ export function BoardDetails() {
     }
     const updatedGroups = fromHeader ? [newGroup, ...board?.groups] : [...board?.groups, newGroup]
     updateBoard(board, null, null, { key: 'groups', value: updatedGroups })
-    console.log(board, ' UPDATED BOARD')
+    // console.log(board, ' UPDATED BOARD')
   }
 
   const handleTasksChecked = (newArrayOfTasks, action) => {
