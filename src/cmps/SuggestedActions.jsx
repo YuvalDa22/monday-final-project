@@ -17,7 +17,7 @@ export function SuggestedActions({ board, group, updateFooterGroupRemoved }) {
   }
   const handleRemoveGroup = () => {
     updateFooterGroupRemoved(null, group)
-    removeGroup(board, group)
+    removeGroup(group)
   }
   return (
     <div className='sa-main-container'>

@@ -5,11 +5,12 @@ import { useEffect, useState } from 'react'
 import {
   addTask,
   updateBoard,
-  loadBoards,
   duplicateTask,
   removeMultipleTasks,
   moveMultipleTasksIntoSpecificGroup,
   duplicateMultipleTasks,
+  getBoardById,
+  logActivity,
 } from '../store/board/board.actions'
 import { showErrorMsg } from '../services/event-bus.service'
 import { Button, IconButton, Menu, MenuItem } from '@mui/material'
@@ -26,8 +27,8 @@ const SvgIcon = ({ iconName, options }) => {
 
 export function BoardDetails() {
   const { boardId } = useParams()
-  const allBoards = useSelector((storeState) => storeState.boardModule.boards)
-  const board = allBoards.find((board) => board._id === boardId)
+  const board = useSelector((storeState) => storeState.boardModule.currentBoard)
+
   const [checkedTasksList, setCheckedTasksList] = useState([])
 
   const [anchorEl, setAnchorEl] = useState(null)
@@ -41,26 +42,27 @@ export function BoardDetails() {
   }
 
   useEffect(() => {
-    onLoadBoards()
+    onLoadBoard()
   }, [])
 
-  async function onLoadBoards() {
+  async function onLoadBoard() {
     try {
-      await loadBoards()
+      await getBoardById(boardId)
     } catch (error) {
       showErrorMsg('Cannot load boards')
       console.error(error)
     }
   }
 
-  if (!allBoards || allBoards.length === 0) return <div>Loading...</div>
+  if (!board) return <div>Loading...</div>
+  console.log('Activities = ', board.activities)
 
   function onAddTask(group, initialTitle = 'New Task', fromHeader) {
     const newTask = { id: utilService.makeId(), title: initialTitle }
     addTask(board, group, newTask, fromHeader)
   }
 
-  const onAddGroup = (fromHeader) => {
+  const onAddGroup = async (fromHeader) => {
     if (!board) return
     let newGroup = boardService.getEmptyGroup()
     newGroup = {
@@ -70,19 +72,17 @@ export function BoardDetails() {
     }
     const updatedGroups = fromHeader ? [newGroup, ...board?.groups] : [...board?.groups, newGroup]
 
-    board.activities.unshift(
-      boardService.createActivityLog(
-        board._id,
-        newGroup.id,
-        null,
-        'Group Created',
-        ``,
-        board.groups
-      )
-    ) // prevValue = the previous board groups without the new group
-    updateBoard(board, null, null, { key: 'groups', value: updatedGroups })
+    updateBoard(null, null, { key: 'groups', value: updatedGroups })
+    logActivity(newGroup, null, null, 'groupCreated')
+    // await board.activities.unshift(boardService.createActivityLog(
+    //   board._id,
+    //   newGroup.id,
+    //   null,
+    //   'Group Created',
+    //   ``,
+    //   board.groups
+    // )) // prevValue = the previous board groups without the new group
   }
-
   const handleTasksChecked = (newArrayOfTasks, action) => {
     if (action === 'add') {
       setCheckedTasksList((prev) => {

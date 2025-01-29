@@ -1,4 +1,5 @@
 export const SET_BOARDS = 'SET_BOARDS'
+export const SET_BOARD = 'SET_BOARD'
 export const REMOVE_BOARD = 'REMOVE_BOARD'
 export const ADD_BOARD = 'ADD_BOARD'
 export const UPDATE_BOARD = 'UPDATE_BOARD'
@@ -9,6 +10,7 @@ export const SET_IS_LOADING = 'SET_IS_LOADING'
 export const ADD_TASK = 'ADD_TASK'
 
 const initialState = {
+  currentBoard: null,
   boards: [],
   filterBy: {},
   isLoading: false,
@@ -16,6 +18,11 @@ const initialState = {
 
 export function boardReducer(state = initialState, cmd) {
   switch (cmd.type) {
+    case SET_BOARD:
+      return {
+        ...state,
+        currentBoard: { ...cmd.board },
+      }
     case SET_BOARDS:
       return {
         ...state,
@@ -50,9 +57,7 @@ export function boardReducer(state = initialState, cmd) {
             ? {
                 ...board,
                 groups: board.groups.map((group) =>
-                  group.id === cmd.groupId
-                    ? { ...group, tasks: [...group.tasks, cmd.task] }
-                    : group
+                  group.id === cmd.groupId ? { ...group, tasks: [...group.tasks, cmd.task] } : group
                 ),
               }
             : board
@@ -67,9 +72,7 @@ export function boardReducer(state = initialState, cmd) {
     case UPDATE_BOARD:
       return {
         ...state,
-        boards: state.boards?.map((board) =>
-          board.id === cmd.board.id ? cmd.board : board
-        ),
+        boards: state.boards?.map((board) => (board.id === cmd.board.id ? cmd.board : board)),
       }
 
     case SET_FILTER_BY:

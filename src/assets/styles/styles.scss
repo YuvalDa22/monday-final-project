@@ -21,10 +21,11 @@
 @import './cmps/boardActionsBar';
 @import './cmps/taskDetails.scss';
 @import './cmps/additionalBoardActions.scss';
-@import './cmps/singleTaskActivityLog.scss';
+@import './cmps/activityLog.scss';
 
 /* Pages */
 @import './pages/homePage';
 @import './pages/login';
 @import './pages/index';
 @import './pages/boardDetails';
+@import './pages/menuFromTheRight.scss';

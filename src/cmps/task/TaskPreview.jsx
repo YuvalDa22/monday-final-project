@@ -14,17 +14,22 @@ export function TaskPreview({ task, cmpsOrder, board, group }) {
             board={board}
             info={task[cmp]} // Pass the current value for this key
             onUpdate={(data) => {
-              board.activities.unshift(
-                boardService.createActivityLog(
-                  board._id,
-                  group.id,
-                  task.id,
-                  `${cmp.charAt(0).toUpperCase() + cmp.slice(1)}`, // make the first letter uppercase
-                  `Changed to ${data.title}`,
-                  null
-                )
-              )
-              updateBoard(board, group, task, { key: cmp, value: data.id })
+              logActivity(group, task, null, {
+                action: 'labelChanged',
+                message: `${cmp.charAt(0).toUpperCase() + cmp.slice(1)}`,
+                free_txt: `Changed to ${data.title}`,
+              })
+              // board.activities.unshift(
+              //   boardService.createActivityLog(
+              //     board._id,
+              //     group.id,
+              //     task.id,
+              //     `${cmp.charAt(0).toUpperCase() + cmp.slice(1)}`, // make the first letter uppercase
+              //     `Changed to ${data.title}`,
+              //     null
+              //   )
+              // )
+              updateBoard(group.id, task.id, { key: cmp, value: data.id })
             }}
           />
         </td>

@@ -4,7 +4,8 @@ import { BoardActionsBar } from './BoardActionsBar'
 import { BoardNavBar } from './BoardNavBar'
 import Input from '@mui/joy/Input'
 import { useState } from 'react'
-import { updateBoard } from '../../store/board/board.actions'
+import { updateBoard, logActivity } from '../../store/board/board.actions'
+import { boardService } from '../../services/board.service'
 
 // Note : We can ignore the props validation error for now
 export function BoardHeader({ board, onAddGroup, onAddTask }) {
@@ -13,12 +14,31 @@ export function BoardHeader({ board, onAddGroup, onAddTask }) {
 
   const handleBoardTitleSave = () => {
     if (boardTempTitle.trim() && boardTempTitle !== board?.title) {
-      board.activities.unshift(
-        createActivityLog(board._id, null, null, 'Board Name Changed', ``, board.title) // prevValue = board.title
-      )
-      updateBoard(board, null, null, { key: 'title', value: boardTempTitle })
+      logActivity(null, null, board.title, {
+        action: 'boardNameChanged',
+        message: 'Board Name Changed',
+        free_txt: `To '${boardTempTitle}'`,
+      })
+      // board.activities.unshift(
+      //   boardService.createActivityLog(
+      //     board._id,
+      //     null,
+      //     null,
+      //     'Board Name Changed',
+      //     `${boardTempTitle}`,
+      //     board.title
+      //   ) // prevValue = board.title
+      // )
+      updateBoard(null, null, { key: 'title', value: boardTempTitle })
     }
     setIsEditingBoardTitle(false)
+  }
+
+  function getTextWidth(text, font = 'normal 501 25px Figtree') {
+    const canvas = document.createElement('canvas')
+    const context = canvas.getContext('2d')
+    context.font = font
+    return context.measureText(text).width // Returns width in pixels
   }
 
   return (
@@ -36,8 +56,12 @@ export function BoardHeader({ board, onAddGroup, onAddTask }) {
             }}
             onBlur={handleBoardTitleSave}
             sx={{
-              width: `${boardTempTitle.length + 2.5}ch`,
-              minWidth: '6ch',
+              padding: '0px',
+              width: `${getTextWidth(boardTempTitle, 'normal 501 25px Figtree') + 10}px`,
+              minWidth: '3ch',
+              fontSize: '25px',
+              alignContent: 'center',
+              fontWeight: '500',
             }}
           />
         ) : (

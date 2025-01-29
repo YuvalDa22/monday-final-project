@@ -2,7 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { SuggestedActions } from '../SuggestedActions.jsx'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Input from '@mui/joy/Input'
-import { addTask, removeTask, updateBoard, duplicateTask } from '../../store/board/board.actions'
+import {
+  addTask,
+  removeTask,
+  updateBoard,
+  duplicateTask,
+  logActivity,
+} from '../../store/board/board.actions'
 import { TaskPreview } from '../task/TaskPreview'
 import { utilService } from '../../services/util.service'
 import Checkbox from '@mui/material/Checkbox'
@@ -81,10 +87,18 @@ export function GroupPreview({
 
   const handleSave = (task) => {
     if (existingItemTempTitle.trim() && existingItemTempTitle !== '') {
-      board.activities.unshift(
-        createActivityLog(board._id, group.id, task.id, 'Task Name Changed', ``, task.title) // prevValue = task.title
-      )
-      updateBoard(board, group, task, {
+      logActivity(group, task, task.title, 'taskNameChanged')
+      // board.activities.unshift(
+      //   boardService.createActivityLog(
+      //     board._id,
+      //     group.id,
+      //     task.id,
+      //     'Task Name Changed',
+      //     'Group: "' + group.title + '"',
+      //     task.title
+      //   ) // prevValue = task.title
+      // )
+      updateBoard(group.id, task.id, {
         key: 'title',
         value: existingItemTempTitle,
       })
@@ -126,10 +140,22 @@ export function GroupPreview({
 
   const handleGroupTitleSave = () => {
     if (groupTempTitle.trim() && groupTempTitle !== group.title) {
-      board.activities.unshift(
-        createActivityLog(board._id, group.id, null, 'Group Name Changed', ``, group.title) // prevValue = group.title
-      )
-      updateBoard(board, group, null, {
+      logActivity(group, null, group.title, {
+        action: 'groupNameChanged',
+        message: 'Group Name Changed',
+        free_txt: `To '${groupTempTitle}'`,
+      })
+      // board.activities.unshift(
+      //   boardService.createActivityLog(
+      //     board._id,
+      //     group.id,
+      //     null,
+      //     'Group Name Changed',
+      //     `${groupTempTitle}`,
+      //     group.title
+      //   ) // prevValue = group.title
+      // )
+      updateBoard(group.id, null, {
         key: 'title',
         value: groupTempTitle,
       })
@@ -199,17 +225,18 @@ export function GroupPreview({
                                 },
                               }}
                               onChangeComplete={(color) => {
-                                board.activities.unshift(
-                                  createActivityLog(
-                                    board._id,
-                                    group.id,
-                                    null,
-                                    'Group Color Changed',
-                                    ``,
-                                    group.style.color
-                                  ) // prevValue = group.style.color
-                                )
-                                updateBoard(board, group, null, {
+                                logActivity(group, null, group.style.color, 'groupColorChanged')
+                                // board.activities.unshift(
+                                //   boardService.createActivityLog(
+                                //     board._id,
+                                //     group.id,
+                                //     null,
+                                //     'Group Color Changed',
+                                //     ``,
+                                //     group.style.color
+                                //   ) // prevValue = group.style.color
+                                // )
+                                updateBoard(group.id, null, {
                                   key: 'style',
                                   value: { color: color.hex },
                                 })
@@ -304,7 +331,7 @@ export function GroupPreview({
                         onChange={(event) => handleTaskChecked(event, task)}
                       />
                     </td>
-                    <td className='testzzz'>
+                    <td>
                       <Link
                         to={`task/${task.id}`}
                         className='task-cell-container'

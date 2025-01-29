@@ -60,3 +60,13 @@
   display: flex;
   bottom: 2px;
 }
+
+.navbar-avatar-container {
+  padding: 7px 10px 4px 10px;
+  margin-right: 8px;
+}
+
+.navbar-avatar-container:hover {
+  background-color: #f8f4f4;
+  border-radius: 6px;
+}

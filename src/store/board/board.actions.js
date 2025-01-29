@@ -5,6 +5,7 @@ import {
   REMOVE_BOARD,
   SET_FILTER_BY,
   SET_BOARDS,
+  SET_BOARD,
   UPDATE_BOARD,
   ADD_TASK,
   REMOVE_TASK,
@@ -12,27 +13,102 @@ import {
 import { userService } from '../../services/user.service'
 import { utilService } from '../../services/util.service'
 
-// Board Actions
-export async function loadBoards(filterBy) {
-  try {
-    const boards = await boardService.query(filterBy)
-    store.dispatch({ type: SET_BOARDS, boards })
-    return boards
-  } catch (err) {
-    console.error('Cannot load boards:', err)
-    throw err
-  }
+//This gets 1 board from the array of all boards!!
+export async function getBoardById(boardId) {
+  const board = await boardService.getById(boardId)
+  store.dispatch({ type: SET_BOARD, board: board })
 }
 
-export async function saveBoard(board) {
-  try {
-    const type = board._id ? UPDATE_BOARD : ADD_BOARD
-    const savedBoard = await boardService.save(board)
-    store.dispatch({ type, board: savedBoard })
-  } catch (err) {
-    console.error('Cannot save board:', err)
-    throw err
+export function logActivity(group, task, prev, action) {
+  const board = store.getState().boardModule.currentBoard
+  let message, free_txt
+
+  /*Why Use switch (true)?
+  Allows Conditional Cases:
+  We can check both exact string matches (e.g., action === 'addTask') and conditions (e.g., typeof action === 'object'). */
+  switch (true) {
+    case action === 'addTask':
+      message = 'Created'
+      free_txt = `Group: ${group.title}`
+      break
+
+    case action === 'removeTask':
+      message = 'Deleted'
+      free_txt = `From: "${group.title}"`
+      break
+
+    case action === 'duplicateTask':
+      message = 'Duplicated'
+      free_txt = `Group: ${group.title}`
+      break
+
+    case action === 'copyCreated':
+      message = 'Created (Copy)'
+      free_txt = `Group: ${group.title}`
+      break
+
+    case action === 'movedFrom':
+      message = 'Moved'
+      free_txt = `From Group: ${group.title}`
+      break
+
+    case action === 'movedTo':
+      message = 'Moved'
+      free_txt = `To Group: ${group.title}`
+      break
+
+    case action === 'groupDeleted':
+      message = 'Group Deleted'
+      free_txt = ``
+      break
+    case action === 'taskNameChanged':
+      message = 'Task Name Changed'
+      free_txt = `Group: ${group.title}`
+      break
+
+    case action === 'groupColorChanged':
+      message = 'Group Color Changed'
+      free_txt = ``
+      break
+
+    case action === 'groupCreated':
+      message = 'Group Created'
+      free_txt = ``
+      break
+
+    // Handle Object Actions
+    case typeof action === 'object' && action.action === 'groupNameChanged':
+      message = action.message
+      free_txt = action.free_txt
+      break
+
+    case typeof action === 'object' && action.action === 'labelChanged':
+      message = action.message
+      free_txt = action.free_txt
+      break
+    case typeof action === 'object' && action.action === 'boardNameChanged':
+      message = action.message
+      free_txt = action.free_txt
+      break
+
+    default:
+      console.error('Action was not logged !!!')
   }
+  board.activities.unshift(
+    boardService.createActivityLog(
+      board?._id,
+      group?.id,
+      task?.id,
+      message /*='Deleted'*/,
+      free_txt /*=`From group "${group.title}"`*/,
+      prev
+    )
+  )
+}
+export async function updateBoard(groupId, taskId, { key, value }) {
+  const board = store.getState().boardModule.currentBoard
+  const updatedBoard = await boardService.updateBoard(board, groupId, taskId, { key, value })
+  store.dispatch({ type: SET_BOARD, board: updatedBoard })
 }
 
 export async function removeBoard(boardId) {
@@ -45,49 +121,24 @@ export async function removeBoard(boardId) {
   }
 }
 
-export async function updateBoard(board, group, task, { key, value }) {
-  if (!board) return
-  const gIdx = board?.groups.findIndex((groupItem) => groupItem.id === group?.id)
-  const tIdx = board?.groups[gIdx]?.tasks.findIndex((t) => t.id === task?.id)
-  let activity = null
-  if (gIdx !== -1 && tIdx !== -1) {
-    board.groups[gIdx].tasks[tIdx][key] = value
-  } else if (gIdx !== -1) {
-    board.groups[gIdx][key] = value
-  } else {
-    board[key] = value
-  }
-  try {
-    await saveBoard(board)
-  } catch (err) {
-    console.error('Failed to save the board:', err)
-    throw err
-  }
-}
-
 // Task Actions
-export async function addTask(board, group, task, fromHeader) {
-  store.dispatch({
-    type: ADD_TASK,
-    boardId: board._id,
-    groupId: group.id,
-    task: task,
-  })
-  const updatedTasks = fromHeader ? [task, ...group.tasks] : [...group.tasks, task]
-  updateBoard(board, group, null, { key: 'tasks', value: updatedTasks })
-  board.activities.unshift(
-    boardService.createActivityLog(
-      board._id,
-      group.id,
-      task.id,
-      'Created',
-      `Group: "${group.title}"`,
-      null
-    )
-  )
+export async function addTask(_, group, task, fromHeader) {
+  let updatedTasks
+  if (group) {
+    // In case 0 groups present , dont let "New Task" button crash program
+    updatedTasks = fromHeader ? [task, ...group.tasks] : [...group.tasks, task]
+  }
+  console.log(task)
+
+  try {
+    updateBoard(group.id, null, { key: 'tasks', value: updatedTasks })
+    logActivity(group, task, group.tasks, 'addTask')
+  } catch (error) {
+    console.log(error, ' The group is probably null')
+  }
 }
 
-export async function removeTask(board, group, task) {
+export async function removeTask(_, group, task) {
   // const isConfirmed = window.confirm(
   //   'Are you sure you want to remove this task?'
   // )
@@ -96,32 +147,22 @@ export async function removeTask(board, group, task) {
   //   'Removing task "' + task.title + '" From group "' + group.title,
   //   '"'
   // )
-
-  store.dispatch({ type: REMOVE_TASK, taskId: task.id })
   const newTasks = group.tasks.filter((t) => t.id !== task.id)
   const newGroup = {
     ...group,
     tasks: newTasks,
   }
-  updateBoard(board, group, null, { key: 'tasks', value: newGroup.tasks })
-  board.activities.unshift(
-    boardService.createActivityLog(
-      board._id,
-      group.id,
-      task.id,
-      'Deleted',
-      `From group "${group.title}"`,
-      task
-    )
-  )
+  updateBoard(group.id, null, { key: 'tasks', value: newGroup.tasks })
+  logActivity(group, task, group.tasks, 'removeTask')
 }
 
-export async function duplicateTask(board, group, task) {
+export async function duplicateTask(_, group, task) {
   const newTask = {
     ...task,
     id: utilService.makeId(),
     title: `${task.title} (copy)`,
   }
+
   // Insert new task below the duplicated one
   const taskIndex = group.tasks.findIndex((t) => t.id === task.id)
   const updatedTasks = [
@@ -131,27 +172,16 @@ export async function duplicateTask(board, group, task) {
   ]
   const newGroup = { ...group, tasks: updatedTasks }
 
-  board.activities.unshift(
-    boardService.createActivityLog(
-      board._id,
-      group.id,
-      task.id,
-      'Duplicated',
-      `Group: "${group.title}"`,
-      task
-    )
-  )
-
-  // Await the asynchronous update
-  return updateBoard(board, group, null, {
-    key: 'tasks',
-    value: newGroup.tasks,
-  })
+  updateBoard(group.id, null, { key: 'tasks', value: newGroup.tasks })
+  // 2 logs , one for the duplicated task and one for the original task
+  logActivity(group, task, null, 'duplicateTask') // No prev value
+  logActivity(group, newTask, null, 'copyCreated')
 }
 
-export async function duplicateMultipleTasks(board, tasksToDuplicate) {
-  // read function removeMultipleTasks for comments about this deep cloning
-  const updatedGroups = structuredClone(board.groups)
+export async function duplicateMultipleTasks(_, tasksToDuplicate) {
+  const board = store.getState().boardModule.currentBoard
+  const updatedGroups = board.groups
+
   // iterate through the tasks to be duplicated
   tasksToDuplicate.forEach(({ groupId, taskId }) => {
     // Find the group containing the task
@@ -177,51 +207,32 @@ export async function duplicateMultipleTasks(board, tasksToDuplicate) {
     group.tasks.splice(taskIndex + 1, 0, duplicatedTask)
     // Update the group in the updatedGroups array
     updatedGroups[groupIndex] = group
-    board.activities.unshift(
-      boardService.createActivityLog(
-        board._id,
-        groupId,
-        duplicatedTask.id,
-        'Duplicated',
-        `Group: "${group.title}"`,
-        null
-      )
-    )
+
+    // 2 logs , one for the duplicated task and one for the original task
+    logActivity(group, duplicatedTask, null, 'copyCreated')
+    logActivity(group, taskToDuplicate, null, 'duplicateTask')
   })
   // Update the board with the modified groups
-  return updateBoard(board, null, null, {
+  return updateBoard(null, null, {
     key: 'groups',
     value: updatedGroups,
   })
 }
 
-export async function removeMultipleTasks(board, checkedTasks) {
+export async function removeMultipleTasks(_, checkedTasks) {
   // Todo : Add 'are you sure' and notify caller if user was sure or not about deleting checked tasks
   /* **Reminder**
 	checkedTasks look like this : [{groupId: 123 , taskId:456}]*/
-  // the logic for deep clone was:
-  // if we dont deep clone and only use shallow copy (let updatedGroups = [...board.groups])
-  // then the tasks-arrays inside updatedGroups will be the exact tasks as in the redux store..
-  // and if we make changes to them , like removing task from group
-  // it could cause a change in our board.. which were not supp to do.. TODO: Verify this
-  let updatedGroups = structuredClone(board.groups)
+
+  const board = store.getState().boardModule.currentBoard
+  let updatedGroups = board.groups
   // go through each group in the board
   updatedGroups = updatedGroups.map((group) => {
     // find tasks to remove that belong to the current group
 
     const tasksToRemove = checkedTasks.filter((checkedTask) => {
       if (checkedTask.groupId === group.id)
-        board.activities.unshift(
-          // This might not be the smartest place to put this (logging activity), but it does the job.
-          boardService.createActivityLog(
-            board._id,
-            checkedTask.groupId,
-            checkedTask.taskId,
-            'Deleted',
-            `From group: "${boardService.getGroupById(checkedTask.groupId).title}"`, // get the title of the group that were gonna delete a task from
-            null
-          )
-        )
+        logActivity(group, { id: checkedTask.taskId }, null, 'removeTask')
       return checkedTask.groupId === group.id
     })
     // if there are tasks to remove from this group
@@ -235,14 +246,15 @@ export async function removeMultipleTasks(board, checkedTasks) {
       return group
     } // If theres no tasks to remove, just return original group
   })
-  updateBoard(board, null, null, { key: 'groups', value: updatedGroups })
+  updateBoard(null, null, { key: 'groups', value: updatedGroups })
 }
 
-export async function moveMultipleTasksIntoSpecificGroup(board, checkedTasks, targetGroupId) {
+export async function moveMultipleTasksIntoSpecificGroup(_, checkedTasks, targetGroupId) {
   /* Logic here is to grab and isolate the group were gonna move stuff into, and then
 	   push the tasks that were checked by the user into that group while removing them from their original group*/
-  // read function removeMultipleTasks for comments about this deep cloning
-  let updatedGroups = structuredClone(board.groups)
+
+  const board = store.getState().boardModule.currentBoard
+  let updatedGroups = board.groups
   // find the target group index in board.groups
   const targetGroupIndex = updatedGroups.findIndex((group) => group.id === targetGroupId)
   if (targetGroupIndex === -1) {
@@ -280,46 +292,25 @@ export async function moveMultipleTasksIntoSpecificGroup(board, checkedTasks, ta
     const [taskToMove] = sourceGroup.tasks.splice(taskIndex, 1)
 
     // log that it was moved from the old (source) group
-    board.activities.unshift(
-      boardService.createActivityLog(
-        board._id,
-        sourceGroup.id,
-        taskToMove.id,
-        'Moved',
-        `From group: "${sourceGroup.title}"`,
-        sourceGroup.id
-      )
-    ) // NOTE : Here prevValue is the ID of the group it was moved from! the old group it was in
-
+    logActivity(sourceGroup, taskToMove, null, 'movedFrom')
+    //  log that it was moved to the new (target) group
+    logActivity(targetGroup, taskToMove, null, 'movedTo')
     // add the task to the target group
     targetGroup.tasks.push(taskToMove)
     // update the source group
     updatedGroups[sourceGroupIndex] = sourceGroup
-
-    //  log that it was moved to the new (target) group
-    board.activities.unshift(
-      boardService.createActivityLog(
-        board._id,
-        targetGroup.id,
-        taskToMove.id,
-        'Moved',
-        `To group: "${targetGroup.title}"`,
-        sourceGroup.id
-      )
-    ) // NOTE : Here prevValue is the ID of the group it was moved from! the old group it was in
   })
   // update the target group
   updatedGroups[targetGroupIndex] = targetGroup
-  updateBoard(board, null, null, { key: 'groups', value: updatedGroups })
+  updateBoard(null, null, { key: 'groups', value: updatedGroups })
 }
 
 // Group Actions
-export async function removeGroup(board, group) {
+export async function removeGroup(group) {
+  const board = store.getState().boardModule.currentBoard
   const newGroups = board.groups.filter((g) => g.id !== group.id)
-  updateBoard(board, null, null, { key: 'groups', value: newGroups })
-  board.activities.unshift(
-    boardService.createActivityLog(board._id, group.id, null, 'Group Deleted', '', group)
-  )
+  logActivity(group, null, group, 'groupDeleted')
+  updateBoard(null, null, { key: 'groups', value: newGroups })
 }
 
 export function setFilterBy(filterBy = {}) {

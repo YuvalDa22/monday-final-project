@@ -49,7 +49,12 @@ const NavBar = () => {
         <Link to='/workspace/board/xxx' className='navbar-link'>
           <SvgIcon iconName={'navbar_help'} />
         </Link>
-        <Avatar className='navbar-avatar' alt='User Avatar' src='' sx={{ width: 32, height: 32 }} />
+        <Avatar
+          className='navbar-avatar'
+          alt='User Avatar'
+          src='https://cdn1.monday.com/dapulse_default_photo.png'
+          sx={{ width: 32, height: 32 }}
+        />
       </div>
     </nav>
   )

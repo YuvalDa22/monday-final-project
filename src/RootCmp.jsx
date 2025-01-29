@@ -10,7 +10,7 @@ import { BoardDetails } from './pages/BoardDetails'
 import NavBar from './cmps/layout/NavBar'
 import { TaskDetails } from './pages/TaskDetails'
 import { BoardIndex } from './pages/BoardIndex'
-// import { TaskDetails } from './pages/TaskDetails'
+import { MenuFromTheRight } from './pages/MenuFromTheRight'
 
 function RootCmp() {
   const location = useLocation()
@@ -24,7 +24,8 @@ function RootCmp() {
           <Route path='/' element={<HomePage />} />
           <Route path='/workspace' element={<BoardIndex />} />
           <Route path='/workspace/board/:boardId' element={<BoardDetails />}>
-            <Route path='task/:taskId' element={<TaskDetails />} />
+            <Route path='task/:taskId' element={<MenuFromTheRight />} />
+            <Route path=':activity_log' element={<MenuFromTheRight />} />
           </Route>
         </Routes>
       </div>

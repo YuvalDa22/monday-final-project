@@ -1,24 +1,42 @@
-import { useEffect } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { loadBoards } from '../../../store/board/board.actions'
+import { getBoardById } from '../../../store/board/board.actions'
 import { showErrorMsg } from '../../../services/event-bus.service' // Assuming you have this function
 import { boardService } from '../../../services/board.service'
 import { Avatar } from 'radix-ui'
+import { use } from 'react'
 
-export function SingleTaskActivityLog({ taskId }) {
+export function ActivityLog({ taskId = null }) {
+  // if taskId wasn't supplied then we know we should display global activity log
   const { boardId } = useParams()
   const dispatch = useDispatch()
 
-  const allBoards = useSelector((storeState) => storeState.boardModule.boards)
-  const board = allBoards.find((board) => board._id === boardId)
+  const board = useSelector((storeState) => storeState.boardModule.currentBoard)
+
+  const taskNameRef = useRef(null)
+  useEffect(() => {
+    taskNameRef.current = boardService.getTaskById(taskId)?.title
+  }, [taskId]) // the only reason for this is when user deletes task while activity log is open , so we save the task name in a useRef regardless of our board state
+
+  const [timestamp, setTimestamp] = useState(Date.now()) // This is to re-render the component every 60 seconds
 
   useEffect(() => {
-    onLoadBoards()
+    const interval = setInterval(() => {
+      setTimestamp(Date.now())
+    }, 1000) // Re-render every 60 seconds
+
+    return () => clearInterval(interval) // Cleanup the interval on unmount
   }, [])
-  async function onLoadBoards() {
+
+  useEffect(() => {
+    onLoadBoard()
+  }, [])
+
+  useEffect(() => {}, [board])
+  async function onLoadBoard() {
     try {
-      await loadBoards()
+      await getBoardById(boardId)
     } catch (error) {
       showErrorMsg('Cannot load boards')
       console.error(error)
@@ -98,15 +116,39 @@ export function SingleTaskActivityLog({ taskId }) {
     }
   }
 
+  function calcTimePassed(taskActivity) {
+    const diff = Date.now() - taskActivity.createdAt // Time difference in milliseconds
+    const seconds = Math.floor(diff / 1000) // Convert to seconds
+
+    // if less than a minute, show seconds , if less than an hour , show minutes , etc etc ....
+    if (seconds < 60) return seconds + 's'
+    const minutes = Math.floor(seconds / 60)
+    if (minutes < 60) return minutes + 'm'
+    const hours = Math.floor(minutes / 60)
+    if (hours < 24) return hours + 'h'
+    const days = Math.floor(hours / 24)
+    return days + 'd'
+  }
+
+  function taskTitle(taskActivity) {
+    const truncate = (title, num) => (title.length > num ? title.slice(0, num) + '...' : title)
+
+    if (taskActivity.task?.title) return truncate(taskActivity.task.title, 20)
+    if (taskActivity.group?.title) return truncate(taskActivity.group.title, 15)
+    if (taskActivity.board?.title) return truncate(taskActivity.board.title, 15)
+
+    return 'Error'
+  }
+
   /* stal = SingleTaskActivityLog */
   return (
     <div className='stal_container'>
       {board.activities
-        .filter((activity) => activity.taskid == taskId)
+        .filter((activity) => taskId == null || activity.task.id == taskId) // if taskId==null don't filter activities because we should show all of them
         .map((taskActivity) => (
           <div className='stal_row' key={taskActivity.id}>
             <div className='stal-time-user-title-and-status'>
-              <span>{Math.floor(((Date.now() - taskActivity.createdAt) / (1000 * 60)) % 60)}m</span>
+              <span className='stal-time'>{calcTimePassed(taskActivity)}</span>
               <Avatar.Root className='AvatarRoot'>
                 <Avatar.Image
                   className='AvatarImage'
@@ -114,17 +156,21 @@ export function SingleTaskActivityLog({ taskId }) {
                   alt='Colm Tuite'
                 />
                 <Avatar.Fallback className='AvatarFallback' delayMs={600}>
-                  GI {/* incase avatar cant be loaded show letters */}
+                  {/* incase avatar cant be loaded show letters */}
                 </Avatar.Fallback>
               </Avatar.Root>
-              <span>{boardService.getTaskById(null, taskActivity.taskid).title}</span>
-              <span className='stal-action'>
-                {/* {getIconByAction(taskActivity.action_name)} */}
-                {taskActivity.action_name}
-              </span>
+              <span>{taskTitle(taskActivity)}</span>
             </div>
+            <span className='stal-action'>
+              {/* {getIconByAction(taskActivity.action_name)} */}
+              {taskActivity.action_name}
+            </span>
 
-            <div className='stal-free-txt'>{taskActivity.free_txt}</div>
+            <div className='stal-free-txt'>
+              {taskActivity.free_txt.length > 15
+                ? taskActivity.free_txt.slice(0, 15) + '...'
+                : taskActivity.free_txt}
+            </div>
           </div>
         ))}
     </div>

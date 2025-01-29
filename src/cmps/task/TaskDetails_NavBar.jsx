@@ -16,7 +16,7 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import ListIcon from '@mui/icons-material/List'
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined'
-import { SingleTaskActivityLog } from './cmps/SingleTaskActivityLog'
+import { ActivityLog } from './cmps/ActivityLog'
 
 const SvgIcon = ({ iconName, options }) => {
   return (
@@ -313,7 +313,7 @@ export function TaskDetails_NavBar({ taskId }) {
         </Box>
       </TabPanel>
       <TabPanel value='3'>
-        <SingleTaskActivityLog taskId={taskId} />
+        <ActivityLog taskId={taskId} />
       </TabPanel>
     </TabContext>
   )

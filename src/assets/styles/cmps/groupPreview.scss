@@ -33,6 +33,14 @@
         width: 10rem;
       }
 
+      td:nth-child(1),
+      th:nth-child(1) {
+        border-left: none;
+        // The reason for this
+        // BEFORE : https://i.imgur.com/pIcEpCM.png
+        // AFTER :https://i.imgur.com/bEbG827.png
+      }
+
       .openTaskDetails_container {
         display: none;
         gap: 5px;
@@ -139,6 +147,7 @@
             left: -3px;
             width: 6px;
             height: 104%;
+            opacity: 0.4;
             background-color: var(--group-color);
             border-bottom-left-radius: 8px;
           }

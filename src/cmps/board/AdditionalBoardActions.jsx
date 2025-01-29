@@ -6,6 +6,8 @@ import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import LoopIcon from '@mui/icons-material/Loop'
 import Avatar from '@mui/material/Avatar'
+import { Tooltip } from 'radix-ui'
+import { useNavigate } from 'react-router-dom'
 
 const SvgIcon = ({ iconName, options, customStyle }) => {
   return (
@@ -17,6 +19,7 @@ const SvgIcon = ({ iconName, options, customStyle }) => {
 }
 
 export function AdditionalBoardActions() {
+  const navigate = useNavigate()
   return (
     <Stack direction={'row'} gap={'10px'} style={{ display: 'flex', alignItems: 'center' }}>
       <IconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
@@ -36,13 +39,29 @@ export function AdditionalBoardActions() {
           options={{ height: 20, width: 20 }}
         />
       </IconButton>
-
-      <Avatar
-        className='navbar-avatar'
-        alt='User Avatar'
-        src=''
-        sx={{ width: 32, height: 32, marginLeft: 1, marginRight: 2 }}
-      />
+      <Tooltip.Provider>
+        <Tooltip.Root delayDuration={0}>
+          <Tooltip.Trigger asChild>
+            <div
+              className='navbar-avatar-container'
+              onClick={() => navigate(`/workspace/board/b101/activity_log`)}
+            >
+              <Avatar
+                className='navbar-avatar'
+                alt='User Avatar'
+                src='https://cdn1.monday.com/dapulse_default_photo.png'
+                sx={{ width: 28, height: 28, marginLeft: 0, marginRight: 0 }}
+              />
+            </div>
+          </Tooltip.Trigger>
+          <Tooltip.Portal>
+            <Tooltip.Content side='bottom' className='TooltipContent' sideOffset={5}>
+              View activity log
+              <Tooltip.Arrow className='TooltipArrow' />
+            </Tooltip.Content>
+          </Tooltip.Portal>
+        </Tooltip.Root>
+      </Tooltip.Provider>
 
       <Box
         sx={{

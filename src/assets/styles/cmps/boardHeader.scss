@@ -12,9 +12,9 @@
 }
 
 .boardHeader_boardName {
-  font-weight: 501; // 500 seems too little , 501 seems too much , :_) , TODO: deal with this later (fonts are not exactly the same , look at the letter "M")
   font-size: 25px;
   align-content: center;
+  font-variation-settings: 'wght' 570; // seemed close to monday
 }
 
 .additional_board_actions {

@@ -1,5 +1,6 @@
 import { storageService } from './async-storage.service.js'
 import { utilService } from './util.service.js'
+import { store } from '../store/store.js'
 const groupColors = new Map([
   ['red', '#bb3354'],
   ['green', '#037f4c'],
@@ -34,10 +35,36 @@ export const boardService = {
   getTaskById,
   getGroupById,
   groupColors,
+  updateBoard,
 }
 
 const STORAGE_KEY = 'boards'
 _createBoards()
+
+//////////////////////////
+
+async function updateBoard(board, groupId, taskId, { key, value }) {
+  if (!board) return
+  const gIdx = board?.groups.findIndex((groupItem) => groupItem.id === groupId)
+  const tIdx = board?.groups[gIdx]?.tasks.findIndex((t) => t.id === taskId)
+
+  if (gIdx !== -1 && tIdx !== -1) {
+    board.groups[gIdx].tasks[tIdx][key] = value
+  } else if (gIdx !== -1) {
+    board.groups[gIdx][key] = value
+  } else {
+    board[key] = value
+  }
+  try {
+    await save(board)
+    return board
+  } catch (err) {
+    console.error('Failed to save the board:', err)
+    throw err
+  }
+}
+
+/////////////////////////
 
 async function query(filterBy = {}) {
   try {
@@ -49,40 +76,37 @@ async function query(filterBy = {}) {
   }
 }
 
-function getGroupById(/*boardId !@!@!@@!@!*/ groupId) {
-  const boards = JSON.parse(localStorage.getItem('boards'))
-  if (!boards) throw new Error('No boards found in local storage')
-
-  const board = boards[0] // TODO: THIS ONLY GETS BOARD[0] !!@!@!@!@!@!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@@@@@@@
-  if (!board) throw new Error(`Board with ID ${boardId} not found`)
-
-  const group = board.groups.find((group) => group.id === groupId)
-  if (!group) throw new Error(`Group with ID ${groupId} not found`)
-
-  return group
+function getBoardById(boardId) {
+  const board = store.getState().boardModule.currentBoard
+  return board || null // Return the board if found, otherwise return null
 }
 
-function getTaskById(groupId, taskId) {
-  console.log('I was called with groupid: ', groupId, 'and taskid: ', taskId)
-
-  const boards = JSON.parse(localStorage.getItem('boards')) || []
-  const board = boards[0] // TODO: THIS ONLY GETS BOARD[0] !!@!@!@!@!@!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@@@@@@@
-  if (!board) return null
+function getGroupById(groupId) {
+  const board = store.getState().boardModule.currentBoard
+  if (!board) {
+    return null
+  }
 
   const group = board.groups.find((group) => group.id === groupId)
-  if (!group) {
-    // This was implemented so even if groupid is null it will still search for the task in all groups
-    // TODO : remove groupId from places we call getTaskById with groupId and not only taskId
-    for (const group of board.groups) {
-      const task = group.tasks.find((task) => task.id === taskId)
-      if (task) {
-        return task // Return the task as soon as it's found
-      }
+  if (group) {
+    return group // Return the group as soon as it's found
+  }
+  return null // If no group is found, return null
+}
+
+function getTaskById(taskId) {
+  const board = store.getState().boardModule.currentBoard
+  // Traverse all boards
+
+  for (const group of board.groups) {
+    // Search for the task within the group's tasks
+    const task = group.tasks.find((task) => task.id === taskId)
+    if (task) {
+      return task // Return the task as soon as it's found
     }
   }
 
-  const task = group.tasks.find((task) => task.id === taskId)
-  return task || null
+  return null // If no task is found, return null
 }
 
 async function getById(id) {
@@ -151,27 +175,13 @@ function getEmptyTask() {
 }
 
 function createActivityLog(boardId, groupId, taskId, action_name, free_txt, prevValue) {
-  console.log(
-    'boardId:',
-    boardId,
-    'groupId:',
-    groupId,
-    'taskId:',
-    taskId,
-    'action_name:',
-    action_name,
-    'free_txt:',
-    free_txt,
-    'prevValue:',
-    prevValue
-  )
   return {
     id: utilService.makeId(),
     createdAt: Date.now(),
     byMember: userService.getLoggedinUser(),
-    boardid: boardId,
-    groupid: groupId,
-    taskid: taskId,
+    board: { id: boardId, title: getBoardById(boardId).title },
+    group: { id: groupId, title: getGroupById(groupId)?.title },
+    task: { id: taskId, title: getTaskById(taskId)?.title }, // we keep title so we can access title if task removed from board
     action_name, // For example : "Moved" , "Duplicated" , "Deleted"
     free_txt, // For example : "To group New Group" or "From group ASAP Tasks"
     prevValue, // Holds the previous value of the task/group/board before the change
