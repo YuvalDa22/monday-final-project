@@ -74,14 +74,6 @@ export function BoardDetails() {
 
     updateBoard(null, null, { key: 'groups', value: updatedGroups })
     logActivity(newGroup, null, null, 'groupCreated')
-    // await board.activities.unshift(boardService.createActivityLog(
-    //   board._id,
-    //   newGroup.id,
-    //   null,
-    //   'Group Created',
-    //   ``,
-    //   board.groups
-    // )) // prevValue = the previous board groups without the new group
   }
   const handleTasksChecked = (newArrayOfTasks, action) => {
     if (action === 'add') {

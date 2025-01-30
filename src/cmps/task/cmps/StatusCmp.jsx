@@ -1,17 +1,20 @@
-import { Padding } from '@mui/icons-material'
-import React from 'react'
-import Select from 'react-select'
+import React from 'react';
+import Select from 'react-select';
 
 export function StatusCmp({ onUpdate, board, info }) {
-  const currentLabel = board?.labels?.find((label) => label.id === info)
+  const currentLabel = board?.labels?.find((label) => label.id === info);
   const style = {
-    backgroundColor: currentLabel?.color || '#fff',
-  }
-  const statusLabels = board?.labels?.filter((label) => label.id[1] === '1')
+    backgroundColor: currentLabel?.color,
+    width: '100%',
+    height: '100%',
+    color: 'white',
+  };
+
+  const labels = board?.labels?.filter((label) => label.id[1] === '1');
 
   const handleChange = (selectedOption) => {
-    onUpdate(selectedOption)
-  }
+    onUpdate(selectedOption.id);
+  };
 
   const customStyles = {
     control: (provided) => ({
@@ -19,7 +22,6 @@ export function StatusCmp({ onUpdate, board, info }) {
       ...style,
       border: 'none',
       boxShadow: 'none',
-      // minHeight: '3rem',
     }),
     option: (provided, { data, isFocused, isSelected }) => ({
       ...provided,
@@ -27,28 +29,21 @@ export function StatusCmp({ onUpdate, board, info }) {
       color: isSelected || isFocused ? '#fff' : '#333',
       cursor: 'pointer',
     }),
-    singleValue: (provided) => ({
-      ...provided,
-      color: currentLabel?.color || '#333',
-      fontWeight: 'bold',
-    }),
-  }
+  };
 
   return (
-    <div style={style}>
-      <Select
-        options={statusLabels}
-        getOptionLabel={(label) => <div style={{ color: 'white' }}>{label.title}</div>}
-        getOptionValue={(label) => label.id}
-        value={statusLabels.find((label) => label.id === info)}
-        onChange={handleChange}
-        styles={customStyles}
-        isSearchable={true}
-        components={{
-          DropdownIndicator: () => null,
-          IndicatorSeparator: () => null,
-        }}
-      />
-    </div>
-  )
+    <Select
+      options={labels}
+      getOptionLabel={(label) => <div className="label-box">{label.title}</div>}
+      getOptionValue={(label) => label.id}
+      value={labels.find((label) => label.id === info)}
+      onChange={handleChange}
+      styles={customStyles}
+      isSearchable={true}
+      components={{
+        DropdownIndicator: () => null,
+        IndicatorSeparator: () => null,
+      }}
+    />
+  );
 }

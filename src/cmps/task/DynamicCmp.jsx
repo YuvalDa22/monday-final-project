@@ -1,8 +1,7 @@
-import { DatePicker } from './cmps/DatePicker'
 import { MemberPicker } from './cmps/MemberPicker'
-import { PriorityPicker } from './cmps/PriorityPicker'
 import { StatusCmp } from './cmps/StatusCmp'
-
+import { DatePicker } from './cmps/DatePicker'
+import {PriorityPicker} from './cmps/PriorityPicker'
 export function DynamicCmp({ board, cmp, info, onUpdate }) {
   //   console.log('DynamicCmp -> cmp:', cmp, 'info:', info)
   switch (cmp) {

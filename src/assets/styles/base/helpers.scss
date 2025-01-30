@@ -48,3 +48,10 @@
   .space-between {
     justify-content: space-between;
   }
+
+  .input {
+    border: $border-input;
+      width: 100%;
+      margin-right: 15px;
+      min-width: 2ch;
+  }

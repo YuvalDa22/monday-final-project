@@ -6,7 +6,7 @@ export default defineConfig({
 	base: '/OGY-Monday/', // Replace with your repository name
 	plugins: [react()],
 	optimizeDeps: {
-		include: ['@radix-ui'],
+		include: ['@radix-ui', '@mui'],
 	},
 	css: {
 		preprocessorOptions: {
