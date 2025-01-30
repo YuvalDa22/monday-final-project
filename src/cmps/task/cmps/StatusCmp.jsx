@@ -1,20 +1,20 @@
-import React from 'react';
-import Select from 'react-select';
+import React from 'react'
+import Select from 'react-select'
 
 export function StatusCmp({ onUpdate, board, info }) {
-  const currentLabel = board?.labels?.find((label) => label.id === info);
+  const currentLabel = board?.labels?.find((label) => label.id === info)
   const style = {
     backgroundColor: currentLabel?.color,
     width: '100%',
     height: '100%',
     color: 'white',
-  };
+  }
 
-  const labels = board?.labels?.filter((label) => label.id[1] === '1');
+  const labels = board?.labels?.filter((label) => label.id[1] === '1')
 
   const handleChange = (selectedOption) => {
-    onUpdate(selectedOption.id);
-  };
+    onUpdate(selectedOption)
+  }
 
   const customStyles = {
     control: (provided) => ({
@@ -29,12 +29,12 @@ export function StatusCmp({ onUpdate, board, info }) {
       color: isSelected || isFocused ? '#fff' : '#333',
       cursor: 'pointer',
     }),
-  };
+  }
 
   return (
     <Select
       options={labels}
-      getOptionLabel={(label) => <div className="label-box">{label.title}</div>}
+      getOptionLabel={(label) => <div className='label-box'>{label.title}</div>}
       getOptionValue={(label) => label.id}
       value={labels.find((label) => label.id === info)}
       onChange={handleChange}
@@ -45,5 +45,5 @@ export function StatusCmp({ onUpdate, board, info }) {
         IndicatorSeparator: () => null,
       }}
     />
-  );
+  )
 }
