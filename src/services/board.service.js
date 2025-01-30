@@ -1,6 +1,7 @@
 import { storageService } from './async-storage.service.js'
 import { utilService } from './util.service.js'
 import { store } from '../store/store.js'
+
 const groupColors = new Map([
 	['red', '#bb3354'],
 	['green', '#037f4c'],
@@ -36,6 +37,8 @@ export const boardService = {
 	getGroupById,
 	groupColors,
 	updateBoard,
+	getFilterFromSearchParams,
+	getDefaultFilter,
 }
 
 const STORAGE_KEY = 'boards'
@@ -66,14 +69,49 @@ async function updateBoard(board, groupId, taskId, { key, value }) {
 
 /////////////////////////
 
-async function query(filterBy = {}) {
+async function query(filterBy, boardId) {
 	try {
 		let boards = await storageService.query(STORAGE_KEY)
+
+		if (boardId) {
+			let board = boards.find((board) => board._id === boardId)
+			if (!board) return null // Ensure board exists
+
+			if (filterBy) {
+				let { txt = '' } = filterBy
+				txt = txt.toLowerCase()
+
+				// Filter groups based on tasks that match the search text
+				board.groups = board.groups.map((group) => {
+						const filteredTasks = group.tasks.filter((task) => deepSearch(task, txt))
+						if (filteredTasks.length > 0 || deepSearch(group, txt)) {
+							return { ...group, tasks: filteredTasks } // Keep the group if it or any task matches
+						}
+						return null // Remove group if no matching task or group data
+					})
+					.filter(Boolean) // Remove `null` groups
+			}
+			return board
+		}
 		return boards
 	} catch (error) {
 		console.log('error:', error)
 		throw error
 	}
+}
+
+//  Recursive function to search in all keys and values
+function deepSearch(obj, searchText) {
+	if (typeof obj === 'string') {
+		return obj.toLowerCase().includes(searchText)
+	}
+
+	if (typeof obj === 'object' && obj !== null) {
+		return Object.entries(obj).some(
+			([key, value]) => key.toLowerCase().includes(searchText) || deepSearch(value, searchText)
+		)
+	}
+	return false
 }
 
 function getBoardById(boardId) {
@@ -193,6 +231,21 @@ function _setNewGroupColor() {
 	const randomIndex = Math.floor(Math.random() * colors.length)
 	const randomColor = colors[randomIndex]
 	return randomColor
+}
+
+function getFilterFromSearchParams(searchParams) {
+	const defaultFilter = getDefaultFilter()
+	const filterBy = {}
+	for (const field in defaultFilter) {
+		filterBy[field] = searchParams.get(field) || ''
+	}
+	return filterBy
+}
+
+function getDefaultFilter() {
+	return {
+		txt: '',
+	}
 }
 
 function _createBoards() {
@@ -393,4 +446,5 @@ function _createBoards() {
 
 		utilService.saveToStorage(STORAGE_KEY, boards)
 	}
+
 }

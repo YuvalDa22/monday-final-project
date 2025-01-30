@@ -1,76 +1,91 @@
-import { useSelector } from 'react-redux'
-import { BoardHeader } from '../cmps/board/BoardHeader'
-import { GroupPreview } from '../cmps/group/GroupPreview'
-import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
+import { BoardHeader } from '../cmps/board/BoardHeader';
+import { GroupPreview } from '../cmps/group/GroupPreview';
+import { useEffect, useRef, useState } from 'react';
 import {
-  addTask,
-  updateBoard,
-  duplicateTask,
-  removeMultipleTasks,
-  moveMultipleTasksIntoSpecificGroup,
-  duplicateMultipleTasks,
-  getBoardById,
-  logActivity,
-} from '../store/board/board.actions'
-import { showErrorMsg } from '../services/event-bus.service'
-import { Button, IconButton, Menu, MenuItem } from '@mui/material'
-import { boardService } from '../services/board.service'
-import { useParams, Outlet } from 'react-router-dom'
-import { utilService, getSvg } from '../services/util.service'
-import CloseIcon from '@mui/icons-material/Close'
-import * as XLSX from 'xlsx'
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
+	addTask,
+	updateBoard,
+	duplicateTask,
+	removeMultipleTasks,
+	moveMultipleTasksIntoSpecificGroup,
+	duplicateMultipleTasks,
+	logActivity,
+	setFilterBy,
+  loadBoard,
+} from '../store/board/board.actions';
+import { showErrorMsg } from '../services/event-bus.service';
+import { Button, IconButton, Menu, MenuItem } from '@mui/material';
+import { boardService } from '../services/board.service';
+import { useParams, Outlet, useSearchParams } from 'react-router-dom';
+import { utilService, getSvg, debounce, getExistingProperties } from '../services/util.service';
+import CloseIcon from '@mui/icons-material/Close';
+import { useEffectUpdate } from "../customHooks/useEffectUpdate";
+import * as XLSX from 'xlsx';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
 const SvgIcon = ({ iconName, options }) => {
-  return <i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>
-}
+	return <i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>;
+};
 
 export function BoardDetails() {
-  const { boardId } = useParams()
-  const board = useSelector((storeState) => storeState.boardModule.currentBoard)
+	const [searchParams, setSearchParams] = useSearchParams();
+	const { boardId } = useParams();
+	const board = useSelector((storeState) => storeState.boardModule.currentBoard);
+	const filterBy = useSelector((storeState) => storeState.boardModule.filterBy);
+	const onSetFilterByDebounce = useRef(debounce(onSetFilterBy, 400)).current;
 
-  const [checkedTasksList, setCheckedTasksList] = useState([])
+	const [checkedTasksList, setCheckedTasksList] = useState([]);
 
-  const [anchorEl, setAnchorEl] = useState(null)
+	const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget) // Set the clicked element as the anchor
-  }
+	useEffect(() => {
+		setFilterBy(boardService.getFilterFromSearchParams(searchParams));
+		onLoadBoard();
+	}, []);
 
-  const handleClose = () => {
-    setAnchorEl(null) // Close the menu
-  }
+	useEffectUpdate(() => {
+		onLoadBoard();
+		setSearchParams(getExistingProperties(filterBy));
+	}, [filterBy]);
 
-  useEffect(() => {
-    onLoadBoard()
-  }, [])
+	function onSetFilterBy(filterBy) {
+		setFilterBy(filterBy);
+	}
 
-  async function onLoadBoard() {
-    try {
-      await getBoardById(boardId)
-    } catch (error) {
-      showErrorMsg('Cannot load boards')
-      console.error(error)
-    }
-  }
+	const handleClick = (event) => {
+		setAnchorEl(event.currentTarget); // Set the clicked element as the anchor
+	};
 
-  if (!board) return <div>Loading...</div>
-  console.log('Activities = ', board.activities)
+	const handleClose = () => {
+		setAnchorEl(null); // Close the menu
+	};
 
-  function onAddTask(group, initialTitle = 'New Task', fromHeader) {
-    const newTask = { id: utilService.makeId(), title: initialTitle }
-    addTask(board, group, newTask, fromHeader)
-  }
+	async function onLoadBoard() {
+		try {
+      await loadBoard(boardId)
+		} catch (error) {
+			showErrorMsg('Cannot load boards');
+			console.error(error);
+		}
+	}
 
-  const onAddGroup = async (fromHeader) => {
-    if (!board) return
-    let newGroup = boardService.getEmptyGroup()
-    newGroup = {
-      id: utilService.makeId(), // Generate and add ID to the top of the properties
+	if (!board) return <div>Loading...</div>;
+	// console.log('Activities = ', board.activities);
 
-      ...newGroup,
-    }
-    const updatedGroups = fromHeader ? [newGroup, ...board?.groups] : [...board?.groups, newGroup]
+	function onAddTask(group, initialTitle = 'New Task', fromHeader) {
+		const newTask = { id: utilService.makeId(), title: initialTitle };
+		addTask(board, group, newTask, fromHeader);
+	}
+
+	const onAddGroup = async (fromHeader) => {
+		if (!board) return;
+		let newGroup = boardService.getEmptyGroup();
+		newGroup = {
+			id: utilService.makeId(), // Generate and add ID to the top of the properties
+
+			...newGroup,
+		};
+		const updatedGroups = fromHeader ? [newGroup, ...board?.groups] : [...board?.groups, newGroup];
 
     updateBoard(null, null, { key: 'groups', value: updatedGroups })
     logActivity(newGroup, null, null, 'groupCreated')
@@ -100,243 +115,230 @@ export function BoardDetails() {
     }
   }
 
-  function groupCheckedTasksByColor(tasks) {
-    // reducer that returns a Map of [color : checkedTaskObj] so the checked taskss will be grouped together when selected
-    return tasks.reduce((groups, task) => {
-      if (!groups[task.groupColor]) {
-        groups[task.groupColor] = []
-      }
-      groups[task.groupColor].push(task)
-      return groups
-    }, {})
-  }
+	function groupCheckedTasksByColor(tasks) {
+		// reducer that returns a Map of [color : checkedTaskObj] so the checked taskss will be grouped together when selected
+		return tasks.reduce((groups, task) => {
+			if (!groups[task.groupColor]) {
+				groups[task.groupColor] = [];
+			}
+			groups[task.groupColor].push(task);
+			return groups;
+		}, {});
+	}
 
-  const handleFooterAction = async (action, groupTargetId) => {
-    switch (action) {
-      case 'duplicate':
-        duplicateMultipleTasks(board, checkedTasksList)
-        handleTasksChecked(checkedTasksList, 'delete') // to clean checkboxes after action is done
-        break
-      case 'export':
-        console.log('CLicked')
-        break
-      case 'archive':
-        console.log('CLicked')
-        break
-      case 'delete':
-        handleTasksChecked(checkedTasksList, 'delete')
-        removeMultipleTasks(board, checkedTasksList) // TODO: get return value and check if user confirmed he wants to delete tasks
-        break
-      case 'convert':
-        console.log('CLicked')
-        break
-      case 'move_to':
-        await moveMultipleTasksIntoSpecificGroup(board, checkedTasksList, groupTargetId)
-        handleTasksChecked(checkedTasksList, 'delete')
-        break
-      case 'apps':
-        console.log('CLicked')
+	const handleFooterAction = async (action, groupTargetId) => {
+		switch (action) {
+			case 'duplicate':
+				duplicateMultipleTasks(board, checkedTasksList);
+				handleTasksChecked(checkedTasksList, 'delete'); // to clean checkboxes after action is done
+				break;
+			case 'export':
+				console.log('CLicked');
+				break;
+			case 'archive':
+				console.log('CLicked');
+				break;
+			case 'delete':
+				handleTasksChecked(checkedTasksList, 'delete');
+				removeMultipleTasks(board, checkedTasksList); // TODO: get return value and check if user confirmed he wants to delete tasks
+				break;
+			case 'convert':
+				console.log('CLicked');
+				break;
+			case 'move_to':
+				await moveMultipleTasksIntoSpecificGroup(board, checkedTasksList, groupTargetId);
+				handleTasksChecked(checkedTasksList, 'delete');
+				break;
+			case 'apps':
+				console.log('CLicked');
 
-        break
-      default:
-        console.warn(`Unknown action: ${action}`)
-    }
-  }
+				break;
+			default:
+				console.warn(`Unknown action: ${action}`);
+		}
+	};
 
-  return (
-    <div className='board-details-container'>
-      <div className='board-details-header'>
-        <BoardHeader board={board} onAddTask={onAddTask} onAddGroup={onAddGroup} />
-      </div>
-      <div className='board-details-groups-container'>
-        {board?.groups &&
-          board?.groups.map((group) => (
-            <GroupPreview
-              board={board}
-              group={group}
-              cmpTitles={board.cmpTitles}
-              cmpsOrder={board.cmpsOrder}
-              key={group.id}
-              onTasksCheckedChange={handleTasksChecked}
-              checkedTasksList={checkedTasksList}
-              onAddTask={onAddTask}
-            />
-          ))}
-        <div className='add-group-button-container'>
-          <Button
-            variant='outlined'
-            onClick={() => onAddGroup(false)}
-            sx={{
-              color: 'black',
-              borderColor: 'gray',
-              textTransform: 'none',
-            }}
-          >
-            Add new group
-          </Button>
-        </div>
-      </div>
-      <div
-        className={`board-details_footer ${
-          checkedTasksList.length > 0 ? 'show_footer' : 'hide_footer'
-        }`}
-      >
-        <div className='footer_blue-number'>
-          <span>{checkedTasksList.length}</span>
-        </div>
-        <div className={'footer_rest-of-footer'}>
-          <div className='footer_item-selected_container'>
-            <div>
-              <span>{checkedTasksList.length > 1 ? 'Items' : 'Item'} selected</span>
-            </div>
-            <div>
-              <div className='footer_colored-dots'>
-                {Object.entries(groupCheckedTasksByColor(checkedTasksList)).flatMap(
-                  ([color, tasks]) =>
-                    tasks.slice(0, 13).map((_, idx) => (
-                      <span key={`${color}-${idx}`} style={{ color }}>
-                        •
-                      </span>
-                    ))
-                )}
-                {checkedTasksList.length > 13 && (
-                  <span style={{ fontSize: '11px' }}> + {checkedTasksList.length - 13}</span>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className='footer_options_container'>
-            <div
-              className='footer_option'
-              onClick={() => {
-                handleFooterAction('duplicate')
-              }}
-            >
-              <SvgIcon iconName='duplicate'></SvgIcon>
-              <span>Duplicate</span>
-            </div>
-            <div
-              className='footer_option'
-              onClick={() => {
-                handleFooterAction('export')
-              }}
-            >
-              <SvgIcon iconName='export'></SvgIcon>
-              <span>Export</span>
-            </div>
-            <div
-              className='footer_option'
-              onClick={() => {
-                handleFooterAction('archive')
-              }}
-            >
-              <SvgIcon iconName='archive'></SvgIcon>
-              <span>Archive</span>
-            </div>
-            <div
-              className='footer_option'
-              onClick={() => {
-                handleFooterAction('delete')
-              }}
-            >
-              <SvgIcon iconName='delete'></SvgIcon>
-              <span>Delete</span>
-            </div>
-            <div
-              className='footer_option'
-              onClick={() => {
-                handleFooterAction('convert')
-              }}
-            >
-              <SvgIcon iconName='convert'></SvgIcon>
-              <span>Convert</span>
-            </div>
-            <div className='footer_option'>
-              <DropdownMenu.Root sx={{ backgroundColor: 'red' }}>
-                <DropdownMenu.Trigger asChild>
-                  <div
-                    style={{
-                      alignItems: 'center',
-                      display: 'flex',
-                      flexDirection: 'column',
-                    }}
-                  >
-                    <SvgIcon iconName='move_to'></SvgIcon>
-                    <span>Move to</span>
-                  </div>
-                </DropdownMenu.Trigger>
 
-                <DropdownMenu.Content
-                  className='fade-in-up' // animation like monday
-                  style={{
-                    background: 'white',
-                    border: '1px solid #ccc',
-                    borderRadius: '5px',
-                    padding: '8px',
-                    marginBottom: '20px',
-                    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-                    position: 'relative',
-                  }}
-                >
-                  <div
-                    // this is for the triangle that points down , at the bottom of the menu
-                    style={{
-                      position: 'absolute',
-                      bottom: '-5px',
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      width: '0',
-                      height: '0',
-                      borderLeft: '8px solid transparent',
-                      borderRight: '8px solid transparent',
-                      borderTop: '8px solid white',
-                    }}
-                  ></div>
-                  {board.groups.map((group) => (
-                    <DropdownMenu.Item
-                      onClick={() => handleFooterAction('move_to', group.id)}
-                      className='dropdown-item'
-                      key={group.id}
-                    >
-                      {group.title}
-                    </DropdownMenu.Item>
-                  ))}
-                </DropdownMenu.Content>
-              </DropdownMenu.Root>
-            </div>
+	return (
+		<div className='board-details-container'>
+			<div className='board-details-header'>
+				<BoardHeader onSetFilterBy={onSetFilterByDebounce} filterBy={filterBy} board={board} onAddTask={onAddTask} onAddGroup={onAddGroup} />
+			</div>
+			<div className='board-details-groups-container'>
+				{board?.groups &&
+					board?.groups.map((group) => (
+						<GroupPreview
+							board={board}
+							group={group}
+							cmpTitles={board.cmpTitles}
+							cmpsOrder={board.cmpsOrder}
+							key={group.id}
+							onTasksCheckedChange={handleTasksChecked}
+							checkedTasksList={checkedTasksList}
+							onAddTask={onAddTask}
+						/>
+					))}
+				<div className='add-group-button-container'>
+					<Button
+						variant='outlined'
+						onClick={() => onAddGroup(false)}
+						sx={{
+							color: 'black',
+							borderColor: 'gray',
+							textTransform: 'none',
+						}}>
+						Add new group
+					</Button>
+				</div>
+			</div>
+			<div
+				className={`board-details_footer ${
+					checkedTasksList.length > 0 ? 'show_footer' : 'hide_footer'
+				}`}>
+				<div className='footer_blue-number'>
+					<span>{checkedTasksList.length}</span>
+				</div>
+				<div className={'footer_rest-of-footer'}>
+					<div className='footer_item-selected_container'>
+						<div>
+							<span>{checkedTasksList.length > 1 ? 'Items' : 'Item'} selected</span>
+						</div>
+						<div>
+							<div className='footer_colored-dots'>
+								{Object.entries(groupCheckedTasksByColor(checkedTasksList)).flatMap(
+									([color, tasks]) =>
+										tasks.slice(0, 13).map((_, idx) => (
+											<span key={`${color}-${idx}`} style={{ color }}>
+												•
+											</span>
+										))
+								)}
+								{checkedTasksList.length > 13 && (
+									<span style={{ fontSize: '11px' }}> + {checkedTasksList.length - 13}</span>
+								)}
+							</div>
+						</div>
+					</div>
+					<div className='footer_options_container'>
+						<div
+							className='footer_option'
+							onClick={() => {
+								handleFooterAction('duplicate');
+							}}>
+							<SvgIcon iconName='duplicate'></SvgIcon>
+							<span>Duplicate</span>
+						</div>
+						<div
+							className='footer_option'
+							onClick={() => {
+								handleFooterAction('export');
+							}}>
+							<SvgIcon iconName='export'></SvgIcon>
+							<span>Export</span>
+						</div>
+						<div
+							className='footer_option'
+							onClick={() => {
+								handleFooterAction('archive');
+							}}>
+							<SvgIcon iconName='archive'></SvgIcon>
+							<span>Archive</span>
+						</div>
+						<div
+							className='footer_option'
+							onClick={() => {
+								handleFooterAction('delete');
+							}}>
+							<SvgIcon iconName='delete'></SvgIcon>
+							<span>Delete</span>
+						</div>
+						<div
+							className='footer_option'
+							onClick={() => {
+								handleFooterAction('convert');
+							}}>
+							<SvgIcon iconName='convert'></SvgIcon>
+							<span>Convert</span>
+						</div>
+						<div className='footer_option'>
+							<DropdownMenu.Root sx={{ backgroundColor: 'red' }}>
+								<DropdownMenu.Trigger asChild>
+									<div
+										style={{
+											alignItems: 'center',
+											display: 'flex',
+											flexDirection: 'column',
+										}}>
+										<SvgIcon iconName='move_to'></SvgIcon>
+										<span>Move to</span>
+									</div>
+								</DropdownMenu.Trigger>
 
-            <div
-              className='footer_option'
-              onClick={() => {
-                handleFooterAction('apps')
-              }}
-            >
-              <SvgIcon iconName='apps'></SvgIcon>
-              <span>Apps</span>
-            </div>
-          </div>
-          <span
-            style={{
-              borderLeft: '2px solid gray',
-              opacity: 0.4,
-              marginLeft: '15px',
-            }}
-          ></span>
-          <IconButton
-            className='footer_close-icon_container'
-            sx={{
-              borderRadius: '2px',
-              '&:hover': { backgroundColor: 'white' },
-            }}
-            onClick={() => {
-              setCheckedTasksList([])
-            }}
-          >
-            <CloseIcon className='footer_close-icon' />
-          </IconButton>
-        </div>
-      </div>
-      <Outlet context={boardId} />
-    </div>
-  )
+								<DropdownMenu.Content
+									className='fade-in-up' // animation like monday
+									style={{
+										background: 'white',
+										border: '1px solid #ccc',
+										borderRadius: '5px',
+										padding: '8px',
+										marginBottom: '20px',
+										boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+										position: 'relative',
+									}}>
+									<div
+										// this is for the triangle that points down , at the bottom of the menu
+										style={{
+											position: 'absolute',
+											bottom: '-5px',
+											left: '50%',
+											transform: 'translateX(-50%)',
+											width: '0',
+											height: '0',
+											borderLeft: '8px solid transparent',
+											borderRight: '8px solid transparent',
+											borderTop: '8px solid white',
+										}}></div>
+									{board.groups.map((group) => (
+										<DropdownMenu.Item
+											onClick={() => handleFooterAction('move_to', group.id)}
+											className='dropdown-item'
+											key={group.id}>
+											{group.title}
+										</DropdownMenu.Item>
+									))}
+								</DropdownMenu.Content>
+							</DropdownMenu.Root>
+						</div>
+
+						<div
+							className='footer_option'
+							onClick={() => {
+								handleFooterAction('apps');
+							}}>
+							<SvgIcon iconName='apps'></SvgIcon>
+							<span>Apps</span>
+						</div>
+					</div>
+					<span
+						style={{
+							borderLeft: '2px solid gray',
+							opacity: 0.4,
+							marginLeft: '15px',
+						}}></span>
+					<IconButton
+						className='footer_close-icon_container'
+						sx={{
+							borderRadius: '2px',
+							'&:hover': { backgroundColor: 'white' },
+						}}
+						onClick={() => {
+							setCheckedTasksList([]);
+						}}>
+						<CloseIcon className='footer_close-icon' />
+					</IconButton>
+				</div>
+			</div>
+			<Outlet context={boardId} />
+		</div>
+	);
 }
