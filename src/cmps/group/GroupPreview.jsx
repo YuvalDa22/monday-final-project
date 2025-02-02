@@ -203,7 +203,7 @@ export function GroupPreview({
                               }}
                               onChangeComplete={(color) => {
                                 logActivity(group, null, group.style.color, 'groupColorChanged')
-                                updateBoard(group, null, {
+                                updateBoard(group.id, null, {
                                   key: 'style',
                                   value: { color: color.hex },
                                 })
