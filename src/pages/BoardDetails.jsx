@@ -20,6 +20,16 @@ import { utilService, getSvg } from '../services/util.service'
 import CloseIcon from '@mui/icons-material/Close'
 import * as XLSX from 'xlsx'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
+import {
+  DndContext,
+  DragOverlay,
+  closestCorners,
+  useSensors,
+  useSensor,
+  PointerSensor,
+} from '@dnd-kit/core'
+import { arrayMove } from '@dnd-kit/sortable'
+import { Item } from '../../src/cmps/group/GroupItemContainer'
 
 const SvgIcon = ({ iconName, options }) => {
   return <i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>
@@ -28,7 +38,14 @@ const SvgIcon = ({ iconName, options }) => {
 export function BoardDetails() {
   const { boardId } = useParams()
   const board = useSelector((storeState) => storeState.boardModule.currentBoard)
-
+  const [activeTask, setActiveTask] = useState() // drag and drop
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5, // only if moved 5px trigger , allowing buttons and stuff to work (since they're insta click)
+      },
+    })
+  )
   const [checkedTasksList, setCheckedTasksList] = useState([])
 
   const [anchorEl, setAnchorEl] = useState(null)
@@ -55,7 +72,6 @@ export function BoardDetails() {
   }
 
   if (!board) return <div>Loading...</div>
-  console.log('Activities = ', board.activities)
 
   function onAddTask(group, initialTitle = 'New Task', fromHeader) {
     const newTask = { id: utilService.makeId(), title: initialTitle }
@@ -66,7 +82,7 @@ export function BoardDetails() {
     if (!board) return
     let newGroup = boardService.getEmptyGroup()
     newGroup = {
-      id: utilService.makeId(), // Generate and add ID to the top of the properties
+      id: 'g' + utilService.makeId(), // Generate and add ID to the top of the properties
 
       ...newGroup,
     }
@@ -74,14 +90,6 @@ export function BoardDetails() {
 
     updateBoard(null, null, { key: 'groups', value: updatedGroups })
     logActivity(newGroup, null, null, 'groupCreated')
-    // await board.activities.unshift(boardService.createActivityLog(
-    //   board._id,
-    //   newGroup.id,
-    //   null,
-    //   'Group Created',
-    //   ``,
-    //   board.groups
-    // )) // prevValue = the previous board groups without the new group
   }
   const handleTasksChecked = (newArrayOfTasks, action) => {
     if (action === 'add') {
@@ -151,25 +159,115 @@ export function BoardDetails() {
     }
   }
 
+  ///////////////////
+
+  function swapArrayElements(arr, index1, index2) {
+    const newArr = [...arr] //  Create a copy to avoid mutating state
+
+    // Swap elements
+    ;[newArr[index1], newArr[index2]] = [newArr[index2], newArr[index1]]
+
+    return newArr //  Return new array with swapped positions
+  }
+
+  function findContainerByTaskId(id) {
+    return board.groups.find((group) => group.tasks.some((task) => task.id === id))
+  }
+
+  function handleDragStart(event) {
+    const { active } = event
+    setCheckedTasksList([]) // clear checked tasks when dragging item
+    if (!active?.id) return
+
+    // Find the task object based on active.id
+    const activeTask = board.groups
+      .flatMap((group) => group.tasks)
+      .find((task) => task.id === active.id)
+    setActiveTask(activeTask)
+  }
+
+  function handleDragOver(event) {
+    let { active, over } = event
+    if (!over || !active) return
+
+    const activeTask = board.groups
+      .flatMap((group) => group.tasks)
+      .find((task) => task.id === active.id)
+
+    let activeContainer = findContainerByTaskId(active.id)
+    let overContainer = findContainerByTaskId(over.id)
+
+    if (!activeContainer || !overContainer) {
+      overContainer = board.groups.find((group) => group.id === over.id)
+
+      if (overContainer.tasks.length == 1) {
+        over = { id: overContainer.tasks[0].id }
+      } else if (overContainer.tasks.length != 0) return
+    }
+
+    let activeIndex = activeContainer.tasks.findIndex((task) => task.id === active.id)
+    let overIndex = overContainer.tasks.findIndex((task) => task.id === over.id)
+    if (overIndex == -1) overIndex = 0
+
+    if (activeContainer.id === overContainer.id) {
+      // if same container swap elements inside
+      const updatedGroupAfterSwap = swapArrayElements(activeContainer.tasks, activeIndex, overIndex)
+
+      updateBoard(activeContainer.id, null, { key: 'tasks', value: updatedGroupAfterSwap })
+      return
+    }
+
+    activeContainer.tasks = activeContainer.tasks.filter((task) => task.id !== active.id)
+    overContainer.tasks = [
+      ...overContainer.tasks.slice(0, overIndex),
+      activeTask,
+      ...overContainer.tasks.slice(overIndex),
+    ]
+
+    updateBoard(activeContainer.id, null, { key: 'tasks', value: activeContainer.tasks })
+    updateBoard(overContainer.id, null, { key: 'tasks', value: overContainer.tasks })
+    return
+  }
+
+  function handleDragEnd(event) {
+    const { active } = event
+    const destinationGroup = findContainerByTaskId(active.id)
+    logActivity(destinationGroup, active, null, 'movedTo')
+    setActiveTask(null)
+    return
+  }
+
+  ///////////////////
+
   return (
     <div className='board-details-container'>
       <div className='board-details-header'>
         <BoardHeader board={board} onAddTask={onAddTask} onAddGroup={onAddGroup} />
       </div>
       <div className='board-details-groups-container'>
-        {board?.groups &&
-          board?.groups.map((group) => (
-            <GroupPreview
-              board={board}
-              group={group}
-              cmpTitles={board.cmpTitles}
-              cmpsOrder={board.cmpsOrder}
-              key={group.id}
-              onTasksCheckedChange={handleTasksChecked}
-              checkedTasksList={checkedTasksList}
-              onAddTask={onAddTask}
-            />
-          ))}
+        <DndContext
+          collisionDetection={closestCorners}
+          onDragStart={handleDragStart}
+          onDragOver={handleDragOver}
+          onDragEnd={handleDragEnd}
+          sensors={sensors}
+        >
+          {board?.groups &&
+            board?.groups.map((group) => (
+              <GroupPreview
+                board={board}
+                group={group}
+                cmpTitles={board.cmpTitles}
+                cmpsOrder={board.cmpsOrder}
+                key={group.id}
+                onTasksCheckedChange={handleTasksChecked}
+                checkedTasksList={checkedTasksList}
+                onAddTask={onAddTask}
+              />
+            ))}
+
+          <DragOverlay>{activeTask ? <Item item={activeTask} /> : null}</DragOverlay>
+        </DndContext>
         <div className='add-group-button-container'>
           <Button
             variant='outlined'

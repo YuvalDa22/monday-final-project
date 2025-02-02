@@ -4,11 +4,36 @@
   gap: 10px;
   align-items: baseline;
 
+  .gh-title-h4 {
+    white-space: nowrap;
+    overflow: hidden;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    padding: 0px 8px;
+    &:hover {
+      border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .gh-title-input-container {
+    box-shadow: none;
+    transform: translateX(
+      -8px
+    ); // help create the illusion that stuff didnt move when clicking on edit task name
+  }
+
+  .title-input {
+    width: 50rem;
+    padding-left: 10px;
+    min-width: 150px;
+  }
+
   .color-picker-btn {
-    width: 10px;
-    height: 10px;
-    border-radius: 1;
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
     background-color: var(--group-color);
+    margin-left: 15px;
   }
   .gp-table {
     width: calc(100vw - 322px);
@@ -98,12 +123,11 @@
 
       .task-menu {
         position: absolute;
-        padding: 14px;
+        padding: 8px 5px;
         align-content: start;
         display: flex;
-        transform: translateX(-45px) translateY(-47.5px);
+        transform: translateX(-40px);
         opacity: 0;
-        border-radius: 10px;
 
         &:hover {
           opacity: 1;
@@ -114,19 +138,19 @@
         display: flex;
         position: relative; /* Ensures the ::before pseudo-element positions relative to this */
       }
+      .checkbox-cell:not(:first-child)::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        left: -3px;
+        width: 6px;
+        height: 104%;
+        top: -1px;
+        background-color: var(--group-color);
+      }
 
       .checkbox-cell {
         position: relative;
-        width: 1rem;
-
-        ::before {
-          content: '';
-          position: absolute;
-          left: -3px;
-          width: 6px;
-          height: 105.5%;
-          background-color: var(--group-color);
-        }
 
         &.header {
           ::before {

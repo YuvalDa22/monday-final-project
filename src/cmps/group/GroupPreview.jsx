@@ -19,6 +19,12 @@ import { Menu, MenuItem, IconButton, Box } from '@mui/material'
 import { boardService } from '../../services/board.service.js'
 import { BlockPicker, CirclePicker } from 'react-color'
 import * as Popover from '@radix-ui/react-popover'
+import { useDroppable } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import GroupItemContainer from './GroupItemContainer.jsx'
+
 export function GroupPreview({
   board,
   group,
@@ -88,16 +94,6 @@ export function GroupPreview({
   const handleSave = (task) => {
     if (existingItemTempTitle.trim() && existingItemTempTitle !== '') {
       logActivity(group, task, task.title, 'taskNameChanged')
-      // board.activities.unshift(
-      //   boardService.createActivityLog(
-      //     board._id,
-      //     group.id,
-      //     task.id,
-      //     'Task Name Changed',
-      //     'Group: "' + group.title + '"',
-      //     task.title
-      //   ) // prevValue = task.title
-      // )
       updateBoard(group.id, task.id, {
         key: 'title',
         value: existingItemTempTitle,
@@ -145,16 +141,6 @@ export function GroupPreview({
         message: 'Group Name Changed',
         free_txt: `To '${groupTempTitle}'`,
       })
-      // board.activities.unshift(
-      //   boardService.createActivityLog(
-      //     board._id,
-      //     group.id,
-      //     null,
-      //     'Group Name Changed',
-      //     `${groupTempTitle}`,
-      //     group.title
-      //   ) // prevValue = group.title
-      // )
       updateBoard(group.id, null, {
         key: 'title',
         value: groupTempTitle,
@@ -163,6 +149,29 @@ export function GroupPreview({
     setIsEditingGroupTitle(false)
     setIsPopoverOpen(false) // what is this
   }
+
+  const { setNodeRef: setGroupRef } = useDroppable({
+    id: group.id,
+  })
+
+  // function getUseSortable(someid) {
+  //   const {
+  //     attributes,
+  //     listeners,
+  //     setNodeRef: setTaskRef,
+  //     transform,
+  //     transition,
+  //   } = useSortable({
+  //     id: someid,
+  //   })
+
+  //   const style = {
+  //     transform: CSS.Transform.toString(transform),
+  //     transition,
+  //   }
+
+  //   return { attributes, listeners, setTaskRef, style }
+  // }
 
   return (
     <>
@@ -226,16 +235,7 @@ export function GroupPreview({
                               }}
                               onChangeComplete={(color) => {
                                 logActivity(group, null, group.style.color, 'groupColorChanged')
-                                // board.activities.unshift(
-                                //   boardService.createActivityLog(
-                                //     board._id,
-                                //     group.id,
-                                //     null,
-                                //     'Group Color Changed',
-                                //     ``,
-                                //     group.style.color
-                                //   ) // prevValue = group.style.color
-                                // )
+
                                 updateBoard(group.id, null, {
                                   key: 'style',
                                   value: { color: color.hex },
@@ -303,141 +303,40 @@ export function GroupPreview({
                 ))}
               </tr>
             </thead>
-            <tbody>
-              {group.tasks.map((task, index) => (
-                <React.Fragment key={`task-${task.id}`}>
-                  <tr
-                    className='task-row'
-                    style={{
-                      // This line says : if task title is being edited OR task is checked , apply the blue backgrnd
-                      // note: we can apply it to a class and move the styling logic to a scss file if we rly want to
-                      backgroundColor:
-                        editingTaskId === task.id ||
-                        checkedTasksList.some(
-                          (checkedTask) =>
-                            checkedTask.groupId === group.id && checkedTask.taskId === task.id
-                        )
-                          ? 'rgb(208,228,252)'
-                          : '',
-                    }}
-                  >
-                    {' '}
-                    <td className={'checkbox-cell'}>
-                      <Checkbox
-                        checked={checkedTasksList.some(
-                          (checkedTask) =>
-                            checkedTask.groupId === group.id && checkedTask.taskId === task.id
-                        )}
-                        onChange={(event) => handleTaskChecked(event, task)}
-                      />
-                    </td>
-                    <td>
-                      <Link
-                        to={`task/${task.id}`}
-                        className='task-cell-container'
-                        style={{ display: editingTaskId === task.id ? 'block' : undefined }} // Input was being annoying because it didn't fit well when its container was flex , so the logic was if input is rendered , make its father not flex , and it fixed the annoying gap
-                      >
-                        {editingTaskId === task.id ? (
-                          <Input
-                            className='taskTitleInput'
-                            autoFocus
-                            type='text'
-                            value={existingItemTempTitle}
-                            onChange={(event) => setExistingItemTempTitle(event.target.value)}
-                            onKeyDown={(event) => {
-                              if (event.key === 'Enter') handleSave(task)
-                              if (event.key === 'Escape') handleCancel()
-                            }}
-                            onClick={(event) => {
-                              event.preventDefault() // without this , if we click on the editable text inside <input> we get sent to task details, not good
-                            }}
-                            onBlur={handleCancel}
-                            sx={{
-                              width: '100%',
-                              marginRight: '15px',
-                              minWidth: '2ch',
-                              alignContent: 'center',
-                              transform: 'translateX(-8px)', // help create the illusion that stuff didnt move when clicking on edit task name
-                            }}
-                          />
-                        ) : (
-                          <span
-                            onClick={(event) => {
-                              // these two ensure that clicking on task name = input (to change task name), and NOT to open task details.
-                              event.preventDefault()
-                              event.stopPropagation()
-                              handleEdit(task.id, task.title)
-                            }}
-                          >
-                            {task.title}
-                          </span>
-                        )}
-
-                        <div
-                          className={`openTaskDetails_container ${
-                            editingTaskId === task.id ? 'hide_open' : ''
-                          }`}
-                        >
-                          <SvgIcon iconName={'task_open_icon'} className={'svgOpenIcon'} />
-                          <div>Open</div>
-                        </div>
-                      </Link>
-                    </td>
-                    <TaskPreview
-                      key={`preview-${task.id}`}
+            <SortableContext
+              id={group.id}
+              items={group.tasks.map((task) => task.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <tbody ref={setGroupRef} style={{ position: 'relative' }}>
+                {group.tasks.map((task, index) => {
+                  return (
+                    <GroupItemContainer
+                      key={`task-${task.id}`}
+                      item={task}
                       group={group}
                       board={board}
-                      task={task}
                       cmpsOrder={cmpsOrder}
+                      editingTaskId={editingTaskId}
+                      setExistingItemTempTitle={setExistingItemTempTitle}
+                      existingItemTempTitle={existingItemTempTitle}
+                      handleEdit={handleEdit}
+                      handleSave={handleSave}
+                      handleCancel={handleCancel}
+                      checkedTasksList={checkedTasksList}
+                      handleTaskChecked={handleTaskChecked}
+                      anchorEl={anchorEl}
+                      selectedTask={selectedTask}
+                      handleMenuClick={handleMenuClick}
+                      handleMenuClose={handleMenuClose}
+                      handleTaskDeleted={handleTaskDeleted}
+                      handleTaskDuplicate={handleTaskDuplicate}
                     />
-                  </tr>
-                  <tr>
-                    <td colSpan={cmpTitles.length + 2}>
-                      <div className='task-menu'>
-                        <IconButton
-                          onClick={(event) => handleMenuClick(event, task)}
-                          sx={{
-                            borderRadius: 1,
-                            padding: '0px 5px',
-                            '&:hover': { backgroundColor: '#d8d4e4' },
-                          }}
-                        >
-                          <MoreHorizOutlinedIcon sx={{ width: '15px' }} />
-                        </IconButton>
-
-                        <Menu
-                          anchorEl={anchorEl}
-                          open={Boolean(anchorEl) && selectedTask?.id === task.id}
-                          onClose={handleMenuClose}
-                          anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'right',
-                          }}
-                          transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                          }}
-                        >
-                          <MenuItem
-                            onClick={() => {
-                              handleTaskDeleted(board, group, task)
-                            }}
-                          >
-                            Delete task
-                          </MenuItem>
-                          <MenuItem
-                            onClick={() => {
-                              handleTaskDuplicate(board, group, task)
-                            }}
-                          >
-                            Duplicate task
-                          </MenuItem>
-                        </Menu>
-                      </div>
-                    </td>
-                  </tr>
-                </React.Fragment>
-              ))}
+                  )
+                })}
+              </tbody>
+            </SortableContext>
+            <tfoot>
               <tr>
                 <td className='checkbox-cell lastone'>
                   <Checkbox disabled />
@@ -464,7 +363,7 @@ export function GroupPreview({
                   </div>
                 </td>
               </tr>
-            </tbody>
+            </tfoot>
           </table>
         </div>
       </div>

@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux'
 import { DynamicCmp } from './DynamicCmp'
 import { boardService } from '../../services/board.service'
 import { useEffect } from 'react'
-import { updateBoard } from '../../store/board/board.actions'
+import { updateBoard, logActivity } from '../../store/board/board.actions'
 
 export function TaskPreview({ task, cmpsOrder, board, group }) {
   return (
