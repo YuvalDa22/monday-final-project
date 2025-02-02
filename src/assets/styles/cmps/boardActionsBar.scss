@@ -55,9 +55,6 @@ button {
     &:hover {
       background-color: #f0f0f0;
     }
-
-    i {
-    }
   }
 
   .icon-button {
@@ -76,6 +73,15 @@ button {
       width: 22px;
       opacity: 1;
     }
+  }
+
+  .search-txt-input {
+    padding: 0 2px;
+    display: flex;
+    align-items: center;
+    width: 300px;
+    border: 1px solid $color-basic_blue;
+    border-radius: 5px;
   }
 
   .svg-icon {

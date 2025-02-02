@@ -1,52 +1,64 @@
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import {
+	Box,
 	Button,
 	ButtonGroup,
+	ClickAwayListener,
+	Divider,
+	IconButton,
+	InputBase,
 	IconButton as MuiIconButton,
 	Stack as MuiStack,
+	Paper,
 	TextField,
-} from '@mui/material';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import { getSvg } from '../../services/util.service';
-import { useEffect, useState } from 'react';
+} from '@mui/material'
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
+import { getSvg } from '../../services/util.service'
+import { useEffect, useRef, useState } from 'react'
+import MenuIcon from '@mui/icons-material/Menu'
+import DirectionsIcon from '@mui/icons-material/Directions'
 
 const SvgIcon = ({ iconName, options, className }) => {
 	return (
 		<i
 			dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}
 			className={`svg-icon ${className || ''}`}></i>
-	);
-};
+	)
+}
 
 export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetFilterBy }) {
-
-	const [filterByToEdit, setFilterByToEdit] = useState(filterBy);
-	const [isSearchInputVisible, setIsSearchInputVisible] = useState(false);
+	const [filterByToEdit, setFilterByToEdit] = useState(filterBy)
+	const [isSearchInputVisible, setIsSearchInputVisible] = useState(false)
+	const searchRef = useRef(null)
+	  
+		const handleClickAway = () => {
+			setIsSearchInputVisible(false);
+		};
 
 	useEffect(() => {
-		onSetFilterBy(filterByToEdit);
-	}, [filterByToEdit]);
+		onSetFilterBy(filterByToEdit)
+	}, [filterByToEdit])
 
 	function handleFilterChange({ target }) {
-		let { name: field, value, type } = target;
+		let { name: field, value, type } = target
 		switch (type) {
 			case 'number':
 			case 'range':
-				value = +value;
-				break;
+				value = +value
+				break
 			case 'checkbox':
-				value = target.checked;
+				value = target.checked
 			default:
-				break;
+				break
 		}
-		setFilterByToEdit((prevFilter) => ({ ...prevFilter, [field]: value }));
+		setFilterByToEdit((prevFilter) => ({ ...prevFilter, [field]: value }))
 	}
 
 	function handleAddTask(fromHeader) {
-		onAddTask(board.groups[0], 'New Task', fromHeader);
+		onAddTask(board.groups[0], 'New Task', fromHeader)
 	}
 
-	const { txt } = filterByToEdit;
+	const { txt } = filterByToEdit
 	return (
 		<MuiStack direction='row' spacing='15px' className='board-actions-bar'>
 			<ButtonGroup variant='contained' className='new-task-buttons'>
@@ -114,17 +126,34 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 			</ButtonGroup>
 
 			{isSearchInputVisible ? (
-				<TextField
-					autoFocus
-					className='search-input'
-					variant='outlined'
-					size='small'
-          id='txt'
-          name='txt'
-					value={txt}
-					onChange={handleFilterChange}
-					onBlur={() => setIsSearchInputVisible(false)} // Hide input when it loses focus
-				/>
+				<ClickAwayListener onClickAway={handleClickAway}>
+					<Box
+						ref={searchRef}
+						component='form'
+						className='search-txt-input'>
+						<IconButton sx={{ p: '4px 5px' }} aria-label='menu' disabled >
+							<SearchOutlinedIcon className='icon' />
+						</IconButton>
+
+						<InputBase
+							sx={{ ml: 1, flex: 1, fontSize: '15px' }}
+							placeholder='Search this board'
+							inputProps={{ 'aria-label': 'search' }}
+							id='txt'
+							name='txt'
+							value={txt}
+							onChange={handleFilterChange}
+							autoFocus
+						/>
+
+						<IconButton type='button' sx={{ p: '4px 5px', borderRadius: '5px' }} aria-label='search'>
+							<SvgIcon
+								iconName='boardActionsBar_searchOptions'
+								options={{ height: 17, width: 17 }}
+							/>
+						</IconButton>
+					</Box>
+				</ClickAwayListener>
 			) : (
 				<MuiIconButton className='icon-button' onClick={() => setIsSearchInputVisible(true)}>
 					<SearchOutlinedIcon className='icon' />
@@ -152,5 +181,5 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 				<span>Group by</span>
 			</MuiIconButton>
 		</MuiStack>
-	);
+	)
 }
