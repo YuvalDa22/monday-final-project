@@ -19,8 +19,8 @@ const myStyle = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'start',
-  border: '1px solid gray',
-  background: '#e6e6e6',
+  border: '1px dashed black',
+  background: '#ebedf2',
   transform: 'rotate(1deg)',
 }
 
