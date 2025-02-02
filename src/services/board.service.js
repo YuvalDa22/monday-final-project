@@ -90,6 +90,12 @@ async function query(filterBy, boardId) {
 						return null // Remove group if no matching task or group data
 					})
 					.filter(Boolean) // Remove `null` groups
+
+					if (filterBy.groups && filterBy.groups.length > 0) {
+						board.groups = board.groups.filter((group) => {
+							return filterBy.groups.includes(group.id)
+						})
+					}
 			}
 			return board
 		}

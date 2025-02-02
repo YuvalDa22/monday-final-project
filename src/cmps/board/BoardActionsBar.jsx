@@ -4,19 +4,16 @@ import {
 	Button,
 	ButtonGroup,
 	ClickAwayListener,
-	Divider,
 	IconButton,
 	InputBase,
 	IconButton as MuiIconButton,
 	Stack as MuiStack,
-	Paper,
-	TextField,
+	Popover,
+	Typography,
 } from '@mui/material'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import { getSvg } from '../../services/util.service'
 import { useEffect, useRef, useState } from 'react'
-import MenuIcon from '@mui/icons-material/Menu'
-import DirectionsIcon from '@mui/icons-material/Directions'
 
 const SvgIcon = ({ iconName, options, className }) => {
 	return (
@@ -29,11 +26,26 @@ const SvgIcon = ({ iconName, options, className }) => {
 export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetFilterBy }) {
 	const [filterByToEdit, setFilterByToEdit] = useState(filterBy)
 	const [isSearchInputVisible, setIsSearchInputVisible] = useState(false)
+	const [boardBeforeFilter, setBoardBeforeFilter] = useState(board)
+
+	const [anchorEl, setAnchorEl] = useState(null)
+
+	const OnOpenFilterPopover = (event) => {
+		setAnchorEl(event.currentTarget)
+	}
+
+	const handleClose = () => {
+		setAnchorEl(null)
+	}
+
+	const open = Boolean(anchorEl)
+	const id = open ? 'simple-popover' : undefined
+
 	const searchRef = useRef(null)
-	  
-		const handleClickAway = () => {
-			setIsSearchInputVisible(false);
-		};
+
+	const handleClickAway = () => {
+		setIsSearchInputVisible(false)
+	}
 
 	useEffect(() => {
 		onSetFilterBy(filterByToEdit)
@@ -127,11 +139,8 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 
 			{isSearchInputVisible ? (
 				<ClickAwayListener onClickAway={handleClickAway}>
-					<Box
-						ref={searchRef}
-						component='form'
-						className='search-txt-input'>
-						<IconButton sx={{ p: '4px 5px' }} aria-label='menu' disabled >
+					<Box ref={searchRef} component='form' className='search-txt-input'>
+						<IconButton sx={{ p: '4px 5px' }} aria-label='menu' disabled>
 							<SearchOutlinedIcon className='icon' />
 						</IconButton>
 
@@ -146,7 +155,10 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 							autoFocus
 						/>
 
-						<IconButton type='button' sx={{ p: '4px 5px', borderRadius: '5px' }} aria-label='search'>
+						<IconButton
+							type='button'
+							sx={{ p: '4px 5px', borderRadius: '5px' }}
+							aria-label='search'>
 							<SvgIcon
 								iconName='boardActionsBar_searchOptions'
 								options={{ height: 17, width: 17 }}
@@ -164,10 +176,196 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 				<SvgIcon iconName='boardActionsBar_person' options={{ height: 22, width: 22 }} />
 				<span>Person</span>
 			</MuiIconButton>
-			<MuiIconButton className='icon-button'>
+			<MuiIconButton className='icon-button' onClick={OnOpenFilterPopover}>
 				<SvgIcon iconName='boardActionsBar_filter' options={{ height: 22, width: 22 }} />
 				<span>Filter</span>
 			</MuiIconButton>
+			<Popover
+				id={id}
+				open={open}
+				anchorEl={anchorEl}
+				onClose={handleClose}
+				anchorOrigin={{
+					vertical: 'bottom',
+					horizontal: 'center',
+				}}>
+				<Box sx={{ p: 2, minWidth: 600 }}>
+					<Typography variant='h6' sx={{ mb: 2 }}>
+						Filter Options
+					</Typography>
+
+					<Box sx={{ display: 'flex', gap: 3 }}>
+						{/* Filter by Groups */}
+						<Box>
+							<Typography variant='subtitle2' sx={{ mb: 1 }}>
+								Group
+							</Typography>
+							<ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+								{boardBeforeFilter.groups.map((group) => (
+									<li key={group.id} style={{ marginBottom: '8px' }}>
+										<Button
+											variant={filterByToEdit.groups?.includes(group.id) ? 'contained' : 'outlined'}
+											onClick={() => {
+												setFilterByToEdit((prev) => {
+													const isSelected = prev.groups?.includes(group.id)
+													return {
+														...prev,
+														groups: isSelected
+															? prev.groups.filter((id) => id !== group.id) // Remove group
+															: [...(prev.groups || []), group.id], // Add group
+													}
+												})
+											}}
+											sx={{ width: '100%', textTransform: 'none' }}>
+											{group.title}
+										</Button>
+									</li>
+								))}
+							</ul>
+						</Box>
+
+						{/* Filter by Tasks */}
+						{/* <Box>
+							<Typography variant='subtitle2' sx={{ mb: 1 }}>
+								Tasks
+							</Typography>
+							<ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+								{boards[0].groups.flatMap((group) =>
+									group.tasks.map((task) => (
+										<li key={task.id} style={{ marginBottom: '8px' }}>
+											<Button
+												variant={filterByToEdit.task === task.id ? 'contained' : 'outlined'}
+												onClick={() => setFilterByToEdit((prev) => ({ ...prev, task: task.id }))}
+												sx={{ width: '100%', textTransform: 'none' }}>
+												{task.title}
+											</Button>
+										</li>
+									))
+								)}
+							</ul>
+						</Box> */}
+
+						{/* Filter by Members */}
+						{/* <Box>
+							<Typography variant='subtitle2' sx={{ mb: 1 }}>
+								Members
+							</Typography>
+							<ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+								{boards[0].members.map((member) => (
+									<li key={member._id} style={{ marginBottom: '8px' }}>
+										<Button
+											variant={filterByToEdit.member === member._id ? 'contained' : 'outlined'}
+											onClick={() => setFilterByToEdit((prev) => ({ ...prev, member: member._id }))}
+											sx={{
+												width: '100%',
+												textTransform: 'none',
+												display: 'flex',
+												alignItems: 'center',
+												gap: 1,
+											}}>
+											<img
+												src={member.imgUrl}
+												alt={member.fullname}
+												style={{
+													width: 24,
+													height: 24,
+													borderRadius: '50%',
+												}}
+											/>
+											{member.fullname}
+										</Button>
+									</li>
+								))}
+							</ul>
+						</Box> */}
+
+						{/* Filter by Status */}
+						{/* <Box>
+							<Typography variant='subtitle2' sx={{ mb: 1 }}>
+								Status
+							</Typography>
+							<ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+								{boards[0].labels
+									.filter((label) => label.id.startsWith('l1'))
+									.map((status) => (
+										<li key={status.id} style={{ marginBottom: '8px' }}>
+											<Button
+												variant={filterByToEdit.status === status.id ? 'contained' : 'outlined'}
+												onClick={() =>
+													setFilterByToEdit((prev) => ({ ...prev, status: status.id }))
+												}
+												sx={{
+													width: '100%',
+													textTransform: 'none',
+													display: 'flex',
+													alignItems: 'center',
+													gap: 1,
+												}}>
+												<span
+													style={{
+														width: 12,
+														height: 12,
+														borderRadius: '50%',
+														backgroundColor: status.color,
+													}}
+												/>
+												{status.title || 'No Status'}
+											</Button>
+										</li>
+									))}
+							</ul>
+						</Box> */}
+
+						{/* Filter by Priority */}
+						{/* <Box>
+							<Typography variant='subtitle2' sx={{ mb: 1 }}>
+								Priority
+							</Typography>
+							<ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+								{boards[0].labels
+									.filter((label) => label.id.startsWith('l2'))
+									.map((priority) => (
+										<li key={priority.id} style={{ marginBottom: '8px' }}>
+											<Button
+												variant={filterByToEdit.priority === priority.id ? 'contained' : 'outlined'}
+												onClick={() =>
+													setFilterByToEdit((prev) => ({
+														...prev,
+														priority: priority.id,
+													}))
+												}
+												sx={{
+													width: '100%',
+													textTransform: 'none',
+													display: 'flex',
+													alignItems: 'center',
+													gap: 1,
+												}}>
+												<span
+													style={{
+														width: 12,
+														height: 12,
+														borderRadius: '50%',
+														backgroundColor: priority.color,
+													}}
+												/>
+												{priority.title || 'No Priority'}
+											</Button>
+										</li>
+									))}
+							</ul>
+						</Box> */}
+					</Box>
+
+					{/* Close Button */}
+					<Box sx={{ mt: 3, textAlign: 'right' }}>
+						<Button onClick={handleClose} size='small' variant='outlined'>
+							Close
+						</Button>
+					</Box>
+				</Box>
+			</Popover>
+
 			<MuiIconButton className='icon-button'>
 				<SvgIcon iconName='boardActionsBar_sort' options={{ height: 22, width: 22 }} />
 				<span>Sort</span>
