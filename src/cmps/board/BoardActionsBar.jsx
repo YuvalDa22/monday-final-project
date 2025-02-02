@@ -225,17 +225,27 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 						</Box>
 
 						{/* Filter by Tasks */}
-						{/* <Box>
+						<Box>
 							<Typography variant='subtitle2' sx={{ mb: 1 }}>
 								Tasks
 							</Typography>
 							<ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-								{boards[0].groups.flatMap((group) =>
+								{boardBeforeFilter.groups.flatMap((group) =>
 									group.tasks.map((task) => (
 										<li key={task.id} style={{ marginBottom: '8px' }}>
 											<Button
-												variant={filterByToEdit.task === task.id ? 'contained' : 'outlined'}
-												onClick={() => setFilterByToEdit((prev) => ({ ...prev, task: task.id }))}
+												variant={filterByToEdit.tasks?.includes(task.id) ? 'contained' : 'outlined'}
+												onClick={() => {
+													setFilterByToEdit((prev) => {
+														const isSelected = prev.tasks?.includes(task.id)
+														return {
+															...prev,
+															tasks: isSelected
+																? prev.tasks.filter((id) => id !== task.id) // Remove task
+																: [...(prev.tasks || []), task.id], // Add task
+														}
+													})
+												}}
 												sx={{ width: '100%', textTransform: 'none' }}>
 												{task.title}
 											</Button>
@@ -243,7 +253,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 									))
 								)}
 							</ul>
-						</Box> */}
+						</Box>
 
 						{/* Filter by Members */}
 						{/* <Box>
@@ -251,7 +261,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 								Members
 							</Typography>
 							<ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-								{boards[0].members.map((member) => (
+								{board.members.map((member) => (
 									<li key={member._id} style={{ marginBottom: '8px' }}>
 										<Button
 											variant={filterByToEdit.member === member._id ? 'contained' : 'outlined'}
@@ -285,7 +295,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 								Status
 							</Typography>
 							<ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-								{boards[0].labels
+								{board.labels
 									.filter((label) => label.id.startsWith('l1'))
 									.map((status) => (
 										<li key={status.id} style={{ marginBottom: '8px' }}>
@@ -322,7 +332,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 								Priority
 							</Typography>
 							<ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-								{boards[0].labels
+								{board.labels
 									.filter((label) => label.id.startsWith('l2'))
 									.map((priority) => (
 										<li key={priority.id} style={{ marginBottom: '8px' }}>

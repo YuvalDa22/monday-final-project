@@ -96,6 +96,15 @@ async function query(filterBy, boardId) {
 							return filterBy.groups.includes(group.id)
 						})
 					}
+					if (filterBy.tasks && filterBy.tasks.length > 0) {
+						board.groups = board.groups.map((group) => {
+							const filteredTasks = group.tasks.filter((task) => filterBy.tasks.includes(task.id))
+							if (filteredTasks.length > 0) {
+								return { ...group, tasks: filteredTasks } // Keep the group with only the filtered tasks
+							}
+							return null // Remove group if no matching tasks
+						}).filter(Boolean) // Remove `null` groups
+					}
 			}
 			return board
 		}
