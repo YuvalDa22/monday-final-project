@@ -1,55 +1,57 @@
 .gp-main-container {
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-	align-items: baseline;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: baseline;
 
-	.gh-title-h4 {
-		white-space: nowrap;
-		overflow: hidden;
-		border: 1px solid transparent;
-		border-radius: 5px;
-		padding: 0px 8px;
-		&:hover {
-			border: 1px solid rgba(0, 0, 0, 0.2);
-		}
-	}
-
-  .gh-title-input-container {
-  box-shadow: none;
-	transform: translateX(-8px); // help create the illusion that stuff didnt move when clicking on edit task name
+  .gh-title-h4 {
+    white-space: nowrap;
+    overflow: hidden;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    padding: 0px 8px;
+    &:hover {
+      border: 1px solid rgba(0, 0, 0, 0.2);
+    }
   }
 
-  .title-input	 {
+  .gh-title-input-container {
+    box-shadow: none;
+    transform: translateX(
+      -8px
+    ); // help create the illusion that stuff didnt move when clicking on edit task name
+  }
+
+  .title-input {
     width: 50rem;
     padding-left: 10px;
     min-width: 150px;
   }
 
-	.color-picker-btn {
-		width: 16px;
-		height: 16px;
-		border-radius: 3px;
-		background-color: var(--group-color);
+  .color-picker-btn {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    background-color: var(--group-color);
     margin-left: 15px;
-	}
-	.gp-table {
-		width: calc(100vw - 322px);
+  }
+  .gp-table {
+    width: calc(100vw - 322px);
 
-		.custom-table {
-			//  width: 100%;
-			border-collapse: collapse;
-			text-align: center;
+    .custom-table {
+      //  width: 100%;
+      border-collapse: collapse;
+      text-align: center;
 
-			a {
-				color: inherit; // this is so task titles wont be colored blue since they're now wrapped in a <Link> container which boils down to <a href> resulting in blue text
-			}
+      a {
+        color: inherit; // this is so task titles wont be colored blue since they're now wrapped in a <Link> container which boils down to <a href> resulting in blue text
+      }
 
-			td,
-			th {
-				border: 1px solid #ddd;
-				font-weight: 300;
-			}
+      td,
+      th {
+        border: 1px solid #ddd;
+        font-weight: 300;
+      }
 
       .header-cell {
         min-width: 10rem;
@@ -64,106 +66,103 @@
         // AFTER :https://i.imgur.com/bEbG827.png
       }
 
-			.openTaskDetails_container {
-				display: none;
-				gap: 5px;
+      .openTaskDetails_container {
+        display: none;
+        gap: 5px;
 
-				//  background-color: lightblue;
-				align-items: center;
-				padding: 0px 10px 0px 5px;
+        //  background-color: lightblue;
+        align-items: center;
+        padding: 0px 10px 0px 5px;
 
-				.svgOpenIcon {
-					margin-top: 5px;
-					opacity: 0.75;
-				}
-			}
+        .svgOpenIcon {
+          margin-top: 5px;
+          opacity: 0.75;
+        }
+      }
 
-			.hide_open {
-				display: none !important; /* had to use important to override the display property*/
-			}
+      .hide_open {
+        display: none !important; /* had to use important to override the display property*/
+      }
 
-			.task-cell-container {
-				padding-left: 15px;
-				position: relative;
-				align-items: center;
-				justify-content: center;
-				text-align: start;
-				display: flex;
-				flex-direction: row;
-				justify-content: space-between;
-				max-width: 30rem; // This is so the content inside the cell wont dictate .task-title width . NOTE FOR SELF : make sure this is synced with .task-title width !
+      .task-cell-container {
+        padding-left: 15px;
+        position: relative;
+        align-items: center;
+        justify-content: center;
+        text-align: start;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        max-width: 30rem; // This is so the content inside the cell wont dictate .task-title width . NOTE FOR SELF : make sure this is synced with .task-title width !
 
+        span {
+          white-space: nowrap;
+          overflow: hidden;
+          border: 1px solid transparent;
+          border-radius: 5px;
+          padding: 3px;
+        }
 
-				span {
-					white-space: nowrap;
-					overflow: hidden;
-					border: 1px solid transparent;
-					border-radius: 5px;
-					padding: 3px;
-				}
+        span:hover {
+          border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+      }
+      .task-title {
+        min-width: 30rem; // This is so task column is by default little bigger than the rest of the columns
+      }
 
-				span:hover {
-					border: 1px solid rgba(0, 0, 0, 0.2);
-				}
+      .task-row {
+      }
 
-			}
-			.task-title {
-				min-width: 30rem; // This is so task column is by default little bigger than the rest of the columns
-			}
+      .task-row:hover {
+        background-color: rgba(245, 246, 248, 255);
+        .openTaskDetails_container {
+          display: flex;
+        }
+      }
 
-			.task-row {
-			}
+      .task-menu {
+        position: absolute;
+        padding: 8px 5px;
+        align-content: start;
+        display: flex;
+        transform: translateX(-40px);
+        opacity: 0;
 
-			.task-row:hover {
-				background-color: rgba(245, 246, 248, 255);
-				.openTaskDetails_container {
-					display: flex;
-				}
-			}
+        &:hover {
+          opacity: 1;
+        }
+      }
 
-			.task-menu {
-				position: absolute;
-				padding: 14px;
-				align-content: start;
-				display: flex;
-				transform: translateX(-45px) translateY(-47.5px);
-				opacity: 0;
-				border-radius: 10px;
+      .add-item {
+        display: flex;
+        position: relative; /* Ensures the ::before pseudo-element positions relative to this */
+      }
+      .checkbox-cell:not(:first-child)::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        left: -3px;
+        width: 6px;
+        height: 104%;
+        top: -1px;
+        background-color: var(--group-color);
+      }
 
-				&:hover {
-					opacity: 1;
-				}
-			}
+      .checkbox-cell {
+        position: relative;
 
-			.add-item {
-				display: flex;
-				position: relative; /* Ensures the ::before pseudo-element positions relative to this */
-			}
-
-			.checkbox-cell {
-				position: relative;
-				width: 1rem;
-
-				::before {
-					content: '';
-					position: absolute;
-					left: -3px;
-					width: 6px;
-					height: 105.5%;
-					background-color: var(--group-color);
-				}
-
-				&.header {
-					::before {
-						content: '';
-						position: absolute;
-						left: -3px;
-						width: 6px;
-						height: 104%;
-						background-color: var(--group-color);
-						border-top-left-radius: 8px;
-					}
-				}
+        &.header {
+          ::before {
+            content: '';
+            position: absolute;
+            left: -3px;
+            width: 6px;
+            height: 104%;
+            background-color: var(--group-color);
+            border-top-left-radius: 8px;
+          }
+        }
 
         &.lastone {
           ::before {

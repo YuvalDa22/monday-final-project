@@ -19,6 +19,12 @@ import { boardService } from '../../services/board.service.js'
 import { BlockPicker, CirclePicker } from 'react-color'
 import { DynamicCmp } from '../task/DynamicCmp.jsx'
 import * as Popover from '@radix-ui/react-popover'
+import { useDroppable } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import GroupItemContainer from './GroupItemContainer.jsx'
+
 export function GroupPreview({
   board,
   group,
@@ -28,15 +34,12 @@ export function GroupPreview({
   checkedTasksList,
   onAddTask,
 }) {
-  const [isRotated, setIsRotated] = useState(false)
-  const handleClick = () => {
-    setIsRotated(!isRotated)
-  }
   const SvgIcon = ({ iconName, options, className }) => {
     return (
       <i className={className} dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>
     )
   }
+  const [isCollapsed, setIsCollapsed] = useState(group.collapsed)
   const [editingTaskId, setEditingTaskId] = useState(null)
   const [existingItemTempTitle, setExistingItemTempTitle] = useState('')
   const [newItemTempTitle, setNewItemTempTitle] = useState('')
@@ -46,6 +49,11 @@ export function GroupPreview({
   const [isEditingGroupTitle, setIsEditingGroupTitle] = useState(false)
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const [groupTempTitle, setGroupTempTitle] = useState(group.title)
+
+  const handleCollapseGroupClicked = () => {
+    setIsCollapsed(!isCollapsed)
+    group.collapsed = !group.collapsed
+  }
 
   const handleGroupChecked = (event, group) => {
     // if event=null, it means that the callback function that was sent to SuggestedActions was triggered
@@ -144,9 +152,20 @@ export function GroupPreview({
     setIsPopoverOpen(false) // what is this
   }
 
+  const { setNodeRef: setGroupRef } = useDroppable({
+    id: group.id,
+  })
+
   return (
     <>
-      <div className='gp-main-container' style={{ '--group-color': group.style.color || '#000' }}>
+      <div
+        className='gp-main-container'
+        style={{
+          '--group-color': group.style.color || '#000',
+          color: group.collapsed ? 'gray' : '',
+          opacity: group.collapsed ? '0.8' : '1',
+        }}
+      >
         <div className='gh-main-container'>
           <div className='gh-title'>
             <SuggestedActions
@@ -155,11 +174,11 @@ export function GroupPreview({
               updateFooterGroupRemoved={handleGroupChecked}
             />
             <div className='colored-area'>
-              <div onClick={handleClick} className='gh-title-expandMoreIcon'>
+              <div onClick={handleCollapseGroupClicked} className='gh-title-expandMoreIcon'>
                 <ExpandMoreIcon
                   style={{
                     transition: 'transform 0.3s ease',
-                    transform: isRotated ? 'rotate(-90deg)' : 'rotate(0deg)',
+                    transform: isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)',
                   }}
                 />
               </div>
@@ -203,7 +222,8 @@ export function GroupPreview({
                               }}
                               onChangeComplete={(color) => {
                                 logActivity(group, null, group.style.color, 'groupColorChanged')
-                                updateBoard(group, null, {
+
+                                updateBoard(group.id, null, {
                                   key: 'style',
                                   value: { color: color.hex },
                                 })
@@ -235,13 +255,16 @@ export function GroupPreview({
                     />
                   </Paper>
                 ) : (
-                  <h4 className='gh-title-h4' onClick={() => setIsEditingGroupTitle(true)}>
-                    {group.title || 'New Group'}
+                  <h4 onClick={() => setIsEditingGroupTitle(true)}>
+                    {group.title ? group.title : 'New Group'}{' '}
+                    <span style={{ color: 'gray', marginLeft: '10px' }}>
+                      {isCollapsed ? `${group.tasks.length} Tasks [Collapsed]` : ''}
+                    </span>
                   </h4>
                 )}
               </div>
             </div>
-            <span className='gh-how-many-tasks'>{group.tasks.length} Tasks</span>
+            {!isCollapsed && <span className='gh-how-many-tasks'>{group.tasks.length} Tasks</span>}
           </div>
         </div>
         <div className='gp-table'>
@@ -272,150 +295,39 @@ export function GroupPreview({
                 ))}
               </tr>
             </thead>
-            <tbody>
-              {group.tasks.map((task, index) => (
-                <React.Fragment key={`task-${task.id}`}>
-                  <tr
-                    className='task-row'
-                    style={{
-                      // This line says : if task title is being edited OR task is checked , apply the blue backgrnd
-                      // note: we can apply it to a class and move the styling logic to a scss file if we rly want to
-                      backgroundColor:
-                        editingTaskId === task.id ||
-                        checkedTasksList.some(
-                          (checkedTask) =>
-                            checkedTask.groupId === group.id && checkedTask.taskId === task.id
-                        )
-                          ? 'rgb(208,228,252)'
-                          : '',
-                    }}
-                  >
-                    <td className={'checkbox-cell'}>
-                      <Checkbox
-                        checked={checkedTasksList.some(
-                          (checkedTask) =>
-                            checkedTask.groupId === group.id && checkedTask.taskId === task.id
-                        )}
-                        onChange={(event) => handleTaskChecked(event, task)}
-                      />
-                    </td>
-                    <td className='testzzz'>
-                      <Link
-                        to={`task/${task.id}`}
-                        className='task-cell-container'
-                        style={{ display: editingTaskId === task.id ? 'block' : undefined }} // Input was being annoying because it didn't fit well when its container was flex , so the logic was if input is rendered , make its father not flex , and it fixed the annoying gap
-                      >
-                        {editingTaskId === task.id ? (
-                          <Input
-                            className='taskTitleInput'
-                            autoFocus
-                            type='text'
-                            value={existingItemTempTitle}
-                            onChange={(event) => setExistingItemTempTitle(event.target.value)}
-                            onKeyDown={(event) => {
-                              if (event.key === 'Enter') handleSave(task)
-                              if (event.key === 'Escape') handleCancel()
-                            }}
-                            onClick={(event) => {
-                              event.preventDefault() // without this , if we click on the editable text inside <input> we get sent to task details, not good
-                            }}
-                            onBlur={handleCancel}
-                            sx={{
-                              width: '100%',
-                              marginRight: '15px',
-                              minWidth: '2ch',
-                              alignContent: 'center',
-                              transform: 'translateX(-8px)', // help create the illusion that stuff didnt move when clicking on edit task name
-                            }}
-                          />
-                        ) : (
-                          <span
-                            onClick={(event) => {
-                              // these two ensure that clicking on task name = input (to change task name), and NOT to open task details.
-                              event.preventDefault()
-                              event.stopPropagation()
-                              handleEdit(task.id, task.title)
-                            }}
-                          >
-                            {task.title}
-                          </span>
-                        )}
-
-                        <div
-                          className={`openTaskDetails_container ${
-                            editingTaskId === task.id ? 'hide_open' : ''
-                          }`}
-                        >
-                          <SvgIcon iconName={'task_open_icon'} className={'svgOpenIcon'} />
-                          <div>Open</div>
-                        </div>
-                      </Link>
-                    </td>
-                    {cmpsOrder.map((cmp, idx) => (
-                      <td key={idx} className='data-cell'>
-                        <DynamicCmp
-                          cmp={cmp}
-                          board={board}
-                          info={task[cmp]} // Pass the current value for this key
-                          onUpdate={(data) => {
-                            logActivity(group, task, null, {
-                              action: 'labelChanged',
-                              message: `${cmp.charAt(0).toUpperCase() + cmp.slice(1)}`,
-                              free_txt: `Changed to ${data.title}`,
-                            })
-                            updateBoard(group.id, task.id, { key: cmp, value: data.id })
-                          }}
-                        />
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <td colSpan={cmpTitles.length + 2}>
-                      <div className='task-menu'>
-                        <IconButton
-                          onClick={(event) => handleMenuClick(event, task)}
-                          sx={{
-                            borderRadius: 1,
-                            padding: '0px 5px',
-                            '&:hover': { backgroundColor: '#d8d4e4' },
-                          }}
-                        >
-                          <MoreHorizOutlinedIcon sx={{ width: '15px' }} />
-                        </IconButton>
-
-                        <Menu
-                          anchorEl={anchorEl}
-                          open={Boolean(anchorEl) && selectedTask?.id === task.id}
-                          onClose={handleMenuClose}
-                          anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'right',
-                          }}
-                          transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                          }}
-                        >
-                          <MenuItem
-                            onClick={() => {
-                              handleTaskDeleted(board, group, task)
-                            }}
-                          >
-                            Delete task
-                          </MenuItem>
-                          <MenuItem
-                            onClick={() => {
-                              handleTaskDuplicate(board, group, task)
-                            }}
-                          >
-                            Duplicate task
-                          </MenuItem>
-                        </Menu>
-                      </div>
-                    </td>
-                  </tr>
-                </React.Fragment>
-              ))}
+            <SortableContext
+              id={group.id}
+              items={group.tasks.map((task) => task.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <tbody ref={setGroupRef} style={{ position: 'relative' }}>
+                {!isCollapsed &&
+                  group.tasks.map((task, index) => (
+                    <GroupItemContainer
+                      key={`task-${task.id}`}
+                      item={task}
+                      group={group}
+                      board={board}
+                      cmpsOrder={cmpsOrder}
+                      editingTaskId={editingTaskId}
+                      setExistingItemTempTitle={setExistingItemTempTitle}
+                      existingItemTempTitle={existingItemTempTitle}
+                      handleEdit={handleEdit}
+                      handleSave={handleSave}
+                      handleCancel={handleCancel}
+                      checkedTasksList={checkedTasksList}
+                      handleTaskChecked={handleTaskChecked}
+                      anchorEl={anchorEl}
+                      selectedTask={selectedTask}
+                      handleMenuClick={handleMenuClick}
+                      handleMenuClose={handleMenuClose}
+                      handleTaskDeleted={handleTaskDeleted}
+                      handleTaskDuplicate={handleTaskDuplicate}
+                    />
+                  ))}
+              </tbody>
+            </SortableContext>
+            <tfoot>
               <tr>
                 <td className='checkbox-cell lastone'>
                   <Checkbox disabled />
@@ -443,7 +355,7 @@ export function GroupPreview({
                   </div>
                 </td>
               </tr>
-            </tbody>
+            </tfoot>
           </table>
         </div>
       </div>
