@@ -157,6 +157,7 @@ export default function GroupItemContainer({
             <Input
               className='taskTitleInput'
               autoFocus
+              disableUnderline
               type='text'
               value={existingItemTempTitle}
               onChange={(event) => setExistingItemTempTitle(event.target.value)}
@@ -167,11 +168,17 @@ export default function GroupItemContainer({
               onClick={(event) => event.preventDefault()}
               onBlur={handleCancel}
               sx={{
-                width: '100%',
-                marginRight: '15px',
+                height: '25px',
+                width: '99%',
+                marginTop: '1px',
+                marginLeft: '6px',
                 minWidth: '2ch',
                 alignContent: 'center',
                 transform: 'translateX(-8px)',
+                backgroundColor: 'white',
+                borderRadius: '3px',
+                padding: '0px 5px',
+                border: '1px solid blue',
               }}
             />
           ) : (

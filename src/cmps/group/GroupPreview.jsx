@@ -34,15 +34,12 @@ export function GroupPreview({
   checkedTasksList,
   onAddTask,
 }) {
-  const [isRotated, setIsRotated] = useState(false)
-  const handleClick = () => {
-    setIsRotated(!isRotated)
-  }
   const SvgIcon = ({ iconName, options, className }) => {
     return (
       <i className={className} dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>
     )
   }
+  const [isCollapsed, setIsCollapsed] = useState(group.collapsed)
   const [editingTaskId, setEditingTaskId] = useState(null)
   const [existingItemTempTitle, setExistingItemTempTitle] = useState('')
   const [newItemTempTitle, setNewItemTempTitle] = useState('')
@@ -52,6 +49,11 @@ export function GroupPreview({
   const [isEditingGroupTitle, setIsEditingGroupTitle] = useState(false)
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const [groupTempTitle, setGroupTempTitle] = useState(group.title)
+
+  const handleCollapseGroupClicked = () => {
+    setIsCollapsed(!isCollapsed)
+    group.collapsed = !group.collapsed
+  }
 
   const handleGroupChecked = (event, group) => {
     // if event=null, it means that the callback function that was sent to SuggestedActions was triggered
@@ -154,28 +156,16 @@ export function GroupPreview({
     id: group.id,
   })
 
-  // function getUseSortable(someid) {
-  //   const {
-  //     attributes,
-  //     listeners,
-  //     setNodeRef: setTaskRef,
-  //     transform,
-  //     transition,
-  //   } = useSortable({
-  //     id: someid,
-  //   })
-
-  //   const style = {
-  //     transform: CSS.Transform.toString(transform),
-  //     transition,
-  //   }
-
-  //   return { attributes, listeners, setTaskRef, style }
-  // }
-
   return (
     <>
-      <div className='gp-main-container' style={{ '--group-color': group.style.color || '#000' }}>
+      <div
+        className='gp-main-container'
+        style={{
+          '--group-color': group.style.color || '#000',
+          color: group.collapsed ? 'gray' : '',
+          opacity: group.collapsed ? '0.8' : '1',
+        }}
+      >
         <div className='gh-main-container'>
           <div className='gh-title'>
             <SuggestedActions
@@ -184,11 +174,11 @@ export function GroupPreview({
               updateFooterGroupRemoved={handleGroupChecked}
             />
             <div className='colored-area'>
-              <div onClick={handleClick} className='gh-title-expandMoreIcon'>
+              <div onClick={handleCollapseGroupClicked} className='gh-title-expandMoreIcon'>
                 <ExpandMoreIcon
                   style={{
                     transition: 'transform 0.3s ease',
-                    transform: isRotated ? 'rotate(-90deg)' : 'rotate(0deg)',
+                    transform: isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)',
                   }}
                 />
               </div>
@@ -268,11 +258,16 @@ export function GroupPreview({
                     />
                   </Box>
                 ) : (
-                  <h4 onClick={() => setIsEditingGroupTitle(true)}>{group.title || 'New Group'}</h4>
+                  <h4 onClick={() => setIsEditingGroupTitle(true)}>
+                    {group.title ? group.title : 'New Group'}{' '}
+                    <span style={{ color: 'gray', marginLeft: '10px' }}>
+                      {isCollapsed ? `${group.tasks.length} Tasks [Collapsed]` : ''}
+                    </span>
+                  </h4>
                 )}
               </div>
             </div>
-            <span className='gh-how-many-tasks'>{group.tasks.length} Tasks</span>
+            {!isCollapsed && <span className='gh-how-many-tasks'>{group.tasks.length} Tasks</span>}
           </div>
         </div>
         <div className='gp-table'>
@@ -309,8 +304,8 @@ export function GroupPreview({
               strategy={verticalListSortingStrategy}
             >
               <tbody ref={setGroupRef} style={{ position: 'relative' }}>
-                {group.tasks.map((task, index) => {
-                  return (
+                {!isCollapsed &&
+                  group.tasks.map((task, index) => (
                     <GroupItemContainer
                       key={`task-${task.id}`}
                       item={task}
@@ -332,8 +327,7 @@ export function GroupPreview({
                       handleTaskDeleted={handleTaskDeleted}
                       handleTaskDuplicate={handleTaskDuplicate}
                     />
-                  )
-                })}
+                  ))}
               </tbody>
             </SortableContext>
             <tfoot>

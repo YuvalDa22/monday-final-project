@@ -154,6 +154,7 @@ function getEmptyGroup() {
     tasks: [],
     archivedItems: [],
     style: { color: _setNewGroupColor() },
+    collapsed: false,
   }
 }
 
@@ -275,6 +276,7 @@ function _createBoards() {
             id: 'g101',
             title: 'Group 1',
             archivedAt: 1589983468418,
+            collapsed: false,
             tasks: [
               {
                 id: 'c101',
@@ -292,6 +294,7 @@ function _createBoards() {
           {
             id: 'g102',
             title: 'Group 2',
+            collapsed: false,
             tasks: [
               {
                 id: 'c103',

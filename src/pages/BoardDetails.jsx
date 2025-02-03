@@ -188,6 +188,9 @@ export function BoardDetails() {
 
   function handleDragOver(event) {
     let { active, over } = event
+    console.log('active ', active)
+    console.log('over ', over)
+
     if (!over || !active) return
 
     const activeTask = board.groups
@@ -199,10 +202,13 @@ export function BoardDetails() {
 
     if (!activeContainer || !overContainer) {
       overContainer = board.groups.find((group) => group.id === over.id)
+      console.log(overContainer)
 
       if (overContainer.tasks.length == 1) {
         over = { id: overContainer.tasks[0].id }
-      } else if (overContainer.tasks.length != 0) return
+      } else if (overContainer.collapsed && overContainer.tasks.length > 0)
+        over = { id: overContainer.tasks[0].id }
+      else if (overContainer.tasks.length != 0) return
     }
 
     let activeIndex = activeContainer.tasks.findIndex((task) => task.id === active.id)
