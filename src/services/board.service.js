@@ -81,30 +81,43 @@ async function query(filterBy, boardId) {
 				let { txt = '' } = filterBy
 				txt = txt.toLowerCase()
 
-				// Filter groups based on tasks that match the search text
-				board.groups = board.groups.map((group) => {
-						const filteredTasks = group.tasks.filter((task) => deepSearch(task, txt))
-						if (filteredTasks.length > 0 || deepSearch(group, txt)) {
-							return { ...group, tasks: filteredTasks } // Keep the group if it or any task matches
+				// Filter by search text
+				board.groups = board.groups
+					.map((group) => {
+						const filteredTasks = group.tasks.filter((task) => deepSearch(task, txt, board))
+						if (filteredTasks.length > 0 || deepSearch(group, txt, board)) {
+							return { ...group, tasks: filteredTasks }
 						}
-						return null // Remove group if no matching task or group data
+						return null
 					})
-					.filter(Boolean) // Remove `null` groups
+					.filter(Boolean) // Remove empty groups
 
-					if (filterBy.groups && filterBy.groups.length > 0) {
-						board.groups = board.groups.filter((group) => {
-							return filterBy.groups.includes(group.id)
-						})
-					}
-					if (filterBy.tasks && filterBy.tasks.length > 0) {
-						board.groups = board.groups.map((group) => {
-							const filteredTasks = group.tasks.filter((task) => filterBy.tasks.includes(task.id))
-							if (filteredTasks.length > 0) {
-								return { ...group, tasks: filteredTasks } // Keep the group with only the filtered tasks
-							}
-							return null // Remove group if no matching tasks
-						}).filter(Boolean) // Remove `null` groups
-					}
+				// Filter by Groups
+				if (filterBy.groups && filterBy.groups.length > 0) {
+					board.groups = board.groups.filter((group) => {
+						return filterBy.groups.includes(group.id)
+					})
+				}
+
+				// Filter by Tasks
+				if (filterBy.tasks && filterBy.tasks.length > 0) {
+					filterGroupsByTasks('tasks', filterBy.tasks, board)
+				}
+
+				// Filter by Members
+				if (filterBy.members && filterBy.members.length > 0) {
+					filterGroupsByTasks('members', filterBy.members, board)
+				}
+
+				// Filter by Status Labels
+				if (filterBy.statusLabels && filterBy.statusLabels.length > 0) {
+					filterGroupsByTasks('statusLabels', filterBy.statusLabels, board)
+				}
+
+				// Filter by Priority Labels
+				if (filterBy.priorityLabels && filterBy.priorityLabels.length > 0) {
+					filterGroupsByTasks('priorityLabels', filterBy.priorityLabels, board)
+				}
 			}
 			return board
 		}
@@ -115,17 +128,61 @@ async function query(filterBy, boardId) {
 	}
 }
 
+// Filters the tasks within each group of a board based on the specified filter key and values
+const filterGroupsByTasks = (filterKey, filterValues, board) => {
+	board.groups = board.groups
+		.map((group) => {
+			const filteredTasks = group.tasks.filter((task) => {
+				if (filterKey === 'tasks') return filterValues.includes(task.id)
+				if (filterKey === 'members')
+					return task.memberIds.some((memberId) => filterValues.includes(memberId))
+				if (filterKey === 'statusLabels') return filterValues.includes(task.status)
+				if (filterKey === 'priorityLabels') return filterValues.includes(task.priority)
+				return false
+			})
+			if (filteredTasks.length > 0) {
+				return { ...group, tasks: filteredTasks } // Keep the group with only the filtered tasks
+			}
+			return null
+		})
+		.filter(Boolean)
+}
+
 //  Recursive function to search in all keys and values
-function deepSearch(obj, searchText) {
+function deepSearch(obj, searchText, board) {
 	if (typeof obj === 'string') {
 		return obj.toLowerCase().includes(searchText)
 	}
 
-	if (typeof obj === 'object' && obj !== null) {
-		return Object.entries(obj).some(
-			([key, value]) => key.toLowerCase().includes(searchText) || deepSearch(value, searchText)
-		)
+	if (typeof obj === 'number') {
+		return obj.toString().includes(searchText)
 	}
+
+	if (Array.isArray(obj)) {
+		return obj.some((item) => deepSearch(item, searchText, board)) // Search inside arrays
+	}
+
+	if (typeof obj === 'object' && obj !== null) {
+		return Object.entries(obj).some(([key, value]) => {
+			if (key === 'status' || key === 'priority') {
+				const label = board.labels.find((label) => label.id === value)
+				if (label && label.title.toLowerCase().includes(searchText)) {
+					return true
+				}
+			}
+
+			if (key === 'memberIds' && Array.isArray(value)) {
+				return value.some((memberId) => {
+					const member = board.members.find((member) => member._id === memberId)
+					return member && member.fullname.toLowerCase().includes(searchText)
+				})
+			}
+
+			// Ensure keys and values are both searched
+			return key.toLowerCase().includes(searchText) || deepSearch(value, searchText, board)
+		})
+	}
+
 	return false
 }
 
@@ -461,5 +518,4 @@ function _createBoards() {
 
 		utilService.saveToStorage(STORAGE_KEY, boards)
 	}
-
 }

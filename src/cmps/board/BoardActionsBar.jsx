@@ -70,6 +70,32 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 		onAddTask(board.groups[0], 'New Task', fromHeader)
 	}
 
+	const filterBtnStyle = {
+		width: '10rem',
+		textTransform: 'none',
+		display: 'flex',
+		alignItems: 'center',
+		gap: '10px',
+		justifyContent: 'space-between',
+		border: 'none',
+		color: '#323338',
+		boxShadow: 'none',
+		'&.MuiButton-outlined': {
+			backgroundColor: '#f6f7fb',
+			'&:hover': {
+				backgroundColor: '#e9eaee',
+				boxShadow: 'none',
+			},
+		},
+		'&.MuiButton-contained': {
+			backgroundColor: '#cce5ff',
+			'&:hover': {
+				backgroundColor: '#aed4fc',
+				boxShadow: 'none',
+			},
+		},
+	}
+
 	const { txt } = filterByToEdit
 	return (
 		<MuiStack direction='row' spacing='15px' className='board-actions-bar'>
@@ -189,7 +215,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 					vertical: 'bottom',
 					horizontal: 'center',
 				}}>
-				<Box sx={{ p: 2, minWidth: 600 }}>
+				<Box sx={{ p: 2, minWidth: 600, color: '#323338' }}>
 					<Typography variant='h6' sx={{ mb: 2 }}>
 						Filter Options
 					</Typography>
@@ -204,6 +230,8 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 								{boardBeforeFilter.groups.map((group) => (
 									<li key={group.id} style={{ marginBottom: '8px' }}>
 										<Button
+											disableRipple
+											className='filter-button'
 											variant={filterByToEdit.groups?.includes(group.id) ? 'contained' : 'outlined'}
 											onClick={() => {
 												setFilterByToEdit((prev) => {
@@ -216,8 +244,16 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 													}
 												})
 											}}
-											sx={{ width: '100%', textTransform: 'none' }}>
+											sx={filterBtnStyle}>
 											{group.title}
+											<span
+												style={{
+													width: 12,
+													height: 12,
+													borderRadius: '50%',
+													backgroundColor: group.style.color,
+												}}
+											/>
 										</Button>
 									</li>
 								))}
@@ -234,6 +270,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 									group.tasks.map((task) => (
 										<li key={task.id} style={{ marginBottom: '8px' }}>
 											<Button
+												disableRipple
 												variant={filterByToEdit.tasks?.includes(task.id) ? 'contained' : 'outlined'}
 												onClick={() => {
 													setFilterByToEdit((prev) => {
@@ -246,7 +283,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 														}
 													})
 												}}
-												sx={{ width: '100%', textTransform: 'none' }}>
+												sx={filterBtnStyle}>
 												{task.title}
 											</Button>
 										</li>
@@ -256,7 +293,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 						</Box>
 
 						{/* Filter by Members */}
-						{/* <Box>
+						<Box>
 							<Typography variant='subtitle2' sx={{ mb: 1 }}>
 								Members
 							</Typography>
@@ -264,15 +301,23 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 								{board.members.map((member) => (
 									<li key={member._id} style={{ marginBottom: '8px' }}>
 										<Button
-											variant={filterByToEdit.member === member._id ? 'contained' : 'outlined'}
-											onClick={() => setFilterByToEdit((prev) => ({ ...prev, member: member._id }))}
-											sx={{
-												width: '100%',
-												textTransform: 'none',
-												display: 'flex',
-												alignItems: 'center',
-												gap: 1,
-											}}>
+											disableRipple
+											variant={
+												filterByToEdit.members?.includes(member._id) ? 'contained' : 'outlined'
+											}
+											onClick={() => {
+												setFilterByToEdit((prev) => {
+													const isSelected = prev.members?.includes(member._id)
+													return {
+														...prev,
+														members: isSelected
+															? prev.members.filter((id) => id !== member._id) // Remove member
+															: [...(prev.members || []), member._id], // Add member
+													}
+												})
+											}}
+											sx={filterBtnStyle}>
+											{member.fullname}
 											<img
 												src={member.imgUrl}
 												alt={member.fullname}
@@ -282,96 +327,97 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 													borderRadius: '50%',
 												}}
 											/>
-											{member.fullname}
 										</Button>
 									</li>
 								))}
 							</ul>
-						</Box> */}
+						</Box>
 
 						{/* Filter by Status */}
-						{/* <Box>
+						<Box>
 							<Typography variant='subtitle2' sx={{ mb: 1 }}>
 								Status
 							</Typography>
 							<ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
 								{board.labels
 									.filter((label) => label.id.startsWith('l1'))
-									.map((status) => (
-										<li key={status.id} style={{ marginBottom: '8px' }}>
+									.map((label) => (
+										<li key={label.id} style={{ marginBottom: '8px' }}>
 											<Button
-												variant={filterByToEdit.status === status.id ? 'contained' : 'outlined'}
-												onClick={() =>
-													setFilterByToEdit((prev) => ({ ...prev, status: status.id }))
+												disableRipple
+												variant={
+													filterByToEdit.statusLabels?.includes(label.id) ? 'contained' : 'outlined'
 												}
-												sx={{
-													width: '100%',
-													textTransform: 'none',
-													display: 'flex',
-													alignItems: 'center',
-													gap: 1,
-												}}>
+												onClick={() => {
+													setFilterByToEdit((prev) => {
+														const isSelected = prev.statusLabels?.includes(label.id)
+														return {
+															...prev,
+															statusLabels: isSelected
+																? prev.statusLabels.filter((id) => id !== label.id)
+																: [...(prev.statusLabels || []), label.id],
+														}
+													})
+												}}
+												sx={filterBtnStyle}>
+												{label.title || 'No Status'}
 												<span
 													style={{
 														width: 12,
 														height: 12,
 														borderRadius: '50%',
-														backgroundColor: status.color,
+														backgroundColor: label.color,
 													}}
 												/>
-												{status.title || 'No Status'}
 											</Button>
 										</li>
 									))}
 							</ul>
-						</Box> */}
+						</Box>
 
 						{/* Filter by Priority */}
-						{/* <Box>
+						<Box>
 							<Typography variant='subtitle2' sx={{ mb: 1 }}>
 								Priority
 							</Typography>
 							<ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
 								{board.labels
 									.filter((label) => label.id.startsWith('l2'))
-									.map((priority) => (
-										<li key={priority.id} style={{ marginBottom: '8px' }}>
+									.map((label) => (
+										<li key={label.id} style={{ marginBottom: '8px' }}>
 											<Button
-												variant={filterByToEdit.priority === priority.id ? 'contained' : 'outlined'}
-												onClick={() =>
-													setFilterByToEdit((prev) => ({
-														...prev,
-														priority: priority.id,
-													}))
+												disableRipple
+												variant={
+													filterByToEdit.priorityLabels?.includes(label.id)
+														? 'contained'
+														: 'outlined'
 												}
-												sx={{
-													width: '100%',
-													textTransform: 'none',
-													display: 'flex',
-													alignItems: 'center',
-													gap: 1,
-												}}>
+												onClick={() => {
+													setFilterByToEdit((prev) => {
+														const isSelected = prev.priorityLabels?.includes(label.id)
+														return {
+															...prev,
+															priorityLabels: isSelected
+																? prev.priorityLabels.filter((id) => id !== label.id)
+																: [...(prev.priorityLabels || []), label.id],
+														}
+													})
+												}}
+												sx={filterBtnStyle}>
+												{label.title || 'No Status'}
 												<span
 													style={{
 														width: 12,
 														height: 12,
 														borderRadius: '50%',
-														backgroundColor: priority.color,
+														backgroundColor: label.color,
 													}}
 												/>
-												{priority.title || 'No Priority'}
 											</Button>
 										</li>
 									))}
 							</ul>
-						</Box> */}
-					</Box>
-
-					{/* Close Button */}
-					<Box sx={{ mt: 3, textAlign: 'right' }}>
-						<Button onClick={handleClose} size='small' variant='outlined'>
-							Close
-						</Button>
+						</Box>
 					</Box>
 				</Box>
 			</Popover>
