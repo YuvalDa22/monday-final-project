@@ -20,7 +20,7 @@ export function DatePicker({ info, onUpdate }) {
     setSelectedDate(date);
     if (date) {
       const formattedDate = utilService.formatDate(date);
-      onUpdate({ title: formattedDate }) // Pass the formatted date
+      onUpdate({ id: formattedDate }) // Pass the formatted date
     } else {
       onUpdate(null);
     }
