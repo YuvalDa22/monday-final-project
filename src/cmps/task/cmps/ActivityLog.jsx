@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { getBoardById } from '../../../store/board/board.actions'
+import { loadBoard } from '../../../store/board/board.actions'
 import { showErrorMsg } from '../../../services/event-bus.service' // Assuming you have this function
 import { boardService } from '../../../services/board.service'
 import { Avatar } from 'radix-ui'
@@ -36,7 +36,7 @@ export function ActivityLog({ taskId = null }) {
   useEffect(() => {}, [board])
   async function onLoadBoard() {
     try {
-      await getBoardById(boardId)
+      await loadBoard(boardId)
     } catch (error) {
       showErrorMsg('Cannot load boards')
       console.error(error)
