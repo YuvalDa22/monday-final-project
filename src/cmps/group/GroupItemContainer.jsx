@@ -6,6 +6,7 @@ import { DynamicCmp } from '../task/DynamicCmp'
 import { getSvg } from '../../services/util.service'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { logActivity, updateBoard } from '../../store/board/board.actions'
 
 const SvgIcon = ({ iconName, options, className }) => {
   return (
@@ -137,6 +138,7 @@ export default function GroupItemContainer({
         </div>
 
         <Checkbox
+          size='small'
           className={'checkbox-cell'}
           checked={checkedTasksList.some(
             (checkedTask) => checkedTask.groupId === group.id && checkedTask.taskId === item.id

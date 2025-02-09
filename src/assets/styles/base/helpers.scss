@@ -1,3 +1,5 @@
+@use "../setup/vars";
+
 .black {
   color: black;
 }
@@ -50,7 +52,7 @@
   }
 
   .input {
-    border: $border-input;
+    border: vars.$border-input;
       width: 100%;
       margin-right: 15px;
       min-width: 2ch;

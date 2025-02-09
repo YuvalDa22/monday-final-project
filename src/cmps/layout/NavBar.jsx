@@ -21,18 +21,18 @@ const NavBar = () => {
 
       {/* Navigation Links */}
       <div className='navbar-links'>
-        <Link to='/workspace/board/xxx' className='navbar-link'>
+        <div className='navbar-link'>
           <SvgIcon iconName={'navbar_bell'} />
-        </Link>
-        <Link to='/workspace/board/xxx' className='navbar-link'>
+        </div>
+        <div className='navbar-link'>
           <SvgIcon iconName={'navbar_updateFeed'} />
-        </Link>{' '}
-        <Link to='/workspace/board/xxx' className='navbar-link'>
+        </div>
+        <div className='navbar-link'>
           <SvgIcon iconName={'navbar_inviteMembers'} />
-        </Link>{' '}
-        <Link to='/workspace/board/xxx' className='navbar-link'>
+        </div>
+        <div className='navbar-link'>
           <SvgIcon iconName={'navbar_mondayMarketplace'} />
-        </Link>{' '}
+        </div>
         <Divider
           orientation='vertical'
           flexItem
@@ -43,12 +43,12 @@ const NavBar = () => {
             margin: '8px 0px 8px',
           }}
         />
-        <Link to='/workspace/board/xxx' className='navbar-link'>
+        <div className='navbar-link'>
           <SvgIcon iconName={'navbar_search'} />
-        </Link>
-        <Link to='/workspace/board/xxx' className='navbar-link'>
+        </div>
+        <div className='navbar-link'>
           <SvgIcon iconName={'navbar_help'} />
-        </Link>
+        </div>
         <Avatar
           className='navbar-avatar'
           alt='User Avatar'

@@ -1,31 +1,32 @@
 /* Setup */
-@import './setup/vars';
+@use 'setup/vars';
 
 /* Basics */
-@import './base/helpers';
-@import './base/base';
-@import './base/layout.scss';
+@use 'base/helpers';
+@use 'base/base';
+@use 'base/layout.scss';
 
 /* Components */
-@import './cmps/header';
-@import './cmps/footer';
-@import './cmps/usermsg';
-@import './cmps/navbar';
-@import './cmps/sidebar';
-@import './cmps/taskList';
-@import './cmps/suggestedActions';
-@import './cmps/groupHeader';
-@import './cmps/groupPreview';
-@import './cmps/taskCmp';
-@import './cmps/boardHeader';
-@import './cmps/boardActionsBar';
-@import './cmps/taskDetails.scss';
-@import './cmps/additionalBoardActions.scss';
-@import './cmps/activityLog.scss';
+@use 'cmps/header';
+@use 'cmps/footer';
+@use 'cmps/usermsg';
+@use 'cmps/navbar';
+@use 'cmps/sidebar';
+@use 'cmps/taskList';
+@use 'cmps/suggestedActions';
+@use 'cmps/groupHeader';
+@use 'cmps/groupPreview';
+@use 'cmps/taskCmp';
+@use 'cmps/boardHeader';
+@use 'cmps/boardActionsBar';
+@use 'cmps/taskDetails.scss';
+@use 'cmps/additionalBoardActions.scss';
+@use 'cmps/activityLog.scss';
 
 /* Pages */
-@import './pages/homePage';
-@import './pages/login';
-@import './pages/index';
-@import './pages/boardDetails';
-@import './pages/menuFromTheRight.scss';
+@use 'pages/homePage';
+@use 'pages/login';
+@use 'pages/index';
+@use 'pages/boardDetails';
+@use 'pages/menuFromTheRight.scss';
+@use 'pages/boardIndex.scss';

@@ -273,6 +273,7 @@ export function GroupPreview({
               <tr className='header-row'>
                 <th className='checkbox-cell header'>
                   <Checkbox
+                    size='small'
                     checked={
                       group.tasks.length > 0 &&
                       group.tasks.every((task) =>
@@ -330,7 +331,7 @@ export function GroupPreview({
             <tfoot>
               <tr>
                 <td className='checkbox-cell lastone'>
-                  <Checkbox disabled />
+                  <Checkbox size='small' disabled />
                 </td>
                 <td colSpan={cmpTitles.length + 2} className='add-item-row'>
                   <div className='add-item'>

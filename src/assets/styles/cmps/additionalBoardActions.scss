@@ -1,5 +1,7 @@
+@use '../setup/vars';
+
 .MuiIconButton-root span {
-  color: $primary-text-color;
+  color: vars.$primary-text-color;
 }
 
 .additionalBoardActions_invite {

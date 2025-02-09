@@ -8,6 +8,7 @@ export function StatusCmp({ onUpdate, board, info }) {
     width: '100%',
     height: '100%',
     color: 'white',
+    borderRadius: '0px',
   }
 
   const labels = board?.labels?.filter((label) => label.id[1] === '1')

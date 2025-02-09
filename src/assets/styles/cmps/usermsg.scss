@@ -1,3 +1,5 @@
+@use "../setup/vars";
+
 
 .user-msg {
   position: fixed;
@@ -11,11 +13,11 @@
   margin: 0.5rem;
   border-radius: 0.5rem;
   background-color: #f1f1f1;
-  box-shadow: 0 0 5px 0 $light;
+  box-shadow: 0 0 5px 0 vars.$light;
 }
 
 .user-msg.success {
-  background-color: $moka;
+  background-color: vars.$moka;
   color: #dbdfdc;
 }
 

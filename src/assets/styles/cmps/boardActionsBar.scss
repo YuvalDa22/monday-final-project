@@ -1,3 +1,5 @@
+@use "../setup/vars";
+
 button {
   all: unset;
 }
@@ -11,27 +13,27 @@ button {
     border-radius: 8px;
 
     .add-task-button {
-      background-color: $primary-color;
+      background-color: vars.$primary-color;
       text-transform: none;
       padding: 4px 10px 4px 10px;
-      font-weight: $font-weight-very-light;
-      font-size: $font-size-10;
+      font-weight: vars.$font-weight-very-light;
+      font-size: vars.$font-size-10;
 
       &:hover {
         box-shadow: none;
-        background-color: $primary-hover-color;
+        background-color: vars.$primary-hover-color;
       }
     }
 
     .dropdown-button {
-      background-color: $primary-color;
+      background-color: vars.$primary-color;
       text-transform: none;
       min-width: 0;
       padding: 4px 3px 4px 3px;
 
       &:hover {
         box-shadow: none;
-        background-color: $primary-hover-color;
+        background-color: vars.$primary-hover-color;
       }
     }
   }
@@ -68,7 +70,7 @@ button {
     gap: 0.5rem;
 
     span {
-      color: $primary-text-color;
+      color: vars.$primary-text-color;
     }
 
     .icon {

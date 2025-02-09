@@ -25,7 +25,7 @@ export function MenuFromTheRight() {
       }
     }
     // To control outlet coming into view
-    document.querySelector('.mftr-container').classList.add('active')
+    document.querySelector('.mftr-container').classList.add('mftrActive')
   }, [taskId])
 
   useEffect(() => {

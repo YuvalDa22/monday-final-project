@@ -1,3 +1,5 @@
+@use "../setup/vars";
+
 .boardHeader_main-container {
   display: flex;
   flex-direction: column;
@@ -21,8 +23,8 @@
 }
 
 .BoardNavBar_text {
-  color: $primary-text-color;
+  color: vars.$primary-text-color;
 }
 .BoardNavBar_add-icon {
-  color: $primary-text-color;
+  color: vars.$primary-text-color;
 }

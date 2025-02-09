@@ -1,22 +1,22 @@
+@use '../setup/vars';
+
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   pointer-events: auto;
-  color: inherit; 
+  color: inherit;
 }
 
 html {
-  background-color: $bg-color;
+  background-color: vars.$bg-color;
   -webkit-font-smoothing: initial;
-
 }
 
 body {
-  font-family: $font-family;
-  color: $primary-text-color; 
+  font-family: vars.$font-family;
+  color: vars.$primary-text-color;
 }
-
 
 .modal-backdrop {
   position: fixed;
@@ -42,9 +42,8 @@ body {
 }
 
 h4 {
-  font-size: $font-size-h4;
-  line-height: $font-line-height-h4;
+  font-size: vars.$font-size-h4;
+  line-height: vars.$font-line-height-h4;
   font-weight: 500;
   -webkit-font-smoothing: initial;
-
 }

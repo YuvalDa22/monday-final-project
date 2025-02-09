@@ -202,7 +202,7 @@ function _createBoards() {
     const boards = [
       {
         _id: 'b101',
-        title: 'Board Name',
+        title: 'First Board',
         isStarred: false,
         archivedAt: 1589983468418,
         createdBy: {
@@ -383,6 +383,18 @@ function _createBoards() {
         cmpTitles: ['Status', 'Priority', 'Members', 'Due Date'],
         groupSummary: [null, null, null],
       },
+      {
+        _id: 'b102',
+        title: 'Second Board',
+      }, // This is just to test BoardIndex.js
+      {
+        _id: 'b103',
+        title: 'Third Board',
+      }, // This is just to test BoardIndex.js
+      {
+        _id: 'b104',
+        title: 'Fourth Board',
+      }, // This is just to test BoardIndex.js
     ]
 
     utilService.saveToStorage(STORAGE_KEY, boards)
