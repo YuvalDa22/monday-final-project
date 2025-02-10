@@ -213,9 +213,11 @@ export default function GroupItemContainer({
             onUpdate={(data) => {
               logActivity(group, item, null, {
                 action: 'labelChanged',
-                message: `${cmp.charAt(0).toUpperCase() + cmp.slice(1)}`,
-                free_txt: `Changed to ${data.title}`,
+                message: `${cmp.charAt(0).toUpperCase() + cmp.slice(1)} Changed`,
+                free_txt: `to: '${data.title}'`,
               })
+              console.log('cmp =', cmp)
+              console.log('data =', data)
               updateBoard(group.id, item.id, { key: cmp, value: data.id })
             }}
           />
