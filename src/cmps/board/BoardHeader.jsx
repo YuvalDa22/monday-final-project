@@ -8,7 +8,7 @@ import { updateBoard, logActivity } from '../../store/board/board.actions'
 import { boardService } from '../../services/board.service'
 
 // Note : We can ignore the props validation error for now
-export function BoardHeader({ board, onAddGroup, onAddTask, filterBy, onSetFilterBy }) {
+export function BoardHeader({ board, onAddGroup, onAddTask }) {
   const [isEditingBoardTitle, setIsEditingBoardTitle] = useState(false)
   const [boardTempTitle, setBoardTempTitle] = useState(board?.title || '')
 
@@ -72,7 +72,7 @@ export function BoardHeader({ board, onAddGroup, onAddTask, filterBy, onSetFilte
         <AdditionalBoardActions />
       </div>
       <BoardNavBar />
-      <BoardActionsBar onSetFilterBy={onSetFilterBy} filterBy={filterBy} board={board} onAddTask={onAddTask} onAddGroup={onAddGroup} />
+      <BoardActionsBar board={board} onAddTask={onAddTask} onAddGroup={onAddGroup} />
     </div>
   )
 }

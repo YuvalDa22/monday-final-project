@@ -13,16 +13,10 @@ import {
 import { userService } from '../../services/user.service'
 import { utilService } from '../../services/util.service'
 
-// loads wanted board
-export async function loadBoard(boardId) {
-  try {
-    const filterBy = store.getState().boardModule.filterBy
-    let board = await boardService.query(filterBy, boardId)
-    store.dispatch({ type: SET_BOARD, board: board })
-  } catch (err) {
-    console.log('board actions --> Having issues with loading board:', err)
-    throw err
-}
+//This gets 1 board from the array of all boards!!
+export async function getBoardById(boardId) {
+  const board = await boardService.getById(boardId)
+  store.dispatch({ type: SET_BOARD, board: board })
 }
 
 export function logActivity(group, task, prev, action) {

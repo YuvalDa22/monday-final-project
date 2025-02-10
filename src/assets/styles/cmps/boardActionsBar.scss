@@ -1,16 +1,16 @@
 @use "../setup/vars";
 
 button {
-	all: unset;
+  all: unset;
 }
 
 .board-actions-bar {
-	display: flex;
-	align-items: center;
-	white-space: nowrap;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
 
-	.new-task-buttons {
-		border-radius: 8px;
+  .new-task-buttons {
+    border-radius: 8px;
 
     .add-task-button {
       background-color: vars.$primary-color;
@@ -38,69 +38,54 @@ button {
     }
   }
 
-	.dropdown-item {
-		font-size: 13px;
-		line-height: 1;
-		color: #333;
-		border-radius: 3px;
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		height: 25px;
-		// padding: 0 5px;
-		position: relative;
-		// padding-left: 25px;
-		user-select: none;
-		outline: none;
-		cursor: pointer;
+  .dropdown-item {
+    font-size: 13px;
+    line-height: 1;
+    color: #333;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 25px;
+    // padding: 0 5px;
+    position: relative;
+    // padding-left: 25px;
+    user-select: none;
+    outline: none;
+    cursor: pointer;
 
-		&:hover {
-			background-color: #f0f0f0;
-		}
-	}
+    &:hover {
+      background-color: #f0f0f0;
+    }
 
-	.icon-button {
-		border-radius: 5px;
-		font-size: 15px;
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
+    i {
+    }
+  }
+
+  .icon-button {
+    border-radius: 5px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 
     span {
       color: vars.$primary-text-color;
     }
 
-		.icon {
-			height: 22px;
-			width: 22px;
-			opacity: 1;
-		}
-	}
+    .icon {
+      height: 22px;
+      width: 22px;
+      opacity: 1;
+    }
+  }
 
-	.search-txt-input {
-		padding: 0 2px;
-		display: flex;
-		align-items: center;
-		width: 300px;
-		border: 1px solid vars.$color-basic_blue;
-		border-radius: 5px;
-	}
+  .svg-icon {
+    display: flex;
+    opacity: 0.6;
 
-	.filter-button {
-		width: '100%';
-		text-transform: 'none';
-		display: 'flex';
-		align-items: 'center';
-		gap: '10px';
-		justify-content: 'space-between';
-	}
-
-	.svg-icon {
-		display: flex;
-		opacity: 0.6;
-
-		&.arrow-icon {
-			opacity: 1;
-		}
-	}
+    &.arrow-icon {
+      opacity: 1;
+    }
+  }
 }

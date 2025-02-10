@@ -236,39 +236,3 @@
 
 // // dispatch to store: updateTask(task, activity)
 // // }
-
-
-
-
-async function updateBoard(board, groupId, taskId, { key, value }) {
-	if (!board) return;
-	const gIdx = board?.groups.findIndex((groupItem) => groupItem.id === groupId);
-	if (gIdx === -1) return;
-	const newGroups = [...board.groups]; // Copy groups array
-	const group = { ...newGroups[gIdx] }; // Copy the specific group
-	if (taskId) {
-		const tIdx = group.tasks.findIndex((t) => t.id === taskId);
-		if (tIdx === -1) return;
-		// Copy the tasks array and modify the specific task
-		const newTasks = [...group.tasks];
-		const updatedTask = { ...newTasks[tIdx], [key]: value };
-		// Update tasks array
-		newTasks[tIdx] = updatedTask;
-		group.tasks = newTasks;
-	} else {
-		// If updating the group directly
-		group[key] = value;
-	}
-	// Update groups array
-	newGroups[gIdx] = group;
-	// Create new board object
-	const updatedBoard = { ...board, groups: newGroups };
-
-	try {
-		await save(updatedBoard);
-		return updatedBoard;
-	} catch (err) {
-		console.error('Failed to save the board:', err);
-		throw err;
-	}
-}
