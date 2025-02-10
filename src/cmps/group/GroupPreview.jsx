@@ -19,6 +19,7 @@ import { boardService } from '../../services/board.service.js'
 import { BlockPicker, CirclePicker } from 'react-color'
 import { DynamicCmp } from '../task/DynamicCmp.jsx'
 import * as Popover from '@radix-ui/react-popover'
+import { Tooltip } from 'radix-ui'
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useSortable } from '@dnd-kit/sortable'
@@ -49,6 +50,27 @@ export function GroupPreview({
   const [isEditingGroupTitle, setIsEditingGroupTitle] = useState(false)
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const [groupTempTitle, setGroupTempTitle] = useState(group.title)
+  // this is to count stuff for the progress bar
+  const counts = group.tasks.reduce((acc, task) => {
+    cmpTitles.forEach((title) => {
+      const key = title.toLowerCase().replace(/\s+/g, '') // Convert to lowercase & remove spaces
+
+      if (key in task) {
+        acc[title] = acc[title] || {} // Ensure the property exists in acc
+
+        if (Array.isArray(task[key])) {
+          // If it's an array (like 'memberIds'), count each element separately
+          task[key].forEach((item) => {
+            acc[title][item] = (acc[title][item] || 0) + 1
+          })
+        } else {
+          // Normal case (single value)
+          acc[title][task[key]] = (acc[title][task[key]] || 0) + 1
+        }
+      }
+    })
+    return acc
+  }, {})
 
   const handleCollapseGroupClicked = () => {
     setIsCollapsed(!isCollapsed)
@@ -355,6 +377,55 @@ export function GroupPreview({
                     />
                   </div>
                 </td>
+              </tr>
+              <tr>
+                <td colSpan='2' style={{ border: 'none' }}></td>
+                {/*Skip first 2 columns (checkbox+Task) */}
+                {cmpTitles.map((label, index) => {
+                  const totalAmountOfTasksWithStatus = Object.values(counts[label] || {}).reduce(
+                    (sum, value) => sum + value,
+                    0
+                  ) // Calculate total for the label
+                  return (
+                    <td
+                      key={label + index}
+                      className={`groupPreview_ProgressBar_container ${index == 0 ? 'first' : ''}`}
+                    >
+                      {/* Apply special style to the first progbar td*/}
+                      <div className='ProgressBar_colors_container'>
+                        {Object.entries(counts[label] || {}).map(([key, value]) => (
+                          <Tooltip.Provider key={key}>
+                            <Tooltip.Root delayDuration={300} skipDelayDuration={0}>
+                              <Tooltip.Trigger asChild>
+                                <div
+                                  className='ProgressBar_single_color'
+                                  style={{
+                                    backgroundColor: board.labels.find((label) => label.id === key)
+                                      ?.color,
+                                    width: `${(value / totalAmountOfTasksWithStatus) * 100}%`,
+                                  }}
+                                ></div>
+                              </Tooltip.Trigger>
+                              <Tooltip.Portal>
+                                <Tooltip.Content className='TooltipContent' sideOffset={8}>
+                                  {`${
+                                    board.labels.find((label) => label.id === key).title
+                                  } ${value}/${totalAmountOfTasksWithStatus} \u00A0 ${
+                                    ((value / totalAmountOfTasksWithStatus) * 100) % 1 === 0
+                                      ? (value / totalAmountOfTasksWithStatus) * 100 // if division is clean simply show the number but if not show 1 digit after the dot
+                                      : ((value / totalAmountOfTasksWithStatus) * 100).toFixed(1)
+                                  }%`}
+
+                                  <Tooltip.Arrow className='TooltipArrow' />
+                                </Tooltip.Content>
+                              </Tooltip.Portal>
+                            </Tooltip.Root>
+                          </Tooltip.Provider>
+                        ))}
+                      </div>
+                    </td>
+                  )
+                })}
               </tr>
             </tfoot>
           </table>

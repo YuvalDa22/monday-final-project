@@ -221,7 +221,7 @@ function _createBoards() {
         labels: [
           // Status Labels (l101 - l199)
           { id: 'l101', title: 'Done', color: '#00c875' },
-          { id: 'l102', title: 'In Progress', color: '#fdab3d' },
+          { id: 'l102', title: 'Working on it', color: '#fdab3d' },
           { id: 'l103', title: 'Stuck', color: '#df2f4a' },
           { id: 'l104', title: 'Ready', color: '#9cd326' },
           { id: 'l105', title: 'Waiting for Review', color: '#ffcb00' },

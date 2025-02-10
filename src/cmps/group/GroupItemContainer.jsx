@@ -146,7 +146,6 @@ export default function GroupItemContainer({
           onChange={(event) => handleTaskChecked(event, item)}
         />
       </td>
-
       <td>
         <Link
           to={`task/${item.id}`}
@@ -203,7 +202,6 @@ export default function GroupItemContainer({
           </div>
         </Link>
       </td>
-
       {cmpsOrder.map((cmp, idx) => (
         <td key={idx} className='data-cell'>
           <DynamicCmp
@@ -216,21 +214,11 @@ export default function GroupItemContainer({
                 message: `${cmp.charAt(0).toUpperCase() + cmp.slice(1)} Changed`,
                 free_txt: `to: '${data.title}'`,
               })
-              console.log('cmp =', cmp)
-              console.log('data =', data)
               updateBoard(group.id, item.id, { key: cmp, value: data.id })
             }}
           />
         </td>
       ))}
-
-      {/* <TaskPreview
-        key={`preview-${item.id}`}
-        group={group}
-        board={board}
-        task={item}
-        cmpsOrder={cmpsOrder}
-      /> */}
     </tr>
   )
 }
