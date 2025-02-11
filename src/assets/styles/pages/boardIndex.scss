@@ -50,12 +50,18 @@
 }
 
 .boardIndex_sidemenu {
-  width: 400px;
+  max-width: 300px;
+  min-width: 300px;
   margin: 5px 5px 0px 0px;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   gap: 15px;
+}
+.bi_sidemenu_image {
+  align-self: center;
+  height: 138px;
+  width: 270px;
 }
 
 .boardIndex_cardImage {

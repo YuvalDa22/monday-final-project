@@ -149,13 +149,12 @@ export function BoardIndex() {
             >
               <Flex direction='column'>
                 <img
-                  height={'138px'}
-                  width={'270px'}
+                  className='bi_sidemenu_image'
                   src='https://cdn.monday.com/images/homepage-desktop/templates-banner.png'
                 />
                 <Box style={{ marginTop: '10px' }}>
-                  <Text as='div' size='2' style={{ display: 'flex', gap: '6px' }}>
-                    <span style={{ position: 'relative', bottom: 2 }}>
+                  <Text as='div' size='3' style={{ display: 'flex', gap: '6px', opacity: '0.9' }}>
+                    <span style={{ position: 'relative', bottom: 2, left: 3 }}>
                       Boost your workflow in minutes with ready-made templates
                     </span>{' '}
                   </Text>
