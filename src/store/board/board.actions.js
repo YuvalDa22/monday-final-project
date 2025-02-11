@@ -122,16 +122,15 @@ export async function removeBoard(boardId) {
 }
 
 // Task Actions
-export async function addTask(_, group, task, fromHeader) { // TODO implemet so an actual task is being sent instead of a task title string...
-	let updatedTasks
+export async function addTask(_, group, task, fromHeader) {
+  let updatedTasks
   if (group) {
     // In case 0 groups present , dont let "New Task" button crash program
-    updatedTasks = fromHeader ? [task, ...group.tasks] : [...group.tasks, task]
-   }
+    const updatedTask = { ...boardService.getEmptyTask(), ...task }
+    updatedTasks = fromHeader ? [updatedTask, ...group.tasks] : [...group.tasks, updatedTask]
+  }
 
   try {
-    // const updatedTask = {...boardService.getEmptyTask() , ...task}
-    // const updatedTasks = fromHeader ? [updatedTask, ...group.tasks] : [...group.tasks, updatedTask]   // <--- refrence to how we get the task in the first place
     updateBoard(group.id, null, { key: 'tasks', value: updatedTasks })
     logActivity(group, task, group.tasks, 'addTask')
   } catch (error) {

@@ -220,18 +220,19 @@ function _createBoards() {
         style: {},
         labels: [
           // Status Labels (l101 - l199)
-          { id: 'l101', title: 'Done', color: '#00c875' },
-          { id: 'l102', title: 'Working on it', color: '#fdab3d' },
-          { id: 'l103', title: 'Stuck', color: '#df2f4a' },
-          { id: 'l104', title: 'Ready', color: '#9cd326' },
+          { id: 'l101', title: '', color: '#c4c4c4' },
+          { id: 'l102', title: 'Done', color: '#00c875' },
+          { id: 'l103', title: 'Working on it', color: '#fdab3d' },
+          { id: 'l104', title: 'Stuck', color: '#df2f4a' },
           { id: 'l105', title: 'Waiting for Review', color: '#ffcb00' },
 
           // Priority Labels (l201 - l299)
-          { id: 'l201', title: 'High', color: '#401694' },
-          { id: 'l202', title: 'Medium', color: '#5559df' },
-          { id: 'l203', title: 'Low', color: '#579bfc' },
-          { id: 'l204', title: 'Critical ⚠️', color: '#333333' },
-          { id: 'l205', title: 'Optional', color: '#9d99ff' },
+          { id: 'l201', title: '', color: '#c4c4c4' },
+          { id: 'l202', title: 'Critical ⚠️', color: '#333333' },
+          { id: 'l203', title: 'High', color: '#401694' },
+          { id: 'l204', title: 'Medium', color: '#5559df' },
+          { id: 'l205', title: 'Low', color: '#579bfc' },
+          { id: 'l206', title: 'Optional', color: '#9d99ff' },
 
           // Member Labels (l301 - l399)
           { id: 'l301', title: 'Frontend Team', color: '#579bfc' },
@@ -263,12 +264,17 @@ function _createBoards() {
           {
             _id: 'u102',
             fullname: 'Yuval Dadon',
-            imgUrl: 'https://eu.ui-avatars.com/api/?name=John+Doe&size=250',
+            imgUrl: 'https://gravatar.com/images/homepage/avatar-04.png',
           },
           {
             _id: 'u103',
             fullname: 'Ofir Gady',
             imgUrl: 'https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250',
+          },
+          {
+            _id: 'u104',
+            fullname: 'Gal Israeli',
+            imgUrl: 'https://gravatar.com/images/homepage/avatar-02.png',
           },
         ],
         groups: [
@@ -281,12 +287,16 @@ function _createBoards() {
               {
                 id: 'c101',
                 title: 'Replace logo',
-                memberIds: ['u102'],
+                status: 'l101',
+                priority: 'l201',
+                memberIds: ['u101', 'u104', 'u102', 'u103'],
               },
               {
                 id: 'c102',
                 title: 'Add Samples',
-                memberIds: ['u101'],
+                status: 'l101',
+                priority: 'l201',
+                memberIds: ['u101', 'u102'],
               },
             ],
             style: { color: 'red' },
@@ -299,15 +309,9 @@ function _createBoards() {
               {
                 id: 'c103',
                 title: 'Do that',
-                archivedAt: 1589983468418,
-                memberIds: ['u103'],
-                byMember: {
-                  _id: 'u101',
-                  username: 'Tal',
-                  fullname: 'Tal Tarablus',
-                  imgUrl:
-                    'http://res.cloudinary.com/shaishar9/image/upload/v1590850482/j1glw3c9jsoz2py0miol.jpg',
-                },
+                status: 'l101',
+                priority: 'l201',
+                memberIds: ['u103'], // tal yuval ofir gal
               },
 
               {
@@ -315,46 +319,7 @@ function _createBoards() {
                 title: 'Help me',
                 status: 'l101', // monday
                 priority: 'l201',
-                description: 'description',
-                comments: [
-                  {
-                    id: 'ZdPnm',
-                    txt: 'also @yaronb please CR this',
-                    createdAt: 1590999817436,
-                    byMember: {
-                      _id: 'u101',
-                      fullname: 'Tal Tarablus',
-                      imgUrl:
-                        'http://res.cloudinary.com/shaishar9/image/upload/v1590850482/j1glw3c9jsoz2py0miol.jpg',
-                    },
-                  },
-                ],
-                checklists: [
-                  {
-                    id: 'YEhmF',
-                    title: 'Checklist',
-                    todos: [
-                      {
-                        id: '212jX',
-                        title: 'To Do 1',
-                        isDone: false,
-                      },
-                    ],
-                  },
-                ],
-                memberIds: ['u101', 'u102', 'u103'],
-                labelIds: ['l101', 'l102'],
-                dueDate: 16156215211,
-                byMember: {
-                  _id: 'u101',
-                  username: 'Tal',
-                  fullname: 'Tal Tarablus',
-                  imgUrl:
-                    'http://res.cloudinary.com/shaishar9/image/upload/v1590850482/j1glw3c9jsoz2py0miol.jpg',
-                },
-                style: {
-                  bgColor: '#26de81',
-                },
+                memberIds: [],
               },
             ],
             style: { color: 'purple' },

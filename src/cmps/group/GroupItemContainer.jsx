@@ -202,23 +202,25 @@ export default function GroupItemContainer({
           </div>
         </Link>
       </td>
-      {cmpsOrder.map((cmp, idx) => (
-        <td key={idx} className='data-cell'>
-          <DynamicCmp
-            cmp={cmp}
-            board={board}
-            info={item[cmp]} // Pass the current value for this key
-            onUpdate={(data) => {
-              logActivity(group, item, null, {
-                action: 'labelChanged',
-                message: `${cmp.charAt(0).toUpperCase() + cmp.slice(1)} Changed`,
-                free_txt: `to: '${data.title}'`,
-              })
-              updateBoard(group.id, item.id, { key: cmp, value: data.id })
-            }}
-          />
-        </td>
-      ))}
+      {cmpsOrder.map((cmp, idx) => {
+        return (
+          <td key={idx} className='data-cell'>
+            <DynamicCmp
+              cmp={cmp}
+              board={board}
+              info={item[cmp]} // Pass the current value for this key
+              onUpdate={(data) => {
+                logActivity(group, item, null, {
+                  action: 'labelChanged',
+                  message: `${cmp.charAt(0).toUpperCase() + cmp.slice(1)} Changed`,
+                  free_txt: `to: '${data.title}'`,
+                })
+                updateBoard(group.id, item.id, { key: cmp, value: data.id })
+              }}
+            />
+          </td>
+        )
+      })}
     </tr>
   )
 }

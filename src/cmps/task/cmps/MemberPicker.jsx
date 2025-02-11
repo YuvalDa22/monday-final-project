@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Select from 'react-select'
 import { getSvg } from '../../../services/util.service'
+import Avatar from '@mui/material/Avatar'
+import AvatarGroup from '@mui/material/AvatarGroup'
 
 const SvgIcon = ({ iconName, options, className }) => {
   return (
@@ -28,25 +30,33 @@ export function MemberPicker({ info, onUpdate, board }) {
     onUpdate({ id: selectedIds, title: selectedIds })
   }
 
-  const renderAvatars = () =>
-    info?.map((memberId, idx) => {
-      const member = board?.members?.find((m) => m._id === memberId)
-      if (!member) return null
-
-      return (
-        <img
-          key={member._id}
-          className='member-avatar'
-          src={member.imgUrl}
-          alt={member.fullname}
-          title={member.fullname}
-          style={{
-            zIndex: info.length - idx,
-            transform: `translateX(${idx * -15}px)`,
-          }}
-        />
-      )
-    })
+  const renderAvatars = () => (
+    <AvatarGroup
+      max={3}
+      spacing={10}
+      sx={{
+        '& .MuiAvatar-root': {
+          fontSize: '14px',
+          width: 32,
+          height: 32,
+        },
+      }}
+    >
+      {info?.map((memberId) => {
+        const member = board?.members?.find((m) => m._id === memberId)
+        if (!member) return null
+        return (
+          <Avatar
+            className='member-avatar'
+            key={member._id}
+            alt={member.fullname}
+            src={member.imgUrl}
+            sx={{ width: 32, height: 32 }}
+          />
+        )
+      })}
+    </AvatarGroup>
+  )
 
   const groupedOptions = [
     {
@@ -112,9 +122,12 @@ export function MemberPicker({ info, onUpdate, board }) {
         {info?.length > 0 ? (
           renderAvatars()
         ) : (
-          <SvgIcon
-            iconName='boardActionsBar_person'
-            options={{ height: 36, width: 36, color: '#d8d8d8' }}
+          <img
+            src='https://cdn.monday.com/icons/dapulse-person-column.svg'
+            className='member-NO-avatar'
+            title=''
+            alt=''
+            aria-hidden='true'
           />
         )}
       </div>

@@ -11,7 +11,8 @@ export function StatusCmp({ onUpdate, board, info }) {
     borderRadius: '0px',
   }
 
-  const labels = board?.labels?.filter((label) => label.id[1] === '1')
+  const labels = board?.labels?.filter((label) => label.id[1] === '1' && label.title)
+  console.log(labels)
 
   const handleChange = (selectedOption) => {
     onUpdate(selectedOption)
@@ -40,6 +41,7 @@ export function StatusCmp({ onUpdate, board, info }) {
       value={labels.find((label) => label.id === info)}
       onChange={handleChange}
       styles={customStyles}
+      placeholder=''
       isSearchable={true}
       components={{
         DropdownIndicator: () => null,

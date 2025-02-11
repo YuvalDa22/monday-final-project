@@ -11,7 +11,7 @@ export function PriorityPicker({ onUpdate, board, info }) {
   }
 
   // Filter priority labels (IDs start with "l2")
-  const labels = board?.labels?.filter((label) => label.id[1] === '2')
+  const labels = board?.labels?.filter((label) => label.id[1] === '2' && label.title != '')
 
   // Handle change in the dropdown
   const handleChange = (selectedOption) => {
@@ -42,6 +42,7 @@ export function PriorityPicker({ onUpdate, board, info }) {
       value={labels.find((label) => label.id === info)}
       onChange={handleChange}
       styles={customStyles}
+      placeholder=''
       isSearchable={true}
       components={{
         DropdownIndicator: () => null,

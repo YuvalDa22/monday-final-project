@@ -26,27 +26,18 @@
 /* Members Classes */
 .member-picker {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-
+  justify-content: center;
   .member-avatars {
+    height: 38px;
+    align-content: center;
+  }
+  .member-NO-avatar {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 36px;
-    width: 100%;
-    position: relative;
+    height: 32px;
 
-    .member-avatar {
-      height: 100%;
-      max-width: 36px;
-      border-radius: 50%;
-      object-fit: cover;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-    }
+    border-radius: 50%; /* Make it circular */
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1); /* Soft outer shadow */
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border */
   }
 
   .dropdown-container {
