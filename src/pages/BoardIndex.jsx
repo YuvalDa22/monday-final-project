@@ -94,7 +94,7 @@ export function BoardIndex() {
                   <Card
                     className='boardIndex_board'
                     onClick={() => {
-                      navigate(`/workspace/board/b101/`) // TODO: change to dynamic board when possible (`/workspace/board/${board._id}/`)
+                      navigate(`/workspace/board/${board._id}`)
                     }}
                   >
                     <Flex direction='column'>

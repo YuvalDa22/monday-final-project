@@ -1,9 +1,10 @@
 // Sidebar.jsx
 //import React from "react";
 import { Divider } from '@mui/material'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { getSvg } from '../../services/util.service'
 import { StarBorderOutlined } from '@mui/icons-material'
+import { boardService } from '../../services/board.service'
 
 const SvgIcon = ({ iconName, options = { height: '17', width: '17', color: 'currentColor' } }) => {
   return (
@@ -17,8 +18,23 @@ const SvgIcon = ({ iconName, options = { height: '17', width: '17', color: 'curr
   ) // So clicking directly on the SVG won't create an ugly black background
 }
 
+import React, { useState, useEffect } from 'react'
+
 export default function Sidebar() {
+  const navigate = useNavigate()
   const location = useLocation() // Get current route
+  const match = location.pathname.match(/\/workspace\/board\/([^/]+)/) // since SideBar isn't inside <Route> in RootCmp we can't use useParams
+  const boardId = match ? match[1] : null
+
+  const [allBoardsTitle, setAllBoardsTitle] = useState([])
+
+  useEffect(() => {
+    fetchBoardsTitle()
+  }, [])
+  const fetchBoardsTitle = async () => {
+    const titles = await boardService.getAllBoardsTitle()
+    setAllBoardsTitle(titles)
+  }
   return (
     <div className='sidebar'>
       {/* Navigation Links */}
@@ -60,16 +76,23 @@ export default function Sidebar() {
       {/* Workspace Section */}
       <div className='workspace-section'>
         <ul className='workspace-links'>
-          <Link to='/workspace/board/b101' style={{ all: 'unset' }}>
-            <li
-              className={`workspace-item ${
-                location.pathname.includes('/workspace/board/b101') ? 'active' : ''
-              }`}
-            >
-              <SvgIcon iconName={'sidebar_workspace_projectIcon'} />
-              <span className='textInSidebar'>Main Workspace</span>
-            </li>
-          </Link>
+          {/*obj looks like this {id: XXX , title: YYY} */}
+          {allBoardsTitle.map((obj) => {
+            return (
+              <div
+                key={obj.id}
+                onClick={() => {
+                  navigate(`/workspace/board/${obj.id}`)
+                  window.location.reload() // Forces a refresh
+                }}
+              >
+                <li className={`workspace-item ${boardId === obj.id ? 'active' : ''}`}>
+                  <SvgIcon iconName={'sidebar_workspace_projectIcon'} />
+                  <span className='textInSidebar'>{obj.title}</span>
+                </li>
+              </div>
+            )
+          })}
         </ul>
       </div>
     </div>

@@ -34,7 +34,9 @@ export const boardService = {
   getEmptyTask,
   getTaskById,
   getGroupById,
+  getAllBoardsTitle,
   getGroupByTaskId,
+  getCurrentBoardId,
   groupColors,
   updateBoard,
 }
@@ -174,6 +176,17 @@ function getEmptyGroup() {
   }
 }
 
+async function getAllBoardsTitle() {
+  const allBoards = await query()
+  const allTitles = allBoards.map((board) => ({ id: board._id, title: board.title }))
+  return allTitles
+}
+
+function getCurrentBoardId() {
+  const board = store.getState().boardModule.currentBoard
+  return board._id
+}
+
 function getEmptyTask() {
   return {
     title: '',
@@ -220,19 +233,11 @@ function _createBoards() {
         _id: 'b101',
         title: 'First Board',
         isStarred: false,
-        archivedAt: 1589983468418,
         createdBy: {
           _id: 'u101',
           fullname: 'Abi Abambi',
           imgUrl: 'http://some-img',
         },
-        archivedItems: [
-          {
-            id: 'g103',
-            type: 'group',
-            archivedAt: 1673894400000,
-          },
-        ],
         style: {},
         labels: [
           // Status Labels (l101 - l199)
@@ -374,15 +379,143 @@ function _createBoards() {
       {
         _id: 'b102',
         title: 'Second Board',
-      }, // This is just to test BoardIndex.js
-      {
-        _id: 'b103',
-        title: 'Third Board',
-      }, // This is just to test BoardIndex.js
-      {
-        _id: 'b104',
-        title: 'Fourth Board',
-      }, // This is just to test BoardIndex.js
+        isStarred: false,
+        createdBy: {
+          _id: 'u101',
+          fullname: 'Abi Abambi',
+          imgUrl: 'http://some-img',
+        },
+        style: {},
+        labels: [
+          // Status Labels (l101 - l199)
+          { id: 'l101', title: '', color: '#c4c4c4' },
+          { id: 'l102', title: 'Done', color: '#00c875' },
+          { id: 'l103', title: 'Working on it', color: '#fdab3d' },
+          { id: 'l104', title: 'Stuck', color: '#df2f4a' },
+          { id: 'l105', title: 'Waiting for Review', color: '#ffcb00' },
+
+          // Priority Labels (l201 - l299)
+          { id: 'l201', title: '', color: '#c4c4c4' },
+          { id: 'l202', title: 'Critical ⚠️', color: '#333333' },
+          { id: 'l203', title: 'High', color: '#401694' },
+          { id: 'l204', title: 'Medium', color: '#5559df' },
+          { id: 'l205', title: 'Low', color: '#579bfc' },
+          { id: 'l206', title: 'Optional', color: '#9d99ff' },
+
+          // Member Labels (l301 - l399)
+          { id: 'l301', title: 'Frontend Team', color: '#579bfc' },
+          { id: 'l302', title: 'Backend Team', color: '#bbd676' },
+          { id: 'l303', title: 'QA Team', color: '#f5dd29' },
+          { id: 'l304', title: 'Product Team', color: '#fdab3d' },
+          { id: 'l305', title: 'Design Team', color: '#ff642e' },
+
+          // Task Type Labels (l401 - l499)
+          { id: 'l401', title: 'Bug', color: '#a25ddc' },
+          { id: 'l402', title: 'Feature', color: '#7f5347' },
+          { id: 'l403', title: 'Chore', color: '#d3d3d3' },
+          { id: 'l404', title: 'Epic', color: '#ffadad' },
+          { id: 'l405', title: 'Improvement', color: '#29cc8e' },
+
+          // Custom Labels (l501 - l599)
+          { id: 'l501', title: 'Customer Request', color: '#ff9d76' },
+          { id: 'l502', title: 'Blocked', color: '#4eccc6' },
+          { id: 'l503', title: 'Research', color: '#b3bac5' },
+          { id: 'l504', title: 'Planning', color: '#2a71d0' },
+          { id: 'l505', title: 'Delayed', color: '#ff0000' },
+        ],
+        members: [
+          {
+            _id: 'u101',
+            fullname: 'Tal Tarablus',
+            imgUrl: 'https://i.pravatar.cc/250?u=mail@ashallendesign.co.uk',
+          },
+          {
+            _id: 'u102',
+            fullname: 'Yuval Dadon',
+            imgUrl: 'https://gravatar.com/images/homepage/avatar-04.png',
+          },
+          {
+            _id: 'u103',
+            fullname: 'Ofir Gady',
+            imgUrl: 'https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250',
+          },
+          {
+            _id: 'u104',
+            fullname: 'Gal Israeli',
+            imgUrl: 'https://gravatar.com/images/homepage/avatar-02.png',
+          },
+        ],
+        groups: [
+          {
+            id: 'g101',
+            title: 'Group 1',
+            archivedAt: 1589983468418,
+            collapsed: false,
+            tasks: [
+              {
+                id: 'c101',
+                title: 'Task 1',
+                status: 'l101',
+                priority: 'l201',
+                memberIds: [],
+              },
+              {
+                id: 'c102',
+                title: 'Task 2',
+                status: 'l101',
+                priority: 'l201',
+                memberIds: [],
+              },
+            ],
+            style: { color: 'green' },
+          },
+          {
+            id: 'g102',
+            title: 'Group 2',
+            collapsed: false,
+            tasks: [
+              {
+                id: 'c103',
+                title: 'Task 3',
+                status: 'l101',
+                priority: 'l201',
+                memberIds: [],
+              },
+
+              {
+                id: 'c104',
+                title: 'Task 4',
+                status: 'l101',
+                priority: 'l201',
+                memberIds: [],
+              },
+            ],
+            style: { color: 'gray' },
+          },
+        ],
+        activities: [
+          // {
+          //   // picture for reference https://i.imgur.com/AMMkPT2.png
+          //   id: 'a101',
+          //   createdAt: Date.now(),
+          //   byMember: {
+          //     _id: 'u101',
+          //     fullname: 'Abi Abambi',
+          //     imgUrl: 'http://some-img',
+          //   },
+          //   boardid: 'b101',
+          //   groupid: 'g101', // if this is null, then it's a board activity
+          //   taskid: 'c101', // If this is null, then it's a group activity
+          //   action_name: 'Created', // Or 'Updated' Or 'Moved' Or 'Deleted' etc etc... perhaps 'Updated' could be broken down into more specific names like 'Name changed' or 'Color Changed'
+          //   free_txt: 'Group created', // Or 'Group deleted' or 'Group moved to another board' etc etc
+          //   prevValue: null, // This remembers the last value of the task/group/board before the change
+          // },
+        ],
+
+        cmpsOrder: ['status', 'priority', 'memberIds', 'dueDate'],
+        cmpTitles: ['Status', 'Priority', 'Members', 'Due Date'],
+        groupSummary: [null, null, null],
+      },
     ]
 
     utilService.saveToStorage(STORAGE_KEY, boards)

@@ -37,6 +37,7 @@ const SvgIcon = ({ iconName, options }) => {
 
 export function BoardDetails() {
   const { boardId } = useParams()
+
   const board = useSelector((storeState) => storeState.boardModule.currentBoard)
   const [activeTask, setActiveTask] = useState() // drag and drop
   const sensors = useSensors(
@@ -60,7 +61,7 @@ export function BoardDetails() {
 
   useEffect(() => {
     onLoadBoard()
-  }, [])
+  }, [boardId])
 
   async function onLoadBoard() {
     try {
