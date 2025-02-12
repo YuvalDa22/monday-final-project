@@ -14,47 +14,45 @@ const SvgIcon = ({ iconName, options, className }) => {
   )
 }
 
-const myStyle = {
-  width: '100%',
-  height: 42,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'start',
-  border: '1px dashed black',
-  background: '#ebedf2',
-  transform: 'rotate(1deg)',
-}
-
-export function Item({ item }) {
+export function Item({ item, board, group, cmpsOrder }) {
   // This is what is shown when a row is being dragged
 
   return (
-    <div key={`DRAGGEDtask-${item.id}`} style={myStyle}>
-      <Checkbox
-        className={'checkbox-cell'}
-        checked={false}
-        onChange={(event) => handleTaskChecked(event, item)}
-      />
-
-      <span
-        onClick={(event) => {
-          event.preventDefault()
-          event.stopPropagation()
-          handleEdit(item.id, item.title)
-        }}
-      >
-        {item.title}
-      </span>
-
-      {/* <TaskPreview
-        key={`preview-${item.id}`}
-        group={group}
-        board={board}
-        task={item}
-        cmpsOrder={cmpsOrder}
-      /> */}
-    </div>
-  ) // ✅ Show task title instead of just ID
+    <tr key={`DRAGGEDtask-${item.id}`} className='draggedTask'>
+      <td>
+        <Checkbox size='small' />
+      </td>
+      <td>
+        <Link
+          to='#' // no where
+          className='task-cell-container'
+          style={{ width: '1000px', height: '38px' }}
+        >
+          <span>{item.title}</span>
+          <div style={{ display: 'flex', flexDirection: 'row', marginRight: 10 }}>
+            <SvgIcon iconName={'task_open_icon'} className={'svgOpenIcon'} />
+            <div>Open</div>
+          </div>
+        </Link>
+      </td>
+      {cmpsOrder.map((cmp, idx) => {
+        return (
+          <td
+            key={idx}
+            className='data-cell'
+            style={{ width: '159px', height: '38px', alignContent: 'center', textAlign: 'center' }}
+          >
+            <DynamicCmp
+              cmp={cmp}
+              board={board}
+              info={item[cmp]} // Pass the current value for this key
+              onUpdate={(data) => {}}
+            />
+          </td>
+        )
+      })}
+    </tr>
+  )
 }
 
 export default function GroupItemContainer({

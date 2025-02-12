@@ -71,6 +71,12 @@ export function GroupPreview({
     })
     return acc
   }, {})
+  Object.keys(counts).forEach((category) => {
+    // This is to sort the progbar by keys , meaning show l100/l200/ first , and then l101/l202 , etc etc (ascending)
+    counts[category] = Object.fromEntries(
+      Object.entries(counts[category]).sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
+    )
+  })
 
   const handleCollapseGroupClicked = () => {
     setIsCollapsed(!isCollapsed)

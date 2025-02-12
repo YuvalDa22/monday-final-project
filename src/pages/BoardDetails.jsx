@@ -188,8 +188,6 @@ export function BoardDetails() {
 
   function handleDragOver(event) {
     let { active, over } = event
-    console.log('active ', active)
-    console.log('over ', over)
 
     if (!over || !active) return
 
@@ -202,7 +200,6 @@ export function BoardDetails() {
 
     if (!activeContainer || !overContainer) {
       overContainer = board.groups.find((group) => group.id === over.id)
-      console.log(overContainer)
 
       if (overContainer.tasks.length == 1) {
         over = { id: overContainer.tasks[0].id }
@@ -223,6 +220,7 @@ export function BoardDetails() {
       return
     }
 
+    if (overIndex > 0) overIndex++ // i added +1 to fix 'transfer item to bottom of new group puts it in the wrong place (-1 index)
     activeContainer.tasks = activeContainer.tasks.filter((task) => task.id !== active.id)
     overContainer.tasks = [
       ...overContainer.tasks.slice(0, overIndex),
@@ -271,8 +269,16 @@ export function BoardDetails() {
                 onAddTask={onAddTask}
               />
             ))}
-
-          <DragOverlay>{activeTask ? <Item item={activeTask} /> : null}</DragOverlay>
+          <DragOverlay>
+            {activeTask ? (
+              <Item
+                item={activeTask}
+                board={board}
+                group={boardService.getGroupByTaskId(activeTask.id)}
+                cmpsOrder={board.cmpsOrder}
+              />
+            ) : null}
+          </DragOverlay>
         </DndContext>
         <div className='add-group-button-container'>
           <Button

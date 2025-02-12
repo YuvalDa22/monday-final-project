@@ -48,22 +48,6 @@
         color: inherit; // this is so task titles wont be colored blue since they're now wrapped in a <Link> container which boils down to <a href> resulting in blue text
       }
 
-      td,
-      th {
-        border: 1px solid #ddd;
-        font-weight: 300;
-      }
-      /* Remove duplicate borders */
-      td:not(:first-child),
-      th:not(:first-child) {
-        border-left: none;
-      }
-
-      tr td,
-      tr:not(:first-child) th {
-        border-top: none;
-      }
-
       .header-cell {
         min-width: 10rem;
         width: 10rem;
@@ -76,139 +60,170 @@
         // BEFORE : https://i.imgur.com/pIcEpCM.png
         // AFTER :https://i.imgur.com/bEbG827.png
       }
+    }
+  }
+}
 
-      .openTaskDetails_container {
-        display: none;
-        gap: 5px;
+.openTaskDetails_container {
+  display: none;
+  gap: 5px;
 
-        //  background-color: lightblue;
-        align-items: center;
-        padding: 0px 10px 0px 5px;
+  align-items: center;
+  padding: 0px 10px 0px 5px;
 
-        .svgOpenIcon {
-          margin-top: 5px;
-          opacity: 0.75;
-        }
-      }
+  .svgOpenIcon {
+    margin-top: 5px;
+    opacity: 0.75;
+  }
+}
 
-      .hide_open {
-        display: none !important; /* had to use important to override the display property*/
-      }
+.hide_open {
+  display: none !important; /* had to use important to override the display property*/
+}
 
-      .task-cell-container {
-        padding-left: 15px;
-        position: relative;
-        align-items: center;
-        justify-content: center;
-        text-align: start;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        max-width: 30rem; // This is so the content inside the cell wont dictate .task-title width . NOTE FOR SELF : make sure this is synced with .task-title width !
+.task-cell-container {
+  padding-left: 15px;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  text-align: start;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  max-width: 30rem; // This is so the content inside the cell wont dictate .task-title width . NOTE FOR SELF : make sure this is synced with .task-title width !
 
-        span {
-          white-space: nowrap;
-          overflow: hidden;
-          border: 1px solid transparent;
-          border-radius: 5px;
-          padding: 3px;
-        }
+  span {
+    white-space: nowrap;
+    overflow: hidden;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    padding: 3px;
+  }
 
-        span:hover {
-          border: 1px solid rgba(0, 0, 0, 0.2);
-        }
-      }
-      .task-title {
-        min-width: 30rem; // This is so task column is by default little bigger than the rest of the columns
-      }
+  span:hover {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+  }
+}
+.task-title {
+  min-width: 30rem; // This is so task column is by default little bigger than the rest of the columns
+}
 
-      .task-row {
-      }
+.task-row {
+}
 
-      .task-row:hover {
-        background-color: rgba(245, 246, 248, 255);
-        .openTaskDetails_container {
-          display: flex;
-        }
-      }
+.task-row:hover {
+  background-color: rgba(245, 246, 248, 255);
+  .openTaskDetails_container {
+    display: flex;
+  }
+}
 
-      .task-menu {
-        position: absolute;
-        padding: 8px 5px;
-        align-content: start;
-        display: flex;
-        transform: translateX(-40px);
-        opacity: 0;
+.task-menu {
+  position: absolute;
+  padding: 8px 5px;
+  align-content: start;
+  display: flex;
+  transform: translateX(-40px);
+  opacity: 0;
 
-        &:hover {
-          opacity: 1;
-        }
-      }
+  &:hover {
+    opacity: 1;
+  }
+}
 
-      .add-item {
-        display: flex;
-        position: relative; /* Ensures the ::before pseudo-element positions relative to this */
-      }
-      .checkbox-cell:not(:first-child)::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        left: -3px;
-        width: 6px;
-        height: 104%;
-        top: -1px;
-        background-color: var(--group-color);
-      }
+.add-item {
+  display: flex;
+  position: relative; /* Ensures the ::before pseudo-element positions relative to this */
+}
+.checkbox-cell:not(:first-child)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  left: -3px;
+  width: 6px;
+  height: 104%;
+  top: -1px;
+  background-color: var(--group-color);
+}
 
-      .checkbox-cell {
-        position: relative;
+.checkbox-cell {
+  position: relative;
 
-        &.header {
-          ::before {
-            content: '';
-            position: absolute;
-            left: -3px;
-            width: 6px;
-            height: 104%;
-            background-color: var(--group-color);
-            border-top-left-radius: 8px;
-          }
-        }
-
-        &.lastone {
-          ::before {
-            content: '';
-            position: absolute;
-            left: -3px;
-            width: 6px;
-            height: 104%;
-            opacity: 0.4;
-            background-color: var(--group-color);
-            border-bottom-left-radius: 8px;
-          }
-        }
-      }
+  &.header {
+    ::before {
+      content: '';
+      position: absolute;
+      left: -3px;
+      width: 6px;
+      height: 104%;
+      background-color: var(--group-color);
+      border-top-left-radius: 8px;
     }
   }
 
-  .groupPreview_ProgressBar_container {
-    height: 38px;
+  &.lastone {
+    ::before {
+      content: '';
+      position: absolute;
+      left: -3px;
+      width: 6px;
+      height: 104%;
+      opacity: 0.4;
+      background-color: var(--group-color);
+      border-bottom-left-radius: 8px;
+    }
   }
-  .groupPreview_ProgressBar_container.first {
-    border-left: 1px solid #ddd !important;
-    border-radius: 0px 0px 0px 8px;
+}
+
+.groupPreview_ProgressBar_container {
+  height: 38px;
+}
+.groupPreview_ProgressBar_container.first {
+  border-left: 1px solid #ddd !important;
+  border-radius: 0px 0px 0px 8px;
+}
+.ProgressBar_colors_container {
+  display: flex;
+  height: 100%;
+  padding: 7px;
+  animation: name duration timing-function delay iteration-count direction fill-mode;
+}
+.ProgressBar_single_color {
+  transition: width 0.4s ease-out;
+}
+.ProgressBar_single_color:hover {
+  transform: scaleY(1.3);
+  border-radius: 3px;
+}
+
+.draggedTask {
+  background: rgba(235, 237, 242, 0.6) !important;
+  backdrop-filter: blur(15px) !important;
+  width: 100%;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  // border: 1px dashed black;
+  background: #ebedf2;
+  transform: rotate(1deg);
+  a {
+    color: inherit; // this is so task titles wont be colored blue since they're now wrapped in a <Link> container which boils down to <a href> resulting in blue text
   }
-  .ProgressBar_colors_container {
-    display: flex;
-    height: 100%;
-    padding: 7px;
-    animation: name duration timing-function delay iteration-count direction fill-mode;
-  }
-  .ProgressBar_single_color {
-    transition: width 0.4s ease-out;
-  }
-  .ProgressBar_single_color:hover {
-    transform: scaleY(1.3);
-    border-radius: 3px;
-  }
+}
+
+td,
+th {
+  border: 1px solid #ddd;
+  font-weight: 300;
+}
+/* Remove duplicate borders */
+td:not(:first-child),
+th:not(:first-child) {
+  border-left: none;
+}
+
+tr td,
+tr:not(:first-child) th {
+  border-top: none;
 }

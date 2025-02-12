@@ -1,16 +1,14 @@
 import { useEffect, useState, useRef } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { getBoardById } from '../../../store/board/board.actions'
 import { showErrorMsg } from '../../../services/event-bus.service' // Assuming you have this function
 import { boardService } from '../../../services/board.service'
 import { Avatar } from 'radix-ui'
-import { use } from 'react'
 
 export function ActivityLog({ taskId = null }) {
   // if taskId wasn't supplied then we know we should display global activity log
   const { boardId } = useParams()
-  const dispatch = useDispatch()
 
   const board = useSelector((storeState) => storeState.boardModule.currentBoard)
 

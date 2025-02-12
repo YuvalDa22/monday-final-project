@@ -34,6 +34,7 @@ export const boardService = {
   getEmptyTask,
   getTaskById,
   getGroupById,
+  getGroupByTaskId,
   groupColors,
   updateBoard,
 }
@@ -74,6 +75,21 @@ async function query(filterBy = {}) {
     console.log('error:', error)
     throw error
   }
+}
+
+function getGroupByTaskId(taskId) {
+  const board = store.getState().boardModule.currentBoard
+  if (!board) {
+    return null
+  }
+
+  for (const group of board.groups) {
+    if (group.tasks.some((task) => task.id === taskId)) {
+      return group // Return the group that contains the task
+    }
+  }
+
+  return null // If no group contains the task, return null
 }
 
 function getBoardById(boardId) {

@@ -12,7 +12,6 @@ export function StatusCmp({ onUpdate, board, info }) {
   }
 
   const labels = board?.labels?.filter((label) => label.id[1] === '1' && label.title)
-  console.log(labels)
 
   const handleChange = (selectedOption) => {
     onUpdate(selectedOption)

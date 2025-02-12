@@ -21,6 +21,7 @@ export async function getBoardById(boardId) {
 
 export function logActivity(group, task, prev, action) {
   const board = store.getState().boardModule.currentBoard
+  const updatedActivities = structuredClone(board.activities)
   let message, free_txt
 
   /*Why Use switch (true)?
@@ -94,7 +95,7 @@ export function logActivity(group, task, prev, action) {
     default:
       console.error('Action was not logged !!!')
   }
-  board.activities.unshift(
+  updatedActivities.unshift(
     boardService.createActivityLog(
       board?._id,
       group?.id,
@@ -104,6 +105,7 @@ export function logActivity(group, task, prev, action) {
       prev
     )
   )
+  updateBoard(null, null, { key: 'activities', value: updatedActivities })
 }
 export async function updateBoard(groupId, taskId, { key, value }) {
   const board = store.getState().boardModule.currentBoard
