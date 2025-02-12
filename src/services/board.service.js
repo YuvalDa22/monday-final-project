@@ -302,17 +302,24 @@ function _createBoards() {
             tasks: [
               {
                 id: 'c101',
-                title: 'Replace logo',
-                status: 'l101',
-                priority: 'l201',
-                memberIds: ['u101', 'u104', 'u102', 'u103'],
+                title: 'Add Samples',
+                status: 'l103',
+                priority: 'l205',
+                memberIds: ['u101', 'u103', 'u102', 'u104'],
               },
               {
                 id: 'c102',
-                title: 'Add Samples',
-                status: 'l101',
-                priority: 'l201',
-                memberIds: ['u101', 'u102'],
+                title: 'Some Task',
+                status: 'l102',
+                priority: 'l205',
+                memberIds: ['u102', 'u104'],
+              },
+              {
+                id: 'c103',
+                title: 'Replace logo',
+                status: 'l102',
+                priority: 'l204',
+                memberIds: [],
               },
             ],
             style: { color: 'red' },
@@ -323,18 +330,18 @@ function _createBoards() {
             collapsed: false,
             tasks: [
               {
-                id: 'c103',
+                id: 'c104',
                 title: 'Do that',
-                status: 'l101',
-                priority: 'l201',
+                status: 'l104',
+                priority: 'l203',
                 memberIds: ['u103'], // tal yuval ofir gal
               },
 
               {
-                id: 'c104',
+                id: 'c105',
                 title: 'Help me',
-                status: 'l101', // monday
-                priority: 'l201',
+                status: 'l105', // monday
+                priority: 'l205',
                 memberIds: [],
               },
             ],
