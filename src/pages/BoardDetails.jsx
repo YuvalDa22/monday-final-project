@@ -82,11 +82,6 @@ export function BoardDetails() {
   const onAddGroup = async (fromHeader) => {
     if (!board) return
     let newGroup = boardService.getEmptyGroup()
-    newGroup = {
-      id: 'g' + utilService.makeId(), // Generate and add ID to the top of the properties
-
-      ...newGroup,
-    }
     const updatedGroups = fromHeader ? [newGroup, ...board?.groups] : [...board?.groups, newGroup]
 
     updateBoard(null, null, { key: 'groups', value: updatedGroups })
@@ -257,7 +252,8 @@ export function BoardDetails() {
           onDragEnd={handleDragEnd}
           sensors={sensors}
         >
-          {board?.groups &&
+          {board?.groups && 
+            board.groups.length !== 0 &&
             board?.groups.map((group) => (
               <GroupPreview
                 board={board}

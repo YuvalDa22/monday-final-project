@@ -3,7 +3,6 @@
 import { Divider } from '@mui/material';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { getSvg, utilService } from '../../services/util.service';
-import { StarBorderOutlined } from '@mui/icons-material';
 import { boardService } from '../../services/board.service';
 import {
   Button,
@@ -41,37 +40,24 @@ export default function Sidebar() {
 
   useEffect(() => {
     fetchBoardsTitle();
-  }, []);
+  }, [allBoardsTitle]);
+
+
   const fetchBoardsTitle = async () => {
     const titles = await boardService.getAllBoardsTitle();
     setAllBoardsTitle(titles);
   };
-
-  // const onAddGroup = async (fromHeader) => {
-  //   if (!board) return
-  //   let newGroup = boardService.getEmptyGroup()
-  //   newGroup = {
-  //     id: 'g' + utilService.makeId(), // Generate and add ID to the top of the properties
-
-  //     ...newGroup,
-  //   }
-  //   const updatedGroups = fromHeader ? [newGroup, ...board?.groups] : [...board?.groups, newGroup]
-
-  //   updateBoard(null, null, { key: 'groups', value: updatedGroups })
-  //   logActivity(newGroup, null, null, 'groupCreated')
-  // }
  
   const handleAddBoard = async () => {
     let newBoard = boardService.getEmptyBoard()
-    newBoard = {
-      _id: 'b' + utilService.makeId(),
-      ...newBoard,
-    }
+    boardService.save(newBoard)
+    console.log(newBoard)
+    const titles = await boardService.getAllBoardsTitle();
+    setAllBoardsTitle(titles)
+
     //logActivity default assume board from state 
-    logActivity(null, null, null, 'BoardCreated')
+    //logActivity(null, null, null, 'BoardCreated')
   }
-
-
 
   return (
     <div className="sidebar">
@@ -151,7 +137,7 @@ export default function Sidebar() {
         <li className="sidebar-item">
           <ButtonGroup variant="contained" className="new-board-buttons">
             <Button
-              onClick={() => handleAddBoard(true)}
+              onClick={() => handleAddBoard()}
               className="add-board-button"
             >
               Add New Board

@@ -366,7 +366,7 @@ export function GroupPreview({
                     <Input
                       className='input'
                       type='text'
-                      placeholder='+ Add item'
+                      placeholder='+ Add task'
                       value={newItemTempTitle}
                       onChange={(event) => setNewItemTempTitle(event.target.value)}
                       onKeyDown={(event) => {

@@ -39,6 +39,7 @@ export const boardService = {
   getCurrentBoardId,
   groupColors,
   updateBoard,
+  getDefaultLabels,
 }
 
 const STORAGE_KEY = 'boards'
@@ -145,7 +146,7 @@ async function save(boardToSave) {
 
 function getEmptyBoard() {
   return {
-    title: '',
+    title: 'New Board',
     isStarred: false,
     archivedAt: 0,
     createdBy: {
@@ -154,22 +155,26 @@ function getEmptyBoard() {
       imgUrl: '',
     },
     style: {},
-    labels: [],
+    labels: getDefaultLabels(),
     members: [],
-    groups: getEmptyGroup(),
+    groupSummary: [null, null, null],
+    groups: [{...getEmptyGroup()},
+    {...getEmptyGroup()}],
     archivedItems: [], //Groups or Tasks
     activities: [],
-    cmpsOrder: [],
-    cmpTitles: [],
+    cmpsOrder: ["status", "priority", "memberIds", "dueDate"],
+    cmpTitles: ["Status", "Priority", "Members", "Due Date"],
     groupSummary: [],
   }
 }
 
 function getEmptyGroup() {
   return {
+    id: 'g' + utilService.makeId(),
     title: 'New Group',
     archivedAt: 0,
-    tasks: [],
+    tasks: [{...getEmptyTask()},
+    {...getEmptyTask()}],
     archivedItems: [],
     style: { color: _setNewGroupColor() },
     collapsed: false,
@@ -189,7 +194,8 @@ function getCurrentBoardId() {
 
 function getEmptyTask() {
   return {
-    title: '',
+    id: 't' + utilService.makeId(),
+    title: 'New Task',
     archivedAt: 0,
     status: 'l101',
     priority: 'l201',
@@ -198,7 +204,7 @@ function getEmptyTask() {
     checklists: [],
     memberIds: [],
     labelIds: [],
-    dueDate: 0,
+    dueDate: new Date(),
     byMember: {},
     style: {},
   }
@@ -217,6 +223,47 @@ function createActivityLog(boardId, groupId, taskId, action_name, free_txt, prev
     prevValue, // Holds the previous value of the task/group/board before the change
   }
 }
+
+function getDefaultLabels(){
+  return [
+      // Status Labels (l101 - l199)
+      { id: 'l101', title: '', color: '#c4c4c4' },
+      { id: 'l102', title: 'Done', color: '#00c875' },
+      { id: 'l103', title: 'Working on it', color: '#fdab3d' },
+      { id: 'l104', title: 'Stuck', color: '#df2f4a' },
+      { id: 'l105', title: 'Waiting for Review', color: '#ffcb00' },
+
+      // Priority Labels (l201 - l299)
+      { id: 'l201', title: '', color: '#c4c4c4' },
+      { id: 'l202', title: 'Critical ⚠️', color: '#333333' },
+      { id: 'l203', title: 'High', color: '#401694' },
+      { id: 'l204', title: 'Medium', color: '#5559df' },
+      { id: 'l205', title: 'Low', color: '#579bfc' },
+      { id: 'l206', title: 'Optional', color: '#9d99ff' },
+
+      // Member Labels (l301 - l399)
+      { id: 'l301', title: 'Frontend Team', color: '#579bfc' },
+      { id: 'l302', title: 'Backend Team', color: '#bbd676' },
+      { id: 'l303', title: 'QA Team', color: '#f5dd29' },
+      { id: 'l304', title: 'Product Team', color: '#fdab3d' },
+      { id: 'l305', title: 'Design Team', color: '#ff642e' },
+
+      // Task Type Labels (l401 - l499)
+      { id: 'l401', title: 'Bug', color: '#a25ddc' },
+      { id: 'l402', title: 'Feature', color: '#7f5347' },
+      { id: 'l403', title: 'Chore', color: '#d3d3d3' },
+      { id: 'l404', title: 'Epic', color: '#ffadad' },
+      { id: 'l405', title: 'Improvement', color: '#29cc8e' },
+
+      // Custom Labels (l501 - l599)
+      { id: 'l501', title: 'Customer Request', color: '#ff9d76' },
+      { id: 'l502', title: 'Blocked', color: '#4eccc6' },
+      { id: 'l503', title: 'Research', color: '#b3bac5' },
+      { id: 'l504', title: 'Planning', color: '#2a71d0' },
+      { id: 'l505', title: 'Delayed', color: '#ff0000' },
+    ]
+}
+
 
 function _setNewGroupColor() {
   const colors = Array.from(groupColors.values())
