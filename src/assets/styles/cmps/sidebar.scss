@@ -1,3 +1,4 @@
+@use "../setup/vars";
 .sidebar {
   display: flex;
   flex-direction: column;
@@ -5,6 +6,8 @@
   height: calc(100vh - 60px); // 60 is the height of the navbar
   background: linear-gradient(to bottom, #ffffff 0%, #eceff8 100%);
   font-size: 14px;
+  width: 100%;
+
 }
 
 .sidebar-links,
@@ -14,6 +17,10 @@
 .divider {
   height: 1px;
   background-color: #d0d4e4;
+}
+
+.li{
+  width: 100%;
 }
 
 .sidebar-item,
@@ -55,4 +62,52 @@
 .sidebar_home {
   position: relative;
   top: 3.5px;
+}
+
+.new-board-buttons {
+  display: flex;
+  width: 100%;
+  
+
+  .add-board-button {
+    flex: 1;
+    background-color: transparent;
+    color: vars.$color-mud_black;
+    text-transform: none;
+    padding: 4px 10px 4px 10px;
+    font-weight: vars.$font-weight-very-light;
+    font-size: vars.$font-size-10;
+    box-shadow: none;
+    position: relative;
+    padding-left: 16px;
+
+    &:hover {
+      box-shadow: none;
+      background-color: rgba(#676879, 0.1);
+    }
+  }
+
+  .dropdown-button {
+    flex: 1;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    background-color: vars.$primary-color;
+    text-transform: none;
+    min-width: 0;
+    max-width: 40px;
+    padding: 4px 3px 4px 3px;
+
+    i {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+
+    &:hover {
+      box-shadow: none;
+      background-color: rgba(#676879, 0.1);
+    }
+  }
 }
