@@ -77,6 +77,10 @@ export function logActivity(group, task, prev, action) {
       free_txt = ``
       break
 
+    case action === 'boardCreated':
+        message = 'Board Created'
+        free_txt = ``
+        break
     // Handle Object Actions
     case typeof action === 'object' && action.action === 'groupNameChanged':
       message = action.message

@@ -156,7 +156,7 @@ function getEmptyBoard() {
     style: {},
     labels: [],
     members: [],
-    groups: [],
+    groups: getEmptyGroup(),
     archivedItems: [], //Groups or Tasks
     activities: [],
     cmpsOrder: [],
