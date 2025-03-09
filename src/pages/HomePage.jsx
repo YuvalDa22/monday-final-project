@@ -14,7 +14,7 @@ export function HomePage() {
           <button
             className="hero-btn"
             onClick={() => {
-              navigate("/workspace/board/b101");
+              navigate("/workspace");
             }}
           >
             Get Started
