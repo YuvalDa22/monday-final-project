@@ -63,7 +63,7 @@ function getEmptyGroup() {
 
   function getEmptyTask() {
     return {
-      title: '',
+      title: 'New Task',
       archivedAt: 0,
       status: 'l101',
       priority: 'l201',

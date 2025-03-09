@@ -7,7 +7,7 @@ import Divider from '@mui/material/Divider'
 import LoopIcon from '@mui/icons-material/Loop'
 import Avatar from '@mui/material/Avatar'
 import { Tooltip } from 'radix-ui'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const SvgIcon = ({ iconName, options, customStyle }) => {
   return (
@@ -20,6 +20,7 @@ const SvgIcon = ({ iconName, options, customStyle }) => {
 
 export function AdditionalBoardActions() {
   const navigate = useNavigate()
+  const { boardId } = useParams()
   return (
     <Stack direction={'row'} gap={'10px'} style={{ display: 'flex', alignItems: 'center' }}>
       <IconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
@@ -44,7 +45,7 @@ export function AdditionalBoardActions() {
           <Tooltip.Trigger asChild>
             <div
               className='navbar-avatar-container'
-              onClick={() => navigate(`/workspace/board/b101/activity_log`)}
+              onClick={() => navigate(`/workspace/board/${boardId}/activity_log`)}
             >
               <Avatar
                 className='navbar-avatar'

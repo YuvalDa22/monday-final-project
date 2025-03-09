@@ -5,8 +5,7 @@ export const boardService = {
   query,
   getById,
   remove,
-  save,
-  updateBoard,
+  save
 }
 
 async function query(filterBy = {}) {
@@ -21,12 +20,12 @@ async function remove(boardId) {
   return httpService.delete(`board/${boardId}`)
 }
 
-// the save function is used only for adding a new board and not for updating an existing one
-async function save(board) { 
-    return await httpService.post('board', board)
-}
-
-async function updateBoard(board, groupId, taskId, { key, value }) {
-  if (!board) return
-  return await httpService.put(`board/${board._id}`, { board, groupId, taskId, change: { key, value } })
+async function save(board) {
+  var savedBoard
+  if (board._id) {
+      savedBoard = await httpService.put(`board/${board._id}`, board)
+  } else {
+      savedBoard = await httpService.post('board', board)
+  }
+  return savedBoard
 }

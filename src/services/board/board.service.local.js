@@ -1,10 +1,7 @@
 import { storageService } from '../async-storage.service.js'
 import { utilService } from '../util.service.js'
-import { store } from '../../store/store.js'
-
 
 export const boardService = {
-  updateBoard,
   query,
   save,
   remove,
@@ -13,27 +10,6 @@ export const boardService = {
 
 const STORAGE_KEY = 'boards'
 _createBoards()
-
-async function updateBoard(board, groupId, taskId, { key, value }) {
-  if (!board) return
-  const gIdx = board?.groups.findIndex((groupItem) => groupItem.id === groupId)
-  const tIdx = board?.groups[gIdx]?.tasks.findIndex((t) => t.id === taskId)
-
-  if (gIdx !== -1 && tIdx !== -1) {
-    board.groups[gIdx].tasks[tIdx][key] = value
-  } else if (gIdx !== -1) {
-    board.groups[gIdx][key] = value
-  } else {
-    board[key] = value
-  }
-  try {
-    await save(board)
-    return board
-  } catch (err) {
-    console.error('Failed to save the board:', err)
-    throw err
-  }
-}
 
 async function query(filterBy = {}) {
   try {
@@ -67,7 +43,7 @@ function _createBoards() {
   if (!boards || !boards.length) {
     const boards = [
       {
-        _id: 'b101',
+        _id: '67cdc83b556eff2b649237e4',
         title: 'First Board',
         isStarred: false,
         createdBy: {
@@ -90,28 +66,7 @@ function _createBoards() {
           { id: 'l203', title: 'High', color: '#401694' },
           { id: 'l204', title: 'Medium', color: '#5559df' },
           { id: 'l205', title: 'Low', color: '#579bfc' },
-          { id: 'l206', title: 'Optional', color: '#9d99ff' },
-
-          // Member Labels (l301 - l399)
-          { id: 'l301', title: 'Frontend Team', color: '#579bfc' },
-          { id: 'l302', title: 'Backend Team', color: '#bbd676' },
-          { id: 'l303', title: 'QA Team', color: '#f5dd29' },
-          { id: 'l304', title: 'Product Team', color: '#fdab3d' },
-          { id: 'l305', title: 'Design Team', color: '#ff642e' },
-
-          // Task Type Labels (l401 - l499)
-          { id: 'l401', title: 'Bug', color: '#a25ddc' },
-          { id: 'l402', title: 'Feature', color: '#7f5347' },
-          { id: 'l403', title: 'Chore', color: '#d3d3d3' },
-          { id: 'l404', title: 'Epic', color: '#ffadad' },
-          { id: 'l405', title: 'Improvement', color: '#29cc8e' },
-
-          // Custom Labels (l501 - l599)
-          { id: 'l501', title: 'Customer Request', color: '#ff9d76' },
-          { id: 'l502', title: 'Blocked', color: '#4eccc6' },
-          { id: 'l503', title: 'Research', color: '#b3bac5' },
-          { id: 'l504', title: 'Planning', color: '#2a71d0' },
-          { id: 'l505', title: 'Delayed', color: '#ff0000' },
+          { id: 'l206', title: 'Optional', color: '#9d99ff' }
         ],
         members: [
           {
@@ -182,8 +137,8 @@ function _createBoards() {
               {
                 id: 'c105',
                 title: 'Help me',
-                status: 'l105', // monday
-                priority: 'l205',
+                status: 'l104', // monday
+                priority: 'l204',
                 memberIds: [],
               },
             ],
@@ -214,7 +169,7 @@ function _createBoards() {
         groupSummary: [null, null, null],
       },
       {
-        _id: 'b102',
+        _id: '67cdc87c556eff2b649237e5',
         title: 'Second Board',
         isStarred: false,
         createdBy: {
@@ -237,28 +192,7 @@ function _createBoards() {
           { id: 'l203', title: 'High', color: '#401694' },
           { id: 'l204', title: 'Medium', color: '#5559df' },
           { id: 'l205', title: 'Low', color: '#579bfc' },
-          { id: 'l206', title: 'Optional', color: '#9d99ff' },
-
-          // Member Labels (l301 - l399)
-          { id: 'l301', title: 'Frontend Team', color: '#579bfc' },
-          { id: 'l302', title: 'Backend Team', color: '#bbd676' },
-          { id: 'l303', title: 'QA Team', color: '#f5dd29' },
-          { id: 'l304', title: 'Product Team', color: '#fdab3d' },
-          { id: 'l305', title: 'Design Team', color: '#ff642e' },
-
-          // Task Type Labels (l401 - l499)
-          { id: 'l401', title: 'Bug', color: '#a25ddc' },
-          { id: 'l402', title: 'Feature', color: '#7f5347' },
-          { id: 'l403', title: 'Chore', color: '#d3d3d3' },
-          { id: 'l404', title: 'Epic', color: '#ffadad' },
-          { id: 'l405', title: 'Improvement', color: '#29cc8e' },
-
-          // Custom Labels (l501 - l599)
-          { id: 'l501', title: 'Customer Request', color: '#ff9d76' },
-          { id: 'l502', title: 'Blocked', color: '#4eccc6' },
-          { id: 'l503', title: 'Research', color: '#b3bac5' },
-          { id: 'l504', title: 'Planning', color: '#2a71d0' },
-          { id: 'l505', title: 'Delayed', color: '#ff0000' },
+          { id: 'l206', title: 'Optional', color: '#9d99ff' }
         ],
         members: [
           {

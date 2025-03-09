@@ -406,7 +406,7 @@ export function GroupPreview({
                                 <div
                                   className='ProgressBar_single_color'
                                   style={{
-                                    backgroundColor: board.labels.find((label) => label.id === key)
+                                    backgroundColor: board?.labels?.find((label) => label.id === key)
                                       ?.color,
                                     width: `${(value / totalAmountOfTasksWithStatus) * 100}%`,
                                   }}
@@ -415,7 +415,7 @@ export function GroupPreview({
                               <Tooltip.Portal>
                                 <Tooltip.Content className='TooltipContent' sideOffset={8}>
                                   {`${
-                                    board.labels.find((label) => label.id === key).title
+                                    board?.labels?.find((label) => label.id === key)?.title
                                   } ${value}/${totalAmountOfTasksWithStatus} \u00A0 ${
                                     ((value / totalAmountOfTasksWithStatus) * 100) % 1 === 0
                                       ? (value / totalAmountOfTasksWithStatus) * 100 // if division is clean simply show the number but if not show 1 digit after the dot

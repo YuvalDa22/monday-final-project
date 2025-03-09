@@ -41,7 +41,7 @@ export default function Sidebar() {
 
   useEffect(() => { 
     fetchBoardsTitle()
-  }, [allBoardsTitle])
+  }, [])
 
 
 const fetchBoardsTitle = async () => {
