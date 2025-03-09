@@ -4,8 +4,11 @@ import { Box, Card, Avatar, Flex, Text, Button } from '@radix-ui/themes'
 import { Theme } from '@radix-ui/themes'
 import '@radix-ui/themes/styles.css'
 import { Opacity, StarBorderOutlined } from '@mui/icons-material'
-import { boardService } from '../services/board.service'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { loadBoards } from '../store/board/board.actions'
+import { showErrorMsg } from '../services/event-bus.service'
+
 
 const SvgIcon = ({ iconName, options, style }) => {
   return <i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }} style={style}></i>
@@ -13,26 +16,21 @@ const SvgIcon = ({ iconName, options, style }) => {
 
 export function BoardIndex() {
   const [greeting, setGreeting] = useState('')
-  const [allBoards, setAllBoards] = useState([])
-  const [loading, setLoading] = useState(true) // Track loading state
+  const [filterBy, setFilterBy] = useState(null)
+  const { boards, isLoading } = useSelector((storeState) => storeState.boardModule)
   const navigate = useNavigate()
 
-  useEffect(() => {
-    getAllBoards()
+  useEffect(() => { 
+    onloadBoards();   
   }, [])
 
-  async function getAllBoards() {
-    setLoading(true)
-    try {
-      const boards = await boardService.query()
-      setAllBoards(boards)
-    } catch (error) {
-      showErrorMsg('Cannot load boards')
-      console.error(error)
-    } finally {
-      setLoading(false)
+  const onloadBoards = async() => {
+    try{
+      await loadBoards(filterBy)
+    } catch (err) {
+      showErrorMsg(`Sorry, couldn't load boards`, err)
     }
-  }
+} 
 
   useEffect(() => {
     // get current time in Israel
@@ -56,11 +54,9 @@ export function BoardIndex() {
     setGreeting(newGreeting)
   }, [])
 
-  useEffect(() => {
-    console.log(allBoards) // This will log the updated allBoards whenever it changes
-  }, [allBoards])
 
-  if (loading) return <div>Loading...</div>
+
+  if (isLoading) return <div>Loading...</div>
   return (
     <Theme asChild>
       {/* for radix ui card (which is custom theme and not a primitive UI item*/}
@@ -82,7 +78,7 @@ export function BoardIndex() {
               <span className='boardIndex_title'>Recently visited </span>
             </div>
             <div className='boardIndex_boards_grid_container'>
-              {allBoards.map((board) => (
+              {boards.map((board) => (
                 <Box
                   key={board._id}
                   style={{

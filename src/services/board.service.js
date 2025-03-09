@@ -34,7 +34,6 @@ export const boardService = {
   getEmptyTask,
   getTaskById,
   getGroupById,
-  getAllBoardsTitle,
   getGroupByTaskId,
   getCurrentBoardId,
   groupColors,
@@ -181,11 +180,7 @@ function getEmptyGroup() {
   }
 }
 
-async function getAllBoardsTitle() {
-  const allBoards = await query()
-  const allTitles = allBoards.map((board) => ({ id: board._id, title: board.title }))
-  return allTitles
-}
+
 
 function getCurrentBoardId() {
   const board = store.getState().boardModule.currentBoard

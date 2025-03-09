@@ -9,9 +9,42 @@ import {
   UPDATE_BOARD,
   ADD_TASK,
   REMOVE_TASK,
+  SET_IS_LOADING,
 } from './board.reducer'
 import { userService } from '../../services/user.service'
 import { utilService } from '../../services/util.service'
+
+
+export async function loadBoards(filterBy){
+  store.dispatch({type: SET_IS_LOADING, isLoading: true})
+  try {
+    const boards = await boardService.query(filterBy)
+    store.dispatch({type: SET_BOARDS, boards: boards})
+  } catch(err) {
+    console.log(`Can't load boards - boards actions`)
+    throw err
+  } finally {
+    store.dispatch({type: SET_IS_LOADING, isLoading: false})
+  }
+}
+
+export async function addBoard() {
+  console.log('Full store state:', store.getState())
+  console.log('boards from store before adding board:', store.getState().boardModule.boards)
+  try {
+    const boardToSave = boardService.getEmptyBoard()
+    const savedBoard = await boardService.save(boardToSave)
+    console.log(savedBoard)
+    store.dispatch({type: ADD_BOARD, savedBoard})
+    console.log('boards from store after adding board:', store.getState().boardModule.boards)
+
+    return savedBoard
+  } catch (err) {
+    console.log(`Couldn't add board, board actions`, err)
+    throw err
+  }
+}
+
 
 //This gets 1 board from the array of all boards!!
 export async function getBoardById(boardId) {
@@ -321,4 +354,10 @@ export async function removeGroup(group) {
 
 export function setFilterBy(filterBy = {}) {
   store.dispatch({ type: SET_FILTER_BY, filterBy })
+}
+
+export async function getAllBoardsTitle() {
+  const allBoards = await boardService.query()
+  const allTitles = allBoards.map((board) => ({ id: board._id, title: board.title }))
+  return allTitles
 }

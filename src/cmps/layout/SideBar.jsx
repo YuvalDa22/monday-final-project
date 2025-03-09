@@ -1,5 +1,5 @@
 // Sidebar.jsx
-//import React from "react";
+
 import { Divider } from '@mui/material';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { getSvg, utilService } from '../../services/util.service';
@@ -10,6 +10,12 @@ import {
   IconButton as MuiIconButton,
   Stack as MuiStack,
 } from '@mui/material';
+import { showErrorMsg, showSuccessMsg } from '../../services/event-bus.service'
+import React, { useState, useEffect } from 'react';
+import { DropdownMenu } from 'radix-ui';
+import { addBoard, getAllBoardsTitle } from '../../store/board/board.actions'
+
+
 
 const SvgIcon = ({
   iconName,
@@ -26,38 +32,66 @@ const SvgIcon = ({
   ); // So clicking directly on the SVG won't create an ugly black background
 };
 
-import React, { useState, useEffect } from 'react';
-import { DropdownMenu } from 'radix-ui';
-import { logActivity } from '../../store/board/board.actions';
-
 export default function Sidebar() {
+
   const navigate = useNavigate();
   const location = useLocation(); // Get current route
   const match = location.pathname.match(/\/workspace\/board\/([^/]+)/); // since SideBar isn't inside <Route> in RootCmp we can't use useParams
   const boardId = match ? match[1] : null;
-
   const [allBoardsTitle, setAllBoardsTitle] = useState([]);
 
-  useEffect(() => {
-    fetchBoardsTitle();
-  }, [allBoardsTitle]);
+  useEffect(() => { 
+    fetchBoardsTitle()
+  }, [allBoardsTitle])
 
 
-  const fetchBoardsTitle = async () => {
-    const titles = await boardService.getAllBoardsTitle();
-    setAllBoardsTitle(titles);
-  };
+const fetchBoardsTitle = async () => {
+  try {
+    const allTitles = await getAllBoardsTitle()
+    setAllBoardsTitle(allTitles)
+  } catch(err) {
+    console.log(`couldn't get or set titles`,err)
+    throw err
+  }
+}
+
+
+
+
+  //const [allBoardsTitle, setAllBoardsTitle] = useState([]);
+
+  // useEffect(() => {
+  //   fetchBoardsTitle();
+  // }, [allBoardsTitle]);
+
+
+  // const fetchBoardsTitle = async () => {
+  //   const titles = await boardService.getAllBoardsTitle();
+  //   setAllBoardsTitle(titles);
+  // };
  
-  const handleAddBoard = async () => {
-    let newBoard = boardService.getEmptyBoard()
-    boardService.save(newBoard)
-    console.log(newBoard)
-    const titles = await boardService.getAllBoardsTitle();
-    setAllBoardsTitle(titles)
+  async function onAddBoard() {
+    try {
+      const addedBoard = await addBoard()
+      console.log('addedBoard from SideBar',addedBoard)
+      showSuccessMsg('Board added successfully')
+      setAllBoardsTitle(prevBoards => [...prevBoards,{id: addedBoard._id ,title: addedBoard.title} ])
+    } catch (err) {
+      showErrorMsg(`Couldn't add board, please try again.`)
+    }
+  }
+
+  // const handleAddBoard = async () => {
+  //   let newBoard = boardService.getEmptyBoard()
+  //   boardService.save(newBoard)
+
+    // console.log(newBoard)
+    // const titles = await boardService.getAllBoardsTitle();
+    // setAllBoardsTitle(titles)
 
     //logActivity default assume board from state 
     //logActivity(null, null, null, 'BoardCreated')
-  }
+  
 
   return (
     <div className="sidebar">
@@ -137,8 +171,8 @@ export default function Sidebar() {
         <li className="sidebar-item">
           <ButtonGroup variant="contained" className="new-board-buttons">
             <Button
-              onClick={() => handleAddBoard()}
-              className="add-board-button"
+            onClick={onAddBoard}
+            className="add-board-button"
             >
               Add New Board
             </Button>
@@ -159,4 +193,5 @@ export default function Sidebar() {
       </ul>
     </div>
   );
+      
 }

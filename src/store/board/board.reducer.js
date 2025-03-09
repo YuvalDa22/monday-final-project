@@ -67,7 +67,7 @@ export function boardReducer(state = initialState, cmd) {
     case ADD_BOARD:
       return {
         ...state,
-        boards: [...state.boards, cmd.boards],
+        boards: [...state.boards, cmd.savedBoard],
       }
     case UPDATE_BOARD:
       return {
