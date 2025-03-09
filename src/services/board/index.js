@@ -26,37 +26,40 @@ const groupColors = new Map([
 ])
 
 function getEmptyBoard() {
-    return {
-      title: '',
-      isStarred: false,
-      archivedAt: 0,
-      createdBy: {
-        _id: '',
-        fullname: '',
-        imgUrl: '',
-      },
-      style: {},
-      labels: [],
-      members: [],
-      groups: [],
-      archivedItems: [], //Groups or Tasks
-      activities: [],
-      cmpsOrder: [],
-      cmpTitles: [],
-      groupSummary: [],
-    }
+  return {
+    title: 'New Board',
+    isStarred: false,
+    archivedAt: 0,
+    createdBy: {
+      _id: '',
+      fullname: '',
+      imgUrl: '',
+    },
+    style: {},
+    labels: [],
+    members: [],
+    groupSummary: [null, null, null],
+    groups: [{...getEmptyGroup()},
+    {...getEmptyGroup()}],
+    archivedItems: [], //Groups or Tasks
+    activities: [],
+    cmpsOrder: ["status", "priority", "memberIds", "dueDate"],
+    cmpTitles: ["Status", "Priority", "Members", "Due Date"],
+    groupSummary: [],
   }
+}
   
-  function getEmptyGroup() {
-    return {
-      title: 'New Group',
-      archivedAt: 0,
-      tasks: [],
-      archivedItems: [],
-      style: { color: _setNewGroupColor() },
-      collapsed: false,
-    }
+function getEmptyGroup() {
+  return {
+    title: 'New Group',
+    archivedAt: 0,
+    tasks: [{...getEmptyTask()},
+    {...getEmptyTask()}],
+    archivedItems: [],
+    style: { color: _setNewGroupColor() },
+    collapsed: false,
   }
+}
 
   function getEmptyTask() {
     return {
