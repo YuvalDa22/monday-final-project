@@ -55,20 +55,6 @@ const fetchBoardsTitle = async () => {
   }
 }
 
-
-
-
-  //const [allBoardsTitle, setAllBoardsTitle] = useState([]);
-
-  // useEffect(() => {
-  //   fetchBoardsTitle();
-  // }, [allBoardsTitle]);
-
-
-  // const fetchBoardsTitle = async () => {
-  //   const titles = await boardService.getAllBoardsTitle();
-  //   setAllBoardsTitle(titles);
-  // };
  
   async function onAddBoard() {
     try {
@@ -81,17 +67,6 @@ const fetchBoardsTitle = async () => {
     }
   }
 
-  // const handleAddBoard = async () => {
-  //   let newBoard = boardService.getEmptyBoard()
-  //   boardService.save(newBoard)
-
-    // console.log(newBoard)
-    // const titles = await boardService.getAllBoardsTitle();
-    // setAllBoardsTitle(titles)
-
-    //logActivity default assume board from state 
-    //logActivity(null, null, null, 'BoardCreated')
-  
 
   return (
     <div className="sidebar">
