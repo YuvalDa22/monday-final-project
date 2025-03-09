@@ -5,7 +5,7 @@ import { BoardNavBar } from './BoardNavBar'
 import Input from '@mui/joy/Input'
 import { useState } from 'react'
 import { updateBoard, logActivity } from '../../store/board/board.actions'
-import { boardService } from '../../services/board.service'
+
 
 // Note : We can ignore the props validation error for now
 export function BoardHeader({ board, onAddGroup, onAddTask }) {

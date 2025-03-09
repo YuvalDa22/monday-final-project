@@ -5,6 +5,8 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
+		"dev:local": "set VITE_LOCAL=true && vite",
+		"dev:local:mac": "export VITE_LOCAL=true && vite",
 		"build": "vite build",
 		"lint": "eslint .",
 		"preview": "vite preview",
@@ -27,6 +29,7 @@
 		"@radix-ui/react-popover": "^1.1.5",
 		"@radix-ui/react-tooltip": "^1.1.8",
 		"@radix-ui/themes": "^3.2.0",
+		"axios": "^1.8.2",
 		"date-fns": "^4.1.0",
 		"dayjs": "^1.11.13",
 		"formik": "^2.4.6",

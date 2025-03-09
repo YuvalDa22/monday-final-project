@@ -4,8 +4,8 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 import { useSelector } from 'react-redux'
 import { IconButton } from '@mui/material'
 import { TaskDetails_NavBar } from '../cmps/task/TaskDetails_NavBar'
-import { boardService } from '../services/board.service.js'
 import { ActivityLog } from '../cmps/task/cmps/ActivityLog.jsx'
+import { getTaskById } from '../store/board/board.actions.js'
 
 export function MenuFromTheRight() {
   const boardId = useOutletContext()
@@ -18,7 +18,7 @@ export function MenuFromTheRight() {
   useEffect(() => {
     if (!activity_log) {
       // these lines are to ensure proper handling incase user tries to access a task that doesn't exist (or)
-      const task = boardService.getTaskById(taskId) // params = taskId
+      const task = getTaskById(taskId) // params = taskId
       if (!task) {
         navigate(`/workspace/board/${boardId}`)
         return
@@ -29,7 +29,7 @@ export function MenuFromTheRight() {
   }, [taskId])
 
   useEffect(() => {
-    const taskTitle = boardService.getTaskById(taskId)?.title
+    const taskTitle = getTaskById(taskId)?.title
 
     if (taskTitle != null) {
       taskNameRef.current = taskTitle
@@ -59,7 +59,7 @@ export function MenuFromTheRight() {
       {!activity_log && (
         <div>
           <div className='activity_log-header'>
-            Task : {boardService.getTaskById(taskId)?.title || taskNameRef.current}
+            Task : {getTaskById(taskId)?.title || taskNameRef.current}
           </div>
 
           <div>

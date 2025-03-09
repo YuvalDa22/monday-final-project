@@ -11,10 +11,11 @@ import {
   duplicateMultipleTasks,
   getBoardById,
   logActivity,
+  getGroupByTaskId,
 } from '../store/board/board.actions'
 import { showErrorMsg } from '../services/event-bus.service'
 import { Button, IconButton, Menu, MenuItem } from '@mui/material'
-import { boardService } from '../services/board.service'
+import { boardService } from '../services/board'
 import { useParams, Outlet } from 'react-router-dom'
 import { utilService, getSvg } from '../services/util.service'
 import CloseIcon from '@mui/icons-material/Close'
@@ -271,7 +272,7 @@ export function BoardDetails() {
               <Item
                 item={activeTask}
                 board={board}
-                group={boardService.getGroupByTaskId(activeTask.id)}
+                group={getGroupByTaskId(activeTask.id)}
                 cmpsOrder={board.cmpsOrder}
               />
             ) : null}

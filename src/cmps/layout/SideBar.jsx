@@ -3,7 +3,6 @@
 import { Divider } from '@mui/material';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { getSvg, utilService } from '../../services/util.service';
-import { boardService } from '../../services/board.service';
 import {
   Button,
   ButtonGroup,

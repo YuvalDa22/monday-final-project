@@ -1,12 +1,12 @@
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
-
 import { IconButton } from '@mui/material'
 import { TaskDetails_NavBar } from '../cmps/task/TaskDetails_NavBar'
-import { boardService } from '../services/board.service.js'
+import { getTaskById } from '../store/board/board.actions.js'
 
 export function TaskDetails() {
+  
   const boardId = useOutletContext()
   const { taskId } = useParams()
 
@@ -16,7 +16,7 @@ export function TaskDetails() {
   const [isExiting, setIsExiting] = useState(false) // State to control slide-out
   useEffect(() => {
     // these lines are to ensure proper handling incase user tries to access a task that doesn't exist (or)
-    const task = boardService.getTaskById(taskId)
+    const task = getTaskById(taskId)
     if (!task) {
       navigate(`/workspace/board/${boardId}`)
       return

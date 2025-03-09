@@ -1,4 +1,4 @@
-import { boardService } from '../../services/board.service'
+import { boardService } from '../../services/board'
 import { store } from '../store'
 import {
   ADD_BOARD,
@@ -133,7 +133,7 @@ export function logActivity(group, task, prev, action) {
       console.error('Action was not logged !!!')
   }
   updatedActivities.unshift(
-    boardService.createActivityLog(
+    createActivityLog(
       board?._id,
       group?.id,
       task?.id,
@@ -360,4 +360,66 @@ export async function getAllBoardsTitle() {
   const allBoards = await boardService.query()
   const allTitles = allBoards.map((board) => ({ id: board._id, title: board.title }))
   return allTitles
+}
+
+export function createActivityLog(boardId, groupId, taskId, action_name, free_txt, prevValue) {
+  return {
+    id: utilService.makeId(),
+    createdAt: Date.now(),
+    byMember: userService.getLoggedinUser(),
+    board: { id: boardId, title: getBoardById(boardId).title },
+    group: { id: groupId, title: getGroupById(groupId)?.title },
+    task: { id: taskId, title: getTaskById(taskId)?.title }, // we keep title so we can access title if task removed from board
+    action_name, // For example : "Moved" , "Duplicated" , "Deleted"
+    free_txt, // For example : "To group New Group" or "From group ASAP Tasks"
+    prevValue, // Holds the previous value of the task/group/board before the change
+  }
+}
+
+export function getTaskById(taskId) {
+  const board = store.getState().boardModule.currentBoard
+  // Traverse all boards
+
+  for (const group of board.groups) {
+    // Search for the task within the group's tasks
+    const task = group.tasks.find((task) => task.id === taskId)
+    if (task) {
+      return task // Return the task as soon as it's found
+    }
+  }
+  return null // If no task is found, return null
+}
+
+export function getGroupById(groupId) {
+  const board = store.getState().boardModule.currentBoard
+  if (!board) {
+    return null
+  }
+
+  const group = board.groups.find((group) => group.id === groupId)
+  if (group) {
+    return group // Return the group as soon as it's found
+  }
+  return null // If no group is found, return null
+}
+
+export function getGroupByTaskId(taskId) {
+  const board = store.getState().boardModule.currentBoard
+  if (!board) {
+    return null
+  }
+
+  for (const group of board.groups) {
+    if (group.tasks.some((task) => task.id === taskId)) {
+      return group // Return the group that contains the task
+    }
+  }
+
+  return null // If no group contains the task, return null
+}
+
+
+function getCurrentBoardId() {
+  const board = store.getState().boardModule.currentBoard
+  return board._id
 }

@@ -1,9 +1,8 @@
 import { useEffect, useState, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { getBoardById } from '../../../store/board/board.actions'
+import { getBoardById, getTaskById } from '../../../store/board/board.actions'
 import { showErrorMsg } from '../../../services/event-bus.service' // Assuming you have this function
-import { boardService } from '../../../services/board.service'
 import { Avatar } from 'radix-ui'
 
 export function ActivityLog({ taskId = null }) {
@@ -14,7 +13,7 @@ export function ActivityLog({ taskId = null }) {
 
   const taskNameRef = useRef(null)
   useEffect(() => {
-    taskNameRef.current = boardService.getTaskById(taskId)?.title
+    taskNameRef.current = getTaskById(taskId)?.title
   }, [taskId]) // the only reason for this is when user deletes task while activity log is open , so we save the task name in a useRef regardless of our board state
 
   const [timestamp, setTimestamp] = useState(Date.now()) // This is to re-render the component every 60 seconds
