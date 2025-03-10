@@ -16,7 +16,7 @@ import {
 import { showErrorMsg } from '../services/event-bus.service'
 import { Button, IconButton, Menu, MenuItem } from '@mui/material'
 import { boardService } from '../services/board'
-import { useParams, Outlet } from 'react-router-dom'
+import { useNavigate, useParams, Outlet } from 'react-router-dom'
 import { utilService, getSvg } from '../services/util.service'
 import CloseIcon from '@mui/icons-material/Close'
 import * as XLSX from 'xlsx'
@@ -38,6 +38,8 @@ const SvgIcon = ({ iconName, options }) => {
 
 export function BoardDetails() {
   const { boardId } = useParams()
+  const navigate = useNavigate();
+
 
   const board = useSelector((storeState) => storeState.boardModule.currentBoard)
   const [activeTask, setActiveTask] = useState() // drag and drop
@@ -61,8 +63,14 @@ export function BoardDetails() {
   }
 
   useEffect(() => {
+    
+
+    if (!boardId) {
+      navigate("/workspace"); //fallback route
+    }
+
     onLoadBoard()
-  }, [boardId])
+  }, [boardId, navigate])
 
   async function onLoadBoard() {
     try {

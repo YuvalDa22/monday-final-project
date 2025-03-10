@@ -1,4 +1,4 @@
-@use "../setup/vars";
+@use '../setup/vars';
 .sidebar {
   display: flex;
   flex-direction: column;
@@ -7,7 +7,6 @@
   background: linear-gradient(to bottom, #ffffff 0%, #eceff8 100%);
   font-size: 14px;
   width: 100%;
-
 }
 
 .sidebar-links,
@@ -19,8 +18,10 @@
   background-color: #d0d4e4;
 }
 
-.li{
+.li {
   width: 100%;
+  // padding: 0;
+  // gap: 0;
 }
 
 .sidebar-item,
@@ -65,9 +66,9 @@
 }
 
 .new-board-buttons {
-  display: flex;
-  width: 100%;
-  
+  // display: flex;
+  // width: 274px;
+  // height: 100%;
 
   .add-board-button {
     flex: 1;
@@ -103,7 +104,6 @@
       align-items: center;
       justify-content: center;
     }
-
 
     &:hover {
       box-shadow: none;

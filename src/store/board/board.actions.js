@@ -433,3 +433,4 @@ function getCurrentBoardId() {
 	const board = store.getState().boardModule.currentBoard
 	return board._id
 }
+
