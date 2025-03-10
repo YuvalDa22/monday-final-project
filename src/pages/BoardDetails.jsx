@@ -41,7 +41,7 @@ export function BoardDetails() {
   const navigate = useNavigate();
 
 
-  const board = useSelector((storeState) => storeState.boardModule.currentBoard)
+  const  board = useSelector((storeState) => storeState.boardModule.currentBoard)
   const [activeTask, setActiveTask] = useState() // drag and drop
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -64,13 +64,13 @@ export function BoardDetails() {
 
   useEffect(() => {
     
-
-    if (!boardId) {
-      navigate("/workspace"); //fallback route
-    }
+    // console.log(`board`, board)
+    // if (board?._id !== boardId) {
+    //   navigate("/workspace"); //fallback route
+    // }
 
     onLoadBoard()
-  }, [boardId, navigate])
+  }, [boardId])
 
   async function onLoadBoard() {
     try {
