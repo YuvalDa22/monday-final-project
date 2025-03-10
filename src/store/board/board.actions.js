@@ -140,25 +140,57 @@ export function logActivity(group, task, prev, action) {
 	updateBoard(null, null, { key: 'activities', value: updatedActivities })
 }
 
-export async function updateBoard(groupId, taskId, { key, value }) {
-	const board = store.getState().boardModule.currentBoard
-	const gIdx = board?.groups.findIndex((groupItem) => groupItem.id === groupId)
-	const tIdx = board?.groups[gIdx]?.tasks.findIndex((t) => t.id === taskId)
+// export async function updateBoard(groupId, taskId, { key, value }) {
+// 	const board = store.getState().boardModule.currentBoard
+// 	const gIdx = board?.groups.findIndex((groupItem) => groupItem.id === groupId)
+// 	const tIdx = board?.groups[gIdx]?.tasks.findIndex((t) => t.id === taskId)
 
-	try {
-		if (gIdx !== -1 && tIdx !== -1) {
-			board.groups[gIdx].tasks[tIdx][key] = value
-		} else if (gIdx !== -1) {
-			board.groups[gIdx][key] = value
-		} else {
-			board[key] = value
-		}
-		const updatedBoard = await boardService.save(board)
-		store.dispatch({ type: SET_BOARD, board: updatedBoard })
-	} catch (err) {
-		console.error('Failed to save the board:', err)
-		throw err
-	}
+// 	try {
+// 		if (gIdx !== -1 && tIdx !== -1) {
+// 			board.groups[gIdx].tasks[tIdx][key] = value
+// 		} else if (gIdx !== -1) {
+// 			board.groups[gIdx][key] = value
+// 		} else {
+// 			board[key] = value
+// 		}
+// 		const updatedBoard = await boardService.save(board)
+// 		store.dispatch({ type: SET_BOARD, board: updatedBoard })
+// 	} catch (err) {
+// 		console.error('Failed to save the board:', err)
+// 		throw err
+// 	}
+// }
+
+
+//optimistic updateBoard function - first dispatch, then call service
+export async function updateBoard(groupId, taskId, { key, value }) {
+    const state = store.getState().boardModule;
+    const board = { ...state.currentBoard }; 
+    const prevBoard = JSON.parse(JSON.stringify(board)); // for rollback
+
+    const gIdx = board?.groups.findIndex((groupItem) => groupItem.id === groupId);
+    const tIdx = board?.groups[gIdx]?.tasks.findIndex((t) => t.id === taskId);
+
+    try {
+        if (gIdx !== -1 && tIdx !== -1) {
+            board.groups[gIdx].tasks[tIdx][key] = value;
+        } else if (gIdx !== -1) {
+            board.groups[gIdx][key] = value;
+        } else {
+            board[key] = value;
+        }
+
+        store.dispatch({ type: SET_BOARD, board });
+        const updatedBoard = await boardService.save(board);
+        store.dispatch({ type: SET_BOARD, board: updatedBoard });
+		
+    } catch (err) {
+        console.error("Failed to save the board:", err);
+
+        store.dispatch({ type: SET_BOARD, board: prevBoard });
+
+        throw err;
+    }
 }
 
 export async function removeBoard(boardId) {
