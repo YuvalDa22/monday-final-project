@@ -195,8 +195,7 @@ export default function GroupItemContainer({
           <div
             className={`openTaskDetails_container ${editingTaskId === item.id ? 'hide_open' : ''}`}
           >
-            <SvgIcon iconName={'task_open_icon'} className={'svgOpenIcon'} />
-            <div>Open</div>
+            <SvgIcon iconName={'taskdetails_bubble'} className={'svgOpenIcon'} />
           </div>
         </Link>
       </td>

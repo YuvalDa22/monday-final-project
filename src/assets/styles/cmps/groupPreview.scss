@@ -65,16 +65,28 @@
 }
 
 .openTaskDetails_container {
-  display: none;
-  gap: 5px;
-
+  position: relative;
+  display: flex;
   align-items: center;
-  padding: 0px 10px 0px 5px;
-
+  padding: 0px 22px 0px 22px;
+  top: 2px;
   .svgOpenIcon {
-    margin-top: 5px;
     opacity: 0.75;
   }
+}
+
+.openTaskDetails_container::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -8px; /* Extends the border above */
+  bottom: -5px; /* Extends the border below */
+  width: 1px; /* Same width as the border */
+  background-color: rgba(173, 173, 173, 0.3);
+}
+
+.openTaskDetails_container .svgOpenIcon:hover {
+  color: blue;
 }
 
 .hide_open {

@@ -40,7 +40,7 @@ const labels = [
   { id: 'l203', title: 'High', color: '#401694' },
   { id: 'l204', title: 'Medium', color: '#5559df' },
   { id: 'l205', title: 'Low', color: '#579bfc' },
-  { id: 'l206', title: 'Optional', color: '#9d99ff' }
+  { id: 'l206', title: 'Optional', color: '#9d99ff' },
 ]
 
 const members = [
@@ -80,57 +80,51 @@ function getEmptyBoard() {
     labels: labels,
     members: members,
     groupSummary: [null, null, null],
-    groups: [{...getEmptyGroup()}],
+    groups: [{ ...getEmptyGroup() }],
     archivedItems: [], //Groups or Tasks
     activities: [],
-    cmpsOrder: ["status", "priority", "memberIds", "dueDate"],
-    cmpTitles: ["Status", "Priority", "Members", "Due Date"],
+    cmpsOrder: ['status', 'priority', 'memberIds', 'dueDate'],
+    cmpTitles: ['Status', 'Priority', 'Members', 'Due Date'],
     groupSummary: [],
   }
 }
-  
+
 function getEmptyGroup() {
   return {
-    id: 'g'+ utilService.makeId(),
+    id: 'g' + utilService.makeId(),
     title: 'New Group',
     archivedAt: 0,
-    tasks: [{...getEmptyTask()}],
+    tasks: [{ ...getEmptyTask() }],
     archivedItems: [],
     style: { color: _setNewGroupColor() },
     collapsed: false,
   }
 }
 
-  function getEmptyTask() {
-    return {
-      id: 't'+ utilService.makeId(),
-      title: 'New Task',
-      archivedAt: 0,
-      status: 'l101',
-      priority: 'l201',
-      description: '',
-      comments: [],
-      checklists: [],
-      memberIds: [],
-      labelIds: [],
-      dueDate: 0,
-      byMember: {},
-      style: {},
-    }
+function getEmptyTask() {
+  return {
+    id: 't' + utilService.makeId(),
+    title: 'New Task',
+    archivedAt: 0,
+    status: 'l101',
+    priority: 'l201',
+    description: '',
+    comments: [],
+    checklists: [],
+    memberIds: [],
+    labelIds: [],
+    dueDate: 0,
+    byMember: {},
+    style: {},
   }
+}
 
-  function _setNewGroupColor() {
-    const colors = Array.from(groupColors.values())
-    const randomIndex = Math.floor(Math.random() * colors.length)
-    const randomColor = colors[randomIndex]
-    return randomColor
-  }
+function _setNewGroupColor() {
+  const colors = Array.from(groupColors.values())
+  const randomIndex = Math.floor(Math.random() * colors.length)
+  const randomColor = colors[randomIndex]
+  return randomColor
+}
 
-
-const service = VITE_LOCAL === 'true' ? local : remote
+const service = VITE_LOCAL ? local : remote
 export const boardService = { getEmptyBoard, getEmptyGroup, getEmptyTask, groupColors, ...service }
-
-
-
-
-
