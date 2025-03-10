@@ -29,14 +29,10 @@ export async function loadBoards(filterBy) {
 }
 
 export async function addBoard() {
-	console.log('Full store state:', store.getState())
-	console.log('boards from store before adding board:', store.getState().boardModule.boards)
 	try {
 		const boardToSave = boardService.getEmptyBoard()
 		const savedBoard = await boardService.save(boardToSave)
-		console.log(savedBoard)
 		store.dispatch({ type: ADD_BOARD, savedBoard })
-		console.log('boards from store after adding board:', store.getState().boardModule.boards)
 
 		return savedBoard
 	} catch (err) {

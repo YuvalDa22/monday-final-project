@@ -58,7 +58,6 @@ const fetchBoardsTitle = async () => {
   async function onAddBoard() {
     try {
       const addedBoard = await addBoard()
-      console.log('addedBoard from SideBar',addedBoard)
       showSuccessMsg('Board added successfully')
       setAllBoardsTitle(prevBoards => [...prevBoards,{id: addedBoard._id ,title: addedBoard.title} ])
     } catch (err) {
