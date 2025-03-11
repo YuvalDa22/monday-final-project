@@ -38,10 +38,9 @@ const SvgIcon = ({ iconName, options }) => {
 
 export function BoardDetails() {
   const { boardId } = useParams()
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-
-  const  board = useSelector((storeState) => storeState.boardModule.currentBoard)
+  const board = useSelector((storeState) => storeState.boardModule.currentBoard)
   const [activeTask, setActiveTask] = useState() // drag and drop
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -63,7 +62,6 @@ export function BoardDetails() {
   }
 
   useEffect(() => {
-    
     // console.log(`board`, board)
     // if (board?._id !== boardId) {
     //   navigate("/workspace"); //fallback route
@@ -253,6 +251,7 @@ export function BoardDetails() {
       <div className='board-details-header'>
         <BoardHeader board={board} onAddTask={onAddTask} onAddGroup={onAddGroup} />
       </div>
+
       <div className='board-details-groups-container'>
         <DndContext
           collisionDetection={closestCorners}
@@ -261,7 +260,7 @@ export function BoardDetails() {
           onDragEnd={handleDragEnd}
           sensors={sensors}
         >
-          {board?.groups && 
+          {board?.groups &&
             board.groups.length !== 0 &&
             board?.groups.map((group) => (
               <GroupPreview
@@ -294,6 +293,7 @@ export function BoardDetails() {
               color: 'black',
               borderColor: 'gray',
               textTransform: 'none',
+              marginBottom: '20px',
             }}
           >
             Add new group

@@ -8,3 +8,10 @@
     'sidebar main-container';
   height: 0px; // Temporary fix to keep the navbar from movingdown when scrolling down the page (in the future the page will not be scrollable , only the area with the table will be scrollable)
 }
+
+html,
+body {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
