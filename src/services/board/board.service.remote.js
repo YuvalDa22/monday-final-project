@@ -8,12 +8,12 @@ export const boardService = {
   save
 }
 
-async function query(filterBy = {}) {
-  return httpService.get(`board`, filterBy)
+async function query() {
+  return httpService.get(`board`)
 }
 
-function getById(boardId) {
-  return httpService.get(`board/${boardId}`)
+function getById(boardId, filterBy) {
+  return httpService.get(`board/${boardId}`, filterBy)
 }
 
 async function remove(boardId) {

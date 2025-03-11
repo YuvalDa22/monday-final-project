@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
 import { BoardHeader } from '../cmps/board/BoardHeader'
 import { GroupPreview } from '../cmps/group/GroupPreview'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   addTask,
   updateBoard,
@@ -12,12 +12,13 @@ import {
   getBoardById,
   logActivity,
   getGroupByTaskId,
+  loadBoards,
 } from '../store/board/board.actions'
 import { showErrorMsg } from '../services/event-bus.service'
 import { Button, IconButton, Menu, MenuItem } from '@mui/material'
 import { boardService } from '../services/board'
 import { useNavigate, useParams, Outlet } from 'react-router-dom'
-import { utilService, getSvg } from '../services/util.service'
+import { utilService, getSvg, debounce } from '../services/util.service'
 import CloseIcon from '@mui/icons-material/Close'
 import * as XLSX from 'xlsx'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
@@ -37,12 +38,15 @@ const SvgIcon = ({ iconName, options }) => {
 }
 
 export function BoardDetails() {
+  const [filterBy, setFilterBy] = useState(boardService.getDefaultFilter())
   const { boardId } = useParams()
   const navigate = useNavigate();
 
 
   const  board = useSelector((storeState) => storeState.boardModule.currentBoard)
   const [activeTask, setActiveTask] = useState() // drag and drop
+  const [checkedTasksList, setCheckedTasksList] = useState([])
+
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -50,31 +54,27 @@ export function BoardDetails() {
       },
     })
   )
-  const [checkedTasksList, setCheckedTasksList] = useState([])
 
-  const [anchorEl, setAnchorEl] = useState(null)
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget) // Set the clicked element as the anchor
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null) // Close the menu
-  }
-
-  useEffect(() => {
-    
+  useEffect(() => {    
     // console.log(`board`, board)
     // if (board?._id !== boardId) {
     //   navigate("/workspace"); //fallback route
     // }
-
-    onLoadBoard()
+    onLoadBoard(filterBy)
   }, [boardId])
 
-  async function onLoadBoard() {
+  useEffect(() => {
+    loadBoards()
+  }, [filterBy, boardId]);
+
+  function onSetFilterBy(filterBy) {
+    setFilterBy(prevFilterBy => ({ ...prevFilterBy, ...filterBy }))
+  }
+  const onSetFilterByDebounce = useRef(debounce(onSetFilterBy, 400)).current;
+
+  async function onLoadBoard(filterBy) {
     try {
-      await getBoardById(boardId)
+      await getBoardById(boardId, filterBy)
     } catch (error) {
       showErrorMsg('Cannot load boards')
       console.error(error)
@@ -251,7 +251,7 @@ export function BoardDetails() {
   return (
     <div className='board-details-container'>
       <div className='board-details-header'>
-        <BoardHeader board={board} onAddTask={onAddTask} onAddGroup={onAddGroup} />
+        <BoardHeader board={board} onAddTask={onAddTask} onAddGroup={onAddGroup} filterBy={filterBy} onSetFilterBy={onSetFilterByDebounce}/>
       </div>
       <div className='board-details-groups-container'>
         <DndContext

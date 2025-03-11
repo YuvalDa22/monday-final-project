@@ -14,11 +14,11 @@ import {
 import { userService } from '../../services/user.service'
 import { utilService } from '../../services/util.service'
 
-export async function loadBoards(filterBy) {
-	console.log('loadBoards called with filterBy:', filterBy) // Add this line for logging
+export async function loadBoards() {
 	store.dispatch({ type: SET_IS_LOADING, isLoading: true })
 	try {
-		const boards = await boardService.query(filterBy)
+		const boards = await boardService.query()
+		console.log("🚀 ~ loadBoards ~ boards:", boards)
 		store.dispatch({ type: SET_BOARDS, boards: boards })
 	} catch (err) {
 		console.log(`Can't load boards - boards actions`)
@@ -42,8 +42,8 @@ export async function addBoard() {
 }
 
 //This gets 1 board from the array of all boards!!
-export async function getBoardById(boardId) {
-	const board = await boardService.getById(boardId)
+export async function getBoardById(boardId, filterBy) {
+	const board = await boardService.getById(boardId, filterBy)
 	store.dispatch({ type: SET_BOARD, board: board })
 }
 

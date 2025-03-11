@@ -11,7 +11,7 @@ export const boardService = {
 const STORAGE_KEY = 'boards'
 _createBoards()
 
-async function query(filterBy = {}) {
+async function query() {
   try {
     let boards = await storageService.query(STORAGE_KEY)
     return boards
@@ -20,7 +20,7 @@ async function query(filterBy = {}) {
     throw error
   }
 }
-
+ // TODO change it to support filterBy //
 async function getById(id) {
   return await storageService.get(STORAGE_KEY, id)
 }

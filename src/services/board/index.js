@@ -126,9 +126,20 @@ function getEmptyGroup() {
     return randomColor
   }
 
+  function getDefaultFilter() {
+    return {
+      txt: '',
+      groups: [],
+      tasks: [],
+      members: [],
+      statusLabels: [],
+      priorityLabels: []
+    }
+  }
+
 
 const service = VITE_LOCAL === 'true' ? local : remote
-export const boardService = { getEmptyBoard, getEmptyGroup, getEmptyTask, groupColors, ...service }
+export const boardService = { getEmptyBoard, getEmptyGroup, getEmptyTask, getDefaultFilter, groupColors, ...service }
 
 
 
