@@ -43,8 +43,13 @@ export async function addBoard() {
 
 //This gets 1 board from the array of all boards!!
 export async function getBoardById(boardId) {
+	try {		
 	const board = await boardService.getById(boardId)
 	store.dispatch({ type: SET_BOARD, board: board })
+	} catch (err) {
+		console.log(`Couldn't get board by ID` , err)
+		throw err
+	}
 }
 
 export function logActivity(group, task, prev, action) {
@@ -142,9 +147,11 @@ export function logActivity(group, task, prev, action) {
 
 export async function updateBoard(groupId, taskId, { key, value }) {
 	const board = store.getState().boardModule.currentBoard
+	console.log("🚀 ~ updateBoard ~ board:", board)
+	
 	const gIdx = board?.groups.findIndex((groupItem) => groupItem.id === groupId)
 	const tIdx = board?.groups[gIdx]?.tasks.findIndex((t) => t.id === taskId)
-
+	console.log(store.getState().boardModule)
 	try {
 		if (gIdx !== -1 && tIdx !== -1) {
 			board.groups[gIdx].tasks[tIdx][key] = value
@@ -154,6 +161,7 @@ export async function updateBoard(groupId, taskId, { key, value }) {
 			board[key] = value
 		}
 		const updatedBoard = await boardService.save(board)
+		console.log("🚀 ~ updateBoard ~ updatedBoard:", updatedBoard)
 		store.dispatch({ type: SET_BOARD, board: updatedBoard })
 	} catch (err) {
 		console.error('Failed to save the board:', err)

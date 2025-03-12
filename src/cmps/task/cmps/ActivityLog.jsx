@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { getBoardById, getTaskById } from '../../../store/board/board.actions'
+import { getBoardById, getTaskById, loadBoards } from '../../../store/board/board.actions'
 import { showErrorMsg } from '../../../services/event-bus.service' // Assuming you have this function
 import { Avatar } from 'radix-ui'
 
@@ -10,6 +10,7 @@ export function ActivityLog({ taskId = null }) {
   const { boardId } = useParams()
 
   const board = useSelector((storeState) => storeState.boardModule.currentBoard)
+  const boards = useSelector((storeState) => storeState.boardModule.boards )
 
   const taskNameRef = useRef(null)
   useEffect(() => {
@@ -39,6 +40,18 @@ export function ActivityLog({ taskId = null }) {
       console.error(error)
     }
   }
+
+  useEffect(() => { 
+    onloadBoards();   
+  }, [])
+
+  const onloadBoards = async() => {
+    try{
+      await loadBoards(filterBy)
+    } catch (err) {
+      showErrorMsg(`Sorry, couldn't load boards`, err)
+    }
+} 
 
   function getIconByAction(action_name) {
     switch (action_name) {
