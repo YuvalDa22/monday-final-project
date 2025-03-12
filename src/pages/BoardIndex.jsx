@@ -21,6 +21,7 @@ export function BoardIndex() {
   const navigate = useNavigate()
 
   useEffect(() => { 
+    console.log(`board index rendered`)
     onloadBoards();   
   }, [])
 

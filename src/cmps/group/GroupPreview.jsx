@@ -154,6 +154,7 @@ export function GroupPreview({
   }
 
   const handleTaskDeleted = (board, group, task) => {
+    console.log(`Triggered habdleTaskDeleted`)
     handleMenuClose()
     onTasksCheckedChange([{ groupId: group.id, taskId: task.id }], 'remove')
     removeTask(board, group, task)

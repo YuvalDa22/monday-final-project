@@ -63,12 +63,11 @@ export function BoardDetails() {
   }
 
   useEffect(() => {
-    
+    console.log(`board details rendered`)
     // console.log(`board`, board)
     // if (board?._id !== boardId) {
     //   navigate("/workspace"); //fallback route
     // }
-
     onLoadBoard()
   }, [boardId])
 
@@ -84,7 +83,7 @@ export function BoardDetails() {
   if (!board) return <div>Loading...</div>
 
   function onAddTask(group, initialTitle = 'New Task', fromHeader) {
-    const newTask = { id: utilService.makeId(), title: initialTitle }
+    const newTask = { title: initialTitle }
     addTask(board, group, newTask, fromHeader)
   }
 

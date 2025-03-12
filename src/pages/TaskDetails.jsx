@@ -15,6 +15,7 @@ export function TaskDetails() {
 
   const [isExiting, setIsExiting] = useState(false) // State to control slide-out
   useEffect(() => {
+    console.log(`task details rendered`)
     // these lines are to ensure proper handling incase user tries to access a task that doesn't exist (or)
     const task = getTaskById(taskId)
     if (!task) {
