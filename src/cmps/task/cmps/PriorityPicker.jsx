@@ -24,15 +24,33 @@ export function PriorityPicker({ onUpdate, board, info }) {
       ...style,
       border: 'none',
       boxShadow: 'none',
-      borderRadius: '0px',
     }),
     option: (provided, { data, isFocused, isSelected }) => ({
       ...provided,
       backgroundColor: data.color,
       color: isSelected || isFocused ? '#fff' : '#333',
       cursor: 'pointer',
+      margin: '5px auto',
+      padding: '8px 12px',
+      width: '152px',
+      height: '32px auto',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: '2px',
+      marginBottoms: '6px',
     }),
-  }
+    menu: (provided) => ({
+      ...provided,
+      width: '200px',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      padding: '6px 0',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    }),
+  };
 
   return (
     <Select
