@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
-import ReactDatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
+import React, { useState, useEffect, useRef } from 'react'
+import { DatePicker as VibeDatePicker } from '@vibe/core'
 import { getSvg, utilService } from '../../../services/util.service'
 
 const SvgIcon = ({ iconName, options, className }) => {
@@ -14,23 +13,48 @@ const SvgIcon = ({ iconName, options, className }) => {
 
 export function DatePicker({ info, onUpdate }) {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedDate, setSelectedDate] = useState(info ? new Date(info) : new Date())
+  const [selectedDate, setSelectedDate] = useState(info ? new Date(info) : null)
+  const datePickerRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (datePickerRef.current && !datePickerRef.current.contains(event.target)) {
+        setIsOpen(false); // Close the date picker
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   const handleDateChange = (date) => {
-    setSelectedDate(date)
-    if (date) {
-      const formattedDate = utilService.formatDate(date)
-      onUpdate({ id: formattedDate, title: formattedDate }) // Pass the formatted date
-    } else {
-      onUpdate(null)
+    
+    if (!date || !date.isValid()) {
+      console.warn("Received an invalid or null date.");
+      setSelectedDate(null);
+      onUpdate(null);
+      return;
     }
-    setIsOpen(false)
-  }
+  
+    const jsDate = date.toDate(); // Convert Moment.js to JavaScript Date
+  
+    setSelectedDate(jsDate);
+    const formattedDate = utilService.formatDate(jsDate);
+    onUpdate({ id: formattedDate, title: formattedDate });
+    setIsOpen(false);
+
+    
+  };
 
   return (
-    <div className='date-picker-container'>
+    <div className='date-picker-container' ref={datePickerRef}>
       <div className='input-wrapper' onClick={() => setIsOpen(!isOpen)}>
-        {info ? (
+        {selectedDate ? (
           <span className='date-picker-display'>{utilService.formatDate(selectedDate)}</span>
         ) : (
           <SvgIcon iconName='calendar' options={{ height: 20, width: 20, color: 'grey' }} />
@@ -39,30 +63,11 @@ export function DatePicker({ info, onUpdate }) {
 
       {isOpen && (
         <div className='date-picker-dropdown'>
-          <ReactDatePicker
-            selected={selectedDate}
-            onChange={handleDateChange}
+          <VibeDatePicker
+            value={selectedDate}
+            onPickDate={handleDateChange}
             inline
-            onClickOutside={() => setIsOpen(false)}
-            calendarClassName='modern-calendar'
-            fixedHeight
-            renderCustomHeader={({
-              date,
-              decreaseMonth,
-              increaseMonth,
-              prevMonthButtonDisabled,
-              nextMonthButtonDisabled,
-            }) => (
-              <div className='custom-header'>
-                <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
-                  &lt;
-                </button>
-                <span>{date.toLocaleString('default', { month: 'long', year: 'numeric' })}</span>
-                <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
-                  &gt;
-                </button>
-              </div>
-            )}
+            onClose={() => setIsOpen(false)}
           />
         </div>
       )}

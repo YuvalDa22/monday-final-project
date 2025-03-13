@@ -9,6 +9,7 @@ export function PriorityPicker({ onUpdate, board, info }) {
     height: '100%',
     color: 'white',
     borderRadius: '0px',
+    
   }
 
   // Filter priority labels (IDs start with "l2")
@@ -25,13 +26,14 @@ export function PriorityPicker({ onUpdate, board, info }) {
       ...style,
       border: 'none',
       boxShadow: 'none',
+      
     }),
     option: (provided, { data, isFocused, isSelected }) => ({
       ...provided,
       backgroundColor: data.color,
       color: isSelected || isFocused ? '#fff' : '#333',
       cursor: 'pointer',
-      margin: '5px auto',
+      margin: '6px auto',
       padding: '8px 12px',
       width: '152px',
       height: '32px auto',
@@ -50,6 +52,7 @@ export function PriorityPicker({ onUpdate, board, info }) {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
+      boxShadow:' 0 0 8px rgba(0, 0, 0, 0.5)',
     }),
   };
 
