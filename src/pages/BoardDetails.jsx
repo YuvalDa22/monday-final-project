@@ -68,7 +68,7 @@ export function BoardDetails() {
     //   navigate("/workspace"); //fallback route
     // }
     onLoadBoard()
-  }, [boardId])
+  }, [boardId, filterBy])
 
   function onSetFilterBy(filterBy) {
     setFilterBy(prevFilterBy => ({ ...prevFilterBy, ...filterBy }))
