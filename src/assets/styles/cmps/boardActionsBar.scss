@@ -38,6 +38,15 @@ button {
     }
   }
 
+  	.search-txt-input {
+		padding: 0 2px;
+		display: flex;
+		align-items: center;
+		width: 300px;
+		border: 1px solid vars.$color-basic_blue;
+		border-radius: 5px;
+	}
+
   .dropdown-item {
     font-size: 13px;
     line-height: 1;

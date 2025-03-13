@@ -8,17 +8,17 @@ import { updateBoard, logActivity } from '../../store/board/board.actions'
 
 
 // Note : We can ignore the props validation error for now
-export function BoardHeader({ board, onAddGroup, onAddTask }) {
+export function BoardHeader({ board, onAddGroup, onAddTask ,filterBy, onSetFilterBy}) {
   const [isEditingBoardTitle, setIsEditingBoardTitle] = useState(false)
   const [boardTempTitle, setBoardTempTitle] = useState(board?.title || '')
 
   const handleBoardTitleSave = () => {
     if (boardTempTitle.trim() && boardTempTitle !== board?.title) {
-      logActivity(null, null, board.title, {
-        action: 'boardNameChanged',
-        message: 'Board Name Changed',
-        free_txt: `To '${boardTempTitle}'`,
-      })
+      // logActivity(null, null, board.title, {
+      //   action: 'boardNameChanged',
+      //   message: 'Board Name Changed',
+      //   free_txt: `To '${boardTempTitle}'`,
+      // })
       // board.activities.unshift(
       //   boardService.createActivityLog(
       //     board._id,
@@ -29,7 +29,7 @@ export function BoardHeader({ board, onAddGroup, onAddTask }) {
       //     board.title
       //   ) // prevValue = board.title
       // )
-      updateBoard(null, null, { key: 'title', value: boardTempTitle })
+      updateBoard(null, null, { key: 'title', value: boardTempTitle } ,{action: 'boardNameChanged'})
     }
     setIsEditingBoardTitle(false)
   }
@@ -72,7 +72,7 @@ export function BoardHeader({ board, onAddGroup, onAddTask }) {
         <AdditionalBoardActions />
       </div>
       <BoardNavBar />
-      <BoardActionsBar board={board} onAddTask={onAddTask} onAddGroup={onAddGroup} />
+      <BoardActionsBar board={board} onAddTask={onAddTask} onAddGroup={onAddGroup} filterBy={filterBy} onSetFilterBy={onSetFilterBy}/>
     </div>
   )
 }

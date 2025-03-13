@@ -123,11 +123,11 @@ export function GroupPreview({
 
   const handleSave = (task) => {
     if (existingItemTempTitle.trim() && existingItemTempTitle !== '') {
-      logActivity(group, task, task.title, 'taskNameChanged')
+      // logActivity(group, task, task.title, 'taskNameChanged')
       updateBoard(group.id, task.id, {
         key: 'title',
         value: existingItemTempTitle,
-      })
+      }, {action: 'taskNameChanged'})
     }
     handleCancel()
   }
@@ -166,15 +166,15 @@ export function GroupPreview({
 
   const handleGroupTitleSave = () => {
     if (groupTempTitle.trim() && groupTempTitle !== group.title) {
-      logActivity(group, null, group.title, {
-        action: 'groupNameChanged',
-        message: 'Group Name Changed',
-        free_txt: `To '${groupTempTitle}'`,
-      })
+      // logActivity(group, null, group.title, {
+      //   action: 'groupNameChanged',
+      //   message: 'Group Name Changed',
+      //   free_txt: `To '${groupTempTitle}'`,
+      // })
       updateBoard(group.id, null, {
         key: 'title',
         value: groupTempTitle,
-      })
+      }, {action: 'groupNameChanged'})
     } else setGroupTempTitle(group.title) // sync the state with actual group title incase first if failed
     setIsEditingGroupTitle(false)
     setIsPopoverOpen(false) // what is this
@@ -249,12 +249,12 @@ export function GroupPreview({
                                 },
                               }}
                               onChangeComplete={(color) => {
-                                logActivity(group, null, group.style.color, 'groupColorChanged')
+                                // logActivity(board, group, null, group.style.color, 'groupColorChanged')
 
                                 updateBoard(group.id, null, {
                                   key: 'style',
                                   value: { color: color.hex },
-                                })
+                                }, {action: 'groupColorChanged'})
                                 setIsPopoverOpen(false)
                                 handleGroupTitleSave()
                               }}
