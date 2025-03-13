@@ -1,3 +1,5 @@
+@use "../setup/vars";
+
 .gp-main-container {
   display: flex;
   flex-direction: column;
@@ -86,7 +88,7 @@
 }
 
 .openTaskDetails_container .svgOpenIcon:hover {
-  color: blue;
+  color: vars.$color-basic_blue;
 }
 
 .hide_open {
