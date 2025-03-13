@@ -1,3 +1,5 @@
+@use "../setup/vars";
+
 /* Status and Priority Classes */
 .label-picker-cmp {
   position: relative;
@@ -92,27 +94,31 @@
 .date-picker-container {
   position: relative;
   display: inline-block;
-  font-family: 'Roboto', sans-serif;
+  font-family: vars.$font-family;
+  
 
   .date-picker-dropdown {
+    margin: 10px auto;
     position: absolute;
+    height: 100%;
+    width: auto;
     top: 100%;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 10;
     background-color: #fff;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     border-radius: 8px;
   }
 
+  .react-datepicker__header--custom {
+    background-color: white !important;
+  }
+
   .custom-calendar {
     display: flex;
     flex-direction: column;
     gap: 2px;
-
-    .react-datepicker__header {
-      background-color: #e1eefd !important;
-      border: none;
-    }
 
     .react-datepicker__day--selected {
       background-color: #0073e6 !important;
