@@ -42,7 +42,10 @@
   }
 
   .dropdown-container {
-    height: 32px auto;
+    height: auto;
+    min-height: 200x;
+    max-height: 250px;
+    width: 28px;
     margin: 10px auto;
     position: absolute;
     top: 50%;
@@ -52,7 +55,8 @@
     background-color: white;
     border-radius: 8px;
     min-width: 20rem;
-
+    overflow-y: auto;
+  }
     .member-selected-name-container {
       background-color: rgb(229, 244, 255);
       border-radius: 20px;
@@ -89,7 +93,7 @@
       }
     }
   }
-}
+
 
 /* Date Classes */
 .date-picker-container {
