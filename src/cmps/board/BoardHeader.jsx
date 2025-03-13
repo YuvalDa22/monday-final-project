@@ -14,11 +14,11 @@ export function BoardHeader({ board, onAddGroup, onAddTask ,filterBy, onSetFilte
 
   const handleBoardTitleSave = () => {
     if (boardTempTitle.trim() && boardTempTitle !== board?.title) {
-      logActivity(null, null, board.title, {
-        action: 'boardNameChanged',
-        message: 'Board Name Changed',
-        free_txt: `To '${boardTempTitle}'`,
-      })
+      // logActivity(null, null, board.title, {
+      //   action: 'boardNameChanged',
+      //   message: 'Board Name Changed',
+      //   free_txt: `To '${boardTempTitle}'`,
+      // })
       // board.activities.unshift(
       //   boardService.createActivityLog(
       //     board._id,
@@ -29,7 +29,7 @@ export function BoardHeader({ board, onAddGroup, onAddTask ,filterBy, onSetFilte
       //     board.title
       //   ) // prevValue = board.title
       // )
-      updateBoard(null, null, { key: 'title', value: boardTempTitle })
+      updateBoard(null, null, { key: 'title', value: boardTempTitle } ,{action: 'boardNameChanged'})
     }
     setIsEditingBoardTitle(false)
   }

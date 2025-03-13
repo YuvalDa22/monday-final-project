@@ -40,10 +40,10 @@ const SvgIcon = ({ iconName, options }) => {
 export function BoardDetails() {
   const [filterBy, setFilterBy] = useState(boardService.getDefaultFilter())
   const { boardId } = useParams()
-  const navigate = useNavigate();
 
-
-  const  board = useSelector((storeState) => storeState.boardModule.currentBoard)
+  const  board = useSelector((storeState) => {
+    return boardService.filterBoard(storeState.boardModule.currentBoard, filterBy)
+  })
   const [activeTask, setActiveTask] = useState() // drag and drop
   const [checkedTasksList, setCheckedTasksList] = useState([])
 
@@ -54,27 +54,30 @@ export function BoardDetails() {
       },
     })
   )
+  useEffect(() => {
+    loadBoards()
+  }, []);
+
+  useEffect(() => {
+    // TODO i want to listen to event that the board has changed through sockets from the backend
+  }, [board]);
 
   useEffect(() => {    
     // console.log(`board`, board)
     // if (board?._id !== boardId) {
     //   navigate("/workspace"); //fallback route
     // }
-    onLoadBoard(filterBy)
+    onLoadBoard()
   }, [boardId])
-
-  useEffect(() => {
-    loadBoards()
-  }, [filterBy, boardId]);
 
   function onSetFilterBy(filterBy) {
     setFilterBy(prevFilterBy => ({ ...prevFilterBy, ...filterBy }))
   }
   const onSetFilterByDebounce = useRef(debounce(onSetFilterBy, 400)).current;
 
-  async function onLoadBoard(filterBy) {
+  async function onLoadBoard() {
     try {
-      await getBoardById(boardId, filterBy)
+      await getBoardById(boardId)
     } catch (error) {
       showErrorMsg('Cannot load boards')
       console.error(error)
@@ -93,8 +96,8 @@ export function BoardDetails() {
     let newGroup = boardService.getEmptyGroup()
     const updatedGroups = fromHeader ? [newGroup, ...board?.groups] : [...board?.groups, newGroup]
 
-    updateBoard(null, null, { key: 'groups', value: updatedGroups })
-    logActivity(newGroup, null, null, 'groupCreated')
+    updateBoard(null, null, { key: 'groups', value: updatedGroups }, {action: 'groupCreated'})
+    // logActivity(newGroup, null, null, 'groupCreated')
   }
   const handleTasksChecked = (newArrayOfTasks, action) => {
     if (action === 'add') {
@@ -241,7 +244,7 @@ export function BoardDetails() {
   function handleDragEnd(event) {
     const { active } = event
     const destinationGroup = findContainerByTaskId(active.id)
-    logActivity(destinationGroup, active, null, 'movedTo')
+    // logActivity(destinationGroup, active, null, 'movedTo')
     setActiveTask(null)
     return
   }

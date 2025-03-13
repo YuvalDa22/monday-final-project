@@ -32,7 +32,6 @@ const labels = [
   { id: 'l102', title: 'Done', color: '#00c875' },
   { id: 'l103', title: 'Working on it', color: '#fdab3d' },
   { id: 'l104', title: 'Stuck', color: '#df2f4a' },
-  { id: 'l105', title: 'Waiting for Review', color: '#ffcb00' },
 
   // Priority Labels (l201 - l299)
   { id: 'l201', title: '', color: '#c4c4c4' },
@@ -109,6 +108,7 @@ function getEmptyGroup() {
       status: 'l101',
       priority: 'l201',
       description: '',
+      updates: [],
       comments: [],
       checklists: [],
       memberIds: [],

@@ -10,83 +10,85 @@ export const SET_IS_LOADING = 'SET_IS_LOADING'
 export const ADD_TASK = 'ADD_TASK'
 
 const initialState = {
-  currentBoard: null,
-  boards: [],
-  filterBy: {},
-  isLoading: false,
+	currentBoard: null,
+	boards: [],
+	filterBy: {},
+	isLoading: false,
 }
 
 export function boardReducer(state = initialState, cmd) {
-  switch (cmd.type) {
-    case SET_BOARD:
-      return {
-        ...state,
-        currentBoard: { ...cmd.board },
-      }
-    case SET_BOARDS:
-      return {
-        ...state,
-        boards: cmd.boards,
-      }
-    case REMOVE_BOARD:
-      return {
-        ...state,
-        boards: state.boards.filter((board) => board._id !== cmd.boardId),
-      }
-    case REMOVE_TASK:
-      // currently it checks ALL THE BOARDS and ALL THE GROUPS for the task , and filters it out if found
-      // board -> group -> tasks -> task
-      console.log('Removing task from store')
-      return {
-        ...state,
-        boards: state.boards.map((board) => ({
-          ...board,
-          groups: board.groups.map((group) => ({
-            ...group,
-            tasks: group.tasks.filter((task) => task.id !== cmd.taskId),
-          })),
-        })),
-      }
-    case ADD_TASK:
-      // needs boardId , groupId , and task
-      console.log('Adding task to store')
-      return {
-        ...state,
-        boards: state.boards.map((board) =>
-          board.id === cmd.boardId
-            ? {
-                ...board,
-                groups: board.groups.map((group) =>
-                  group.id === cmd.groupId ? { ...group, tasks: [...group.tasks, cmd.task] } : group
-                ),
-              }
-            : board
-        ),
-      }
+	switch (cmd.type) {
+		case SET_BOARD:
+			return {
+				...state,
+				currentBoard: { ...cmd.board },
+			}
+		case SET_BOARDS:
+			return {
+				...state,
+				boards: cmd.boards,
+			}
+		case REMOVE_BOARD:
+			return {
+				...state,
+				boards: state.boards.filter((board) => board._id !== cmd.boardId),
+			}
+		case REMOVE_TASK:
+			// currently it checks ALL THE BOARDS and ALL THE GROUPS for the task , and filters it out if found
+			// board -> group -> tasks -> task
+			console.log('Removing task from store')
+			return {
+				...state,
+				boards: state.boards.map((board) => ({
+					...board,
+					groups: board.groups.map((group) => ({
+						...group,
+						tasks: group.tasks.filter((task) => task.id !== cmd.taskId),
+					})),
+				})),
+			}
+		case ADD_TASK:
+			// needs boardId , groupId , and task
+			console.log('Adding task to store')
+			return {
+				...state,
+				boards: state.boards.map((board) =>
+					board.id === cmd.boardId
+						? {
+								...board,
+								groups: board.groups.map((group) =>
+									group.id === cmd.groupId ? { ...group, tasks: [...group.tasks, cmd.task] } : group
+								),
+						  }
+						: board
+				),
+			}
 
-    case ADD_BOARD:
-      return {
-        ...state,
-        boards: [...state.boards, cmd.savedBoard],
-      }
-    case UPDATE_BOARD:
-      return {
-        ...state,
-        boards: state.boards?.map((board) => (board.id === cmd.board.id ? cmd.board : board)),
-      }
+		case ADD_BOARD:
+			return {
+				...state,
+				boards: [...state.boards, cmd.savedBoard],
+			}
+		case UPDATE_BOARD:
+			return {
+				...state,
+				boards: state.boards.map((board) =>
+					board._id === cmd.board._id ? { ...cmd.board } : board
+				),
+			}
 
-    case SET_FILTER_BY:
-      return {
-        ...state,
-        filterBy: { ...state.filterBy, ...cmd.filterBy },
-      }
+		case SET_FILTER_BY:
+			return {
+				...state,
+				filterBy: { ...state.filterBy, ...cmd.filterBy },
+			}
 
-    case SET_IS_LOADING:
-      return {
-        ...state,
-        isLoading: cmd.isLoading,
-      }
-    default:
-      return state
-  }
+		case SET_IS_LOADING:
+			return {
+				...state,
+				isLoading: cmd.isLoading,
+			}
+		default:
+			return state
+	}
 }

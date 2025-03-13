@@ -18,7 +18,6 @@ export async function loadBoards() {
 	store.dispatch({ type: SET_IS_LOADING, isLoading: true })
 	try {
 		const boards = await boardService.query()
-		console.log("🚀 ~ loadBoards ~ boards:", boards)
 		store.dispatch({ type: SET_BOARDS, boards: boards })
 	} catch (err) {
 		console.log(`Can't load boards - boards actions`)
@@ -42,117 +41,136 @@ export async function addBoard() {
 }
 
 //This gets 1 board from the array of all boards!!
-export async function getBoardById(boardId, filterBy) {
+export async function getBoardById(boardId, filterBy = {}) {
 	const board = await boardService.getById(boardId, filterBy)
 	store.dispatch({ type: SET_BOARD, board: board })
 }
 
-export function logActivity(group, task, prev, action) {
-	const board = store.getState().boardModule.currentBoard
-	const updatedActivities = structuredClone(board.activities)
+export function logActivity(board, group, task, prev, activity = {}) {
+	// const updatedActivities = structuredClone(board.activities)
 	let message, free_txt
 
 	/*Why Use switch (true)?
   Allows Conditional Cases:
   We can check both exact string matches (e.g., action === 'addTask') and conditions (e.g., typeof action === 'object'). */
 	switch (true) {
-		case action === 'addTask':
+		case activity.action === 'addTask':
 			message = 'Created'
 			free_txt = `Group: ${group.title}`
 			break
 
-		case action === 'removeTask':
+		case activity.action === 'removeTask':
 			message = 'Deleted'
 			free_txt = `From: "${group.title}"`
 			break
 
-		case action === 'duplicateTask':
+		case activity.action === 'removeMultipleTasks':
+			message = 'Multiple Tasks has been deleted'
+			free_txt = `From: "${board.title}"`
+			break
+
+		case activity.action === 'duplicateTask':
 			message = 'Duplicated'
 			free_txt = `Group: ${group.title}`
 			break
 
-		case action === 'copyCreated':
+		case activity.action === 'copyCreated':
 			message = 'Created (Copy)'
 			free_txt = `Group: ${group.title}`
 			break
 
-		case action === 'movedFrom':
+		case activity.action === 'movedFrom':
 			message = 'Moved'
 			free_txt = `From Group: ${group.title}`
 			break
 
-		case action === 'movedTo':
+		case activity.action === 'movedTo':
 			message = 'Moved'
 			free_txt = `To Group: ${group.title}`
 			break
 
-		case action === 'groupDeleted':
+		case activity.action === 'moveMultipleTasks':
+			message = 'Moved Multiple Tasks'
+			free_txt = `To Group: ${group.title}`
+			break
+
+		case activity.action === 'groupDeleted':
 			message = 'Group Deleted'
 			free_txt = ``
 			break
-		case action === 'taskNameChanged':
+		case activity.action === 'taskNameChanged':
 			message = 'Task Name Changed'
-			free_txt = `Group: ${group.title}`
+			free_txt = `To ${task.title}`
 			break
 
-		case action === 'groupColorChanged':
+		case activity.action === 'groupColorChanged':
 			message = 'Group Color Changed'
 			free_txt = ``
 			break
 
-		case action === 'groupCreated':
+		case activity.action === 'groupCreated':
 			message = 'Group Created'
 			free_txt = ``
 			break
 
-		case action === 'boardCreated':
+		case activity.action === 'boardCreated':
 			message = 'Board Created'
 			free_txt = ``
 			break
-		// Handle Object Actions
-		case typeof action === 'object' && action.action === 'groupNameChanged':
-			message = action.message
-			free_txt = action.free_txt
+		// Handle Object activity.Actions
+		case activity.action === 'groupNameChanged':
+			message = 'Group Name Changed'
+			free_txt = `To ${group?.title}`
 			break
 
-		case typeof action === 'object' && action.action === 'labelChanged':
-			message = action.message
-			free_txt = action.free_txt
+		case activity.action === 'labelChanged':
+			message = activity.message
+			free_txt = activity.free_txt
 			break
-		case typeof action === 'object' && action.action === 'boardNameChanged':
-			message = action.message
-			free_txt = action.free_txt
+		case activity.action === 'boardNameChanged':
+			message = 'Board Name Changed'
+			free_txt = `To ${board?.title}`
 			break
 
 		default:
 			console.error('Action was not logged !!!')
 	}
-	updatedActivities.unshift(
-		createActivityLog(
-			board?._id,
-			group?.id,
-			task?.id,
-			message /*='Deleted'*/,
-			free_txt /*=`From group "${group.title}"`*/,
-			prev
-		)
+	return createActivityLog(
+		{ boardId: board._id, boardTitle: board.title },
+		group,
+		task,
+		message /*='Deleted'*/,
+		free_txt /*=`From group "${group.title}"`*/,
+		prev
 	)
-	updateBoard(null, null, { key: 'activities', value: updatedActivities })
+	// TODO REMOVE COMMENT //
+	// updateBoard(null, null, { key: 'activities', value: updatedActivities })
+	// dispatch( { type: SET_BOARD, board: { ...board, activities: updatedActivities } })
 }
 
-export async function updateBoard(groupId, taskId, { key, value }) {
+export async function updateBoard(groupId, taskId, { key, value }, activity = {}) {
 	const board = store.getState().boardModule.currentBoard
+
 	const gIdx = board?.groups.findIndex((groupItem) => groupItem.id === groupId)
 	const tIdx = board?.groups[gIdx]?.tasks.findIndex((t) => t.id === taskId)
+	let prev
 
+	if (gIdx !== -1 && tIdx !== -1) {
+		prev = board.groups[gIdx].tasks[tIdx][key]
+		board.groups[gIdx].tasks[tIdx][key] = value
+		board.activities.unshift(
+			logActivity(board, board.groups[gIdx], board.groups[gIdx].tasks[tIdx], prev, activity)
+		)
+	} else if (gIdx !== -1) {
+		prev = board.groups[gIdx][key]
+		board.groups[gIdx][key] = value
+		board.activities.unshift(logActivity(board, board.groups[gIdx], null, prev, activity))
+	} else {
+		prev = board[key]
+		board[key] = value
+		board.activities.unshift(logActivity(board, null, null, prev, activity))
+	}
 	try {
-		if (gIdx !== -1 && tIdx !== -1) {
-			board.groups[gIdx].tasks[tIdx][key] = value
-		} else if (gIdx !== -1) {
-			board.groups[gIdx][key] = value
-		} else {
-			board[key] = value
-		}
 		const updatedBoard = await boardService.save(board)
 		store.dispatch({ type: SET_BOARD, board: updatedBoard })
 	} catch (err) {
@@ -181,8 +199,8 @@ export async function addTask(_, group, task, fromHeader) {
 	}
 
 	try {
-		updateBoard(group.id, null, { key: 'tasks', value: updatedTasks })
-		logActivity(group, task, group.tasks, 'addTask')
+		updateBoard(group.id, null, { key: 'tasks', value: updatedTasks }, { action: 'addTask' })
+		// logActivity(group, task, group.tasks, 'addTask')
 	} catch (error) {
 		console.log(error, ' The group is probably null')
 	}
@@ -202,8 +220,8 @@ export async function removeTask(_, group, task) {
 		...group,
 		tasks: newTasks,
 	}
-	updateBoard(group.id, null, { key: 'tasks', value: newGroup.tasks })
-	logActivity(group, task, group.tasks, 'removeTask')
+	updateBoard(group.id, null, { key: 'tasks', value: newGroup.tasks }, { action: 'removeTask' })
+	// logActivity(group, task, group.tasks, 'removeTask')
 }
 
 export async function duplicateTask(_, group, task) {
@@ -222,10 +240,10 @@ export async function duplicateTask(_, group, task) {
 	]
 	const newGroup = { ...group, tasks: updatedTasks }
 
-	updateBoard(group.id, null, { key: 'tasks', value: newGroup.tasks })
+	updateBoard(group.id, null, { key: 'tasks', value: newGroup.tasks }, { action: 'duplicateTask' })
 	// 2 logs , one for the duplicated task and one for the original task
-	logActivity(group, task, null, 'duplicateTask') // No prev value
-	logActivity(group, newTask, null, 'copyCreated')
+	// logActivity(group, task, null, 'duplicateTask') // No prev value
+	// logActivity(group, newTask, null, 'copyCreated')
 }
 
 export async function duplicateMultipleTasks(_, tasksToDuplicate) {
@@ -259,14 +277,19 @@ export async function duplicateMultipleTasks(_, tasksToDuplicate) {
 		updatedGroups[groupIndex] = group
 
 		// 2 logs , one for the duplicated task and one for the original task
-		logActivity(group, duplicatedTask, null, 'copyCreated')
-		logActivity(group, taskToDuplicate, null, 'duplicateTask')
+		// logActivity(group, duplicatedTask, null, 'copyCreated')
+		// logActivity(group, taskToDuplicate, null, 'duplicateTask')
 	})
 	// Update the board with the modified groups
-	return updateBoard(null, null, {
-		key: 'groups',
-		value: updatedGroups,
-	})
+	return updateBoard(
+		null,
+		null,
+		{
+			key: 'groups',
+			value: updatedGroups,
+		},
+		{ action: 'duplicateTask' }
+	)
 }
 
 export async function removeMultipleTasks(_, checkedTasks) {
@@ -282,8 +305,8 @@ export async function removeMultipleTasks(_, checkedTasks) {
 
 		const tasksToRemove = checkedTasks.filter((checkedTask) => {
 			if (checkedTask.groupId === group.id)
-				logActivity(group, { id: checkedTask.taskId }, null, 'removeTask')
-			return checkedTask.groupId === group.id
+				// logActivity(group, { id: checkedTask.taskId }, null, 'removeTask')
+				return checkedTask.groupId === group.id
 		})
 		// if there are tasks to remove from this group
 		if (tasksToRemove.length > 0) {
@@ -296,7 +319,12 @@ export async function removeMultipleTasks(_, checkedTasks) {
 			return group
 		} // If theres no tasks to remove, just return original group
 	})
-	updateBoard(null, null, { key: 'groups', value: updatedGroups })
+	updateBoard(
+		null,
+		null,
+		{ key: 'groups', value: updatedGroups },
+		{ action: 'removeMultipleTasks' }
+	)
 }
 
 export async function moveMultipleTasksIntoSpecificGroup(_, checkedTasks, targetGroupId) {
@@ -342,9 +370,9 @@ export async function moveMultipleTasksIntoSpecificGroup(_, checkedTasks, target
 		const [taskToMove] = sourceGroup.tasks.splice(taskIndex, 1)
 
 		// log that it was moved from the old (source) group
-		logActivity(sourceGroup, taskToMove, null, 'movedFrom')
+		// logActivity(sourceGroup, taskToMove, null, 'movedFrom')
 		//  log that it was moved to the new (target) group
-		logActivity(targetGroup, taskToMove, null, 'movedTo')
+		// logActivity(targetGroup, taskToMove, null, 'movedTo')
 		// add the task to the target group
 		targetGroup.tasks.push(taskToMove)
 		// update the source group
@@ -352,15 +380,20 @@ export async function moveMultipleTasksIntoSpecificGroup(_, checkedTasks, target
 	})
 	// update the target group
 	updatedGroups[targetGroupIndex] = targetGroup
-	updateBoard(null, null, { key: 'groups', value: updatedGroups })
+	updateBoard(null, null, { key: 'groups', value: updatedGroups } ,{ action: 'moveMultipleTasks' })
 }
 
 // Group Actions
 export async function removeGroup(group) {
 	const board = store.getState().boardModule.currentBoard
 	const newGroups = board.groups.filter((g) => g.id !== group.id)
-	logActivity(group, null, group, 'groupDeleted')
-	updateBoard(null, null, { key: 'groups', value: newGroups })
+	// logActivity(group, null, group, 'groupDeleted')
+	updateBoard(
+		null,
+		null,
+		{ key: 'groups', value: newGroups },
+		{ action: 'groupDeleted', groupId: group.id, groupTitle: group.title }
+	)
 }
 
 export function setFilterBy(filterBy = {}) {
@@ -373,14 +406,21 @@ export async function getAllBoardsTitle() {
 	return allTitles
 }
 
-export function createActivityLog(boardId, groupId, taskId, action_name, free_txt, prevValue) {
+export function createActivityLog(
+	{ boardId, boardTitle },
+	group,
+	task,
+	action_name,
+	free_txt,
+	prevValue
+) {
 	return {
 		id: utilService.makeId(),
 		createdAt: Date.now(),
 		byMember: userService.getLoggedinUser(),
-		board: { id: boardId, title: getBoardById(boardId).title },
-		group: { id: groupId, title: getGroupById(groupId)?.title },
-		task: { id: taskId, title: getTaskById(taskId)?.title }, // we keep title so we can access title if task removed from board
+		board: { id: boardId, title: boardTitle },
+		group: { id: group?.id, title: group?.title },
+		task: { id: task?.id, title: task?.title }, // we keep title so we can access title if task removed from board
 		action_name, // For example : "Moved" , "Duplicated" , "Deleted"
 		free_txt, // For example : "To group New Group" or "From group ASAP Tasks"
 		prevValue, // Holds the previous value of the task/group/board before the change
@@ -433,4 +473,3 @@ function getCurrentBoardId() {
 	const board = store.getState().boardModule.currentBoard
 	return board._id
 }
-

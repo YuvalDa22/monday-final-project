@@ -14,6 +14,7 @@ import {
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import { getSvg } from '../../services/util.service'
 import { useEffect, useRef, useState } from 'react'
+import { loadBoards } from '../../store/board/board.actions'
 
 const SvgIcon = ({ iconName, options, className }) => {
 	return (
@@ -49,7 +50,6 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 	}
 
 	useEffect(() => {
-		console.log('filterByToEdit changed:', filterByToEdit)
 		onSetFilterBy(filterByToEdit)
 	}, [filterByToEdit])
 
@@ -65,7 +65,6 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 			default:
 				break
 		}
-		console.log(`handleFilterChange - field: ${field}, value: ${value}`)
 		setFilterByToEdit((prevFilter) => ({ ...prevFilter, [field]: value }))
 	}
 
