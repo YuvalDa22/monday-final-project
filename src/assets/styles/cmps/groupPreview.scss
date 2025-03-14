@@ -39,7 +39,6 @@
     width: calc(100vw - 322px);
 
     .custom-table {
-      //  width: 100%;
       border-collapse: separate;
       border-spacing: 0; /* Ensure spacing is minimal */
       text-align: center;
@@ -51,6 +50,53 @@
       .header-cell {
         min-width: 10rem;
         width: 10rem;
+      }
+      tr td,
+      tr th {
+        position: relative;
+      }
+
+      tfoot tr:first-of-type,
+      tfoot tr:first-of-type td,
+      tfoot tr:first-of-type th {
+        border-right: none; /* remove border from "Add task" row */
+        right: 0.1px;
+      }
+
+      /* This is for the infinite look for the board! */
+      tr td:last-child::after,
+      tr th:last-child::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 0.1px;
+        background-color: #ddd;
+        transform: translateX(159px);
+      }
+
+      /* This is for the infinite look for the board! */
+      thead tr th:last-child::before {
+        content: '';
+        position: absolute;
+        top: -1px;
+        left: 0;
+        width: 100%;
+        height: 0.1px;
+        background-color: #ddd;
+        transform: translateX(159px);
+      }
+      /* This is for the infinite look for the board! */
+      thead tr th:last-child::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 0.1px;
+        background-color: #ddd;
+        transform: translateX(159px);
       }
 
       td:nth-child(1),
