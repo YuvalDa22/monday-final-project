@@ -32,7 +32,6 @@ const labels = [
   { id: 'l102', title: 'Done', color: '#00c875' },
   { id: 'l103', title: 'Working on it', color: '#fdab3d' },
   { id: 'l104', title: 'Stuck', color: '#df2f4a' },
-  { id: 'l105', title: 'Waiting for Review', color: '#ffcb00' },
 
   // Priority Labels (l201 - l299)
   { id: 'l201', title: '', color: '#c4c4c4' },
@@ -101,23 +100,24 @@ function getEmptyGroup() {
   }
 }
 
-function getEmptyTask() {
-  return {
-    id: 't' + utilService.makeId(),
-    title: 'New Task',
-    archivedAt: 0,
-    status: 'l101',
-    priority: 'l201',
-    description: '',
-    comments: [],
-    checklists: [],
-    memberIds: [],
-    labelIds: [],
-    dueDate: 0,
-    byMember: {},
-    style: {},
+  function getEmptyTask() {
+    return {
+      id: 't'+ utilService.makeId(),
+      title: 'New Task',
+      archivedAt: 0,
+      status: 'l101',
+      priority: 'l201',
+      description: '',
+      updates: [],
+      comments: [],
+      checklists: [],
+      memberIds: [],
+      labelIds: [],
+      dueDate: 0,
+      byMember: {},
+      style: {},
+    }
   }
-}
 
 function _setNewGroupColor() {
   const colors = Array.from(groupColors.values())
@@ -126,5 +126,22 @@ function _setNewGroupColor() {
   return randomColor
 }
 
-const service = VITE_LOCAL ? local : remote
-export const boardService = { getEmptyBoard, getEmptyGroup, getEmptyTask, groupColors, ...service }
+  function getDefaultFilter() {
+    return {
+      txt: '',
+      groups: [],
+      tasks: [],
+      members: [],
+      statusLabels: [],
+      priorityLabels: []
+    }
+  }
+
+
+const service = VITE_LOCAL === 'true' ? local : remote
+export const boardService = { getEmptyBoard, getEmptyGroup, getEmptyTask, getDefaultFilter, groupColors, ...service }
+
+
+
+
+

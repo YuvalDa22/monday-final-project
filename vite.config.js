@@ -3,8 +3,11 @@ import react from '@vitejs/plugin-react'
 import sass from 'sass'
 
 export default defineConfig({
-	base: '/OGY-Monday/', // Replace with your repository name
 	plugins: [react()],
+	build: {
+		outDir: '../backend/public',
+		emptyOutDir: true
+	},
 	optimizeDeps: {
 		include: ['@radix-ui', '@mui'],
 	},
