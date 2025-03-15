@@ -14,7 +14,7 @@ export function HomePage() {
           <button
             className="hero-btn"
             onClick={() => {
-              navigate("/workspace");
+              navigate("/login");
             }}
           >
             Get Started

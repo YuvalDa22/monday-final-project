@@ -207,7 +207,6 @@ export default function GroupItemContainer({
               board={board}
               info={item[cmp]} // Pass the current value for this key
               onUpdate={(data) => {
-                console.log("🚀 ~ {cmpsOrder.map ~ data:", data)
                 // logActivity(group, item, null, {
                 //   action: 'labelChanged',
                 //   message: `${cmp.charAt(0).toUpperCase() + cmp.slice(1)} Changed`,
