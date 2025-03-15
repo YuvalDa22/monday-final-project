@@ -15,6 +15,7 @@ const SvgIcon = ({ iconName, options, style }) => {
 }
 
 export function BoardIndex() {
+  const user = useSelector((storeState) => storeState.userModule.user)
   const [greeting, setGreeting] = useState('')
   const [filterBy, setFilterBy] = useState(null)
   const { boards, isLoading } = useSelector((storeState) => storeState.boardModule)
@@ -62,7 +63,7 @@ export function BoardIndex() {
       {/* for radix ui card (which is custom theme and not a primitive UI item*/}
       <div className='boardIndex_container'>
         <div className='boardIndex_greeting'>
-          <div className='greeting_top'>{greeting}, Gal!</div>
+          <div className='greeting_top'>{greeting}, {user.fullname.split(' ')[0]}!</div>
           <div className='greeting_bottom'>
             Quickly access your recent boards, Inbox and workspaces
           </div>

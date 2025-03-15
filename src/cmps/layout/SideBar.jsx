@@ -60,7 +60,7 @@ export default function Sidebar() {
 
   useEffect(() => {
     fetchBoardsTitle();
-  }, [boards]);
+  }, [boards.length]);
 
   const fetchBoardsTitle = async () => {
     try {
@@ -169,7 +169,7 @@ export default function Sidebar() {
                     aria-controls={open ? 'basic-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
-                    onClick={(event)=> event.preventDefault() }
+                    onClick={(event) => {event.preventDefault(); event.stopPropagation();}}
                     sx={{
                       color: 'rgb(50, 51, 56)',
                       padding: 0,

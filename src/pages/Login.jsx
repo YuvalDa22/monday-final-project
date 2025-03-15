@@ -1,69 +1,74 @@
-import { useNavigate } from "react-router";
-import { login } from "../store/user/user.actions";
-import { useState } from "react";
-import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service";
-import { AppHeader } from "../cmps/layout/AppHeader";
-import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router'
+import { login } from '../store/user/user.actions'
+import { useState } from 'react'
+import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service'
+import { AppHeader } from '../cmps/layout/AppHeader'
+import { Link } from 'react-router-dom'
+import { TextField, Button } from '@mui/material'
 
 export function Login() {
-  const [user, setUser] = useState({});
-  const navigate = useNavigate();
+	const [credentials, setCredentials] = useState({ username: '', password: '' })
 
-  function handleChange(event) {
-    const { name, value } = event.target;
-    setUser((prevUser) => ({
-      ...prevUser,
-      [name]: value,
-    }));
-  }
-  async function handleSubmit(e) {
-    e.preventDefault();
+	const navigate = useNavigate()
 
-    if (!user.email || !user.password) {
-      showErrorMsg("Please fill in all fields");
-      return;
-    }
+	function handleChange(event) {
+		const { name, value } = event.target
+		setCredentials((prevUser) => ({
+			...prevUser,
+			[name]: value,
+		}))
+	}
 
-    try {
-      await login(user);
-      navigate("/index");
-      showSuccessMsg("Logged in successfully");
-    } catch (err) {
-      showErrorMsg(err.message || "Invalid credentials");
-    }
-  }
+	async function handleLogIn(e = null) {
+		if (e) e.preventDefault()
 
-  return (
-    <>
-      <AppHeader />
-      <div className="container">
-        <h1>Log into you account !</h1>
-        <form className="login-form " onSubmit={handleSubmit}>
-          <div className="form-section">
-            <input
-              type="text"
-              name="email"
-              onChange={handleChange}
-              placeholder="Email-adress"
-            />
-          </div>
-          <div className="form-section">
-            <input
-              type="password"
-              name="password"
-              onChange={handleChange}
-              placeholder="Password"
-            />
-          </div>
-          <button type="submit">Submit</button>
-        </form>
-        <div>
-          <p>
-            {" "}
-            don't have an account ? <Link to={"/signup"}>sign up</Link>{" "}
-          </p>
-        </div>
-      </div>
-    </>
-  );
+		if (!credentials.username || !credentials.password) {
+			showErrorMsg('Please fill in all fields')
+			return
+		}
+
+		try {
+			await login(credentials)
+			navigate('/workspace')
+			showSuccessMsg('Logged in successfully')
+		} catch (err) {
+			showErrorMsg(err.message || 'Invalid credentials')
+		}
+	}
+
+	return (
+		<div className='login-page'>
+			<AppHeader />
+			<div className='container'>
+				<h1>Log into your account!</h1>
+				<form className='login-form' onSubmit={handleLogIn}>
+					<TextField
+						label='Username'
+						variant='outlined'
+						name='username'
+						onChange={handleChange}
+						fullWidth
+					/>
+					<div className='form-section'>
+						<TextField
+							label='Password'
+							variant='outlined'
+							type='password'
+							name='password'
+							onChange={handleChange}
+							fullWidth
+						/>
+					</div>
+					<Button type='submit' variant='contained' color='primary' fullWidth>
+						Log In
+					</Button>
+				</form>
+				<div>
+					<p>
+						Don't have an account? <Link to={'/signup'}>Sign up</Link>
+					</p>
+				</div>
+			</div>
+		</div>
+	)
 }

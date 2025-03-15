@@ -11,7 +11,7 @@ import {
 	REMOVE_TASK,
 	SET_IS_LOADING,
 } from './board.reducer'
-import { userService } from '../../services/user.service'
+import { userService } from '../../services/user'
 import { utilService } from '../../services/util.service'
 
 export async function loadBoards() {

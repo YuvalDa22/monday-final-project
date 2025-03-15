@@ -1,86 +1,106 @@
-import { useNavigate } from "react-router"
-import { login, signup } from "../store/user/user.actions";
-import { useState } from "react";
-import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service";
-import { AppHeader } from "../cmps/layout/AppHeader";
-import { Link } from "react-router-dom";
-import { ImgUploader } from "../cmps/ImgUploader";
-
+import { useNavigate } from 'react-router'
+import { signup } from '../store/user/user.actions'
+import { useState } from 'react'
+import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service'
+import { AppHeader } from '../cmps/layout/AppHeader'
+import { Link } from 'react-router-dom'
+import { TextField, Button } from '@mui/material'
+import { ImgUploader } from '../cmps/ImgUploader'
 
 export function SignUp() {
+	const [credentials, setCredentials] = useState({})
+	const navigate = useNavigate()
 
-    const [user, setUser] = useState({})
-    const navigate = useNavigate()
+	function handleChange(event) {
+		const { name, value } = event.target
+		setCredentials((prevUser) => ({
+			...prevUser,
+			[name]: value,
+		}))
+	}
 
-
-
-
-    function handleChange(event) {
-        const { name, value } = event.target;
-        setUser((prevUser) => ({
-            ...prevUser,
-            [name]: value,
-        }));
-    }
-    async function handleSubmit(e) {
-        e.preventDefault();
-
-        try {
-            signup(user)
-            showSuccessMsg('made a new account')
-            navigate('/index')
-        }
-        catch (err) {
-            showErrorMsg('something went wrong')
-            console.log(err)
-        }
+    function clearState() {
+        setCredentials({ username: '', password: '', fullname: '', email: '', imgUrl: '' })
     }
 
-    function onUploaded(imgUrl) {
-        setUser(prevCredentials => ({ ...prevCredentials, imgUrl }))
-    }
+	async function handleSignup(e) {
+		e.preventDefault()
 
-    return (
-        <>
-            <AppHeader />
-            <div className="container">
-                <h1>Sign Up Now!</h1>
-                <form className="login-form " onSubmit={handleSubmit}>
-                    <div className="form-section">
+		try {
+			await signup(credentials)
+            clearState()
+			showSuccessMsg('Account created successfully')
+			navigate('/workspace')
+		} catch (err) {
+			showErrorMsg('Something went wrong')
+			console.error(err)
+		}
+	}
 
-                        <input
-                            type="email"
-                            name="email"
-                            onChange={handleChange}
-                            placeholder="Email-adress"
-                        />
-                    </div>
-                    <div className="form-section">
+	function onUploaded(imgUrl) {
+		setCredentials((prevUser) => ({ ...prevUser, imgUrl }))
+	}
 
-                        <input
-                            type="text"
-                            name="fullName"
-                            onChange={handleChange}
-                            placeholder="Full Name"
-                        />
-                    </div>
-                    <div className="form-section">
-
-                        <input
-                            type="password"
-                            name="password"
-                            onChange={handleChange}
-                            placeholder="Password"
-                        />
-                    </div>
-                    <button type="submit">Submit</button>
-                    <ImgUploader onUploaded={onUploaded} />
-
-                </form>
-                <div>
-                    <p>  have an account ? <Link to={'/login'}>Log In</Link > </p>
-                </div>
-            </div>
-        </>
-    );
+	return (
+		<div className='signup-page'>
+			<AppHeader />
+			<div className='container'>
+				<h1>Sign Up Now!</h1>
+				<form className='login-form' onSubmit={handleSignup}>
+                    <TextField
+                        label='Full Name'
+                        variant='outlined'
+                        name='fullname'
+                        onChange={handleChange}
+                        fullWidth
+                        required
+                    />
+                    <TextField
+						label='Username'
+						variant='outlined'
+						name='username'
+						onChange={handleChange}
+						fullWidth
+                        required
+					/>
+					<TextField
+						label='Email Address'
+						variant='outlined'
+						name='email'
+                        type='email'
+						onChange={handleChange}
+						fullWidth
+                        required
+					/>
+					<TextField
+						label='Password'
+						variant='outlined'
+						type='password'
+						name='password'
+						onChange={handleChange}
+						fullWidth
+                        required
+					/>
+                    <TextField
+						label='Role'
+						variant='outlined'
+						type='text'
+						name='role'
+						onChange={handleChange}
+						fullWidth
+                
+					/>
+					<ImgUploader onUploaded={onUploaded} />
+					<Button type='submit' variant='contained' color='primary' fullWidth>
+						Sign Up
+					</Button>
+				</form>
+				<div>
+					<p>
+						Already have an account? <Link to={'/login'}>Log In</Link>
+					</p>
+				</div>
+			</div>
+		</div>
+	)
 }

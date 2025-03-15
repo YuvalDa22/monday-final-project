@@ -22,6 +22,8 @@ function RootCmp() {
       <div>
         <Routes>
           <Route path='/' element={<HomePage />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<SignUp />} />
           <Route path='/workspace' element={<BoardIndex />} />
           <Route path='/workspace/board/:boardId' element={<BoardDetails />}>
             <Route path='task/:taskId' element={<MenuFromTheRight />} />

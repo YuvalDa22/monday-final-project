@@ -68,23 +68,13 @@ const members = [
 function getEmptyBoard() {
   return {
     title: 'New Board',
-    isStarred: false,
-    archivedAt: 0,
-    createdBy: {
-      _id: '',
-      fullname: '',
-      imgUrl: '',
-    },
-    style: {},
     labels: labels,
     members: members,
     groupSummary: [null, null, null],
     groups: [{ ...getEmptyGroup() }],
-    archivedItems: [], //Groups or Tasks
     activities: [],
     cmpsOrder: ['status', 'priority', 'memberIds', 'dueDate'],
     cmpTitles: ['Status', 'Priority', 'Members', 'Due Date'],
-    groupSummary: [],
   }
 }
 
@@ -92,9 +82,7 @@ function getEmptyGroup() {
   return {
     id: 'g' + utilService.makeId(),
     title: 'New Group',
-    archivedAt: 0,
     tasks: [{ ...getEmptyTask() }],
-    archivedItems: [],
     style: { color: _setNewGroupColor() },
     collapsed: false,
   }
@@ -107,15 +95,11 @@ function getEmptyGroup() {
       archivedAt: 0,
       status: 'l101',
       priority: 'l201',
-      description: '',
       updates: [],
       comments: [],
       checklists: [],
       memberIds: [],
-      labelIds: [],
       dueDate: 0,
-      byMember: {},
-      style: {},
     }
   }
 

@@ -28,6 +28,7 @@ async function ajax(endpoint, method = 'GET', data = null) {
 
     const options = { url, method, data, params }
 
+    console.log("🚀 ~ ajax ~ options:", options)
     try {
         const res = await axios(options)
         return res.data

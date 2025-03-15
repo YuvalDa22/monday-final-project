@@ -11,7 +11,7 @@ export function MondayIndex() {
     return (
         <div className="index-container">
             <h1>You Logged In !</h1>
-            <h2>{user.fullName || 'no user'}</h2>
+            <h2>{user.fullname || 'no user'}</h2>
             <img src={user.imgUrl} width={'300px'} alt="" />
         </div>
     )

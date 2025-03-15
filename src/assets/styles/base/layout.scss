@@ -1,17 +1,17 @@
 .app-container {
-  display: grid;
-  grid-template-columns: 210px 1fr; // Sidebar
-  grid-template-rows: 50px 1fr; // Navbar
-  gap: 0px 12px;
-  grid-template-areas:
-    'navbar navbar'
-    'sidebar main-container';
-  height: 0px; // Temporary fix to keep the navbar from movingdown when scrolling down the page (in the future the page will not be scrollable , only the area with the table will be scrollable)
+	display: grid;
+	grid-template-columns: 210px 1fr; // Sidebar
+	grid-template-rows: 50px 1fr; // Navbar
+	gap: 0px 12px;
+	grid-template-areas:
+		'navbar navbar'
+		'sidebar main-container';
+	height: 0px; // Temporary fix to keep the navbar from moving down when scrolling down the page
 }
 
 html,
 body {
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
+	height: 100vh;
+	width: 100vw;
+	overflow: hidden;
 }

@@ -1,5 +1,5 @@
 import io from 'socket.io-client'
-import { userService } from './user.service'
+import { userService } from './user'
 
 export const SOCKET_EVENT_BOARD_UPDATED = 'board-updated'
 

@@ -164,7 +164,7 @@ export function ActivityLog({ taskId = null }) {
             </span>
 
             <div className='stal-free-txt'>
-              {taskActivity.free_txt.length > 15
+              {taskActivity.free_txt?.length > 15
                 ? taskActivity.free_txt.slice(0, 15) + '...'
                 : taskActivity.free_txt}
             </div>
