@@ -13,7 +13,7 @@ _createBoards()
 
 async function query() {
   try {
-    let boards = await storageService.query(STORAGE_KEY)
+    const boards = await storageService.query(STORAGE_KEY)
     return boards
   } catch (error) {
     console.log('error:', error)

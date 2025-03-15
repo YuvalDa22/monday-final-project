@@ -41,8 +41,8 @@ export async function addBoard() {
 }
 
 //This gets 1 board from the array of all boards!!
-export async function getBoardById(boardId, filterBy = {}) {
-	const board = await boardService.getById(boardId, filterBy)
+export async function getBoardById(boardId) {
+	const board = await boardService.getById(boardId)
 	store.dispatch({ type: SET_BOARD, board: board })
 }
 
