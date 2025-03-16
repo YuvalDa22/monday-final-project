@@ -160,7 +160,9 @@ export function ActivityLog({ taskId = null }) {
             </div>
             <span className='stal-action'>
               {/* {getIconByAction(taskActivity.action_name)} */}
-              {taskActivity.action_name}
+              {taskActivity.action_name?.length > 15
+                ? taskActivity.action_name.slice(0, 15) + '...'
+                : taskActivity.action_name}
             </span>
 
             <div className='stal-free-txt'>

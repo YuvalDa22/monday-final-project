@@ -91,7 +91,7 @@ export function logActivity(board, group, task, prev, activity = {}) {
 
 		case activity.action === 'moveMultipleTasks':
 			message = 'Moved Multiple Tasks'
-			free_txt = `To Group: ${group.title}`
+			free_txt = activity.free_txt
 			break
 
 		case activity.action === 'groupDeleted':
@@ -380,7 +380,7 @@ export async function moveMultipleTasksIntoSpecificGroup(_, checkedTasks, target
 	})
 	// update the target group
 	updatedGroups[targetGroupIndex] = targetGroup
-	updateBoard(null, null, { key: 'groups', value: updatedGroups } ,{ action: 'moveMultipleTasks' })
+	updateBoard(null, null, { key: 'groups', value: updatedGroups } ,{ action: 'moveMultipleTasks' , free_txt: `To ${targetGroup.title}` })
 }
 
 // Group Actions

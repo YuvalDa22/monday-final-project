@@ -32,7 +32,8 @@ export function Login() {
 			navigate('/workspace')
 			showSuccessMsg('Logged in successfully')
 		} catch (err) {
-			showErrorMsg(err.message || 'Invalid credentials')
+			console.log('🚀 ~ handleLogIn ~ err:', err)
+			showErrorMsg(err.response.data.err || err.message || 'Invalid credentials')
 		}
 	}
 

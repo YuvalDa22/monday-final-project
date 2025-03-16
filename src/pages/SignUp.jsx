@@ -32,7 +32,7 @@ export function SignUp() {
 			showSuccessMsg('Account created successfully')
 			navigate('/workspace')
 		} catch (err) {
-			showErrorMsg('Something went wrong')
+			showErrorMsg(err.response.data.err || 'Something went wrong')
 			console.error(err)
 		}
 	}

@@ -1,6 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
 import './assets/styles/styles.scss'
-import { UserMsg } from './cmps/Usermsg'
 import { Login } from './pages/Login'
 import { HomePage } from './pages/HomePage'
 import { SignUp } from './pages/SignUp'
@@ -11,6 +10,7 @@ import NavBar from './cmps/layout/NavBar'
 import { TaskDetails } from './pages/TaskDetails'
 import { BoardIndex } from './pages/BoardIndex'
 import { MenuFromTheRight } from './pages/MenuFromTheRight'
+import { UserMsg } from './cmps/UserMsg'
 
 function RootCmp() {
   const location = useLocation()
@@ -20,6 +20,7 @@ function RootCmp() {
       {showSidebarAndNavBar && <SideBar />}
       {showSidebarAndNavBar && <NavBar />}
       <div>
+      <UserMsg />
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/login' element={<Login />} />
