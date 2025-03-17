@@ -150,6 +150,7 @@ export function logActivity(board, group, task, prev, activity = {}) {
 
 export async function updateBoard(groupId, taskId, { key, value }, activity = {}) {
 	const board = store.getState().boardModule.currentBoard
+	const boards = store.getState().boardModule.boards
 
 	const gIdx = board?.groups.findIndex((groupItem) => groupItem.id === groupId)
 	const tIdx = board?.groups[gIdx]?.tasks.findIndex((t) => t.id === taskId)
@@ -173,6 +174,7 @@ export async function updateBoard(groupId, taskId, { key, value }, activity = {}
 	try {
 		const updatedBoard = await boardService.save(board)
 		store.dispatch({ type: SET_BOARD, board: updatedBoard })
+		store.dispatch({type: SET_BOARDS, boards: boards.map(b => b._id === updatedBoard._id ? updatedBoard : b)}) //update boards state
 	} catch (err) {
 		console.error('Failed to save the board:', err)
 		throw err

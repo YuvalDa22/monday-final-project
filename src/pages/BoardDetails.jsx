@@ -38,14 +38,28 @@ const SvgIcon = ({ iconName, options }) => {
 }
 
 export function BoardDetails() {
-	const [filterBy, setFilterBy] = useState(boardService.getDefaultFilter())
-	const { boardId } = useParams()
+  const [filterBy, setFilterBy] = useState(boardService.getDefaultFilter())
+  const { boardId } = useParams()
+  const navigate = useNavigate();
 
-	const board = useSelector((storeState) => {
-		return boardService.filterBoard(storeState.boardModule.currentBoard, filterBy)
-	})
-	const [activeTask, setActiveTask] = useState() // drag and drop
-	const [checkedTasksList, setCheckedTasksList] = useState([])
+
+  // const  board = useSelector((storeState) => {
+  //   return boardService.filterBoard(storeState.boardModule.currentBoard, filterBy)
+  // })
+
+  const board = useSelector((storeState) => {
+    const currentBoard = storeState.boardModule.currentBoard
+    return currentBoard ? boardService.filterBoard(currentBoard, filterBy) : null
+  })
+
+  useEffect(() => {
+    if (board === null) {
+      navigate('/workspace') // fallback route
+    }
+  }, [board, navigate])
+
+  const [activeTask, setActiveTask] = useState() // drag and drop
+  const [checkedTasksList, setCheckedTasksList] = useState([])
 
 	const sensors = useSensors(
 		useSensor(PointerSensor, {
@@ -62,27 +76,24 @@ export function BoardDetails() {
 		// TODO i want to listen to event that the board has changed through sockets from the backend
 	}, [board])
 
-	useEffect(() => {
-		// console.log(`board`, board)
-		// if (board?._id !== boardId) {
-		//   navigate("/workspace"); //fallback route
-		// }
-		onLoadBoard()
-	}, [boardId, filterBy])
+  useEffect(() => {    
+   
+    onLoadBoard()
+  }, [boardId, filterBy])
 
 	function onSetFilterBy(filterBy) {
 		setFilterBy((prevFilterBy) => ({ ...prevFilterBy, ...filterBy }))
 	}
 	const onSetFilterByDebounce = useRef(debounce(onSetFilterBy, 400)).current
 
-	async function onLoadBoard() {
-		try {
-			await getBoardById(boardId)
-		} catch (error) {
-			showErrorMsg('Cannot load boards')
-			console.error(error)
-		}
-	}
+  async function onLoadBoard() {
+    try {
+      await getBoardById(boardId)
+    } catch (error) {
+      showErrorMsg('Cannot load board')
+      console.error(error)
+    }
+  }
 
 	if (!board) return <div>Loading...</div>
 

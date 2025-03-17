@@ -7,8 +7,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
-  padding-top: 10px;
+  padding: 10px 3px;
+  padding-top: 6px;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -20,15 +20,19 @@
 }
 
 .navBar-logo-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .navBar-company-name {
-  font-weight: 900;
+  margin-right: vars.$spacing-xs;
+  letter-spacing: vars.$letter-spacing-h1-bold ;
+  font-weight: 700;
+  padding: 0px 0px 0px 10px;
 }
 
 .navbar-logo img {
-  height: 30px;
-  width: 30px;
   height: 25px;
   width: 25px;
 }
@@ -36,7 +40,9 @@
 .navbar-logo {
   display: flex;
   align-items: center;
-  gap: 6px;
+  
+  //gap: 6px;
+  
 }
 
 .navbar-links {

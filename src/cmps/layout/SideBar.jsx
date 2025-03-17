@@ -1,4 +1,3 @@
-// Sidebar.jsx
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -11,6 +10,23 @@ import {
   IconButton as MuiIconButton,
   Stack as MuiStack,
 } from '@mui/material';
+import {
+  Button as ButtonVibe,
+  IconButton as IconButtonVibe,
+  Icon as IconVibe,
+  Avatar as AvatarVibe,
+  Menu as MenuVibe,
+  MenuItem as MenuItemVibe,
+  MenuButton as MenuButtonVibe,
+} from '@vibe/core';
+import {
+  Add as AddIcon,
+  Home,
+  Favorite,
+  Workspace,
+  Board,
+  Delete,
+} from '@vibe/icons';
 import { showErrorMsg, showSuccessMsg } from '../../services/event-bus.service';
 import React, { useState, useEffect } from 'react';
 import { DropdownMenu } from 'radix-ui';
@@ -19,7 +35,7 @@ import {
   getAllBoardsTitle,
   removeBoard,
 } from '../../store/board/board.actions';
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
 
 const SvgIcon = ({
   iconName,
@@ -33,7 +49,7 @@ const SvgIcon = ({
         pointerEvents: 'none',
       }}
     ></i>
-  ); // So clicking directly on the SVG won't create an ugly black background
+  );
 };
 
 export default function Sidebar() {
@@ -42,25 +58,33 @@ export default function Sidebar() {
   const match = location.pathname.match(/\/workspace\/board\/([^/]+)/); // since SideBar isn't inside <Route> in RootCmp we can't use useParams
   const boardId = match ? match[1] : null;
   const [allBoardsTitle, setAllBoardsTitle] = useState([]);
-  const { boards } = useSelector((storeState) => storeState.boardModule)
+  const { boards } = useSelector((storeState) => storeState.boardModule);
 
-  
-  const [anchorEl, setAnchorEl] = useState(null)
-  const open = Boolean(anchorEl)
+  // Fix: Store menu anchor & selected board
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [selectedBoard, setSelectedBoard] = useState(null);
 
-  const handleClick = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setAnchorEl(event.currentTarget)
-  }
+  const handleMenuClick = (event, boardId) => {
+    event.stopPropagation(); // Prevents navigation
+    setMenuAnchor(event.currentTarget);
+    setSelectedBoard(boardId);
+  };
 
   const handleMenuClose = () => {
-    setAnchorEl(null)
-  }
+    setMenuAnchor(null);
+    setSelectedBoard(null);
+  };
+
+  const handleDelete = () => {
+    if (selectedBoard) {
+      handleRemoveBoard(selectedBoard);
+    }
+    handleMenuClose(); // Close menu after deleting
+  };
 
   useEffect(() => {
     fetchBoardsTitle();
-  }, [boards.length]);
+  }, [boards]);
 
   const fetchBoardsTitle = async () => {
     try {
@@ -85,181 +109,207 @@ export default function Sidebar() {
     }
   }
 
-  async function handleRemoveBoard(boardId){
+  async function handleRemoveBoard(selectedBoardId) {
+    handleMenuClose();
     try {
-      removeBoard(boardId)
-      showSuccessMsg(`Board removed successfully`)
+      await removeBoard(selectedBoardId); // Ensure deletion is processed
+  
+      // Immediately update the board list in state
+      setAllBoardsTitle((prevBoards) =>
+        prevBoards.filter((board) => board.id !== selectedBoardId)
+      );
+  
+      // If the current board was deleted, navigate to `/workspace`
+      if (boardId === selectedBoardId) {
+        navigate('/workspace');
+      }
+  
+      showSuccessMsg(`Board removed successfully`);
     } catch (err) {
-      showErrorMsg(`Couldn't remove board, please try again`)
-      console.log(err)
-    } finally {
-      handleMenuClose()
+      showErrorMsg(`Couldn't remove board, please try again`);
+      console.log(err);
     }
   }
+  
 
   return (
     <div className="sidebar">
       {/* Navigation Links */}
-      <ul className="sidebar-links">
-        <Link to="/workspace" style={{ all: 'unset' }}>
-          <li
-            className={`sidebar-item ${
-              location.pathname === '/workspace' ? 'active' : ''
-            }`}
-          >
-            <SvgIcon iconName={'sidebar_home'} />{' '}
-            <span className="textInSidebar">Home</span>
-          </li>
-        </Link>
-
-        <li
-          className={`sidebar-item ${
-            location.pathname.includes('/workspace/myWork') ? 'active' : ''
-          }`}
-        >
-          <SvgIcon iconName={'sidebar_myWork'} />{' '}
-          <span className="textInSidebar">My work</span>
-        </li>
-      </ul>
-      <Divider className="divider" />
-      <ul className="sidebar-links">
-        <li className="sidebar-item">
-          <SvgIcon iconName="sidebar_favorites" />
-          <span
-            className="textInSidebar"
-            style={{ position: 'relative', right: 2 }}
-          >
-            Favorites
-          </span>
-        </li>
-      </ul>
-      <Divider className="divider" />
-      <ul className="sidebar-links">
-        <li
-          className={`sidebar-item ${
-            location.pathname.includes('/workspace/workspaces') ? 'active' : ''
-          }`}
-        >
-          <SvgIcon iconName={'sidebar_workspaces'} />
-          <span className="textInSidebar">Workspaces</span>
-        </li>
-      </ul>
-      {/* Workspace Section */}
-      <div className="workspace-section">
-        <ul className="workspace-links">
-          {/*obj looks like this {id: XXX , title: YYY} */}
-          {allBoardsTitle.map((obj) => {
-            return (
-              <div
-                key={obj.id}
-                onClick={() => {
-                  navigate(`/workspace/board/${obj.id}`);
-                  window.location.reload(); // Forces a refresh
+      <div>
+        <ul className="sidebar-links">
+          <Link to="/workspace" style={{ all: 'unset' }}>
+            <li
+              className={`sidebar-item ${
+                location.pathname === '/workspace' ? 'active' : ''
+              }`}
+            >
+              <IconVibe
+                icon={Home}
+                style={{
+                  height: '18px',
+                  width: '18px',
                 }}
-              >
-                <li
-                  className={`workspace-item ${
-                    boardId === obj.id ? 'active' : ''
-                  }`}
-                >
-                  <SvgIcon iconName={'sidebar_workspace_projectIcon'} />
-                  <span className="textInSidebar">{obj.title}</span>
-                  <Button
-                    id="basic-button"
-                    aria-controls={open ? 'basic-menu' : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={open ? 'true' : undefined}
-                    onClick={(event) => {event.preventDefault(); event.stopPropagation();}}
-                    sx={{
-                      color: 'rgb(50, 51, 56)',
-                      padding: 0,
-                      minWidth: '0px',
-                      marginLeft: 'auto',
-                      color: 'transparent',
-                      '&:hover': {
-                        color: '#323338',
-                      },
-                    }}
-                  >
-                    <MoreHorizIcon
-                      className="more-actions-icon"
-                      sx={{
-                        height: '20px',
-                        width: '20px',
-                      }}
-                      onClick={handleClick}
-                    />
-                  </Button>
-                  <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleMenuClose}
-                    MenuListProps={{
-                      'aria-labelledby': 'basic-button',
-                    }}
-                  >
-                    <MenuItem
-                      onClick={(event) => {
-                        event.preventDefault(); 
-                        event.stopPropagation(); 
-                        handleRemoveBoard(obj.id);
-                      }}
-                    >
-                      Remove Board
-                    </MenuItem>
-                  </Menu>
-                </li>
-              </div>
-            );
-          })}
+                className="sidebar_home"
+              />{' '}
+              <span className="textInSidebar">Home</span>
+            </li>
+          </Link>
         </ul>
       </div>
       <Divider className="divider" />
-      <ul className="sidebar-links">
-        <li className="sidebar-item">
-          <ButtonGroup 
-          onClick={(event)=> event.preventDefault() }
-          variant="contained" 
-          className="new-board-buttons"
-          sx={{
-            width: '100%',
-            height: '100%',
-            p: 0,
-            gap: 0,
-          }}
-          >
-            <Button 
-            onClick={onAddBoard} 
-            className="add-board-button"
-            style={{
-              width: '100%',
-              height: '100%',
-            }}
+      <div>
+        <ul className="sidebar-links">
+          <li className="sidebar-item">
+            <SvgIcon iconName="sidebar_favorites" />
+            <span
+              className="textInSidebar"
+              style={{ position: 'relative', right: 2 }}
             >
-              Add New Board
-            </Button>
-            <DropdownMenu.Root>
-              <DropdownMenu.Trigger asChild>
-                <Button className="dropdown-button"
-                
-                >
-                  <SvgIcon
-                    className="add-item"
-                    iconName="sidebar_add_item"
-                    options={{
-                      height: 22,
-                      width: 22,
-                      color: '#ffff',
-                      position: 'fixed',
-                    }}
-                  />
-                </Button>
-              </DropdownMenu.Trigger>
-            </DropdownMenu.Root>
-          </ButtonGroup>
-        </li>
-      </ul>
+              {/* <IconVibe icon= {Favorite}
+             style={{
+              height: '20px',
+              width: '19px',
+            }}
+            className="sidebar_favorites" /> */}
+              Favorites
+            </span>
+          </li>
+        </ul>
+      </div>
+      <Divider className="divider" />
+      <div>
+        <ul className="sidebar-links">
+          <li
+            className={`sidebar-item ${
+              location.pathname.includes('/workspace/workspaces')
+                ? 'active'
+                : ''
+            }`}
+          >
+            <IconVibe
+              icon={Workspace}
+              style={{
+                height: '18px',
+                width: '18px',
+              }}
+              className="sidebar_workspaces"
+            />
+            <span className="textInSidebar">Workspaces</span>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <ul className="main-workspace">
+          <ButtonVibe
+            size={ButtonVibe.sizes.SMALL}
+            className="main-workspace-button"
+            kind={ButtonVibe.kinds.TERTIARY}
+            style={{
+              width: '110%',
+              border: '1px solid #d0d4e4',
+            }}
+          >
+            <AvatarVibe
+              size="xs"
+              type="text"
+              className="board-avatar-icon"
+              text={'M'}
+              backgroundColor={'#fdab3d'}
+              bottomRightBadgeProps={{
+                icon: Home,
+                height: '14px',
+                width: '14px',
+                fill: 'black',
+                size: 'medium',
+                className: 'little-home-icon',
+              }}
+              square
+            />
+            <span
+              className="workspace-name"
+              style={{
+                marginLeft: '3px',
+                textOverflow: 'clip',
+                fontWeight: 'bold',
+              }}
+            >
+              {'Main workspace'}
+            </span>
+          </ButtonVibe>
+
+          <IconButtonVibe
+            className="add-board-button"
+            size={ButtonVibe.sizes.SMALL}
+            kind={ButtonVibe.kinds.PRIMARY}
+            ariaLabel="Add Board"
+            icon={AddIcon}
+            aria-disabled="false"
+            style={{
+              marginLeft: '8px',
+              backgroundColor: '#0073ea',
+              color: '#ffffff',
+            }}
+            onClick={onAddBoard}
+          />
+        </ul>
+      </div>
+      <div className="workspace-section">
+        <ul className="workspace-links">
+          {allBoardsTitle.map((obj) => (
+            <div
+              key={obj.id}
+              onClick={(event) => {
+                if (event.target.closest('.menu-button')) return; // Ignore clicks on the menu
+
+                // Get the latest board list from the `allBoardsTitle` state (ensures it's fresh)
+                const boardExists = allBoardsTitle.some(
+                  (board) => board.id === obj.id
+                );
+
+                // ✅ If the board exists, navigate to it
+                if (boardExists) {
+                  navigate(`/workspace/board/${obj.id}`);
+                }
+              }}
+            >
+              <li
+                className={`workspace-item ${
+                  boardId === obj.id ? 'active' : ''
+                }`}
+              >
+                <IconVibe
+                  icon={Board}
+                  style={{ color: '#676879', height: '20px', width: '19px' }}
+                  className="sidebar_board"
+                />
+
+                <span className="textInSidebar">{obj.title}</span>
+
+                <div className="menu-container">
+                  <MenuButtonVibe
+                    className="menu-button"
+                    onClick={(event) => handleMenuClick(event, obj.id)}
+                    size="xs"
+                  >
+                    <MenuVibe
+                      anchorEl={menuAnchor}
+                      open={Boolean(menuAnchor)}
+                      onClose={handleMenuClose}
+                      size="medium"
+                    >
+                      <MenuItemVibe
+                        icon={Delete}
+                        onClick={handleDelete}
+                        title="Remove Board"
+                      />
+                    </MenuVibe>
+                  </MenuButtonVibe>
+                </div>
+              </li>
+            </div>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

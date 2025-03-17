@@ -2,91 +2,180 @@
 .sidebar {
   display: flex;
   flex-direction: column;
-  border-radius: 0px 8px;
+  border-radius: 12px 0px 0px 0px;
   height: calc(100vh - 60px); // 60 is the height of the navbar
-  background: linear-gradient(to bottom, #ffffff 0%, #eceff8 100%);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(236, 239, 248, 0.7) 70%, rgba(236, 239, 248, 0) 100%), 
+              linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(236, 239, 248, 0) 100%);
   font-size: 14px;
   width: 100%;
+  box-shadow: rgb(236, 239, 248) -5px -20px 20px 0px inset;
 }
 
 .sidebar-links,
 .workspace-section {
+  width: auto;
+  height: auto;
+  margin: 6px 5px 5px 0px;
+  align-items: center;
 }
+
+
+.active {
+  position: relative; // Keeps the title above the background
+  border-radius: 4px;
+  box-shadow: none;
+  overflow: hidden;
+  z-index: 1; // Ensures it stays above the background
+}
+
+.active::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 13px; /* Moves only the background */
+  width: calc(100% - 13px);
+  height: 100%;
+  background-color: #cce5ff;
+  border-radius: 4px;
+  z-index: -1; /* Ensures the background stays behind text */
+}
+
+/* Ensures text remains visible */
+.textInSidebar {
+  position: relative; /* Keeps text above the background */
+  z-index: 2; /* Higher than the background */
+}
+
 
 .divider {
   height: 1px;
   background-color: #d0d4e4;
 }
 
-.li {
-  width: 100%;
-  // padding: 0;
-  // gap: 0;
-}
-
-.sidebar-item,
-.workspace-item {
+.sidebar-item {
+  width: auto;
+  height: 32px;
   display: flex;
   gap: 5px;
-  padding: 12px 18px; // Padding items and not container so divider line could span across the whole container
+  padding: 6px 6px 12px 18px; // Padding items and not container so divider line could span across the whole container
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+.workspace-item {
+  position: relative; // Ensures the menu is positioned inside
+  display: flex;
+  align-items: center;
+  padding: 6px 18px; // Keeps spacing consistent
+  gap: 8px; // Adds correct spacing between the icon and title
 
-.sidebar-item:hover,
-.workspace-item:hover {
+  &:hover {
+    box-shadow: none;
+    background-color: rgba(#676879, 0.1);
+  }
+}
+
+
+.menu-container {
+  position: absolute;
+  right: 10px; // Keeps the menu aligned to the right
+  opacity: 0; // Hides it by default
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+}
+
+.workspace-item:hover .menu-container {
+  opacity: 1; // Shows the menu on hover
+  visibility: visible;
+}
+
+.sidebar-item:hover {
   background-color: rgba(#676879, 0.1);
+  width: auto;
+  height: 32px;
 }
 
-.active {
-  background-color: #cce5ff !important; // The important is here so when hovering it wont override this and make sure bg remains blue on hover
-  border-radius: 4px;
-}
-
-.textInSidebar {
-  align-content: center;
-}
 
 // ___ ICONS ___
-.sidebar_workspace_projectIcon {
+.sidebar_board {
   position: relative;
-  top: 2px;
+  bottom: 1px;
+  
 }
 .sidebar_workspaces {
   position: relative;
-  top: 2px;
-}
-.sidebar_myWork {
-  position: relative;
-  top: 1.5px;
+  bottom: 1px;
 }
 .sidebar_home {
   position: relative;
-  top: 3.5px;
+  bottom: 1px;
+}
+.sidebar_favorites {
+  position: relative;
+  //top: 1px;
+  bottom: 3px;
+  margin-right: 0px;
+}
+
+
+
+.main-workspace {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  width: 100%;
+  border-radius: 4px;
+  margin: 2px;
+  padding: 3px 4px 3px 3px;
+}
+.main-workspace-button {
+  display: flex;
+  margin: 0px 4px;
+  padding: 0px 0px 0px 1px;
+  text-align: left;
+  justify-content: start;
+  box-sizing: border-box;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 15px;
+  height: 32px;
+  width: 140px;
+}
+
+.border-avatar-icon {
+  
+}
+
+.border-avatar-icon .Avatar-text {
+  font-size: 14px !important;
+  font-weight: bold !important;
+}
+
+.add-board-button {
+  height: 32px;
+  width: 32px;
+  text-align: center;
+  border-radius: 4px;
+  flex: 1;
+  background-color: transparent;
+  color: vars.$color-snow_white;
+  text-transform: none;
+
+  font-weight: vars.$font-weight-very-light;
+  font-size: vars.$font-size-10;
+  box-shadow: none;
+  position: relative;
+
+  &:hover {
+    box-shadow: none;
+    background-color: rgba(#676879, 0.1);
+  }
 }
 
 .new-board-buttons {
   // display: flex;
   // width: 274px;
   // height: 100%;
-
-  .add-board-button {
-    flex: 1;
-    background-color: transparent;
-    color: vars.$color-mud_black;
-    text-transform: none;
-    padding: 4px 10px 4px 10px;
-    font-weight: vars.$font-weight-very-light;
-    font-size: vars.$font-size-10;
-    box-shadow: none;
-    position: relative;
-    padding-left: 16px;
-
-    &:hover {
-      box-shadow: none;
-      background-color: rgba(#676879, 0.1);
-    }
-  }
 
   .dropdown-button {
     flex: 1;

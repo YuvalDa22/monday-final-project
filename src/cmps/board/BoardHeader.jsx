@@ -3,14 +3,22 @@ import { AdditionalBoardActions } from './AdditionalBoardActions'
 import { BoardActionsBar } from './BoardActionsBar'
 import { BoardNavBar } from './BoardNavBar'
 import Input from '@mui/joy/Input'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { updateBoard, logActivity } from '../../store/board/board.actions'
+import { use } from 'react'
+import { set } from 'date-fns'
 
 
 // Note : We can ignore the props validation error for now
 export function BoardHeader({ board, onAddGroup, onAddTask ,filterBy, onSetFilterBy}) {
   const [isEditingBoardTitle, setIsEditingBoardTitle] = useState(false)
   const [boardTempTitle, setBoardTempTitle] = useState(board?.title || '')
+
+
+  //Change temp title when board changes
+  useEffect(() => {
+    setBoardTempTitle(board?.title || '')  
+  }, [board])
 
   const handleBoardTitleSave = () => {
     if (boardTempTitle.trim() && boardTempTitle !== board?.title) {
@@ -40,6 +48,7 @@ export function BoardHeader({ board, onAddGroup, onAddTask ,filterBy, onSetFilte
     context.font = font
     return context.measureText(text).width // Returns width in pixels
   }
+
 
   return (
     <div className='boardHeader_main-container'>

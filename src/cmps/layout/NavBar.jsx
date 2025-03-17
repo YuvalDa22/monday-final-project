@@ -14,7 +14,8 @@ const NavBar = () => {
     <nav className='navbar'>
       {/* Logo */}
       <div className='navbar-logo'>
-        <img src='./icon.svg' alt='Logo' />
+        <img src='./icon.svg' alt='Logo'/>
+      
         <span className='navBar-company-name'>monday</span>
         <span className='navBar-logo-title'>work management</span>
       </div>
