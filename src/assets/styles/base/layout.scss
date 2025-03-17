@@ -1,8 +1,9 @@
 .app-container {
 	display: grid;
-	grid-template-columns: 210px 1fr; // Sidebar
+	grid-template-columns: 228px 1fr; // Sidebar
 	grid-template-rows: 50px 1fr; // Navbar
-	gap: 0px 12px;
+	margin: 0px 0px 0px 12px;
+	gap: 0px 4px;
 	grid-template-areas:
 		'navbar navbar'
 		'sidebar main-container';

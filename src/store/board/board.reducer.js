@@ -72,10 +72,10 @@ export function boardReducer(state = initialState, cmd) {
 		case UPDATE_BOARD:
 			return {
 				...state,
-				boards: state.boards.map((board) =>
-					board._id === cmd.board._id ? { ...cmd.board } : board
-				),
-			}
+				boards: state.boards.map((board) => {
+					return board._id === cmd.board._id ? { ...cmd.board } : board;
+				}),
+			};
 
 		case SET_FILTER_BY:
 			return {
