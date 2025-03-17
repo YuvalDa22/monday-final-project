@@ -55,10 +55,18 @@ export function DatePicker({ info, onUpdate }) {
     setIsOpen(false);
   };
 
+  //TODO : Make + icon of 'date-picker-add-icon' bigger
+
   return (
     <div className="date-picker-container" ref={datePickerRef}>
       <div className="input-wrapper" onClick={() => setIsOpen(!isOpen)}>
-        <IconButton
+        {selectedDate ? (
+          <span className="date-picker-display">
+            {utilService.formatDate(selectedDate)}
+          </span>
+        ) : (
+          <div>
+              <IconButton
           size="xxs"
           className="date-picker-add-icon"
           kind="primary"
@@ -67,15 +75,12 @@ export function DatePicker({ info, onUpdate }) {
         >
           <AddSmall />
         </IconButton>
-        {selectedDate ? (
-          <span className="date-picker-display">
-            {utilService.formatDate(selectedDate)}
-          </span>
-        ) : (
           <SvgIcon
             iconName="calendar"
-            options={{ height: 20, width: 20, color: 'grey' }}
+            options={{ height: 20, width: 20, color: 'grey'}}
+            className="calendar-icon"
           />
+          </div>
         )}
       </div>
 
@@ -92,37 +97,3 @@ export function DatePicker({ info, onUpdate }) {
     </div>
   );
 }
-
-// <IconButton size="xxs" className="addMembersIcon rounded-btn custom" kind="primary" ariaLabel="Add Link" onClick={handleOpenDialog}>
-// <Add />
-// </IconButton>
-
-// .addMembers {
-//   border-radius: 50%;
-//   position: absolute;
-//   left: 8px;
-//   z-index: 9;
-//   justify-content: left;
-//   background-color: #0073ea;
-//   color: white;
-
-//   &:hover {
-//     background-color: color.adjust(#0073ea, $lightness: -10%) !important;
-//   }
-// }
-
-// .addMembersIcon {
-//   width: 16px;
-//   height: 16px;
-// }
-
-// .rounded-btn {
-//   border-radius: 50%;
-//   position: absolute;
-//   right: 0;
-//   z-index: 2;
-// }
-
-// .rounded-btn.custom {
-//   position: relative;
-// }

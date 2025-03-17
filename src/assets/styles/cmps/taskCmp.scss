@@ -96,18 +96,20 @@
 
 /* Date Classes */
 .date-picker-container {
-  width: 100%; //To allow triggering the add icon from each part of the container
+  width: 100%; // To allow triggering the add icon from any part of the container
   display: flex;
   align-items: center;
   position: relative;
   display: inline-block;
   font-family: vars.$font-family;
 
+  // Show Add Icon when hovering on the Date Picker container
   &:hover .date-picker-add-icon {
     opacity: 1;
     visibility: visible;
   }
 
+  // Initially hide the Add Icon
   .date-picker-add-icon {
     right: 130px;
     top: 50%;
@@ -117,32 +119,45 @@
     z-index: 2;
     background-color: vars.$color-basic_blue;
     color: white;
-    font-weight: 400 !important; 
-    
+    font-weight: 400 !important;
+
     opacity: 0; // Initially hidden
-    visibility: hidden; // Ensures it's not interactive when hidden
+    visibility: hidden;
     transition: opacity 0.1s ease-in-out, visibility 0.1s ease-in-out; // Smooth fade-in effect
+  }
+
+  // Initially hide the Calendar Icon (SvgIcon)
+  .calendar-icon {
+    opacity: 0;
+    visibility: hidden;
+    //transition: opacity 0.1s ease-in-out, visibility 0.1s ease-in-out !important;
   }
 }
 
-  .date-picker-dropdown {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-    padding: 1em;
-    background-color: white;
-    border-radius: 8px;
-    min-width: 20rem;
-  }
+// Make the Calendar Icon visible only when hovering on the cell
+td:hover .date-picker-container .calendar-icon {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.1s ease-in-out, visibility 0.1s ease-in-out !important;
+}
 
-  .custom-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px;
-    border-radius: 8px;
-  }
+.date-picker-dropdown {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  padding: 1em;
+  background-color: white;
+  border-radius: 8px;
+  min-width: 20rem;
+}
 
+.custom-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border-radius: 8px;
+}
