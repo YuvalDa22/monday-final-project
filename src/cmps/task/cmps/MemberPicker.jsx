@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
-import Select from 'react-select'
-import { getSvg } from '../../../services/util.service'
-import Avatar from '@mui/material/Avatar'
-import AvatarGroup from '@mui/material/AvatarGroup'
+import React, { useState, useEffect, useRef } from 'react';
+import Select from 'react-select';
+import { getSvg } from '../../../services/util.service';
+import Avatar from '@mui/material/Avatar';
+import AvatarGroup from '@mui/material/AvatarGroup';
+import { IconButton } from '@vibe/core';
+import { AddSmall } from '@vibe/icons';
 
 const SvgIcon = ({ iconName, options, className }) => {
   return (
@@ -10,26 +12,26 @@ const SvgIcon = ({ iconName, options, className }) => {
       dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}
       className={`svg-icon ${className || ''}`}
     ></i>
-  )
-}
+  );
+};
 
 export function MemberPicker({ info, onUpdate, board }) {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const dropdownRef = useRef(null)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   // Extract selected members for the dropdown
   const selectedMembers = info
     ?.map((memberId) => {
-      const member = board?.members?.find((member) => member._id === memberId)
-      return member ? { value: member._id, label: member.fullname } : null
+      const member = board?.members?.find((member) => member._id === memberId);
+      return member ? { value: member._id, label: member.fullname } : null;
     })
-    .filter(Boolean)
+    .filter(Boolean);
 
   const handleChange = (selected) => {
-    const selectedIds = selected.map((option) => option.value)
-    const selectedNames = selected.map((option) => option.label)
-    onUpdate({ id: selectedIds, title: selectedNames })
-  }
+    const selectedIds = selected.map((option) => option.value);
+    const selectedNames = selected.map((option) => option.label);
+    onUpdate({ id: selectedIds, title: selectedNames });
+  };
 
   const renderAvatars = () => (
     <AvatarGroup
@@ -44,20 +46,20 @@ export function MemberPicker({ info, onUpdate, board }) {
       }}
     >
       {info?.map((memberId) => {
-        const member = board?.members?.find((m) => m._id === memberId)
-        if (!member) return null
+        const member = board?.members?.find((m) => m._id === memberId);
+        if (!member) return null;
         return (
           <Avatar
-            className='member-avatar'
+            className="member-avatar"
             key={member._id}
             alt={member.fullname}
             src={member.imgUrl}
             sx={{ width: 32, height: 32 }}
           />
-        )
+        );
       })}
     </AvatarGroup>
-  )
+  );
 
   const groupedOptions = [
     {
@@ -66,75 +68,93 @@ export function MemberPicker({ info, onUpdate, board }) {
         board?.members?.map((member) => ({
           value: member._id,
           label: (
-            <div className='member-option'>
-              <img className='member-option-img' src={member.imgUrl} alt={member.fullname} />
+            <div className="member-option">
+              <img
+                className="member-option-img"
+                src={member.imgUrl}
+                alt={member.fullname}
+              />
               {member.fullname}
             </div>
           ),
         })) || [],
     },
-  ]
+  ];
 
   const customComponents = {
     // Customize Group rendering
     Group: (props) => (
-      <div className='custom-group'>
-        <div className='group-heading'>{props.children}</div>
+      <div className="custom-group">
+        <div className="group-heading">{props.children}</div>
       </div>
     ),
     // Customize Menu rendering
-    Menu: (props) => <div className='custom-menu'>{props.children}</div>,
+    Menu: (props) => <div className="custom-menu">{props.children}</div>,
     // Customize MenuList for additional wrapping styles
-    MenuList: (props) => <div className='custom-menu-list'>{props.children}</div>,
+    MenuList: (props) => (
+      <div className="custom-menu-list">{props.children}</div>
+    ),
     // Customize individual option rendering
     Option: (props) => (
-      <div {...props.innerRef} {...props.innerProps} className='custom-option'>
+      <div {...props.innerRef} {...props.innerProps} className="custom-option">
         {props.data.label}
       </div>
     ),
     MultiValueContainer: (props) => (
-      <div className='member-selected-name-container'>{props.children}</div>
+      <div className="member-selected-name-container">{props.children}</div>
     ),
     ClearIndicator: null,
     DropdownIndicator: null,
-  }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false)
+        setIsDropdownOpen(false);
       }
-    }
+    };
 
     if (isDropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
+      document.addEventListener('mousedown', handleClickOutside);
     } else {
-      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isDropdownOpen])
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDropdownOpen]);
 
   return (
-    <div className='member-picker' ref={dropdownRef}>
-      <div className='member-avatars' onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+    <div className="member-picker" ref={dropdownRef}>
+      <IconButton
+              size="xxs"
+              className="member-picker-add-icon"
+              kind="primary"
+              ariaLabel="Add Member"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              <AddSmall />
+            </IconButton>
+      <div
+        className="member-avatars"
+        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+      >
         {info?.length > 0 ? (
           renderAvatars()
         ) : (
           <img
-            src='https://cdn.monday.com/icons/dapulse-person-column.svg'
-            className='member-NO-avatar'
-            title=''
-            alt=''
-            aria-hidden='true'
+            src="https://cdn.monday.com/icons/dapulse-person-column.svg"
+            className="member-NO-avatar"
+            title=""
+            alt=""
+            aria-hidden="true"
           />
         )}
       </div>
 
       {isDropdownOpen && (
-        <div className='dropdown-container'>
+        <div className="dropdown-container">
           <Select
             options={groupedOptions}
             isMulti
@@ -162,5 +182,5 @@ export function MemberPicker({ info, onUpdate, board }) {
         </div>
       )}
     </div>
-  )
+  );
 }

@@ -27,12 +27,39 @@
 
 /* Members Classes */
 .member-picker {
+  width: 100%; 
   display: flex;
   justify-content: center;
+  align-items: center;
+  position: relative;
+ 
+  &:hover .member-picker-add-icon {
+    opacity: 1;
+    visibility: visible;
+  }
+
   .member-avatars {
+    top: 50%;
     height: 38px;
     align-content: center;
   }
+
+  .member-picker-add-icon {
+    right: 130px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    position: absolute;
+    z-index: 2;
+    background-color: vars.$color-basic_blue;
+    color: white;
+    font-weight: 400 !important;
+
+    opacity: 0; // Initially hidden
+    visibility: hidden;
+    transition: opacity 0.1s ease-in-out, visibility 0.1s ease-in-out; // Smooth fade-in effect
+  }
+
   .member-NO-avatar {
     display: flex;
     height: 32px;
