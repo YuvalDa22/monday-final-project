@@ -1,5 +1,4 @@
-
-@use "../setup/vars";
+@use '../setup/vars';
 
 /* Status and Priority Classes */
 .label-picker-cmp {
@@ -58,49 +57,73 @@
     min-width: 20rem;
     overflow-y: auto;
   }
-    .member-selected-name-container {
-      background-color: rgb(229, 244, 255);
-      border-radius: 20px;
-      white-space: nowrap;
-      margin: 3px;
+  .member-selected-name-container {
+    background-color: rgb(229, 244, 255);
+    border-radius: 20px;
+    white-space: nowrap;
+    margin: 3px;
+    display: flex;
+    align-items: center;
+  }
+
+  .custom-menu-list {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .custom-option {
+    transition: background-color 0.2s;
+    padding: 4px;
+    border-radius: 8px;
+
+    &:hover {
+      background-color: rgba(196, 196, 196, 0.2);
+    }
+
+    .member-option {
       display: flex;
       align-items: center;
-    }
 
-    .custom-menu-list {
-      max-height: 200px;
-      overflow-y: auto;
-    }
-
-    .custom-option {
-      transition: background-color 0.2s;
-      padding: 4px;
-      border-radius: 8px;
-
-      &:hover {
-        background-color: rgba(196, 196, 196, 0.2);
-      }
-
-      .member-option {
-        display: flex;
-        align-items: center;
-
-        .member-option-img {
-          border-radius: 50%;
-          width: 30px;
-          height: 30px;
-          margin-right: 10px;
-        }
+      .member-option-img {
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
       }
     }
   }
-
+}
 
 /* Date Classes */
 .date-picker-container {
+  width: 100%; //To allow triggering the add icon from each part of the container
+  display: flex;
+  align-items: center;
   position: relative;
   display: inline-block;
   font-family: vars.$font-family;
+
+  &:hover .date-picker-add-icon {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .date-picker-add-icon {
+    right: 130px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    position: absolute;
+    z-index: 2;
+    background-color: vars.$color-basic_blue;
+    color: white;
+    font-weight: 400 !important; 
+    
+    opacity: 0; // Initially hidden
+    visibility: hidden; // Ensures it's not interactive when hidden
+    transition: opacity 0.1s ease-in-out, visibility 0.1s ease-in-out; // Smooth fade-in effect
+  }
+}
 
   .date-picker-dropdown {
     position: absolute;
@@ -114,7 +137,6 @@
     border-radius: 8px;
     min-width: 20rem;
   }
-  
 
   .custom-header {
     display: flex;
@@ -123,4 +145,4 @@
     padding: 8px;
     border-radius: 8px;
   }
-}
+
