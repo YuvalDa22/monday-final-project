@@ -144,7 +144,11 @@ export function GroupPreview({
   }
 
   const handleAddItem = () => {
-    onAddTask(group, newItemTempTitle, false)
+    if (!newItemTempTitle.trim()){ // if the title is empty, add a default title
+      onAddTask(group, 'New Task', false)
+    } else{
+      onAddTask(group, newItemTempTitle, false)
+    }
     setNewItemTempTitle('')
   }
 

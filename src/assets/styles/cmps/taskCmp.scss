@@ -1,5 +1,4 @@
-
-@use "../setup/vars";
+@use '../setup/vars';
 
 /* Status and Priority Classes */
 .label-picker-cmp {
@@ -28,12 +27,39 @@
 
 /* Members Classes */
 .member-picker {
+  width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
+  position: relative;
+
+  &:hover .member-picker-add-icon {
+    opacity: 1;
+    visibility: visible;
+  }
+
   .member-avatars {
+    top: 50%;
     height: 38px;
     align-content: center;
   }
+
+  .member-picker-add-icon {
+    right: 130px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    position: absolute;
+    z-index: 2;
+    background-color: vars.$color-basic_blue;
+    color: white;
+    font-weight: 400 !important;
+
+    opacity: 0; // Initially hidden
+    visibility: hidden;
+    transition: opacity 0.1s ease-in-out, visibility 0.1s ease-in-out; // Smooth fade-in effect
+  }
+
   .member-NO-avatar {
     display: flex;
     height: 32px;
@@ -49,7 +75,7 @@
     width: 28px;
     margin: 10px auto;
     position: absolute;
-    top: 50%;
+    top: 90%;
     z-index: 10;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     padding: 1em;
@@ -58,69 +84,131 @@
     min-width: 20rem;
     overflow-y: auto;
   }
-    .member-selected-name-container {
-      background-color: rgb(229, 244, 255);
-      border-radius: 20px;
-      white-space: nowrap;
-      margin: 3px;
+  .member-selected-name-container {
+    background-color: rgb(229, 244, 255);
+    border-radius: 20px;
+    white-space: nowrap;
+    margin: 3px;
+    display: flex;
+    align-items: center;
+  }
+
+  .custom-menu-list {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .custom-option {
+    transition: background-color 0.2s;
+    padding: 4px;
+    border-radius: 8px;
+
+    &:hover {
+      background-color: rgba(196, 196, 196, 0.2);
+    }
+
+    .member-option {
       display: flex;
       align-items: center;
-    }
 
-    .custom-menu-list {
-      max-height: 200px;
-      overflow-y: auto;
-    }
-
-    .custom-option {
-      transition: background-color 0.2s;
-      padding: 4px;
-      border-radius: 8px;
-
-      &:hover {
-        background-color: rgba(196, 196, 196, 0.2);
-      }
-
-      .member-option {
-        display: flex;
-        align-items: center;
-
-        .member-option-img {
-          border-radius: 50%;
-          width: 30px;
-          height: 30px;
-          margin-right: 10px;
-        }
+      .member-option-img {
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
       }
     }
   }
-
+}
 
 /* Date Classes */
 .date-picker-container {
+  width: 100%; // To allow triggering the add icon from any part of the container
+  display: flex;
+  align-items: center;
   position: relative;
   display: inline-block;
   font-family: vars.$font-family;
 
-  .date-picker-dropdown {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-    padding: 1em;
-    background-color: white;
-    border-radius: 8px;
-    min-width: 20rem;
+  // Show Add Icon when hovering on the Date Picker container
+  &:hover .date-picker-add-icon {
+    opacity: 1;
+    visibility: visible;
   }
-  
 
-  .custom-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px;
-    border-radius: 8px;
+  // Initially hide the Add Icon
+  .date-picker-add-icon {
+    right: 130px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    position: absolute;
+    z-index: 2;
+    background-color: vars.$color-basic_blue;
+    color: white;
+    font-weight: 400 !important;
+
+    opacity: 0; // Initially hidden
+    visibility: hidden;
+    transition: opacity 0.1s ease-in-out, visibility 0.1s ease-in-out; // Smooth fade-in effect
+  }
+
+  // Initially hide the Calendar Icon (SvgIcon)
+  .calendar-icon {
+    opacity: 0;
+    visibility: hidden;
+    //transition: opacity 0.1s ease-in-out, visibility 0.1s ease-in-out !important;
   }
 }
+
+// Make the Calendar Icon visible only when hovering on the cell
+td:hover .date-picker-container .calendar-icon {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.1s ease-in-out, visibility 0.1s ease-in-out !important;
+}
+
+.date-picker-dropdown {
+  position: absolute;
+  top: 180%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  padding: 1em;
+  background-color: white;
+  border-radius: 8px;
+  max-width: 308px !important;
+  max-height: 360px !important;
+}
+
+.custom-vibe-datepicker {
+  font-size: 14px !important;
+  position: relative !important;
+  width: 295px !important;
+  height: 375px !important;
+  right: 16px !important;
+  align-items: center !important;  
+}
+
+.custom-vibe-datepicker * {
+  margin: 0 !important;
+  font-size: 14px !important;
+  max-width: 308px !important;
+  max-height: 385px !important; 
+}
+
+.custom-vibe-datepicker 
+.vibe-datepicker-container {
+  font-size: 14px !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+}
+
+
+// .custom-DayPicker_weekHeader_ul 
+// .custom-DayPicker_weekHeader_ul_1
+// {
+// background-color: pink !important;
+// }
