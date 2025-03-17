@@ -80,7 +80,9 @@ export function MenuFromTheRight() {
 							<div className='activity_log-header'>
 								Task : {getTaskById(taskId)?.title || taskNameRef.current}
 							</div>
+							<div>
 								<TaskDetails_NavBar taskId={taskId} board={board} user={user} groupId={groupId} />
+							</div>
 						</>
 					)}
 				</div>

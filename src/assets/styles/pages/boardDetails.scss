@@ -29,8 +29,9 @@
   }
 
 
-  overflow-y: hidden; /* Always show scrollbar */
-  scrollbar-width: none; /* For Firefox */
+  overflow-y:scroll; /* Always show scrollbar */
+  scrollbar-width:thin; /* For Firefox */
+  scrollbar-gutter: auto; /* Fallback for unsupported browsers */
   scrollbar-gutter: stable both-edges; /* Modern browsers */
 }
 .add-group-button-container {

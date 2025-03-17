@@ -1,66 +1,49 @@
-@use '../setup/vars';
-
-
-
-.updates-tab {
-	height: calc(100vh - 180px);
+.chat-body {
+	height: calc(100vh - 170px);
 	overflow-y: auto;
+	display: flex;
+	justify-content: center;
+	padding: 20px;
+
 	&::-webkit-scrollbar {
 		width: 8px;
 	}
 	&::-webkit-scrollbar-thumb {
-		background: #a2a2a2cb;
-		// border-radius: 5px;
+		background: #b2b2b2;
 	}
-}
-.chat-body {
-	display: flex;
-	justify-content: center;
-
 }
 
 .create-comment {
 	margin-top: 10px;
 	display: flex;
 	flex-direction: column;
-	border: solid #0073ea 1px;
+	// border: solid #0073ea 1px;
 	border-radius: 8px;
-	padding: 8px;
+	padding: 15px;
 	.create-comment-editor {
 		.ql-toolbar {
-			width: 100%;
 			border-radius: 8px 8px 0 0;
-			display: flex;
-			justify-content: space-evenly;
-			border: none;
-			padding: 0;
 		}
-
 		.ql-container {
 			border-radius: 0 0 8px 8px;
 			font-size: 15px;
-			padding: 0 10px;
+			padding: 10px;
 			background-color: #ffffff;
-			min-height: 110px;
-			border: none;
-			
+			min-height: 150px;
 		}
 	}
 
 	.create-comment-btn {
 		cursor: pointer;
 		font-size: 14px;
-		width: 47px;
-		height: 32px;
+		width: 80px;
+		height: 35px;
 		align-self: flex-end;
 		background-color: #0073ea;
-		color: rgba(255, 255, 255, 0.909);
-		font-weight: vars.$font-weight-light;
+		color: white;
 		border: none;
 		border-radius: 4px;
-		margin-top: 0;
-		-webkit-font-smoothing: antialiased;
-  		font-family: Figtree, Roboto, sans-serif;
+		margin-top: 10px;
 
 		&:hover {
 			background-color: #005bb5;
@@ -70,10 +53,13 @@
 
 .create-comment-blur {
 	cursor: text;
+	border: solid #0073ea 1px;
 	border-radius: 8px;
-	height: 90px;
-
+	height: 150px;
+	display: flex;
+	align-items: center;
 	border: 1px solid #c3c6d4;
+	background-color: #81d89e;
 
 	.placeholder {
 		font-size: 1em;
@@ -82,7 +68,7 @@
 	}
 
 	&:hover {
-		background-color: #c3c6d43d;
+		background-color: #eaf1fb;
 	}
 }
 .chat-inner-body {
@@ -107,7 +93,7 @@
 				padding-bottom: 10px;
 				gap: 10px;
 
-				.fullname {
+				.username {
 					font-weight: bold;
 					color: #333333;
 					font-size: 0.9em;
@@ -127,14 +113,10 @@
 			}
 
 			.comment-text {
-				padding-left: 10px;
+				margin-left: 50px;
 				font-size: 0.9em;
 				color: #4a4a4a;
 				line-height: 1.5;
-
-				li {
-					margin-left: 15px;
-				}
 			}
 		}
 	}

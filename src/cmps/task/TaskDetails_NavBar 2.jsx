@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
@@ -41,16 +41,20 @@ const SvgIcon = ({ iconName, options }) => {
 
 export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 	const [value, setValue] = useState('1')
-	const [updates, setUpdates] = useState(null)
+	const [updates, setUpdates] = useState([])
 	const [tabs, setTabs] = useState([
-		{ value: '1', label: 'Updates' },
+		{ value: '1', label: 'Updates / 1' },
 		{ value: '2', label: 'Files' },
 		{ value: '3', label: 'Activity Log' },
 	])
 	// For the comments in 'Update' tab
+	const [inputValue, setInputValue] = useState('')
 	const [newComment, setNewComment] = useState('')
 	const [editNewComment, setEditNewComment] = useState(false)
-	const quillRef = useRef(null)
+
+	const handleInputChange = (event) => {
+		setInputValue(event.target.value)
+	}
 
 	useEffect(() => {
 		onSetUpdates()
@@ -76,7 +80,12 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 			const update = boardService.getNewUpdate(newComment, user)
 			const newUpdates = [...updates, update]
 			setUpdates(newUpdates)
-			await updateBoard(groupId, taskId, { key: 'updates', value: newUpdates }, { action: 'taskUpdateAdded' })
+			await updateBoard(
+				groupId,
+				taskId,
+				{ key: 'updates', value: newUpdates },
+				{ action: 'taskUpdateAdded' }
+			)
 			showSuccessMsg('Update added successfully')
 			setNewComment('')
 			setEditNewComment(false)
@@ -89,22 +98,6 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 	useEffect(() => {
 		onLoadBoard()
 	}, [updates])
-
-	  useEffect(() => {
-		const handleClickOutside = (event) => {
-		  if (quillRef.current && !quillRef.current.contains(event.target)) {
-			setEditNewComment(false);
-		  }
-		};
-	
-		if (editNewComment) {
-		  document.addEventListener("mousedown", handleClickOutside);
-		}
-	
-		return () => {
-		  document.removeEventListener("mousedown", handleClickOutside);
-		};
-	  }, [editNewComment]);
 
 	async function onLoadBoard() {
 		try {
@@ -120,56 +113,75 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 		setValue(newValue)
 	}
 
-	// // Handle adding new tabs
-	// const handleAddTab = () => {
-	// 	setTabs((prev) => {
-	// 		const nextValue = prev.length + 1
-	// 		const nextLabel = `Item ${prev.length + 1}`
-	// 		return [...prev, { value: nextValue, label: nextLabel }]
-	// 	})
-	// }
+	// Handle adding new tabs
+	const handleAddTab = () => {
+		setTabs((prev) => {
+			const nextValue = prev.length + 1
+			const nextLabel = `Item ${prev.length + 1}`
+			return [...prev, { value: nextValue, label: nextLabel }]
+		})
+	}
 
 	return (
-		<TabContext value={value} 				>
-
+		<TabContext value={value}>
+			<Box
+				sx={{
+					width: '100%',
+					borderBottom: '1px solid rgb(174, 174, 174)',
+					display: 'flex',
+				}}>
+				<Box sx={{ display: 'flex', alignItems: 'center', marginBottom: -1 }}>
 					<Tabs
 						value={value}
 						onChange={handleChange}
 						aria-label='tabs'
 						variant='scrollable'
-						sx={{
-							borderBottom: '1px solid rgb(174, 174, 174)',
+						TabIndicatorProps={{
+							sx: {
+								height: '2px',
+								backgroundColor: '#1976d2',
+								bottom: 8,
+							},
 						}}>
 						{tabs.map((tab, index) => (
 							<Tab
 								key={index}
 								value={tab.value}
+								label={
+									<Box
+										sx={{
+											display: 'flex',
+											alignItems: 'center',
+											gap: '3px',
+											opacity: 0.8,
+										}}>
+										{/* the icon for the first tab */}
+										{tab.value === '1' && <SvgIcon iconName={'sidebar_home'} />}
+										{tab.label}
+										{/* show menu if tab selected */}
+										{value === tab.value && <ThreeDotsMenu />}
+									</Box>
+								}
 								sx={{
-									opacity: 0.8,
 									textTransform: 'none',
-									padding: '0 12px',
+									padding: '4px 12px',
+									minHeight: '32px',
+
 									'&:hover': {
 										backgroundColor: '#eaeefb',
 										borderRadius: '5px',
 									},
 								}}
-								label={
-									<Box sx={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-										{/* the icon for the first tab */}
-										{tab.value === '1' && <SvgIcon iconName={'sidebar_home'} />}
-										{tab.label}
-										{/* show menu if tab selected */}
-										{value === tab.value}
-									</Box>
-								}
 							/>
 						))}
 					</Tabs>
+				</Box>
+			</Box>
 
-			<TabPanel value='1' className='updates-tab'>
+			<TabPanel value='1'>
 				{/* ReactQuill Editor */}
 				{editNewComment ? (
-					<div className='create-comment' ref={quillRef}>
+					<div className='create-comment'>
 						<ReactQuill
 							className='create-comment-editor'
 							value={newComment}
@@ -177,17 +189,14 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 							theme='snow'
 							modules={{
 								toolbar: [
-									[{ size: ['small', false, 'large', 'huge'] }],
-									['bold'],
-									['italic'],
-									['underline'],
-									['strike'],
-									[{ color: [] }],
-									[{ list: 'ordered' }],
-									[{ list: 'bullet' }],
-									['link'],
-									[{ align: [] }],
-									[{ direction: 'rtl' }],
+									[{ size: ['small', false, 'large', 'huge'] }], // Font Size
+									['bold', 'italic', 'underline', 'strike'], // Bold, Italic, Underline, Strikethrough
+									[{ color: [] }], // Font Color
+									[{ list: 'ordered' }, { list: 'bullet' }], // Ordered & Bullet List
+									['link'], // Link
+									[{ align: [] }], // Alignment (Left, Center, Right, Justify)
+									[{ direction: 'rtl' }], // Text Direction (RTL/LTR)
+									['clean'], // Remove Formatting
 								],
 							}}
 							formats={[
@@ -202,6 +211,7 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 								'link',
 								'align',
 								'direction',
+								'clean',
 							]}
 						/>
 						<Button
@@ -209,13 +219,14 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 							color='primary'
 							className='create-comment-btn'
 							sx={{ textTransform: 'none', marginTop: '10px', padding: '5px 10px' }}
-							onClick={() => newComment.length ? handleAddUpdate() : {}}>
+							onClick={handleAddUpdate}>
 							Update
 						</Button>
 					</div>
 				) : (
 					<div
 						className='create-comment-blur'
+						style={{ minHeight: '150px' }}
 						onClick={() => setEditNewComment(true)}>
 						<p className='placeholder'>Write an update</p>
 					</div>
