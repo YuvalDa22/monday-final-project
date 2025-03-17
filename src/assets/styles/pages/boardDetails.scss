@@ -1,7 +1,6 @@
 .board-details-container {
   background-color: white;
   border-radius: 8px 0px 0px 0px;
-  // padding-left: 40px;
   height: 105%;
   overflow: hidden;
 }
@@ -14,7 +13,7 @@
   gap: 4em;
   margin-top: 28px;
   padding-left: 0;
-  height: 78vh;
+  height: 68vh;
 
   @media (max-width: 990px) {
     width: 75vw;
@@ -28,9 +27,8 @@
     width: 55vw;
   }
 
-
-  overflow-y: hidden; /* Always show scrollbar */
-  scrollbar-width: none; /* For Firefox */
+  overflow-y: auto; /* Always show scrollbar */
+  scrollbar-width: thin; /* For Firefox */
   scrollbar-gutter: stable both-edges; /* Modern browsers */
 }
 .add-group-button-container {

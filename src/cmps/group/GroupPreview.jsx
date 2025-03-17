@@ -124,10 +124,15 @@ export function GroupPreview({
   const handleSave = (task) => {
     if (existingItemTempTitle.trim() && existingItemTempTitle !== '') {
       // logActivity(group, task, task.title, 'taskNameChanged')
-      updateBoard(group.id, task.id, {
-        key: 'title',
-        value: existingItemTempTitle,
-      }, {action: 'taskNameChanged'})
+      updateBoard(
+        group.id,
+        task.id,
+        {
+          key: 'title',
+          value: existingItemTempTitle,
+        },
+        { action: 'taskNameChanged' }
+      )
     }
     handleCancel()
   }
@@ -171,10 +176,15 @@ export function GroupPreview({
       //   message: 'Group Name Changed',
       //   free_txt: `To '${groupTempTitle}'`,
       // })
-      updateBoard(group.id, null, {
-        key: 'title',
-        value: groupTempTitle,
-      }, {action: 'groupNameChanged'})
+      updateBoard(
+        group.id,
+        null,
+        {
+          key: 'title',
+          value: groupTempTitle,
+        },
+        { action: 'groupNameChanged' }
+      )
     } else setGroupTempTitle(group.title) // sync the state with actual group title incase first if failed
     setIsEditingGroupTitle(false)
     setIsPopoverOpen(false) // what is this
@@ -210,7 +220,7 @@ export function GroupPreview({
                   }}
                 />
               </div>
-              <div style={{ position: 'relative' }}>
+              <div className='group-name-container'>
                 {isEditingGroupTitle ? (
                   <Paper
                     component='form'
@@ -251,10 +261,15 @@ export function GroupPreview({
                               onChangeComplete={(color) => {
                                 // logActivity(board, group, null, group.style.color, 'groupColorChanged')
 
-                                updateBoard(group.id, null, {
-                                  key: 'style',
-                                  value: { color: color.hex },
-                                }, {action: 'groupColorChanged'})
+                                updateBoard(
+                                  group.id,
+                                  null,
+                                  {
+                                    key: 'style',
+                                    value: { color: color.hex },
+                                  },
+                                  { action: 'groupColorChanged' }
+                                )
                                 setIsPopoverOpen(false)
                                 handleGroupTitleSave()
                               }}
@@ -406,8 +421,9 @@ export function GroupPreview({
                                 <div
                                   className='ProgressBar_single_color'
                                   style={{
-                                    backgroundColor: board?.labels?.find((label) => label.id === key)
-                                      ?.color,
+                                    backgroundColor: board?.labels?.find(
+                                      (label) => label.id === key
+                                    )?.color,
                                     width: `${(value / totalAmountOfTasksWithStatus) * 100}%`,
                                   }}
                                 ></div>

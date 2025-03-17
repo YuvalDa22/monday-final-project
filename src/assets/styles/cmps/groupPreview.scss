@@ -1,4 +1,4 @@
-@use "../setup/vars";
+@use '../setup/vars';
 
 .gp-main-container {
   display: flex;
@@ -6,6 +6,7 @@
   gap: 10px;
   // padding: 0 20px;
   align-items: baseline;
+  position: relative;
 
   .gh-title-h4 {
     white-space: nowrap;
@@ -38,6 +39,7 @@
     background-color: var(--group-color);
     margin-left: 15px;
   }
+
   .gp-table {
     width: calc(100vw - 322px);
 
@@ -45,6 +47,16 @@
       border-collapse: separate;
       border-spacing: 0; /* Ensure spacing is minimal */
       text-align: center;
+
+      .header-row {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      th {
+        background: white;
+      }
 
       a {
         color: inherit; // this is so task titles wont be colored blue since they're now wrapped in a <Link> container which boils down to <a href> resulting in blue text
