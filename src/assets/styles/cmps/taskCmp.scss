@@ -27,12 +27,12 @@
 
 /* Members Classes */
 .member-picker {
-  width: 100%; 
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
- 
+
   &:hover .member-picker-add-icon {
     opacity: 1;
     visibility: visible;
@@ -75,7 +75,7 @@
     width: 28px;
     margin: 10px auto;
     position: absolute;
-    top: 50%;
+    top: 90%;
     z-index: 10;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     padding: 1em;
@@ -170,7 +170,7 @@ td:hover .date-picker-container .calendar-icon {
 
 .date-picker-dropdown {
   position: absolute;
-  top: 50%;
+  top: 180%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
@@ -178,13 +178,37 @@ td:hover .date-picker-container .calendar-icon {
   padding: 1em;
   background-color: white;
   border-radius: 8px;
-  min-width: 20rem;
+  max-width: 308px !important;
+  max-height: 360px !important;
 }
 
-.custom-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px;
-  border-radius: 8px;
+.custom-vibe-datepicker {
+  font-size: 14px !important;
+  position: relative !important;
+  width: 295px !important;
+  height: 375px !important;
+  right: 16px !important;
+  align-items: center !important;  
 }
+
+.custom-vibe-datepicker * {
+  margin: 0 !important;
+  font-size: 14px !important;
+  max-width: 308px !important;
+  max-height: 385px !important; 
+}
+
+.custom-vibe-datepicker 
+.vibe-datepicker-container {
+  font-size: 14px !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+}
+
+
+// .custom-DayPicker_weekHeader_ul 
+// .custom-DayPicker_weekHeader_ul_1
+// {
+// background-color: pink !important;
+// }

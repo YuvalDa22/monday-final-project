@@ -44,6 +44,7 @@ export function StatusCmp({ onUpdate, board, info }) {
     menu: (provided) => ({
       ...provided,
       width: '200px',
+      top: '90%',
       left: '50%',
       transform: 'translateX(-50%)',
       padding: '6px 0',

@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { DatePicker as VibeDatePicker } from '@vibe/core';
+import {
+  DatePicker as VibeDatePicker,
+  DialogContentContainer,
+} from '@vibe/core';
 import { Add, AddSmall } from '@vibe/icons';
 import { Icon, IconButton } from '@vibe/core';
 import { getSvg, utilService } from '../../../services/util.service';
@@ -66,33 +69,34 @@ export function DatePicker({ info, onUpdate }) {
           </span>
         ) : (
           <div>
-              <IconButton
-          size="xxs"
-          className="date-picker-add-icon"
-          kind="primary"
-          ariaLabel="Add Due Date"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <AddSmall />
-        </IconButton>
-          <SvgIcon
-            iconName="calendar"
-            options={{ height: 20, width: 20, color: 'grey'}}
-            className="calendar-icon"
-          />
+            <IconButton
+              size="xxs"
+              className="date-picker-add-icon"
+              kind="primary"
+              ariaLabel="Add Due Date"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              <AddSmall />
+            </IconButton>
+            <SvgIcon
+              iconName="calendar"
+              options={{ height: 20, width: 20, color: 'grey' }}
+              className="calendar-icon"
+            />
           </div>
         )}
       </div>
 
       {isOpen && (
-        <div className="date-picker-dropdown">
+        <DialogContentContainer className="date-picker-dropdown" type={DialogContentContainer.types.POPOVER}>
           <VibeDatePicker
+            className="custom-vibe-datepicker"
             value={selectedDate}
             onPickDate={handleDateChange}
             inline
             onClose={() => setIsOpen(false)}
           />
-        </div>
+        </DialogContentContainer>
       )}
     </div>
   );
