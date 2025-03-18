@@ -121,7 +121,7 @@ function getDefaultFilter() {
 	}
 }
 
-function getNewUpdate(text, user) {
+function createNewUpdate(text, user) {
 	return {
 		id: utilService.makeId(),
 		commenter: {
@@ -131,6 +131,7 @@ function getNewUpdate(text, user) {
 		},
 		text,
 		createdAt: utilService.formatDate(Date.now()),
+		replies: []
 	}
 }
 
@@ -249,7 +250,7 @@ export const boardService = {
 	getEmptyTask,
 	getDefaultFilter,
 	filterBoard,
-	getNewUpdate,
+	createNewUpdate,
 	groupColors,
 	...service,
 }

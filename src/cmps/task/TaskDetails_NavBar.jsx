@@ -4,11 +4,7 @@ import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import AddIcon from '@mui/icons-material/Add'
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import GridViewIcon from '@mui/icons-material/GridView'
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
-import Divider from '@mui/material/Divider'
 import Button from '@mui/material/Button'
 import { debounce, getSvg, utilService } from '../../services/util.service'
 import { TabContext, TabPanel } from '@mui/lab'
@@ -17,8 +13,7 @@ import Typography from '@mui/material/Typography'
 import ListIcon from '@mui/icons-material/List'
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined'
 import { ActivityLog } from './cmps/ActivityLog'
-import { getBoardById, getGroupByTaskId, updateBoard } from '../../store/board/board.actions'
-import { ThreeDotsMenu } from './ThreeDotsMenu'
+import { getBoardById, updateBoard } from '../../store/board/board.actions'
 import { boardService } from '../../services/board'
 import { showErrorMsg, showSuccessMsg } from '../../services/event-bus.service'
 import ReactQuill from 'react-quill'
@@ -39,8 +34,8 @@ const SvgIcon = ({ iconName, options }) => {
 	)
 }
 
-//TODO - CHANGE FROM SUBMIT INTO BUTTON ONCLICK WITH DEBOUNCE
-//TODO - ADD CLICKOUT TO CLOSE THE EDITING ON REPLIES
+//TODO - ADD CRUD FOR UPDATES
+//TODO - ADD CRUD FOR REPLIES
 
 export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 	const [value, setValue] = useState('1')
@@ -102,17 +97,7 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 		setNewComment('')
 		setEditNewComment(false)
 		try {
-			const update = {
-				id: utilService.makeId(), // Ensure unique ID for each update
-				commenter: {
-					id: user._id, // Use 'id' instead of '_id'
-					fullname: user.fullname,
-					imgUrl: user.imgUrl,
-				},
-				text: newComment,
-				createdAt: Date.now(), // Changed from sentAt to createdAt
-				replies: [],
-			}
+			const update = await boardService.createNewUpdate(newComment, user)
 			const updatedUpdates = [update, ...updates]
 			setUpdates(updatedUpdates)
 			await updateBoard(
@@ -124,8 +109,8 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 			socketService.emit('add-update', { taskId, updates: updatedUpdates })
 			showSuccessMsg('Update added successfully')
 		} catch (error) {
+			console.log('Failed to add update:', error)
 			showErrorMsg('Failed to add update')
-			console.error('Failed to add update:', error)
 		}
 	}
 
@@ -135,15 +120,9 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 
 	useEffect(() => {
 		const handleClickOutside = (event) => {
-			if (quillRef.current && !quillRef.current.contains(event.target)) {
-				setEditNewComment(false)
-			}
+			if (quillRef.current && !quillRef.current.contains(event.target)) setEditNewComment(false)
 		}
-
-		if (editNewComment) {
-			document.addEventListener('mousedown', handleClickOutside)
-		}
-
+		if (editNewComment) document.addEventListener('mousedown', handleClickOutside)
 		return () => {
 			document.removeEventListener('mousedown', handleClickOutside)
 		}
@@ -158,24 +137,83 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 		}
 	}
 
-	useEffect(() => {
-		if (updates) {
-			updateBoardData()
-		}
-	}, [updates])
+	// useEffect(() => {
+	// 	if (updates) {
+	// 		updateBoardData()
+	// 	}
+	// }, [updates])
 
-	async function updateBoardData() {
-		try {
-			await updateBoard(
-				groupId,
-				taskId,
-				{ key: 'updates', value: updates },
-				{ action: 'taskUpdateModified' }
+	// async function updateBoardData() {
+	// 	try {
+	// 		await updateBoard(
+	// 			groupId,
+	// 			taskId,
+	// 			{ key: 'updates', value: updates },
+	// 			{ action: 'taskUpdateModified' }
+	// 		)
+	// 		showSuccessMsg('Board updated successfully')
+	// 	} catch (error) {
+	// 		showErrorMsg('Failed to update board')
+	// 		console.error('Error in updateBoardData:', error)
+	// 	}
+	// }
+
+	useEffect(() => {
+		const handleClickOutsideComment = (event) => {
+			if (quillRef.current && !quillRef.current.contains(event.target)) {
+				setEditNewComment(false)
+			}
+		}
+		if (editNewComment) {
+			document.addEventListener('mousedown', handleClickOutsideComment)
+		}
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutsideComment)
+		}
+	}, [editNewComment])
+
+	useEffect(() => {
+		// Updated click-out for replies using DOM query similar to comment click-out
+		const handleClickOutsideReply = (event) => {
+			setNewReplies((prevReplies) =>
+				prevReplies.map((reply) => {
+					if (reply.isEditing) {
+						const replyElement = document.querySelector(`[data-reply-id="${reply.id}"]`)
+						if (replyElement && !replyElement.contains(event.target)) {
+							return { ...reply, isEditing: false }
+						}
+					}
+					return reply
+				})
 			)
-			showSuccessMsg('Board updated successfully')
-		} catch (error) {
-			showErrorMsg('Failed to update board')
-			console.error('Error in updateBoardData:', error)
+		}
+		if (newReplies.some((reply) => reply.isEditing)) {
+			document.addEventListener('mousedown', handleClickOutsideReply)
+		}
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutsideReply)
+		}
+	}, [newReplies])
+
+	useEffect(() => {
+		// Update the `ref` for replies after rendering
+		newReplies.forEach((reply) => {
+			if (reply.isEditing && !reply.ref) {
+				reply.ref = document.querySelector(`[data-reply-id="${reply.id}"]`)
+			}
+		})
+	}, [newReplies])
+
+	function handleNewReplyToEdit(commentId) {
+		if (!newReplies.find((reply) => reply.id === commentId)) {
+			setNewReplies((prevReplies) => [
+				...prevReplies,
+				{ id: commentId, text: '', isEditing: true, ref: null },
+			])
+		} else {
+			setNewReplies((prevReplies) =>
+				prevReplies.map((reply) => (reply.id === commentId ? { ...reply, isEditing: true } : reply))
+			)
 		}
 	}
 
@@ -194,7 +232,6 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 			prevReplies.map((reply) => (reply.id === commentId ? { ...reply, text: replyText } : reply))
 		)
 	}
-
 
 	function resetReplyState(commentId) {
 		setNewReplies((prevReplies) =>
@@ -225,7 +262,14 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 				: comment
 		)
 		setUpdates(updatedUpdates)
+		updateBoard(
+			groupId,
+			taskId,
+			{ key: 'updates', value: updatedUpdates },
+			{ action: 'taskReplyAdded' }
+		)
 		resetReplyState(commentId)
+
 		socketService.emit('add-reply', { taskId, updates: updatedUpdates })
 	}
 
@@ -376,7 +420,8 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 												{findNewReplyByComment(update)?.isEditing ? (
 													<form
 														className='create-reply'
-														onSubmit={(event) => handleReplySubmit(event, update.id)}>
+														onSubmit={(event) => handleReplySubmit(event, update.id)}
+														data-reply-id={update.id}>
 														<ReactQuill
 															className='textarea-quill'
 															value={findNewReplyByComment(update)?.text}

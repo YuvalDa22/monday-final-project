@@ -70,7 +70,6 @@ export function BoardDetails() {
 		}
 	
 		socketService.on('board-updated', (boardId) => {
-			console.log(`Board updated: ${boardId}`)
 			onLoadBoard()
 		})
 	

@@ -136,6 +136,9 @@ export function logActivity(board, group, task, prev, activity = {}) {
 			message = 'Update Added'
 			free_txt = `To Task: ${task?.title}`
 			break
+		case activity.action === 'taskReplyAdded':
+			message = 'Reply Added'
+			free_txt = `To Task: ${task?.title}`
 
 		default:
 			console.error('Action was not logged !!!')
