@@ -12,6 +12,10 @@ export function Updates({
 	handleReplySubmit,
 	handleNewReplyToEdit,
 }) {
+
+
+	//TODO - CHANGE FROM SUBMIT INTO BUTTON ONCLICK WITH DEBOUNCE
+	//TODO - ADD CLICKOUT TO CLOSE THE EDITING ON REPLIES
 	const [loading, setLoading] = useState(true)
 
 	// Handle loading state based on updates
@@ -133,7 +137,7 @@ export function Updates({
 										<div
 											className='create-reply-blur'
 											onClick={() => handleNewReplyToEdit(update.id)}>
-											<p className='placeholder'>Write a reply and mention others with @</p>
+											<p className='placeholder'>Write a reply</p>
 										</div>
 									)}
 								</div>
