@@ -10,7 +10,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Divider from '@mui/material/Divider'
 import Button from '@mui/material/Button'
-import { getSvg } from '../../services/util.service'
+import { debounce, getSvg, utilService } from '../../services/util.service'
 import { TabContext, TabPanel } from '@mui/lab'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
@@ -51,6 +51,7 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 	const [newComment, setNewComment] = useState('')
 	const [editNewComment, setEditNewComment] = useState(false)
 	const quillRef = useRef(null)
+	const [newReplies, setNewReplies] = useState([])
 
 	useEffect(() => {
 		onSetUpdates()
@@ -72,14 +73,29 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 	}
 
 	const handleAddUpdate = async () => {
+		setNewComment('')
+		setEditNewComment(false)
 		try {
-			const update = boardService.getNewUpdate(newComment, user)
-			const newUpdates = [...updates, update]
+			const update = {
+				id: utilService.makeId(), // Ensure unique ID for each update
+				commenter: {
+					id: user._id, // Use 'id' instead of '_id'
+					fullname: user.fullname,
+					imgUrl: user.imgUrl,
+				},
+				text: newComment,
+				createdAt: Date.now(), // Changed from sentAt to createdAt
+				replies: [],
+			}
+			const newUpdates = [update, ...updates]
 			setUpdates(newUpdates)
-			await updateBoard(groupId, taskId, { key: 'updates', value: newUpdates }, { action: 'taskUpdateAdded' })
+			await updateBoard(
+				groupId,
+				taskId,
+				{ key: 'updates', value: newUpdates },
+				{ action: 'taskUpdateAdded' }
+			)
 			showSuccessMsg('Update added successfully')
-			setNewComment('')
-			setEditNewComment(false)
 		} catch (error) {
 			showErrorMsg('Failed to add update')
 			console.error('Failed to add update:', error)
@@ -90,21 +106,21 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 		onLoadBoard()
 	}, [updates])
 
-	  useEffect(() => {
+	useEffect(() => {
 		const handleClickOutside = (event) => {
-		  if (quillRef.current && !quillRef.current.contains(event.target)) {
-			setEditNewComment(false);
-		  }
-		};
-	
-		if (editNewComment) {
-		  document.addEventListener("mousedown", handleClickOutside);
+			if (quillRef.current && !quillRef.current.contains(event.target)) {
+				setEditNewComment(false)
+			}
 		}
-	
+
+		if (editNewComment) {
+			document.addEventListener('mousedown', handleClickOutside)
+		}
+
 		return () => {
-		  document.removeEventListener("mousedown", handleClickOutside);
-		};
-	  }, [editNewComment]);
+			document.removeEventListener('mousedown', handleClickOutside)
+		}
+	}, [editNewComment])
 
 	async function onLoadBoard() {
 		try {
@@ -115,56 +131,123 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 		}
 	}
 
+	useEffect(() => {
+		if (updates) {
+			updateBoardData()
+		}
+	}, [updates])
+
+	async function updateBoardData() {
+		try {
+			await updateBoard(
+				groupId,
+				taskId,
+				{ key: 'updates', value: updates },
+				{ action: 'taskUpdateModified' }
+			)
+			showSuccessMsg('Board updated successfully')
+		} catch (error) {
+			showErrorMsg('Failed to update board')
+			console.error('Error in updateBoardData:', error)
+		}
+	}
+
 	// Handle tab change
 	const handleChange = (event, newValue) => {
 		setValue(newValue)
 	}
 
-	// // Handle adding new tabs
-	// const handleAddTab = () => {
-	// 	setTabs((prev) => {
-	// 		const nextValue = prev.length + 1
-	// 		const nextLabel = `Item ${prev.length + 1}`
-	// 		return [...prev, { value: nextValue, label: nextLabel }]
-	// 	})
-	// }
+	function findNewReplyByComment(comment) {
+		return newReplies.find((newReply) => newReply.id === comment.id) // Match by comment.id
+	}
+
+	function handleReplyChange(event, commentId) {
+		const replyText = event
+		 setNewReplies((prevReplies) =>
+			prevReplies.map((reply) => (reply.id === commentId ? { ...reply, text: replyText } : reply))
+		)
+	}
+
+	function handleReplySubmit(event, commentId) {
+		event.preventDefault()
+		const replyText = newReplies.find((reply) => reply.id === commentId)?.text || ''
+
+		// Add the reply to the corresponding comment
+		setUpdates((prevUpdates) =>
+			prevUpdates.map((comment) =>
+				comment.id === commentId
+					? {
+							...comment,
+							replies: [
+								...comment.replies,
+								{
+									id: utilService.makeId(), // Ensure unique ID for each reply
+									text: replyText,
+									replier: {
+										id: user._id, // Use 'id' instead of '_id'
+										fullname: user.fullname,
+										imgUrl: user.imgUrl,
+									},
+									createdAt: Date.now(), // Changed from sentAt to createdAt
+								},
+							],
+					  }
+					: comment
+			)
+		)
+
+		setNewReplies((prevReplies) =>
+			prevReplies.map((reply) =>
+				reply.id === commentId ? { ...reply, text: '', isEditing: false } : reply
+			)
+		)
+	}
+
+	function handleNewReplyToEdit(commentId) {
+		if (!newReplies.find((reply) => reply.id === commentId)) {
+			setNewReplies((prevReplies) => [...prevReplies, { id: commentId, text: '', isEditing: true }])
+		} else {
+			setNewReplies((prevReplies) =>
+				prevReplies.map((reply) => (reply.id === commentId ? { ...reply, isEditing: true } : reply))
+			)
+		}
+	}
 
 	return (
-		<TabContext value={value} 				>
-
-					<Tabs
-						value={value}
-						onChange={handleChange}
-						aria-label='tabs'
-						variant='scrollable'
+		<TabContext value={value}>
+			<Tabs
+				value={value}
+				onChange={handleChange}
+				aria-label='tabs'
+				variant='scrollable'
+				sx={{
+					borderBottom: '1px solid rgb(174, 174, 174)',
+				}}>
+				{tabs.map((tab, index) => (
+					<Tab
+						key={index}
+						value={tab.value}
 						sx={{
-							borderBottom: '1px solid rgb(174, 174, 174)',
-						}}>
-						{tabs.map((tab, index) => (
-							<Tab
-								key={index}
-								value={tab.value}
-								sx={{
-									opacity: 0.8,
-									textTransform: 'none',
-									padding: '0 12px',
-									'&:hover': {
-										backgroundColor: '#eaeefb',
-										borderRadius: '5px',
-									},
-								}}
-								label={
-									<Box sx={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-										{/* the icon for the first tab */}
-										{tab.value === '1' && <SvgIcon iconName={'sidebar_home'} />}
-										{tab.label}
-										{/* show menu if tab selected */}
-										{value === tab.value}
-									</Box>
-								}
-							/>
-						))}
-					</Tabs>
+							opacity: 0.8,
+							textTransform: 'none',
+							padding: '0 12px',
+							'&:hover': {
+								backgroundColor: '#eaeefb',
+								borderRadius: '5px',
+							},
+						}}
+						label={
+							<Box sx={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+								{/* the icon for the first tab */}
+								{tab.value === '1' && <SvgIcon iconName={'sidebar_home'} />}
+								{tab.label}
+								{/* show menu if tab selected */}
+								{value === tab.value}
+							</Box>
+						}
+					/>
+				))}
+			</Tabs>
 
 			<TabPanel value='1' className='updates-tab'>
 				{/* ReactQuill Editor */}
@@ -173,11 +256,11 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 						<ReactQuill
 							className='create-comment-editor'
 							value={newComment}
-							onChange={setNewComment}
+							onChange={debounce(setNewComment, 400)}
 							theme='snow'
 							modules={{
 								toolbar: [
-									[{ size: ['small', false, 'large', 'huge'] }],
+									[{ header: [1, 2, 3, false] }], // Headers
 									['bold'],
 									['italic'],
 									['underline'],
@@ -191,7 +274,7 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 								],
 							}}
 							formats={[
-								'size',
+								'header',
 								'bold',
 								'italic',
 								'underline',
@@ -209,18 +292,23 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 							color='primary'
 							className='create-comment-btn'
 							sx={{ textTransform: 'none', marginTop: '10px', padding: '5px 10px' }}
-							onClick={() => newComment.length ? handleAddUpdate() : {}}>
+							onClick={() => (newComment.length ? handleAddUpdate() : {})}>
 							Update
 						</Button>
 					</div>
 				) : (
-					<div
-						className='create-comment-blur'
-						onClick={() => setEditNewComment(true)}>
+					<div className='create-comment-blur' onClick={() => setEditNewComment(true)}>
 						<p className='placeholder'>Write an update</p>
 					</div>
 				)}
-				<Updates updates={updates} />
+				<Updates
+					updates={updates}
+					user={user}
+					findNewReplyByComment={findNewReplyByComment}
+					handleReplyChange={handleReplyChange}
+					handleReplySubmit={handleReplySubmit}
+					handleNewReplyToEdit={handleNewReplyToEdit}
+				/>
 			</TabPanel>
 
 			<TabPanel value='2'>

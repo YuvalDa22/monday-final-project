@@ -1,35 +1,29 @@
 import { useEffect, useState } from 'react'
-import { userService } from '../services/user'
-import { utilService } from '../services/util.service'
+import { debounce, utilService } from '../services/util.service'
 import { Box, Typography } from '@mui/material'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 
-export function Updates({ updates }) {
-	const [comments, setComments] = useState([])
-	const [loading, setLoading] = useState(true) // Add loading state
+export function Updates({
+	updates,
+	user,
+	findNewReplyByComment,
+	handleReplyChange,
+	handleReplySubmit,
+	handleNewReplyToEdit,
+}) {
+	const [loading, setLoading] = useState(true)
 
+	// Handle loading state based on updates
 	useEffect(() => {
-		fetchCommenters()
+		setLoading(!updates)
 	}, [updates])
 
-	async function fetchCommenters() {
-		if (!updates) {
-			setLoading(false) // Stop loading if no updates
-			return
-		}
-		setLoading(true) // Start loading
-		const fetchedComments = []
-		for (const update of updates) {
-			const commenter = await userService.getById(update.userId)
-			console.log("🚀 ~ fetchCommenters ~ commenter:", commenter)
-			const createdAt = utilService.formatDate(update.sentAt)
-			fetchedComments.push({ ...update, commenter, createdAt })
-		}
-		setComments(fetchedComments)
-		setLoading(false) // Stop loading after fetching
-	}
+	// Render loading state
+	if (loading) return <div>Loading...</div>
 
-	if (loading) return <div>Loading...</div> // Show loading indicator
-	if (!comments.length)
+	// Render empty state
+	if (!updates?.length)
 		return (
 			<Box
 				sx={{
@@ -61,24 +55,88 @@ export function Updates({ updates }) {
 				</Typography>
 			</Box>
 		)
+
+	// Render updates and replies
 	return (
 		<div className='chat-body'>
 			<div className='chat-inner-body'>
-				{/* Comment List */}
 				<ul className='comments-list'>
-					{comments.map((comment) => (
-						<li key={comment.sentAt} className='comment'>
+					{updates.map((update) => (
+						<li key={update.id || update.createdAt} className='comment'>
+							{/* Comment Info */}
 							<div className='comment-info'>
-								<img src={comment.commenter.imgUrl} alt={comment.commenter.fullName} />
-								<p className='fullname'>{comment.commenter.fullName}</p>
-								<p className='time'>{comment.createdAt}</p>
+								<img
+									src={update.commenter?.imgUrl || 'https://via.placeholder.com/40'}
+									alt={update.commenter?.fullname || 'Unknown User'}
+								/>
+								<p className='fullname'>{update.commenter?.fullname || 'Unknown User'}</p>
+								<p className='time'>{utilService.calcTimePassed(update)}</p>
 							</div>
-							<div className='comment-text'>
-								{Array.isArray(comment.text) ? (
-									comment.text.map((item, idx) => <React.Fragment key={idx}>{item}</React.Fragment>)
-								) : (
-									<span dangerouslySetInnerHTML={{ __html: comment.text }} />
-								)}
+
+							{/* Comment Text */}
+							<p className='comment-text'>
+								<span dangerouslySetInnerHTML={{ __html: update.text }} />
+							</p>
+
+							{/* Replies Section */}
+							<div className='replies-section'>
+								<ul className='replies-list'>
+									{update.replies.map((reply) => (
+										<li key={reply.id || reply.createdAt} className='reply'>
+											{/* Reply Info */}
+											<img
+												src={reply.replier?.imgUrl || 'https://via.placeholder.com/30'}
+												alt={reply.replier?.fullname || 'Unknown User'}
+											/>
+											<div className='reply-content-container'>
+												<div className='reply-content'>
+													<p className='reply-fullname'>
+														{reply.replier?.fullname || 'Unknown User'}
+													</p>
+													<div className='reply-text'>
+														<span dangerouslySetInnerHTML={{ __html: reply.text }} />
+													</div>
+												</div>
+												<p className='reply-time'>{utilService.calcTimePassed(reply)}</p>
+											</div>
+										</li>
+									))}
+								</ul>
+
+								{/* Create New Reply */}
+								<div className='create-reply-container'>
+									<img src={user.imgUrl} alt={user.fullname} />
+									{findNewReplyByComment(update)?.isEditing ? (
+										<form
+											className='create-reply'
+											onSubmit={(event) => handleReplySubmit(event, update.id)}>
+											<ReactQuill
+												className='textarea-quill'
+												value={findNewReplyByComment(update)?.text}
+												onChange={debounce((event) => handleReplyChange(event, update.id), 400)}
+												modules={{
+													toolbar: [
+														[{ header: [1, 2, 3, false] }],
+														['bold'],
+														['italic'],
+														['underline'],
+														[{ list: 'ordered' }], 
+														[{ list: 'bullet' }],
+													],
+												}}
+											/>
+											<button className='reply-button' type='submit'>
+												Reply
+											</button>
+										</form>
+									) : (
+										<div
+											className='create-reply-blur'
+											onClick={() => handleNewReplyToEdit(update.id)}>
+											<p className='placeholder'>Write a reply and mention others with @</p>
+										</div>
+									)}
+								</div>
 							</div>
 						</li>
 					))}

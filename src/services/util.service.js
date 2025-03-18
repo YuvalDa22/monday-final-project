@@ -8,6 +8,7 @@ export const utilService = {
   animateCSS,
   getSvg,
   formatDate,
+  calcTimePassed
 }
 
 function makeId(length = 5) {
@@ -91,4 +92,18 @@ function formatDate(date) {
     ...options,
     ...(selectedYear !== currentYear && { year: 'numeric' }),
   })
+}
+
+function calcTimePassed(item) {
+  const diff = Date.now() - item.createdAt // Time difference in milliseconds
+  const seconds = Math.floor(diff / 1000) // Convert to seconds
+
+  // if less than a minute, show seconds , if less than an hour , show minutes , etc etc ....
+  if (seconds < 60) return 'a few seconds ago'
+  const minutes = Math.floor(seconds / 60)
+  if (minutes < 60) return minutes + 'm'
+  const hours = Math.floor(minutes / 60)
+  if (hours < 24) return hours + 'h'
+  const days = Math.floor(hours / 24)
+  return days + 'd'
 }
