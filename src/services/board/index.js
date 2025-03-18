@@ -131,7 +131,6 @@ function getNewUpdate(text, user) {
 		},
 		text,
 		createdAt: utilService.formatDate(Date.now()),
-		replies: [],
 	}
 }
 

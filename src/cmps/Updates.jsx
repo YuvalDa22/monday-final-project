@@ -3,6 +3,7 @@ import { debounce, utilService } from '../services/util.service'
 import { Box, Typography } from '@mui/material'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
+import { socketService } from '../services/socket.service'
 
 export function Updates({
 	updates,
@@ -12,8 +13,6 @@ export function Updates({
 	handleReplySubmit,
 	handleNewReplyToEdit,
 }) {
-
-
 	//TODO - CHANGE FROM SUBMIT INTO BUTTON ONCLICK WITH DEBOUNCE
 	//TODO - ADD CLICKOUT TO CLOSE THE EDITING ON REPLIES
 	const [loading, setLoading] = useState(true)
@@ -22,6 +21,23 @@ export function Updates({
 	useEffect(() => {
 		setLoading(!updates)
 	}, [updates])
+
+	useEffect(() => {
+		socketService.on('update-added', (newUpdates) => {
+			setLoading(false)
+			setUpdates(newUpdates)
+		})
+
+		socketService.on('reply-added', (newUpdates) => {
+			setLoading(false)
+			setUpdates(newUpdates)
+		})
+
+		return () => {
+			socketService.off('update-added')
+			socketService.off('reply-added')
+		}
+	}, [])
 
 	// Render loading state
 	if (loading) return <div>Loading...</div>
@@ -124,7 +140,7 @@ export function Updates({
 														['bold'],
 														['italic'],
 														['underline'],
-														[{ list: 'ordered' }], 
+														[{ list: 'ordered' }],
 														[{ list: 'bullet' }],
 													],
 												}}

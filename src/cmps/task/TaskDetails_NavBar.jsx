@@ -18,12 +18,12 @@ import ListIcon from '@mui/icons-material/List'
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined'
 import { ActivityLog } from './cmps/ActivityLog'
 import { getBoardById, getGroupByTaskId, updateBoard } from '../../store/board/board.actions'
-import { Updates } from '../Updates'
 import { ThreeDotsMenu } from './ThreeDotsMenu'
 import { boardService } from '../../services/board'
 import { showErrorMsg, showSuccessMsg } from '../../services/event-bus.service'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
+import { socketService } from '../../services/socket.service'
 
 const SvgIcon = ({ iconName, options }) => {
 	return (
@@ -39,6 +39,9 @@ const SvgIcon = ({ iconName, options }) => {
 	)
 }
 
+//TODO - CHANGE FROM SUBMIT INTO BUTTON ONCLICK WITH DEBOUNCE
+//TODO - ADD CLICKOUT TO CLOSE THE EDITING ON REPLIES
+
 export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 	const [value, setValue] = useState('1')
 	const [updates, setUpdates] = useState(null)
@@ -52,12 +55,14 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 	const [editNewComment, setEditNewComment] = useState(false)
 	const quillRef = useRef(null)
 	const [newReplies, setNewReplies] = useState([])
+	const [loading, setLoading] = useState(false)
 
 	useEffect(() => {
 		onSetUpdates()
-	}, [taskId])
+	}, [])
 
 	async function onSetUpdates() {
+		setLoading(true)
 		try {
 			const currentUpdates = board?.groups
 				?.find((group) => group.id === groupId)
@@ -66,11 +71,32 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 			if (currentUpdates) {
 				setUpdates(currentUpdates)
 			}
+			setLoading(false)
 		} catch (error) {
 			showErrorMsg('Failed to set updates')
 			console.error('Error in onSetUpdates:', error)
 		}
 	}
+
+	useEffect(() => {
+		if (taskId) {
+			socketService.emit('join-task', taskId)
+		}
+
+		socketService.on('update-added', (newUpdates) => {
+			setUpdates(newUpdates)
+		})
+
+		socketService.on('reply-added', (newUpdates) => {
+			setUpdates(newUpdates)
+		})
+
+		return () => {
+			socketService.emit('leave-task', taskId)
+			socketService.off('update-added')
+			socketService.off('reply-added')
+		}
+	}, [taskId])
 
 	const handleAddUpdate = async () => {
 		setNewComment('')
@@ -87,14 +113,15 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 				createdAt: Date.now(), // Changed from sentAt to createdAt
 				replies: [],
 			}
-			const newUpdates = [update, ...updates]
-			setUpdates(newUpdates)
+			const updatedUpdates = [update, ...updates]
+			setUpdates(updatedUpdates)
 			await updateBoard(
 				groupId,
 				taskId,
-				{ key: 'updates', value: newUpdates },
+				{ key: 'updates', value: updatedUpdates },
 				{ action: 'taskUpdateAdded' }
 			)
+			socketService.emit('add-update', { taskId, updates: updatedUpdates })
 			showSuccessMsg('Update added successfully')
 		} catch (error) {
 			showErrorMsg('Failed to add update')
@@ -163,44 +190,43 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 
 	function handleReplyChange(event, commentId) {
 		const replyText = event
-		 setNewReplies((prevReplies) =>
+		setNewReplies((prevReplies) =>
 			prevReplies.map((reply) => (reply.id === commentId ? { ...reply, text: replyText } : reply))
+		)
+	}
+
+
+	function resetReplyState(commentId) {
+		setNewReplies((prevReplies) =>
+			prevReplies.map((reply) =>
+				reply.id === commentId ? { ...reply, text: '', isEditing: false } : reply
+			)
 		)
 	}
 
 	function handleReplySubmit(event, commentId) {
 		event.preventDefault()
 		const replyText = newReplies.find((reply) => reply.id === commentId)?.text || ''
-
-		// Add the reply to the corresponding comment
-		setUpdates((prevUpdates) =>
-			prevUpdates.map((comment) =>
-				comment.id === commentId
-					? {
-							...comment,
-							replies: [
-								...comment.replies,
-								{
-									id: utilService.makeId(), // Ensure unique ID for each reply
-									text: replyText,
-									replier: {
-										id: user._id, // Use 'id' instead of '_id'
-										fullname: user.fullname,
-										imgUrl: user.imgUrl,
-									},
-									createdAt: Date.now(), // Changed from sentAt to createdAt
-								},
-							],
-					  }
-					: comment
-			)
+		if (replyText.length === 0) return
+		const updatedUpdates = updates.map((comment) =>
+			comment.id === commentId
+				? {
+						...comment,
+						replies: [
+							...comment.replies,
+							{
+								id: utilService.makeId(),
+								text: replyText,
+								replier: { id: user._id, fullname: user.fullname, imgUrl: user.imgUrl },
+								createdAt: Date.now(),
+							},
+						],
+				  }
+				: comment
 		)
-
-		setNewReplies((prevReplies) =>
-			prevReplies.map((reply) =>
-				reply.id === commentId ? { ...reply, text: '', isEditing: false } : reply
-			)
-		)
+		setUpdates(updatedUpdates)
+		resetReplyState(commentId)
+		socketService.emit('add-reply', { taskId, updates: updatedUpdates })
 	}
 
 	function handleNewReplyToEdit(commentId) {
@@ -301,14 +327,123 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 						<p className='placeholder'>Write an update</p>
 					</div>
 				)}
-				<Updates
-					updates={updates}
-					user={user}
-					findNewReplyByComment={findNewReplyByComment}
-					handleReplyChange={handleReplyChange}
-					handleReplySubmit={handleReplySubmit}
-					handleNewReplyToEdit={handleNewReplyToEdit}
-				/>
+
+				{/* Render Updates */}
+
+				{loading && <div>Loading...</div>}
+
+				{updates?.length ? (
+					<div className='chat-body'>
+						<div className='chat-inner-body'>
+							<ul className='comments-list'>
+								{updates?.map((update) => (
+									<li key={update.id || update.createdAt} className='comment'>
+										<div className='comment-info'>
+											<img
+												src={update.commenter?.imgUrl || 'https://via.placeholder.com/40'}
+												alt={update.commenter?.fullname || 'Unknown User'}
+											/>
+											<p className='fullname'>{update.commenter?.fullname || 'Unknown User'}</p>
+											<p className='time'>{utilService.calcTimePassed(update)}</p>
+										</div>
+										<p className='comment-text'>
+											<span dangerouslySetInnerHTML={{ __html: update.text }} />
+										</p>
+										<div className='replies-section'>
+											<ul className='replies-list'>
+												{update.replies.map((reply) => (
+													<li key={reply.id || reply.createdAt} className='reply'>
+														<img
+															src={reply.replier?.imgUrl || 'https://via.placeholder.com/30'}
+															alt={reply.replier?.fullname || 'Unknown User'}
+														/>
+														<div className='reply-content-container'>
+															<div className='reply-content'>
+																<p className='reply-fullname'>
+																	{reply.replier?.fullname || 'Unknown User'}
+																</p>
+																<div className='reply-text'>
+																	<span dangerouslySetInnerHTML={{ __html: reply.text }} />
+																</div>
+															</div>
+															<p className='reply-time'>{utilService.calcTimePassed(reply)}</p>
+														</div>
+													</li>
+												))}
+											</ul>
+											<div className='create-reply-container'>
+												<img src={user.imgUrl} alt={user.fullname} />
+												{findNewReplyByComment(update)?.isEditing ? (
+													<form
+														className='create-reply'
+														onSubmit={(event) => handleReplySubmit(event, update.id)}>
+														<ReactQuill
+															className='textarea-quill'
+															value={findNewReplyByComment(update)?.text}
+															onChange={debounce(
+																(event) => handleReplyChange(event, update.id),
+																400
+															)}
+															modules={{
+																toolbar: [
+																	[{ header: [1, 2, 3, false] }],
+																	['bold'],
+																	['italic'],
+																	['underline'],
+																	[{ list: 'ordered' }],
+																	[{ list: 'bullet' }],
+																],
+															}}
+														/>
+														<button className='reply-button' type='submit'>
+															Reply
+														</button>
+													</form>
+												) : (
+													<div
+														className='create-reply-blur'
+														onClick={() => handleNewReplyToEdit(update.id)}>
+														<p className='placeholder'>Write a reply</p>
+													</div>
+												)}
+											</div>
+										</div>
+									</li>
+								))}
+							</ul>
+						</div>
+					</div>
+				) : (
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							justifyContent: 'center',
+							gap: '8px',
+							marginBottom: '24px',
+						}}>
+						<Box
+							sx={{
+								width: '182px',
+								height: '182px',
+								marginTop: '50px',
+								backgroundImage:
+									'url("https://res.cloudinary.com/ofirgady/image/upload/v1742132681/x6wvtx7vvc4xrhiqr4fr.svg")',
+								backgroundSize: 'cover',
+							}}
+						/>
+						<Typography variant='h6' fontWeight='bold'>
+							No updates yet
+						</Typography>
+						<Typography
+							variant='h7'
+							color='#303030'
+							sx={{ fontSize: 16, textAlign: 'center', whiteSpace: 'pre-line' }}>
+							{`Share progress, mention a teammate,\n or upload a file to get things moving`}
+						</Typography>
+					</Box>
+				)}
 			</TabPanel>
 
 			<TabPanel value='2'>

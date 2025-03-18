@@ -21,6 +21,14 @@ function createSocketService() {
 			socket = io(baseUrl)
 			const user = userService.getLoggedinUser()
 			if (user) this.login(user._id)
+
+			socket.on('connect_error', (err) => {
+				console.error('Socket connection error:', err)
+			})
+
+			socket.on('disconnect', (reason) => {
+				console.warn('Socket disconnected:', reason)
+			})
 		},
 		on(eventName, cb) {
 			socket.on(eventName, cb)
@@ -38,6 +46,12 @@ function createSocketService() {
 		},
 		logout() {
 			socket.emit(SOCKET_EMIT_LOGOUT)
+		},
+		joinRoom(roomName) {
+			socket.emit('join-board', roomName)
+		},
+		leaveRoom(roomName) {
+			socket.emit('leave-board', roomName)
 		},
 		terminate() {
 			socket = null
