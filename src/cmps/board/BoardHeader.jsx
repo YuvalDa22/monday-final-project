@@ -78,7 +78,7 @@ export function BoardHeader({ board, onAddGroup, onAddTask ,filterBy, onSetFilte
             {board?.title}
           </span>
         )}
-        <AdditionalBoardActions />
+        <AdditionalBoardActions board={board}/>
       </div>
       <BoardNavBar />
       <BoardActionsBar board={board} onAddTask={onAddTask} onAddGroup={onAddGroup} filterBy={filterBy} onSetFilterBy={onSetFilterBy}/>

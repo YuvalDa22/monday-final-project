@@ -144,7 +144,7 @@ export function MemberPicker({ info, onUpdate, board }) {
           renderAvatars()
         ) : (
           <img
-            src="https://cdn.monday.com/icons/dapulse-person-column.svg"
+            src="https://res.cloudinary.com/ofirgady/image/upload/v1742391464/cvhy78jtbyaw9sbjkjzv.svg"
             className="member-NO-avatar"
             title=""
             alt=""

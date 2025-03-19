@@ -41,6 +41,7 @@ const SvgIcon = ({ iconName, options }) => {
 export function BoardDetails() {
   const [filterBy, setFilterBy] = useState(boardService.getDefaultFilter())
   const { boardId } = useParams()
+  const user = useSelector((storeState) => storeState.userModule.user)
   const navigate = useNavigate();
 
 

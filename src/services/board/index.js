@@ -65,11 +65,13 @@ const members = [
 	},
 ]
 
-function getEmptyBoard() {
+function getEmptyBoard(user) {
 	return {
 		title: 'New Board',
 		labels: labels,
-		members: members,
+		members: [...members, 
+			{_id :user._id, fullname: user.fullname, imgUrl: user.imgUrl}
+	],
 		groupSummary: [null, null, null],
 		groups: [{ ...getEmptyGroup() }],
 		activities: [],

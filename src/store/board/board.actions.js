@@ -30,7 +30,8 @@ export async function loadBoards() {
 
 export async function addBoard() {
 	try {
-		const boardToSave = boardService.getEmptyBoard()
+		const user = store.getState().userModule.user
+		const boardToSave = boardService.getEmptyBoard(user)
 		const savedBoard = await boardService.save(boardToSave)
 		store.dispatch({ type: ADD_BOARD, savedBoard })
 
@@ -205,7 +206,7 @@ export async function addTask(_, group, task, fromHeader) {
 	let updatedTasks
 	if (group) {
 		// In case 0 groups present , dont let "New Task" button crash program
-		const updatedTask = { ...boardService.getEmptyTask(), ...task }
+		const updatedTask = { ...boardService.getEmptyTask(user), ...task }
 		updatedTasks = fromHeader ? [updatedTask, ...group.tasks] : [...group.tasks, updatedTask]
 	}
 
