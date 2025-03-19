@@ -206,7 +206,7 @@ export async function addTask(_, group, task, fromHeader) {
 	let updatedTasks
 	if (group) {
 		// In case 0 groups present , dont let "New Task" button crash program
-		const updatedTask = { ...boardService.getEmptyTask(user), ...task }
+		const updatedTask = { ...boardService.getEmptyTask(), ...task }
 		updatedTasks = fromHeader ? [updatedTask, ...group.tasks] : [...group.tasks, updatedTask]
 	}
 
