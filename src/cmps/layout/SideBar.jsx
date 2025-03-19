@@ -18,6 +18,7 @@ import {
   Menu as MenuVibe,
   MenuItem as MenuItemVibe,
   MenuButton as MenuButtonVibe,
+  ListItem as ListItemVibe,
 } from '@vibe/core';
 import {
   Add as AddIcon,
@@ -65,18 +66,24 @@ export default function Sidebar() {
   const [selectedBoard, setSelectedBoard] = useState(null);
 
   const handleMenuClick = (event, boardId) => {
+   
     event.stopPropagation(); // Prevents navigation
     setMenuAnchor(event.currentTarget);
     setSelectedBoard(boardId);
+    
   };
 
   const handleMenuClose = () => {
+   
     setMenuAnchor(null);
     setSelectedBoard(null);
   };
 
-  const handleDelete = () => {
-    if (selectedBoard) {
+  const handleDelete = (event) => {
+    event.stopPropagation();
+    setMenuAnchor(event.currentTarget);
+    
+    if (boards.some((board) => board._id === selectedBoard)) {
       handleRemoveBoard(selectedBoard);
     }
     handleMenuClose(); // Close menu after deleting
@@ -91,7 +98,7 @@ export default function Sidebar() {
       const allTitles = await getAllBoardsTitle();
       setAllBoardsTitle(allTitles);
     } catch (err) {
-      console.log(`couldn't get or set titles`, err);
+      console.error(`couldn't get or set titles`, err);
       throw err;
     }
   };
@@ -109,28 +116,45 @@ export default function Sidebar() {
     }
   }
 
+  async function onNavigateToBoard(event, obj) {
+    
+    if (
+      event.target.closest('.menu-button') ||
+      event.target.closest('.remove-button')
+    )
+      return; // Ignore clicks on the menu
+
+    let boardExists = await fetchBoardsTitle();
+
+    boardExists = allBoardsTitle.some((board) => board.id === obj.id);
+
+    if (boardExists) {
+      navigate(`/workspace/board/${obj.id}`);
+    }
+  }
+
   async function handleRemoveBoard(selectedBoardId) {
-    handleMenuClose();
+    
     try {
       await removeBoard(selectedBoardId); // Ensure deletion is processed
-  
+     
+
       // Immediately update the board list in state
       setAllBoardsTitle((prevBoards) =>
         prevBoards.filter((board) => board.id !== selectedBoardId)
       );
-  
+
+      
       // If the current board was deleted, navigate to `/workspace`
       if (boardId === selectedBoardId) {
+        
         navigate('/workspace');
       }
-  
-      showSuccessMsg(`Board removed successfully`);
     } catch (err) {
+      console.error('Error removing board:', err);
       showErrorMsg(`Couldn't remove board, please try again`);
-      console.log(err);
     }
   }
-  
 
   return (
     <div className="sidebar">
@@ -256,57 +280,40 @@ export default function Sidebar() {
       <div className="workspace-section">
         <ul className="workspace-links">
           {allBoardsTitle.map((obj) => (
-            <div
+            <ListItemVibe
+              style={{ width: '100%' }}
               key={obj.id}
-              onClick={(event) => {
-                if (event.target.closest('.menu-button')) return; // Ignore clicks on the menu
-
-                // Get the latest board list from the `allBoardsTitle` state (ensures it's fresh)
-                const boardExists = allBoardsTitle.some(
-                  (board) => board.id === obj.id
-                );
-
-                // ✅ If the board exists, navigate to it
-                if (boardExists) {
-                  navigate(`/workspace/board/${obj.id}`);
-                }
-              }}
+              onClick={(event) => onNavigateToBoard(event, obj)}
+              className={`workspace-item ${boardId === obj.id ? 'active' : ''}`}
             >
-              <li
-                className={`workspace-item ${
-                  boardId === obj.id ? 'active' : ''
-                }`}
-              >
-                <IconVibe
-                  icon={Board}
-                  style={{ color: '#676879', height: '20px', width: '19px' }}
-                  className="sidebar_board"
-                />
-
-                <span className="textInSidebar">{obj.title}</span>
-
-                <div className="menu-container">
-                  <MenuButtonVibe
-                    className="menu-button"
-                    onClick={(event) => handleMenuClick(event, obj.id)}
-                    size="xs"
+              <IconVibe
+                icon={Board}
+                style={{ color: '#676879', height: '20px', width: '19px' }}
+                className="sidebar_board"
+              />
+              <span className="textInSidebar">{obj.title}</span>
+              <div className="menu-container">
+                <MenuButtonVibe
+                  className="menu-button"
+                  onClick={(event) => handleMenuClick(event, obj.id)}
+                  size="xs"
+                >
+                  <MenuVibe
+                    size={MenuVibe.sizes.MEDIUM}
+                    anchorEl={menuAnchor}
+                    open={Boolean(menuAnchor)}
+                    onClose={handleMenuClose}
                   >
-                    <MenuVibe
-                      anchorEl={menuAnchor}
-                      open={Boolean(menuAnchor)}
-                      onClose={handleMenuClose}
-                      size="medium"
-                    >
-                      <MenuItemVibe
-                        icon={Delete}
-                        onClick={handleDelete}
-                        title="Remove Board"
-                      />
-                    </MenuVibe>
-                  </MenuButtonVibe>
-                </div>
-              </li>
-            </div>
+                    <MenuItemVibe
+                      className="remove-button"
+                      icon={Delete}
+                      onClick={(event) => handleDelete(event)}
+                      title="Remove Board"
+                    />
+                  </MenuVibe>
+                </MenuButtonVibe>
+              </div>
+            </ListItemVibe>
           ))}
         </ul>
       </div>
