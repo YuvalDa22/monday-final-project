@@ -23,10 +23,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-family: vars.$h1-font-family;
 }
 
 .navBar-company-name {
   margin-right: vars.$spacing-xs;
+  font-family: vars.$h1-font-family;
   letter-spacing: vars.$letter-spacing-h1-bold ;
   font-weight: 700;
   padding: 0px 0px 0px 10px;

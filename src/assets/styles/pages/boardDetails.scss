@@ -1,3 +1,4 @@
+@use '../setup/vars';
 .board-details-container {
   background-color: white;
   border-radius: 8px 0px 0px 0px;
@@ -31,5 +32,21 @@
   scrollbar-width: thin; /* For Firefox */
   scrollbar-gutter: stable both-edges; /* Modern browsers */
 }
+
+.div-in-button {
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+  margin-right: 10px;
+  padding-bottom: 5px;
+}
+
+.div-in-button:hover {
+  background-color: transparent !important;
+}
+
 .add-group-button-container {
+  & :hover {
+    background-color: vars.$primary-background-hover-color;
+  }
 }
