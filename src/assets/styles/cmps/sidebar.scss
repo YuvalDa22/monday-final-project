@@ -4,8 +4,18 @@
   flex-direction: column;
   border-radius: 12px 0px 0px 0px;
   height: calc(100vh - 60px); // 60 is the height of the navbar
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(236, 239, 248, 0.7) 70%, rgba(236, 239, 248, 0) 100%), 
-              linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(236, 239, 248, 0) 100%);
+  background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 1) 25%,
+      rgba(236, 239, 248, 0.7) 70%,
+      rgba(236, 239, 248, 0.7) 100%
+    ),
+    linear-gradient(
+      to right,
+      rgba(255, 255, 255, 1) 25%,
+      rgba(236, 239, 248, 0.7) 70%,
+      rgba(236, 239, 248, 0.7) 100%
+    );
   font-size: 14px;
   width: 100%;
   box-shadow: rgb(236, 239, 248) -5px -20px 20px 0px inset;
@@ -19,7 +29,6 @@
   align-items: center;
 }
 
-
 .active {
   position: relative; // Keeps the title above the background
   border-radius: 4px;
@@ -29,7 +38,7 @@
 }
 
 .active::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 13px; /* Moves only the background */
@@ -45,7 +54,6 @@
   position: relative; /* Keeps text above the background */
   z-index: 2; /* Higher than the background */
 }
-
 
 .divider {
   height: 1px;
@@ -74,7 +82,6 @@
   }
 }
 
-
 .menu-container {
   position: absolute;
   right: 10px; // Keeps the menu aligned to the right
@@ -94,12 +101,10 @@
   height: 32px;
 }
 
-
 // ___ ICONS ___
 .sidebar_board {
   position: relative;
   bottom: 1px;
-  
 }
 .sidebar_workspaces {
   position: relative;
@@ -115,8 +120,6 @@
   bottom: 3px;
   margin-right: 0px;
 }
-
-
 
 .main-workspace {
   display: flex;
@@ -143,7 +146,6 @@
 }
 
 .border-avatar-icon {
-  
 }
 
 .border-avatar-icon .Avatar-text {
