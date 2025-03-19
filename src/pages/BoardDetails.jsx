@@ -44,11 +44,7 @@ const SvgIcon = ({ iconName, options }) => {
 export function BoardDetails() {
   const [filterBy, setFilterBy] = useState(boardService.getDefaultFilter());
   const { boardId } = useParams();
-  const navigate = useNavigate();
 
-  // const  board = useSelector((storeState) => {
-  //   return boardService.filterBoard(storeState.boardModule.currentBoard, filterBy)
-  // })
 
   const board = useSelector((storeState) => {
     const currentBoard = storeState.boardModule.currentBoard;
@@ -56,12 +52,6 @@ export function BoardDetails() {
       ? boardService.filterBoard(currentBoard, filterBy)
       : null;
   });
-
-  useEffect(() => {
-    if (board === null) {
-      navigate('/workspace'); // fallback route
-    }
-  }, [board, navigate]);
 
   const [activeTask, setActiveTask] = useState(); // drag and drop
   const [checkedTasksList, setCheckedTasksList] = useState([]);
@@ -73,6 +63,11 @@ export function BoardDetails() {
       },
     })
   );
+
+  useEffect(() => {
+    onLoadBoard();
+  }, [boardId, filterBy]);
+
   useEffect(() => {
     loadBoards();
   }, []);
@@ -80,10 +75,6 @@ export function BoardDetails() {
   useEffect(() => {
     // TODO i want to listen to event that the board has changed through sockets from the backend
   }, [board]);
-
-  useEffect(() => {
-    onLoadBoard();
-  }, [boardId, filterBy]);
 
   function onSetFilterBy(filterBy) {
     setFilterBy((prevFilterBy) => ({ ...prevFilterBy, ...filterBy }));
@@ -378,7 +369,7 @@ export function BoardDetails() {
               <IconVibe
                 icon={Add}
                 iconSize={20}
-                style={{ flexShrink: 0, top: '5px' , margin: '0px 5px'}}
+                style={{ flexShrink: 0, top: '5px', margin: '0px 5px' }}
                 //   className="add-group-button-add-icon" marginRight: '6px'
               />
               Add new group
