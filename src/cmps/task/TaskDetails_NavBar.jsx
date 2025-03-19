@@ -576,7 +576,7 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 				</Box>
 			</TabPanel>
 			<TabPanel value='3'>
-				<ActivityLog taskId={taskId} />
+				<ActivityLog taskId={taskId} user={user} />
 			</TabPanel>
 		</TabContext>
 	)

@@ -68,7 +68,7 @@ export function MenuFromTheRight() {
 			{activity_log && (
 				<div>
 					<div className='activity_log-header'>Activity log for board "{board.title}"</div>
-					<ActivityLog />
+					<ActivityLog user={user}/>
 				</div>
 			)}
 			{!activity_log && (

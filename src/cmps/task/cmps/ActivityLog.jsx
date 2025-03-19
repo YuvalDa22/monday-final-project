@@ -6,7 +6,7 @@ import { showErrorMsg } from '../../../services/event-bus.service' // Assuming y
 import { Avatar } from 'radix-ui'
 import { SOCKET_EVENT_BOARD_UPDATED, socketService } from '../../../services/socket.service'
 
-export function ActivityLog({ taskId = null }) {
+export function ActivityLog({ taskId = null, user }) {
   // if taskId wasn't supplied then we know we should display global activity log
   const { boardId } = useParams()
 
@@ -162,8 +162,8 @@ export function ActivityLog({ taskId = null }) {
               <Avatar.Root className='AvatarRoot'>
                 <Avatar.Image
                   className='AvatarImage'
-                  src='https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80'
-                  alt='Colm Tuite'
+                  src={user ? user.imgUrl : 'https://cdn1.monday.com/dapulse_default_photo.png'}
+                  alt={user ? user.fullname : 'User Avatar'}
                 />
                 <Avatar.Fallback className='AvatarFallback' delayMs={600}>
                   {/* incase avatar cant be loaded show letters */}
