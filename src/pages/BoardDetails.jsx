@@ -71,10 +71,6 @@ export function BoardDetails() {
 	}, [])
 
 	useEffect(() => {
-		// TODO i want to listen to event that the board has changed through sockets from the backend
-	}, [board])
-
-	useEffect(() => {
 		if (boardId) {
 			socketService.emit('join-board', boardId)
 		}
@@ -138,7 +134,6 @@ export function BoardDetails() {
 		try {
 			switch (action) {
 				case 'duplicate':
-					console.log("🚀 ~ handleFooterAction ~ checkedTasksList:", checkedTasksList)
 					await duplicateMultipleTasks(board, checkedTasksList)
 					handleTasksChecked(checkedTasksList, 'add')
 					showSuccessMsg('Tasks duplicated successfully')
