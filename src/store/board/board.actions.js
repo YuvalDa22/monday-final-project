@@ -13,6 +13,7 @@ import {
 } from './board.reducer'
 import { userService } from '../../services/user'
 import { utilService } from '../../services/util.service'
+import { socketService } from '../../services/socket.service'
 
 export async function loadBoards() {
 	store.dispatch({ type: SET_IS_LOADING, isLoading: true })
@@ -131,6 +132,13 @@ export function logActivity(board, group, task, prev, activity = {}) {
 			message = 'Board Name Changed'
 			free_txt = `To ${board?.title}`
 			break
+		case activity.action === 'taskUpdateAdded':
+			message = 'Update Added'
+			free_txt = `To Task: ${task?.title}`
+			break
+		case activity.action === 'taskReplyAdded':
+			message = 'Reply Added'
+			free_txt = `To Task: ${task?.title}`
 
 		default:
 			console.error('Action was not logged !!!')
@@ -175,6 +183,7 @@ export async function updateBoard(groupId, taskId, { key, value }, activity = {}
 		const updatedBoard = await boardService.save(board)
 		store.dispatch({ type: SET_BOARD, board: updatedBoard })
 		store.dispatch({type: SET_BOARDS, boards: boards.map(b => b._id === updatedBoard._id ? updatedBoard : b)}) //update boards state
+		socketService.emit('board-updated', board._id)
 	} catch (err) {
 		console.error('Failed to save the board:', err)
 		throw err
@@ -382,7 +391,12 @@ export async function moveMultipleTasksIntoSpecificGroup(_, checkedTasks, target
 	})
 	// update the target group
 	updatedGroups[targetGroupIndex] = targetGroup
-	updateBoard(null, null, { key: 'groups', value: updatedGroups } ,{ action: 'moveMultipleTasks' , free_txt: `To ${targetGroup.title}` })
+	updateBoard(
+		null,
+		null,
+		{ key: 'groups', value: updatedGroups },
+		{ action: 'moveMultipleTasks', free_txt: `To ${targetGroup.title}` }
+	)
 }
 
 // Group Actions

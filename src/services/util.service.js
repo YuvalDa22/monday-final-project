@@ -8,6 +8,7 @@ export const utilService = {
   animateCSS,
   getSvg,
   formatDate,
+  calcTimePassed
 }
 
 function makeId(length = 5) {
@@ -82,12 +83,27 @@ export function getSvg(name, options = { height: '22', width: '22', color: 'curr
 
 // right now not being implemented because of datepicker-mui
 function formatDate(date) {
-  if (!date || isNaN(date.getTime())) return ''
+  const parsedDate = new Date(date)
+  if (!date || isNaN(parsedDate.getTime())) return ''
   const currentYear = new Date().getFullYear()
-  const selectedYear = date.getFullYear()
+  const selectedYear = parsedDate.getFullYear()
   const options = { day: 'numeric', month: 'short' }
-  return date.toLocaleDateString('en-US', {
+  return parsedDate.toLocaleDateString('en-US', {
     ...options,
     ...(selectedYear !== currentYear && { year: 'numeric' }),
   })
+}
+
+function calcTimePassed(item) {
+  const diff = Date.now() - item.createdAt // Time difference in milliseconds
+  const seconds = Math.floor(diff / 1000) // Convert to seconds
+
+  // if less than a minute, show seconds , if less than an hour , show minutes , etc etc ....
+  if (seconds < 60) return 'a few seconds ago'
+  const minutes = Math.floor(seconds / 60)
+  if (minutes < 60) return minutes + 'm'
+  const hours = Math.floor(minutes / 60)
+  if (hours < 24) return hours + 'h'
+  const days = Math.floor(hours / 24)
+  return days + 'd'
 }

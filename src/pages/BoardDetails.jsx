@@ -32,6 +32,7 @@ import {
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import { Item } from '../../src/cmps/group/GroupItemContainer'
+import { socketService } from '../services/socket.service'
 
 const SvgIcon = ({ iconName, options }) => {
 	return <i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>
@@ -72,14 +73,25 @@ export function BoardDetails() {
 		loadBoards()
 	}, [])
 
-	useEffect(() => {
-		// TODO i want to listen to event that the board has changed through sockets from the backend
-	}, [board])
 
-  useEffect(() => {    
-   
-    onLoadBoard()
-  }, [boardId, filterBy])
+	useEffect(() => {
+		onLoadBoard()
+	}, [boardId, filterBy])
+
+	useEffect(() => {
+		if (boardId) {
+			socketService.emit('join-board', boardId)
+		}
+	
+		socketService.on('board-updated', (boardId) => {
+			onLoadBoard()
+		})
+	
+		return () => {
+			socketService.emit('leave-board', boardId)
+			socketService.off('board-updated')
+		}
+	}, [boardId])
 
 	function onSetFilterBy(filterBy) {
 		setFilterBy((prevFilterBy) => ({ ...prevFilterBy, ...filterBy }))
@@ -326,7 +338,7 @@ export function BoardDetails() {
 							borderColor: 'gray',
 							textTransform: 'none',
 							marginBottom: '20px',
-              marginLeft: '42px',
+							marginLeft: '42px',
 						}}>
 						Add new group
 					</Button>

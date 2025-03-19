@@ -32,7 +32,7 @@ export function Login() {
 			navigate('/workspace')
 			showSuccessMsg('Logged in successfully')
 		} catch (err) {
-			console.log('🚀 ~ handleLogIn ~ err:', err)
+			console.log('Error:', err);
 			showErrorMsg(err.response.data.err || err.message || 'Invalid credentials')
 		}
 	}
@@ -65,7 +65,7 @@ export function Login() {
 					</Button>
 				</form>
 				<div>
-					<p>
+					<p className='signup-link'>
 						Don't have an account? <Link to={'/signup'}>Sign up</Link>
 					</p>
 				</div>

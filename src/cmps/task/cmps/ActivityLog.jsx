@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { getBoardById, getTaskById } from '../../../store/board/board.actions'
 import { showErrorMsg } from '../../../services/event-bus.service' // Assuming you have this function
 import { Avatar } from 'radix-ui'
+import { SOCKET_EVENT_BOARD_UPDATED, socketService } from '../../../services/socket.service'
 
 export function ActivityLog({ taskId = null }) {
   // if taskId wasn't supplied then we know we should display global activity log
@@ -30,7 +31,19 @@ export function ActivityLog({ taskId = null }) {
     onLoadBoard()
   }, [])
 
-  useEffect(() => {}, [board])
+
+  useEffect(() => {
+    const handleBoardUpdate = async () => {
+      await getBoardById(boardId) // Re-fetch the board data
+    }
+  
+    socketService.on(SOCKET_EVENT_BOARD_UPDATED, handleBoardUpdate)
+  
+    return () => {
+      socketService.off(SOCKET_EVENT_BOARD_UPDATED, handleBoardUpdate)
+    }
+  }, [boardId])
+
   async function onLoadBoard() {
     try {
       await getBoardById(boardId)
