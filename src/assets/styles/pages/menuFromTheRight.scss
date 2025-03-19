@@ -20,11 +20,20 @@
   transform: translateX(0);
 }
 
+.task-activity_log-header {
+  text-align: center;
+  place-self: start;
+  padding: 15px;
+  color: #373737;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
 .activity_log-header {
   text-align: center;
   place-self: start;
   padding: 15px;
   color: #373737;
-  font-size: 28px;
+  font-size: 20px;
   margin-bottom: 10px;
 }

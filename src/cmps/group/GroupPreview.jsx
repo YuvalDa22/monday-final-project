@@ -108,7 +108,6 @@ export function GroupPreview({
           {
             groupId: group.id,
             taskId: task.id,
-            groupColor: group.style.color,
           },
         ],
         'add'

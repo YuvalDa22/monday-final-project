@@ -158,19 +158,7 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 	// 	}
 	// }
 
-	useEffect(() => {
-		const handleClickOutsideComment = (event) => {
-			if (quillRef.current && !quillRef.current.contains(event.target)) {
-				setEditNewComment(false)
-			}
-		}
-		if (editNewComment) {
-			document.addEventListener('mousedown', handleClickOutsideComment)
-		}
-		return () => {
-			document.removeEventListener('mousedown', handleClickOutsideComment)
-		}
-	}, [editNewComment])
+
 
 	useEffect(() => {
 		// Updated click-out for replies using DOM query similar to comment click-out
@@ -326,7 +314,7 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 						<ReactQuill
 							className='create-comment-editor'
 							value={newComment}
-							onChange={debounce(setNewComment, 400)}
+							onChange={debounce(setNewComment, 200)}
 							theme='snow'
 							modules={{
 								toolbar: [
@@ -425,9 +413,7 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 														<ReactQuill
 															className='textarea-quill'
 															value={findNewReplyByComment(update)?.text}
-															onChange={debounce(
-																(event) => handleReplyChange(event, update.id),
-																400
+															onChange={debounce((event) => handleReplyChange(event, update.id), 200
 															)}
 															modules={{
 																toolbar: [

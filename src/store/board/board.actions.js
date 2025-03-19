@@ -56,62 +56,67 @@ export function logActivity(board, group, task, prev, activity = {}) {
   Allows Conditional Cases:
   We can check both exact string matches (e.g., action === 'addTask') and conditions (e.g., typeof action === 'object'). */
 	switch (true) {
-		case activity.action === 'addTask':
-			message = 'Created'
-			free_txt = `Group: ${group.title}`
+		case activity.action === 'addTask': //
+			message = `Created Task`
+			free_txt = `In: ${group.title}`
 			break
 
-		case activity.action === 'removeTask':
-			message = 'Deleted'
-			free_txt = `From: "${group.title}"`
+		case activity.action === 'removeTask': //
+			message = 'Deleted Task'
+			free_txt = `From: ${group.title}`
 			break
 
-		case activity.action === 'removeMultipleTasks':
-			message = 'Multiple Tasks has been deleted'
-			free_txt = `From: "${board.title}"`
+		case activity.action === 'removeMultipleTasks': //
+			message = 'Deleted Multiple Tasks'
+			free_txt = ``
 			break
 
-		case activity.action === 'duplicateTask':
-			message = 'Duplicated'
-			free_txt = `Group: ${group.title}`
+		case activity.action === 'duplicateTask': //
+			message = 'Duplicated Task'
+			free_txt = `In: ${group.title}`
+			break
+
+		case activity.action === 'duplicateMultipleTask': //
+			message = 'Duplicated multiple tasks'
+			free_txt = ``
 			break
 
 		case activity.action === 'copyCreated':
-			message = 'Created (Copy)'
-			free_txt = `Group: ${group.title}`
+			message = 'Created Copy of a Task'
+			free_txt = `In: ${group.title}`
 			break
 
 		case activity.action === 'movedFrom':
-			message = 'Moved'
-			free_txt = `From Group: ${group.title}`
+			message = 'Moved Task'
+			free_txt = `From: ${group.title}`
 			break
 
-		case activity.action === 'movedTo':
-			message = 'Moved'
-			free_txt = `To Group: ${group.title}`
+		case activity.action === 'movedTo': //
+			message = 'Moved Task'
+			free_txt = activity.free_txt
 			break
 
-		case activity.action === 'moveMultipleTasks':
+		case activity.action === 'moveMultipleTasks': //
 			message = 'Moved Multiple Tasks'
 			free_txt = activity.free_txt
 			break
 
-		case activity.action === 'groupDeleted':
-			message = 'Group Deleted'
+		case activity.action === 'groupDeleted': //
+			message = 'Deleted Group'
 			free_txt = ``
 			break
-		case activity.action === 'taskNameChanged':
-			message = 'Task Name Changed'
-			free_txt = `To ${task.title}`
+		case activity.action === 'taskNameChanged': //
+			message = 'Changed Task Name'
+			free_txt = `To: ${task.title}`
 			break
 
-		case activity.action === 'groupColorChanged':
-			message = 'Group Color Changed'
-			free_txt = ``
+		case activity.action === 'groupColorChanged': //
+			message = 'Changed Group Color'
+			free_txt = `In: ${group.title}`
 			break
 
-		case activity.action === 'groupCreated':
-			message = 'Group Created'
+		case activity.action === 'groupCreated': //
+			message = 'Created Group'
 			free_txt = ``
 			break
 
@@ -120,26 +125,26 @@ export function logActivity(board, group, task, prev, activity = {}) {
 			free_txt = ``
 			break
 		// Handle Object activity.Actions
-		case activity.action === 'groupNameChanged':
-			message = 'Group Name Changed'
-			free_txt = `To ${group?.title}`
+		case activity.action === 'groupNameChanged': //
+			message = 'Changed Group Name'
+			free_txt = `To: ${group?.title}`
 			break
 
-		case activity.action === 'labelChanged':
+		case activity.action === 'labelChanged': //
 			message = activity.message
 			free_txt = activity.free_txt
 			break
-		case activity.action === 'boardNameChanged':
-			message = 'Board Name Changed'
-			free_txt = `To ${board?.title}`
+		case activity.action === 'boardNameChanged': //
+			message = 'Changed Board Name'
+			free_txt = `To: ${board?.title}`
 			break
-		case activity.action === 'taskUpdateAdded':
-			message = 'Update Added'
-			free_txt = `To Task: ${task?.title}`
+		case activity.action === 'taskUpdateAdded': //
+			message = 'Added an Update'
+			free_txt = `To: ${task?.title}`
 			break
-		case activity.action === 'taskReplyAdded':
-			message = 'Reply Added'
-			free_txt = `To Task: ${task?.title}`
+		case activity.action === 'taskReplyAdded': //
+			message = 'Added a Reply'
+			free_txt = `To: ${task?.title}`
 
 		default:
 			console.error('Action was not logged !!!')
@@ -183,7 +188,10 @@ export async function updateBoard(groupId, taskId, { key, value }, activity = {}
 	try {
 		const updatedBoard = await boardService.save(board)
 		store.dispatch({ type: SET_BOARD, board: updatedBoard })
-		store.dispatch({type: SET_BOARDS, boards: boards.map(b => b._id === updatedBoard._id ? updatedBoard : b)}) //update boards state
+		store.dispatch({
+			type: SET_BOARDS,
+			boards: boards.map((b) => (b._id === updatedBoard._id ? updatedBoard : b)),
+		}) //update boards state
 		socketService.emit('board-updated', board._id)
 	} catch (err) {
 		console.error('Failed to save the board:', err)
@@ -260,7 +268,7 @@ export async function duplicateTask(_, group, task) {
 
 export async function duplicateMultipleTasks(_, tasksToDuplicate) {
 	const board = store.getState().boardModule.currentBoard
-	const updatedGroups = board.groups
+	const updatedGroups = [...board.groups]
 
 	// iterate through the tasks to be duplicated
 	tasksToDuplicate.forEach(({ groupId, taskId }) => {
@@ -288,20 +296,20 @@ export async function duplicateMultipleTasks(_, tasksToDuplicate) {
 		// Update the group in the updatedGroups array
 		updatedGroups[groupIndex] = group
 
+		console.log(
+			updatedGroups[groupIndex]
+		)
 		// 2 logs , one for the duplicated task and one for the original task
 		// logActivity(group, duplicatedTask, null, 'copyCreated')
 		// logActivity(group, taskToDuplicate, null, 'duplicateTask')
 	})
 	// Update the board with the modified groups
-	return updateBoard(
-		null,
-		null,
-		{
-			key: 'groups',
-			value: updatedGroups,
-		},
-		{ action: 'duplicateTask' }
-	)
+	if (tasksToDuplicate.length === 1) {
+		const updatedGroup = updatedGroups.find((group) => group.id === tasksToDuplicate[0].groupId)
+		updateBoard( updatedGroup.id, null, { key: 'tasks', value: updatedGroup.tasks }, { action: 'duplicateTask' })
+	} else {
+	updateBoard(null, null,	{key: 'groups',	value: updatedGroups},{ action: 'duplicateMultipleTask' })
+	}
 }
 
 export async function removeMultipleTasks(_, checkedTasks) {
@@ -315,11 +323,11 @@ export async function removeMultipleTasks(_, checkedTasks) {
 	updatedGroups = updatedGroups.map((group) => {
 		// find tasks to remove that belong to the current group
 
-		const tasksToRemove = checkedTasks.filter((checkedTask) => {
-			if (checkedTask.groupId === group.id)
-				// logActivity(group, { id: checkedTask.taskId }, null, 'removeTask')
-				return checkedTask.groupId === group.id
-		})
+		const tasksToRemove = checkedTasks.filter((checkedTask) => checkedTask.groupId === group.id)
+		// if (checkedTask.groupId === group.id)
+		// logActivity(group, { id: checkedTask.taskId }, null, 'removeTask')
+		// 		return checkedTask.groupId === group.id
+		// })
 		// if there are tasks to remove from this group
 		if (tasksToRemove.length > 0) {
 			const updatedTasks = group.tasks.filter(
@@ -331,12 +339,24 @@ export async function removeMultipleTasks(_, checkedTasks) {
 			return group
 		} // If theres no tasks to remove, just return original group
 	})
-	updateBoard(
-		null,
-		null,
-		{ key: 'groups', value: updatedGroups },
-		{ action: 'removeMultipleTasks' }
-	)
+	// If only one task was checked, update the board with the updated group
+	// If multiple tasks were checked, update the board with the updated groups
+	if (checkedTasks.length === 1) {
+		const updatedGroup = updatedGroups.find((group) => group.id === checkedTasks[0].groupId)
+		updateBoard(
+			updatedGroup.id,
+			null,
+			{ key: 'tasks', value: updatedGroup.tasks },
+			{ action: 'removeTask' }
+		)
+	} else {
+		updateBoard(
+			null,
+			null,
+			{ key: 'groups', value: updatedGroups },
+			{ action: 'removeMultipleTasks' }
+		)
+	}
 }
 
 export async function moveMultipleTasksIntoSpecificGroup(_, checkedTasks, targetGroupId) {
@@ -383,8 +403,10 @@ export async function moveMultipleTasksIntoSpecificGroup(_, checkedTasks, target
 
 		// log that it was moved from the old (source) group
 		// logActivity(sourceGroup, taskToMove, null, 'movedFrom')
+
 		//  log that it was moved to the new (target) group
 		// logActivity(targetGroup, taskToMove, null, 'movedTo')
+
 		// add the task to the target group
 		targetGroup.tasks.push(taskToMove)
 		// update the source group
@@ -392,11 +414,12 @@ export async function moveMultipleTasksIntoSpecificGroup(_, checkedTasks, target
 	})
 	// update the target group
 	updatedGroups[targetGroupIndex] = targetGroup
+	const action = checkedTasks.length > 1 ? 'moveMultipleTasks' : 'movedTo'
 	updateBoard(
 		null,
 		null,
 		{ key: 'groups', value: updatedGroups },
-		{ action: 'moveMultipleTasks', free_txt: `To ${targetGroup.title}` }
+		{ action, free_txt: `To: ${targetGroup.title}` }
 	)
 }
 

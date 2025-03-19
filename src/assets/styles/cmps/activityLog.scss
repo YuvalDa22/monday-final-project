@@ -36,7 +36,7 @@
   display: flex;
   gap: 5px;
   align-items: center;
-  width: 250px; // Exactly fits with the "..." truncate
+  width: 150px; // Exactly fits with the "..." truncate
 }
 
 .stal_container {
@@ -49,12 +49,14 @@
 .stal_row {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
   padding: 5px 5px;
   border-bottom: 1px solid rgba(172, 169, 169, 0.7);
 }
 
 .stal-action {
-  width: 160px; // dont change
+  width: 150px; // dont change
   margin: 0px 15px; // to ensure it doesnt get squashed in the future if menu will be resizeable
 }
 
@@ -66,5 +68,5 @@
 }
 
 .stal-free-txt {
-  width: 150px;
+  width: 170px;
 }

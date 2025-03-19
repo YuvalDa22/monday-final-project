@@ -169,18 +169,19 @@ export function ActivityLog({ taskId = null, user }) {
                   {/* incase avatar cant be loaded show letters */}
                 </Avatar.Fallback>
               </Avatar.Root>
-              <span>{taskTitle(taskActivity)}</span>
+              <span>{user.fullname}</span>
+              {/* <span>{taskTitle(taskActivity)}</span> */}
             </div>
             <span className='stal-action'>
               {/* {getIconByAction(taskActivity.action_name)} */}
-              {taskActivity.action_name?.length > 15
-                ? taskActivity.action_name.slice(0, 15) + '...'
+              {taskActivity.action_name?.length > 25
+                ? taskActivity.action_name.slice(0, 25) + '...'
                 : taskActivity.action_name}
             </span>
 
             <div className='stal-free-txt'>
-              {taskActivity.free_txt?.length > 15
-                ? taskActivity.free_txt.slice(0, 15) + '...'
+              {taskActivity.free_txt?.length > 17
+                ? taskActivity.free_txt.slice(0, 17) + '...'
                 : taskActivity.free_txt}
             </div>
           </div>

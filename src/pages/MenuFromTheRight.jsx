@@ -67,7 +67,7 @@ export function MenuFromTheRight() {
 			</div>
 			{activity_log && (
 				<div>
-					<div className='activity_log-header'>Activity log for board "{board.title}"</div>
+					<div className='activity_log-header'><b>{board.title}</b> Log</div>
 					<ActivityLog user={user}/>
 				</div>
 			)}
@@ -77,7 +77,7 @@ export function MenuFromTheRight() {
 						<div>Loading...</div> // Show loading state
 					) : (
 						<>
-							<div className='activity_log-header'>
+							<div className='task-activity_log-header'>
 								Task : {getTaskById(taskId)?.title || taskNameRef.current}
 							</div>
 								<TaskDetails_NavBar taskId={taskId} board={board} user={user} groupId={groupId} />
