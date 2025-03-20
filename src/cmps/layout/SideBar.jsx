@@ -46,6 +46,37 @@ export default function Sidebar() {
 	const [menuAnchor, setMenuAnchor] = useState(null)
 	const [selectedBoard, setSelectedBoard] = useState(null)
 
+	useEffect(() => {
+		fetchBoardsTitle()
+
+
+		// Listen for board-added event
+		socketService.on('board-added', (addedBoard) => {
+			fetchBoardsTitle()
+		})
+
+		// Listen for board-deleted event
+		socketService.on('board-deleted', (deletedBoardId) => {
+			setAllBoardsTitle((prevBoards) => prevBoards.filter((board) => board.id !== deletedBoardId))
+		})
+
+		// Listen for board-title-updated event
+		socketService.on('board-title-updated', ({id, title}) => {
+			setAllBoardsTitle((prevBoards) =>
+				prevBoards.map((board) =>
+					board.id === id ? { ...board, title } : board
+				)
+			)
+      console.log('allBoardsTitle', allBoardsTitle);
+		})
+
+		return () => {
+			socketService.off('board-added')
+			socketService.off('board-deleted')
+			socketService.off('board-title-updated')
+		}
+	}, [])
+
 	const handleMenuClick = (event, boardId) => {
 		event.stopPropagation() // Prevents navigation
 		setMenuAnchor(event.currentTarget)
@@ -66,10 +97,6 @@ export default function Sidebar() {
 		}
 		handleMenuClose() // Close menu after deleting
 	}
-
-	useEffect(() => {
-		fetchBoardsTitle()
-	}, [boards])
 
 	const fetchBoardsTitle = async () => {
 		try {
@@ -123,36 +150,7 @@ export default function Sidebar() {
 		}
 	}
 
-	useEffect(() => {
-		// Listen for board-added event
-		socketService.on('board-added', (addedBoard) => {
-			setAllBoardsTitle((prevBoards) => [
-				...prevBoards,
-				{ id: addedBoard._id, title: addedBoard.title },
-			])
-		})
-
-		// Listen for board-deleted event
-		socketService.on('board-deleted', (deletedBoardId) => {
-			setAllBoardsTitle((prevBoards) => prevBoards.filter((board) => board.id !== deletedBoardId))
-		})
-
-		// Listen for board-title-updated event
-		socketService.on('board-title-updated', ({id, title}) => {
-			setAllBoardsTitle((prevBoards) =>
-				prevBoards.map((board) =>
-					board.id === id ? { ...board, title } : board
-				)
-			)
-      console.log('allBoardsTitle', allBoardsTitle);
-		})
-
-		return () => {
-			socketService.off('board-added')
-			socketService.off('board-deleted')
-			socketService.off('board-title-updated')
-		}
-	}, [])
+	
 
 	return (
 		<div className='sidebar'>
