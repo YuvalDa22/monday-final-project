@@ -168,7 +168,7 @@ export default function GroupItemContainer({
               onBlur={handleCancel}
               sx={{
                 height: '25px',
-                width: '99%',
+                width: '80%',
                 marginTop: '1px',
                 marginLeft: '6px',
                 minWidth: '2ch',
@@ -177,7 +177,7 @@ export default function GroupItemContainer({
                 backgroundColor: 'white',
                 borderRadius: '3px',
                 padding: '0px 5px',
-                border: '1px solid blue',
+                border: '1px solid #0073ea',
               }}
             />
           ) : (
