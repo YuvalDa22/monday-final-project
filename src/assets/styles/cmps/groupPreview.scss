@@ -10,6 +10,7 @@
   -webkit-font-smoothing: initial !important;
   padding: 0px 4px 0px 0px;
   -webkit-text-stroke-width: 0.7px;
+
 }
 
 .gp-main-container {
@@ -19,6 +20,8 @@
   // padding: 0 20px;
   align-items: baseline;
   position: relative;
+
+  
 
   .gh-title-h4 {
     white-space: nowrap;
@@ -32,6 +35,7 @@
   }
 
   .gh-title-input-container {
+    
     box-shadow: none;
     transform: translateX(
       -8px
@@ -53,7 +57,9 @@
   }
 
   .gp-table {
-    width: calc(100vw - 322px);
+    width: calc(100vw - 300px);
+    
+    // overflow-x: hidden;
 
     .custom-table {
       border-collapse: separate;
@@ -63,11 +69,17 @@
       .header-row {
         position: sticky;
         top: 0;
-        z-index: 1000;
+        z-index: 10;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); // Adds a shadow at the bottom
       }
 
       th {
-        background: white;
+        background-color: #ffffff;
+      }
+
+      .end-cell {
+        border-right: none;
+        width: 100%;
       }
 
       a {
@@ -97,10 +109,11 @@
         position: absolute;
         bottom: 0;
         left: 0;
-        width: 100%;
+        // width: 100vh;
+        width: calc(100vw - 322px);
         height: 0.1px;
         background-color: #ddd;
-        transform: translateX(159px);
+        // transform: translateX(159px);
       }
 
       /* This is for the infinite look for the board! */
@@ -109,10 +122,11 @@
         position: absolute;
         top: -1px;
         left: 0;
-        width: 100%;
+        // width: 100%;
+        width: calc(100vw - 322px);
         height: 0.1px;
         background-color: #ddd;
-        transform: translateX(159px);
+        // transform: translateX(159px);
       }
       /* This is for the infinite look for the board! */
       thead tr th:last-child::after {
@@ -120,10 +134,11 @@
         position: absolute;
         bottom: 0;
         left: 0;
-        width: 100%;
+        // width: 100%;
+        width: calc(100vw - 322px);
         height: 0.1px;
         background-color: #ddd;
-        transform: translateX(159px);
+        // transform: translateX(159px);
       }
 
       td:nth-child(1),

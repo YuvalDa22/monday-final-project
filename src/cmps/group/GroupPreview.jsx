@@ -341,6 +341,7 @@ export function GroupPreview({
                     {title}
                   </th>
                 ))}
+                <th className='end-cell'></th>
               </tr>
             </thead>
             <SortableContext
