@@ -4,6 +4,7 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 import { IconButton } from '@mui/material'
 import { TaskDetails_NavBar } from '../cmps/task/TaskDetails_NavBar'
 import { getTaskById } from '../store/board/board.actions.js'
+import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service'
 
 export function TaskDetails() {
 	const boardId = useOutletContext()
