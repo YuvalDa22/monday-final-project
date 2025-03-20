@@ -170,6 +170,17 @@ export function MemberPicker({ info, onUpdate, board }) {
                 boxShadow: 'none',
                 marginBottom: '1em',
               }),
+              input: (provided) => ({
+                ...provided,
+                width: '100%',
+                border: '1px solid #0073ea',
+                borderRadius: '5px',
+                color: '#323338',
+                paddingLeft: '10px',
+                fontFamily:
+                  'Figtree, Roboto, Noto Sans Hebrew, Noto Kufi Arabic, Noto Sans JP, sans-serif',
+                fontSize: '14px', 
+              }),
               menu: (base) => ({
                 ...base,
               }),
