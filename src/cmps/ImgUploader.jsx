@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { uploadService } from '../services/upload.service'
 import { Box, Button, Typography, CircularProgress } from '@mui/material'
+import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service'
 
 export function ImgUploader({ onUploaded = null }) {
 	const [imgData, setImgData] = useState({

@@ -5,6 +5,7 @@ import MenuItem from '@mui/material/MenuItem'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import { Divider } from '@mui/material'
 import { removeGroup } from '../store/board/board.actions'
+import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service'
 
 export function SuggestedActions({ board, group, updateFooterGroupRemoved }) {
 	const [anchorEl, setAnchorEl] = useState(null)
