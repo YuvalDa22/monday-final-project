@@ -100,11 +100,45 @@ export function MemberPicker({ info, onUpdate, board }) {
         {props.data.label}
       </div>
     ),
+    MultiValueRemove: (props) => (
+      <div {...props.innerProps} 
+      style={{ 
+        cursor: "pointer", 
+        width: "20px",
+        height: "20px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "2px", 
+        marginRight: "5px",
+        borderRadius: "50%",
+        transition: "background-color 0.2s ease",
+        backgroundColor: "transparent", }}
+        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "white")} 
+        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")} 
+        >
+        <svg
+          width="auto"
+          height="12"
+          viewBox="0 0 24 24" 
+        >
+          <path
+            d="M6 6L18 18M6 18L18 6"
+            stroke="gray" 
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </div>
+    ),
+    
     MultiValueContainer: (props) => (
       <div className="member-selected-name-container">{props.children}</div>
     ),
     ClearIndicator: null,
     DropdownIndicator: null,
+
   };
 
   useEffect(() => {
@@ -181,6 +215,7 @@ export function MemberPicker({ info, onUpdate, board }) {
                   'Figtree, Roboto, Noto Sans Hebrew, Noto Kufi Arabic, Noto Sans JP, sans-serif',
                 fontSize: '14px', 
               }),
+          
               menu: (base) => ({
                 ...base,
               }),
