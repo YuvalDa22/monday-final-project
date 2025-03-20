@@ -5,6 +5,9 @@ import MenuItem from '@mui/material/MenuItem'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import { Divider } from '@mui/material'
 import { removeGroup } from '../store/board/board.actions'
+import { Icon } from '@vibe/core'
+import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service'
+import { Delete } from '@vibe/icons'
 
 export function SuggestedActions({ board, group, updateFooterGroupRemoved }) {
 	const [anchorEl, setAnchorEl] = useState(null)
@@ -23,6 +26,16 @@ export function SuggestedActions({ board, group, updateFooterGroupRemoved }) {
 		} catch (err) {
 			showErrorMsg('Failed to remove group')
 			console.error(err)
+		}
+	}
+	const handleDelete = async () => {
+		try {
+			updateFooterGroupRemoved(null, group)
+			await removeGroup(group)
+			showSuccessMsg('Group removed successfully')
+		} catch (err) {
+			showErrorMsg('Failed to remove group')
+			console.log(err)
 		}
 	}
 	return (
@@ -50,17 +63,42 @@ export function SuggestedActions({ board, group, updateFooterGroupRemoved }) {
 				anchorEl={anchorEl}
 				open={open}
 				onClose={handleMenuClose}
-				MenuListProps={{
-					'aria-labelledby': 'basic-button',
-				}}>
+				anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+				transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+				slotProps={{
+					paper: {
+						sx: {
+							zIndex: 1300,
+							borderRadius: '8px',
+							color: '#333333',
+							fontSize: '15px',
+							fontWeight: '400',
+							padding: 0,
+							fontFamily: 'Figtree, Roboto, sans-serif',
+							boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.1)',
+							width: '240px',
+						},
+					},
+					list: { sx: { padding: '8px' } },
+				}}
+				disableAutoFocusItem
+				disableEnforceFocus
+				disableRestoreFocus>
 				<MenuItem
-					onClick={() => {
-						handleRemoveGroup()
+					onClick={(event) => {
+						event.stopPropagation()
+						handleDelete()
+					}}
+					sx={{
+						display: 'flex',
+						gap: '10px',
+						alignItems: 'center',
+						cursor: 'pointer',
+						'&:hover': { backgroundColor: '#f5f5f5' },
 					}}>
-					Remove Group
+					<Icon iconType="svg" icon={Delete} iconSize={20} style={{ alignSelf: 'start' }} />
+					<span>Remove Board</span>
 				</MenuItem>
-				{/* <Divider />
-        <MenuItem onClick={handleMenuClose}>...</MenuItem> */}
 			</Menu>
 		</div>
 	)

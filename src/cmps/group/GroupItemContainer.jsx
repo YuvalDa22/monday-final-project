@@ -6,7 +6,9 @@ import { DynamicCmp } from '../task/DynamicCmp'
 import { getSvg } from '../../services/util.service'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { logActivity, updateBoard } from '../../store/board/board.actions'
+import { updateBoard } from '../../store/board/board.actions'
+import { Icon } from '@vibe/core'
+import { Delete, Duplicate } from '@vibe/icons'
 
 const SvgIcon = ({ iconName, options, className }) => {
   return (
@@ -114,23 +116,59 @@ export default function GroupItemContainer({
           >
             <MoreHorizOutlinedIcon sx={{ width: '15px' }} />
           </IconButton>
-
           <Menu
             anchorEl={anchorEl}
             open={Boolean(anchorEl) && selectedTask?.id === item.id}
             onClose={handleMenuClose}
             anchorOrigin={{
-              vertical: 'bottom',
+              vertical: 'top',
               horizontal: 'right',
             }}
             transformOrigin={{
               vertical: 'top',
-              horizontal: 'right',
+              horizontal: 'left',
             }}
+            slotProps={{
+              paper: {
+                sx: {
+                  zIndex: 1300,
+                  borderRadius: '8px',
+                  color: '#333333',
+                  fontSize: '15px',
+                  fontWeight: '400',
+                  padding: 0,
+                  fontFamily: 'Figtree, Roboto, sans-serif',
+                  boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.1)',
+                  width: '240px',
+                },
+              },
+              list: { sx: { padding: '8px' } },
+            }}
+            disableAutoFocusItem
+										disableEnforceFocus
+										disableRestoreFocus
           >
-            <MenuItem onClick={() => handleTaskDeleted(board, group, item)}>Delete task</MenuItem>
-            <MenuItem onClick={() => handleTaskDuplicate(board, group, item)}>
-              Duplicate task
+            <MenuItem onClick={() => handleTaskDeleted(board, group, item)} sx={{
+												display: 'flex',
+												gap: '10px',
+												alignItems: 'center',
+												cursor: 'pointer',
+												'&:hover': { backgroundColor: '#f5f5f5' },
+											}}>
+                        <Icon icon={Delete} iconSize={20} style={{ alignSelf: 'start' }} />
+                        <span>Remove task</span>
+                        
+                        </MenuItem>
+            <MenuItem onClick={() => handleTaskDuplicate(board, group, item)} sx={{
+												display: 'flex',
+												gap: '10px',
+												alignItems: 'center',
+												cursor: 'pointer',
+												'&:hover': { backgroundColor: '#f5f5f5' },
+											}}>
+                        <Icon icon={Duplicate} iconSize={20} style={{ alignSelf: 'start' }} />
+                        <span>Duplicate task</span>
+              
             </MenuItem>
           </Menu>
         </div>

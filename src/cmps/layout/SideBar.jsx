@@ -1,10 +1,6 @@
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
-import { Divider } from '@mui/material'
+import { Divider, Menu, MenuItem } from '@mui/material'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { getSvg } from '../../services/util.service'
-import { Button, ButtonGroup, IconButton as MuiIconButton, Stack as MuiStack } from '@mui/material'
 import {
 	Button as ButtonVibe,
 	IconButton as IconButtonVibe,
@@ -15,10 +11,9 @@ import {
 	MenuButton as MenuButtonVibe,
 	ListItem as ListItemVibe,
 } from '@vibe/core'
-import { Add as AddIcon, Home, Favorite, Workspace, Board, Delete } from '@vibe/icons'
+import { Add as AddIcon, Home, Workspace, Board, Delete } from '@vibe/icons'
 import { showErrorMsg, showSuccessMsg } from '../../services/event-bus.service'
 import React, { useState, useEffect } from 'react'
-import { DropdownMenu } from 'radix-ui'
 import { addBoard, getAllBoardsTitle, removeBoard } from '../../store/board/board.actions'
 import { useSelector } from 'react-redux'
 import { socketService } from '../../services/socket.service'
@@ -42,13 +37,29 @@ export default function Sidebar() {
 	const [allBoardsTitle, setAllBoardsTitle] = useState([])
 	const { boards } = useSelector((storeState) => storeState.boardModule)
 
-	// Fix: Store menu anchor & selected board
 	const [menuAnchor, setMenuAnchor] = useState(null)
 	const [selectedBoard, setSelectedBoard] = useState(null)
 
+	const handleMenuClick = (event, boardId) => {
+		event.stopPropagation()
+		setMenuAnchor(event.currentTarget)
+		setSelectedBoard(boardId)
+	}
+
+	const handleMenuClose = () => {
+		setMenuAnchor(null)
+		setSelectedBoard(null)
+	}
+
+	const handleDelete = async () => {
+		if (boards.some((board) => board._id === selectedBoard)) {
+			await handleRemoveBoard(selectedBoard)
+		}
+		handleMenuClose()
+	}
+
 	useEffect(() => {
 		fetchBoardsTitle()
-
 
 		// Listen for board-added event
 		socketService.on('board-added', (addedBoard) => {
@@ -61,13 +72,11 @@ export default function Sidebar() {
 		})
 
 		// Listen for board-title-updated event
-		socketService.on('board-title-updated', ({id, title}) => {
+		socketService.on('board-title-updated', ({ id, title }) => {
 			setAllBoardsTitle((prevBoards) =>
-				prevBoards.map((board) =>
-					board.id === id ? { ...board, title } : board
-				)
+				prevBoards.map((board) => (board.id === id ? { ...board, title } : board))
 			)
-      console.log('allBoardsTitle', allBoardsTitle);
+			console.log('allBoardsTitle', allBoardsTitle)
 		})
 
 		return () => {
@@ -76,27 +85,6 @@ export default function Sidebar() {
 			socketService.off('board-title-updated')
 		}
 	}, [])
-
-	const handleMenuClick = (event, boardId) => {
-		event.stopPropagation() // Prevents navigation
-		setMenuAnchor(event.currentTarget)
-		setSelectedBoard(boardId)
-	}
-
-	const handleMenuClose = () => {
-		setMenuAnchor(null)
-		setSelectedBoard(null)
-	}
-
-	const handleDelete = (event) => {
-		event.stopPropagation()
-		setMenuAnchor(event.currentTarget)
-
-		if (boards.some((board) => board._id === selectedBoard)) {
-			handleRemoveBoard(selectedBoard)
-		}
-		handleMenuClose() // Close menu after deleting
-	}
 
 	const fetchBoardsTitle = async () => {
 		try {
@@ -149,8 +137,6 @@ export default function Sidebar() {
 			showErrorMsg(`Couldn't remove board, please try again`)
 		}
 	}
-
-	
 
 	return (
 		<div className='sidebar'>
@@ -263,39 +249,71 @@ export default function Sidebar() {
 			</div>
 			<div className='workspace-section'>
 				<ul className='workspace-links'>
-					{allBoardsTitle.map((obj) => (
-						<ListItemVibe
-							style={{ width: '100%' }}
-							key={obj.id}
-							onClick={(event) => onNavigateToBoard(event, obj)}
-							className={`workspace-item ${boardId === obj.id ? 'active' : ''}`}>
-							<IconVibe
-								icon={Board}
-								style={{ color: '#676879', height: '20px', width: '19px' }}
-								className='sidebar_board'
-							/>
-							<span className='textInSidebar'>{obj.title}</span>
-							<div className='menu-container'>
-								<MenuButtonVibe
-									className='menu-button'
-									onClick={(event) => handleMenuClick(event, obj.id)}
-									size='xs'>
-									<MenuVibe
-										size={MenuVibe.sizes.MEDIUM}
+					{allBoardsTitle.map((obj) => {
+						const isMenuOpen = selectedBoard === obj.id && Boolean(menuAnchor)
+						return (
+							<ListItemVibe
+								style={{ width: '100%' }}
+								key={obj.id}
+								onClick={(event) => onNavigateToBoard(event, obj)}
+								className={`workspace-item ${boardId === obj.id ? 'active' : ''}`}>
+								<IconVibe
+									icon={Board}
+									style={{ color: '#676879', height: '20px', width: '19px' }}
+									className='sidebar_board'
+								/>
+								<span className='textInSidebar'>{obj.title}</span>
+								<div className='menu-container'>
+									<MenuButtonVibe
+										className='menu-button'
+										onClick={(event) => handleMenuClick(event, obj.id)}
+										size='xs'
+									/>
+									<Menu
 										anchorEl={menuAnchor}
-										open={Boolean(menuAnchor)}
-										onClose={handleMenuClose}>
-										<MenuItemVibe
-											className='remove-button'
-											icon={Delete}
-											onClick={(event) => handleDelete(event)}
-											title='Remove Board'
-										/>
-									</MenuVibe>
-								</MenuButtonVibe>
-							</div>
-						</ListItemVibe>
-					))}
+										open={isMenuOpen}
+										onClose={handleMenuClose}
+										anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+										transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+										slotProps={{
+											paper: {
+												sx: {
+													zIndex: 1300,
+													borderRadius: '8px',
+													color: '#333333',
+													fontSize: '15px',
+													fontWeight: '400',
+													padding: 0,
+													fontFamily: 'Figtree, Roboto, sans-serif',
+													boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.1)',
+													width: '240px',
+												},
+											},
+											list: { sx: { padding: '8px' } },
+										}}
+										disableAutoFocusItem
+										disableEnforceFocus
+										disableRestoreFocus>
+										<MenuItem
+											onClick={(event) => {
+												event.stopPropagation()
+												handleDelete()
+											}}
+											sx={{
+												display: 'flex',
+												gap: '10px',
+												alignItems: 'center',
+												cursor: 'pointer',
+												'&:hover': { backgroundColor: '#f5f5f5' },
+											}}>
+											<IconVibe icon={Delete} iconSize={20} style={{ alignSelf: 'start' }} />
+											<span>Remove Board</span>
+										</MenuItem>
+									</Menu>
+								</div>
+							</ListItemVibe>
+						)
+					})}
 				</ul>
 			</div>
 		</div>
