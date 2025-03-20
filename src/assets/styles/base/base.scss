@@ -41,9 +41,11 @@ body {
   z-index: 1001;
 }
 
-h4 {
-  font-size: vars.$font-size-h4;
+.h4 {
+  font-family: vars.$title-font-family;
+  font-size: 18px;
   line-height: vars.$font-line-height-h4;
-  font-weight: 500;
+  font-weight: vars.$font-weight-bold;
+  --heading-clamp-lines: 1;
   -webkit-font-smoothing: initial;
 }

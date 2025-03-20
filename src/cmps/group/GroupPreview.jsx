@@ -301,7 +301,8 @@ export function GroupPreview({
                     />
                   </Paper>
                 ) : (
-                  <h4 onClick={() => setIsEditingGroupTitle(true)}>
+                  <h4 onClick={() => setIsEditingGroupTitle(true)}
+                  className="group-title">
                     {group.title ? group.title : 'New Group'}{' '}
                     <span style={{ color: 'gray', marginLeft: '10px' }}>
                       {isCollapsed ? `${group.tasks.length} Tasks [Collapsed]` : ''}

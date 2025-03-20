@@ -1,5 +1,17 @@
 @use '../setup/vars';
 
+.group-title {
+  font-family: Poppins;
+  font-size: 18px !important;
+  line-height: 24px;
+  max-height: 24px;
+  font-weight: 500;
+  --heading-clamp-lines: 1 !important;
+  -webkit-font-smoothing: initial !important;
+  padding: 0px 4px 0px 0px;
+  -webkit-text-stroke-width: 0.7px;
+}
+
 .gp-main-container {
   display: flex;
   flex-direction: column;
@@ -259,7 +271,8 @@
   display: flex;
   height: 100%;
   padding: 7px;
-  animation: name duration timing-function delay iteration-count direction fill-mode;
+  animation: name duration timing-function delay iteration-count direction
+    fill-mode;
 }
 .ProgressBar_single_color {
   transition: width 0.4s ease-out;
