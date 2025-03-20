@@ -1,18 +1,47 @@
-.user-msg-container > div {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  text-wrap: nowrap !important;
+@use '../setup/vars';
+
+.user-msg-container {
   position: fixed;
-  top: 16px; /* Ensures it's at the top */
+  top: 16px;
   left: 50%;
-  transform: translateX(-50%); /* Centers it horizontally */
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: vars.$color-snow_white !important;
+  font-size: 14px;
+  z-index: 1000;
+  min-width: 250px;
+  max-width: 400px;
+  transition: all 0.3s ease-in-out;
 
-  max-width: 300px !important;
-  border-radius: 4px !important;
-  height: 48px !important;
-
-  margin: 16px 0px !important;
-  padding: 8px !important;
-  font-size: 14px !important;
+  
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15); /* Softer shadow */
+  border: none !important;
 }
+
+/* Icons */
+.alert-icon {
+  color: white !important;
+  flex-shrink: 0;
+}
+
+.close-icon {
+  color: white !important;
+  cursor: pointer;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Force text visibility */
+.user-msg-text {
+  color: white !important;
+  font-size: 14px !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  flex: 1;
+}
+
+

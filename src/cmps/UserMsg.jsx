@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { eventBusService } from '../services/event-bus.service';
-import { AlertBanner, AlertBannerText, Icon } from '@vibe/core';
-import { Check } from '@vibe/icons';
+import { Check, XCircle } from 'lucide-react'; // Lightweight icons
 
 export function UserMsg() {
   const [msg, setMsg] = useState(null);
@@ -9,7 +8,7 @@ export function UserMsg() {
   useEffect(() => {
     const unsubscribe = eventBusService.on('show-user-msg', (msg) => {
       setMsg(msg);
-      setTimeout(closeMsg, 3000);
+      setTimeout(closeMsg, 1500);
     });
 
     return () => unsubscribe();
@@ -21,35 +20,34 @@ export function UserMsg() {
 
   if (!msg) return null;
 
-  const backgroundColorMap = {
-    success: 'positive',
-    error: 'negative',
-    warning: 'warning',
-    info: 'dark',
-  };
+  const bgColor =
+    {
+      success: '#00854d',
+      error: '#d83a52',
+      warning: '#FFCB00',
+      info: '#579BFC',
+    }[msg.type] || '#579BFC';
 
   return (
-    <div className="user-msg-container">
-      <Icon
-        iconSize={40}
-        icon={Check}
-        style={{
-          zIndex: '1000',
-          color: 'black',
-          top: '30px',
-          position: 'absolute',
-          //left: '45%',
-          // marginLeft: 'calc(100% - 13px)',
-          marginTop: '15px',
-        }}
-      />
-      <AlertBanner
-        backgroundColor={backgroundColorMap[msg.type] || 'dark'}
-        onClose={closeMsg}
-        canDismiss
+    <div className="user-msg-container" style={{ backgroundColor: bgColor }}>
+      <svg className="alert-icon" width="20" height="20" viewBox="0 0 24 24">
+        <path fill="white" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z" />
+      </svg>
+      <span className="user-msg-text">{msg.txt}</span>
+      <svg
+        className="close-icon"
+        onClick={closeMsg}
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
       >
-        <AlertBannerText text={msg.txt} className="user-msg-text" />
-      </AlertBanner>
+        <path
+          d="M18 6 L6 18 M6 6 L18 18"
+          stroke="white"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
     </div>
   );
 }
