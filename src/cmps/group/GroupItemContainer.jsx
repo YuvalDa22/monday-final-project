@@ -194,6 +194,7 @@ export default function GroupItemContainer({
                 onClick={(event) => event.preventDefault()}
                 onBlur={handleCancel}
                 sx={{
+                  fontFamily: 'inherit',
                   height: '25px',
                   width: 'min(380px, 100%)', 
                   backgroundColor: 'white',
