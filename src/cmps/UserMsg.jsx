@@ -1,27 +1,55 @@
-import { useEffect, useState } from "react";
-import { eventBusService } from "../services/event-bus.service";
+import { useEffect, useState } from 'react';
+import { eventBusService } from '../services/event-bus.service';
+import { AlertBanner, AlertBannerText, Icon } from '@vibe/core';
+import { Check } from '@vibe/icons';
 
 export function UserMsg() {
   const [msg, setMsg] = useState(null);
 
   useEffect(() => {
-    eventBusService.on("show-user-msg", (msg) => {
+    const unsubscribe = eventBusService.on('show-user-msg', (msg) => {
       setMsg(msg);
       setTimeout(closeMsg, 3000);
     });
+
+    return () => unsubscribe();
   }, []);
 
   function closeMsg() {
     setMsg(null);
   }
 
-  if (!msg) return <></>;
+  if (!msg) return null;
+
+  const backgroundColorMap = {
+    success: 'positive',
+    error: 'negative',
+    warning: 'warning',
+    info: 'dark',
+  };
+
   return (
-    <div className={"user-msg " + msg.type}>
-      <h4>{msg.txt}</h4>
-      <button onClick={closeMsg} className="close-btn">
-        X
-      </button>
+    <div className="user-msg-container">
+      <Icon
+        iconSize={40}
+        icon={Check}
+        style={{
+          zIndex: '1000',
+          color: 'black',
+          top: '30px',
+          position: 'absolute',
+          //left: '45%',
+          // marginLeft: 'calc(100% - 13px)',
+          marginTop: '15px',
+        }}
+      />
+      <AlertBanner
+        backgroundColor={backgroundColorMap[msg.type] || 'dark'}
+        onClose={closeMsg}
+        canDismiss
+      >
+        <AlertBannerText text={msg.txt} className="user-msg-text" />
+      </AlertBanner>
     </div>
   );
 }
