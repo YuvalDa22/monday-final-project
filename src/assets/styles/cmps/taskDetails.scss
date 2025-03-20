@@ -3,12 +3,13 @@
 .updates-tab {
 	height: calc(100vh - 180px);
 	overflow-y: auto;
+	scroll-behavior: smooth; /* Smooth scrolling */
 	&::-webkit-scrollbar {
 		width: 8px;
 	}
 	&::-webkit-scrollbar-thumb {
-		background: #a2a2a2cb;
-		// border-radius: 5px;
+		background-color: vars.$color-wolf_gray;
+		border-radius: 0;
 	}
 }
 .chat-body {

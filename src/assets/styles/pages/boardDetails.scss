@@ -1,9 +1,9 @@
 @use '../setup/vars';
 .board-details-container {
-  background-color: white;
   border-radius: 8px 0px 0px 0px;
   height: 105%;
   overflow: hidden;
+  background-color: #fff;
 }
 
 .board-details-groups-container {
@@ -12,7 +12,19 @@
   gap: 4em;
   margin-top: 28px;
   padding-left: 0;
-  height: 68vh;
+  height: 83vh;
+  overflow-x: hidden;
+  overflow-y: scroll; /* Always show scrollbar */
+  scroll-behavior: smooth; /* Smooth scrolling */
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: vars.$color-wolf_gray;
+    border-radius: 0;
+  }
+  // scrollbar-width:thin ; /* For Firefox */
+  // scrollbar-gutter: stable both-edges; /* Modern browsers */
 
   @media (max-width: 990px) {
     width: 75vw;
@@ -26,9 +38,6 @@
     width: 55vw;
   }
 
-  overflow-y: auto; /* Always show scrollbar */
-  scrollbar-width: thin; /* For Firefox */
-  scrollbar-gutter: stable both-edges; /* Modern browsers */
 }
 
 .div-in-button {
@@ -44,6 +53,7 @@
 }
 
 .add-group-button-container {
+  margin-bottom: 60px;
   & :hover {
     background-color: vars.$primary-background-hover-color;
   }
