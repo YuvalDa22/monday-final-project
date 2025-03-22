@@ -91,12 +91,12 @@
 				position: relative;
 			}
 
-			tfoot tr:first-of-type,
-			tfoot tr:first-of-type td,
-			tfoot tr:first-of-type th {
-				border-right: none; /* remove border from "Add task" row */
-				right: 0.1px;
-			}
+			// tfoot tr:first-of-type,
+			// tfoot tr:first-of-type td,
+			// tfoot tr:first-of-type th {
+			// 	border-right: none; /* remove border from "Add task" row */
+			// 	right: 0.5px;
+			// }
 
 			/* This is for the infinite look for the board! */
 			tr td:last-child::after,
@@ -109,7 +109,7 @@
 				width: calc(100vw - 322px);
 				height: 0.1px;
 				background-color: #ddd;
-				// transform: translateX(159px);
+				transform: translateX(159px);
 			}
 
 			/* This is for the infinite look for the board! */
@@ -122,19 +122,19 @@
 				width: calc(100vw - 322px);
 				height: 0.1px;
 				background-color: #ddd;
-				// transform: translateX(159px);
+				transform: translateX(159px);
 			}
 			/* This is for the infinite look for the board! */
 			thead tr th:last-child::after {
 				content: '';
+				background-color: transparent;
 				position: absolute;
 				bottom: 0;
 				left: 0;
 				// width: 100%;
 				width: calc(100vw - 322px);
-				height: 0.1px;
-				background-color: #ddd;
-				// transform: translateX(159px);
+				// height: 0.1px;
+				transform: translateX(159px);
 			}
 
 			td:nth-child(1),
@@ -232,20 +232,25 @@
 	display: flex;
 	position: relative; /* Ensures the ::before pseudo-element positions relative to this */
 }
+
+.add-item-row {
+	border-right: none;
+}
+
 .checkbox-cell:not(:first-child)::before {
 	content: '';
 	position: absolute;
 	inset: 0;
 	left: -3px;
 	width: 6px;
-	height: 104%;
+	height: 40px;
 	top: -1px;
 	background-color: var(--group-color);
 }
 
 .checkbox-cell {
 	position: relative;
-
+	
 	&.header {
 		::before {
 			content: '';
@@ -264,7 +269,7 @@
 			position: absolute;
 			left: -3px;
 			width: 6px;
-			height: 104%;
+			height: 106%;
 			opacity: 0.4;
 			background-color: var(--group-color);
 			border-bottom-left-radius: 8px;

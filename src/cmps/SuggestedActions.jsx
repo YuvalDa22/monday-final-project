@@ -8,6 +8,7 @@ import { removeGroup } from '../store/board/board.actions'
 import { Icon } from '@vibe/core'
 import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service'
 import { Delete } from '@vibe/icons'
+import { Box } from 'lucide-react'
 
 export function SuggestedActions({ board, group, updateFooterGroupRemoved }) {
 	const [anchorEl, setAnchorEl] = useState(null)
@@ -17,16 +18,6 @@ export function SuggestedActions({ board, group, updateFooterGroupRemoved }) {
 	}
 	const handleMenuClose = () => {
 		setAnchorEl(null)
-	}
-	const handleRemoveGroup = async () => {
-		try {
-			updateFooterGroupRemoved(null, group)
-			await removeGroup(group)
-			showSuccessMsg('Group removed successfully')
-		} catch (err) {
-			showErrorMsg('Failed to remove group')
-			console.error(err)
-		}
 	}
 	const handleDelete = async () => {
 		try {
@@ -68,10 +59,10 @@ export function SuggestedActions({ board, group, updateFooterGroupRemoved }) {
 				slotProps={{
 					paper: {
 						sx: {
-							zIndex: 1300,
+							zIndex: 13,
 							borderRadius: '8px',
 							color: '#333333',
-							fontSize: '15px',
+							fontSize: '14px',
 							fontWeight: '400',
 							padding: 0,
 							fontFamily: 'Figtree, Roboto, sans-serif',
@@ -87,17 +78,20 @@ export function SuggestedActions({ board, group, updateFooterGroupRemoved }) {
 				<MenuItem
 					onClick={(event) => {
 						event.stopPropagation()
-						handleDelete()
+						if(board.groups.length > 1)	handleDelete()
 					}}
+					disabled={board.groups.length === 1}
 					sx={{
 						display: 'flex',
 						gap: '10px',
 						alignItems: 'center',
 						cursor: 'pointer',
+						fontSize: '14px',
 						'&:hover': { backgroundColor: '#f5f5f5' },
+						padding: '4px 8px',
 					}}>
-					<Icon iconType="svg" icon={Delete} iconSize={20} style={{ alignSelf: 'start' }} />
-					<span>Remove Group</span>
+					<Icon iconType="svg" icon={Delete} iconSize={18} style={{ alignSelf: 'start' }} />
+					<span style={{fontSize: '14px'}}>Remove Group</span>
 				</MenuItem>
 			</Menu>
 		</div>

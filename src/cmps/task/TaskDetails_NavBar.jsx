@@ -363,8 +363,7 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 				{/* Render Updates */}
 
 				{loading && <div>Loading...</div>}
-
-				{updates?.length ? (
+				{(updates && updates.length) ? (
 					<div className='chat-body'>
 						<div className='chat-inner-body'>
 							<ul className='comments-list'>

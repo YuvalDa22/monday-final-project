@@ -16,6 +16,7 @@ html {
 body {
   font-family: vars.$font-family;
   color: vars.$primary-text-color;
+  transition: vars.$motion-timing-transition;
 }
 
 .modal-backdrop {

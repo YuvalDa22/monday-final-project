@@ -14,7 +14,7 @@ import {
 	getGroupByTaskId,
 	loadBoards,
 } from '../store/board/board.actions'
-import { Icon as IconVibe } from '@vibe/core'
+import { Heading, Icon as IconVibe } from '@vibe/core'
 import { Add } from '@vibe/icons'
 import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service'
 import { Button, IconButton, Menu, MenuItem } from '@mui/material'
@@ -45,11 +45,13 @@ export function BoardDetails() {
 	const { boardId } = useParams()
 	const user = useSelector((storeState) => storeState.userModule.user)
 	const navigate = useNavigate()
+	const currentBoard = useSelector((storeState) => storeState.boardModule.currentBoard)
 
 	const board = useSelector((storeState) => {
 		const currentBoard = storeState.boardModule.currentBoard
 		return currentBoard ? boardService.filterBoard(currentBoard, filterBy) : null
 	})
+
 
 	const [activeTask, setActiveTask] = useState() // drag and drop
 	const [checkedTasksList, setCheckedTasksList] = useState([])
@@ -295,10 +297,11 @@ export function BoardDetails() {
 					onAddGroup={onAddGroup}
 					filterBy={filterBy}
 					onSetFilterBy={onSetFilterByDebounce}
+					currentBoard={currentBoard}
 				/>
 			</div>
 
-			<div className='board-details-groups-container'>
+			{board.groups.length ? (<div className='board-details-groups-container'>
 				<DndContext
 					collisionDetection={closestCorners}
 					onDragStart={handleDragStart}
@@ -361,7 +364,14 @@ export function BoardDetails() {
 						</div>
 					</Button>
 				</div>
-			</div>
+			</div> 
+			): (
+				<div className="no-groups-container">
+					<img src="https://res.cloudinary.com/ofirgady/image/upload/v1742631862/je9sa8d5amvpuykzdcxq.svg" alt="empty board" 
+						style={{width: '200px', height: '230px'}}/>
+					<Heading type='h2' >No results were found</Heading>
+				</div>
+			)}
 			<div
 				className={`board-details_footer ${
 					checkedTasksList.length > 0 ? 'show_footer' : 'hide_footer'

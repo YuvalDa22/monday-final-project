@@ -7,10 +7,11 @@ import { useState, useEffect } from 'react'
 import { updateBoard, logActivity } from '../../store/board/board.actions'
 import { use } from 'react'
 import { set } from 'date-fns'
+import { useSelector } from 'react-redux'
 
 
 // Note : We can ignore the props validation error for now
-export function BoardHeader({ board, onAddGroup, onAddTask ,filterBy, onSetFilterBy}) {
+export function BoardHeader({ board, onAddGroup, onAddTask ,filterBy, onSetFilterBy, currentBoard }) {
   const [isEditingBoardTitle, setIsEditingBoardTitle] = useState(false)
   const [boardTempTitle, setBoardTempTitle] = useState(board?.title || '')
 
@@ -22,21 +23,6 @@ export function BoardHeader({ board, onAddGroup, onAddTask ,filterBy, onSetFilte
 
   const handleBoardTitleSave = () => {
     if (boardTempTitle.trim() && boardTempTitle !== board?.title) {
-      // logActivity(null, null, board.title, {
-      //   action: 'boardNameChanged',
-      //   message: 'Board Name Changed',
-      //   free_txt: `To '${boardTempTitle}'`,
-      // })
-      // board.activities.unshift(
-      //   boardService.createActivityLog(
-      //     board._id,
-      //     null,
-      //     null,
-      //     'Board Name Changed',
-      //     `${boardTempTitle}`,
-      //     board.title
-      //   ) // prevValue = board.title
-      // )
       updateBoard(null, null, { key: 'title', value: boardTempTitle } ,{action: 'boardNameChanged'})
     }
     setIsEditingBoardTitle(false)
@@ -81,7 +67,7 @@ export function BoardHeader({ board, onAddGroup, onAddTask ,filterBy, onSetFilte
         <AdditionalBoardActions board={board}/>
       </div>
       <BoardNavBar />
-      <BoardActionsBar board={board} onAddTask={onAddTask} onAddGroup={onAddGroup} filterBy={filterBy} onSetFilterBy={onSetFilterBy}/>
+      <BoardActionsBar board={board} onAddTask={onAddTask} onAddGroup={onAddGroup} filterBy={filterBy} onSetFilterBy={onSetFilterBy} currentBoard={currentBoard}/>
     </div>
   )
 }

@@ -118,8 +118,8 @@ export function MemberPicker({ info, onUpdate, board }) {
         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")} 
         >
         <svg
-          width="auto"
-          height="12"
+          length="auto"
+          height="12px"
           viewBox="0 0 24 24" 
         >
           <path

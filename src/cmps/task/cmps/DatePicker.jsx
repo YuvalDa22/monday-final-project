@@ -6,6 +6,8 @@ import {
 import { Add, AddSmall } from '@vibe/icons';
 import { Icon, IconButton } from '@vibe/core';
 import { getSvg, utilService } from '../../../services/util.service';
+import moment from 'moment';
+
 
 const SvgIcon = ({ iconName, options, className }) => {
   return (
@@ -19,7 +21,7 @@ const SvgIcon = ({ iconName, options, className }) => {
 export function DatePicker({ info, onUpdate }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(
-    info ? new Date(info) : null
+    info ? moment(info) : null
   );
   const datePickerRef = useRef(null);
 
@@ -50,22 +52,23 @@ export function DatePicker({ info, onUpdate }) {
       return;
     }
 
+    
+    setSelectedDate(date);
     const jsDate = date.toDate(); // Convert Moment.js to JavaScript Date
-
-    setSelectedDate(jsDate);
     const formattedDate = utilService.formatDate(jsDate);
     onUpdate({ id: formattedDate, title: formattedDate });
     setIsOpen(false);
   };
 
   //TODO : Make + icon of 'date-picker-add-icon' bigger
+  const initialVisibleMonth = selectedDate || moment();
 
   return (
     <div className="date-picker-container" ref={datePickerRef}>
       <div className="input-wrapper" onClick={() => setIsOpen(!isOpen)}>
         {selectedDate ? (
           <span className="date-picker-display">
-            {utilService.formatDate(selectedDate)}
+            {utilService.formatDate(selectedDate.toDate())}
           </span>
         ) : (
           <div>
@@ -91,10 +94,11 @@ export function DatePicker({ info, onUpdate }) {
         <DialogContentContainer className="date-picker-dropdown" type={DialogContentContainer.types.POPOVER}>
           <VibeDatePicker
             className="custom-vibe-datepicker"
-            value={selectedDate}
+            date={selectedDate}
             onPickDate={handleDateChange}
             inline
             onClose={() => setIsOpen(false)}
+            shouldBlockYear={false}
           />
         </DialogContentContainer>
       )}

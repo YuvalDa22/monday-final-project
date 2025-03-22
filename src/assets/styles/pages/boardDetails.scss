@@ -1,27 +1,38 @@
 @use '../setup/vars';
+
 .board-details-container {
-  border-radius: 8px 0px 0px 0px;
+  border-radius: vars.$border-radius-medium;
   height: 105%;
   overflow: hidden;
-  background-color: #fff;
+  background-color: vars.$primary-background-color;
+}
+
+.no-groups-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  padding-top: vars.$spacing-xxl;
 }
 
 .board-details-groups-container {
   display: flex;
   flex-direction: column;
-  gap: 4em;
-  margin-top: 28px;
+  gap: vars.$spacing-large;
+  margin-top: vars.$spacing-medium;
   padding-left: 0;
   height: 83vh;
   overflow-x: hidden;
   overflow-y: scroll; /* Always show scrollbar */
   scroll-behavior: smooth; /* Smooth scrolling */
+
   &::-webkit-scrollbar {
-    width: 10px;
+    width: vars.$spacing-small; /* Use spacing variable for scrollbar width */
   }
+
   &::-webkit-scrollbar-thumb {
     background-color: vars.$color-wolf_gray;
-    border-radius: 0;
+    border-radius: vars.$border-radius-small;
   }
   // scrollbar-width:thin ; /* For Firefox */
   // scrollbar-gutter: stable both-edges; /* Modern browsers */
@@ -38,23 +49,26 @@
     width: 55vw;
   }
 
+  // transition: all vars.$motion-expressive-short vars.$motion-timing-transition;
 }
+
 
 .div-in-button {
   justify-content: center;
   align-items: center;
   justify-items: center;
-  margin-right: 10px;
-  padding-bottom: 5px;
+  margin-right: vars.$spacing-small;
+  padding-bottom: vars.$spacing-xs;
 }
+
 
 .div-in-button:hover {
   background-color: transparent !important;
 }
 
 .add-group-button-container {
-  margin-bottom: 60px;
-  & :hover {
+  margin-bottom: vars.$spacing-xxl;
+  &:hover {
     background-color: vars.$primary-background-hover-color;
   }
 }

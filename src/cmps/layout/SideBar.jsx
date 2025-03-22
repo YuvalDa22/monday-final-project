@@ -305,9 +305,10 @@ export default function Sidebar() {
 												alignItems: 'center',
 												cursor: 'pointer',
 												'&:hover': { backgroundColor: '#f5f5f5' },
+												padding: '4px 8px',
 											}}>
-											<IconVibe icon={Delete} iconSize={20} style={{ alignSelf: 'start' }} />
-											<span>Remove Board</span>
+											<IconVibe icon={Delete} iconSize={18} style={{ alignSelf: 'start' }} />
+											<span style={{fontSize: '14px'}}>Remove Board</span>
 										</MenuItem>
 									</Menu>
 								</div>

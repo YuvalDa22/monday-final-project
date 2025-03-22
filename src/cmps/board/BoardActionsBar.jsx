@@ -4,6 +4,7 @@ import {
 	Button,
 	ButtonGroup,
 	ClickAwayListener,
+	darkScrollbar,
 	IconButton,
 	InputBase,
 	IconButton as MuiIconButton,
@@ -15,6 +16,7 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import { getSvg } from '../../services/util.service'
 import { useEffect, useRef, useState } from 'react'
 import { loadBoards } from '../../store/board/board.actions'
+import { Heading } from '@vibe/core'
 
 const SvgIcon = ({ iconName, options, className }) => {
 	return (
@@ -25,7 +27,6 @@ const SvgIcon = ({ iconName, options, className }) => {
 }
 
 export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetFilterBy }) {
-	
 	const [filterByToEdit, setFilterByToEdit] = useState(filterBy)
 	const [isSearchInputVisible, setIsSearchInputVisible] = useState(false)
 	const [boardBeforeFilter, setBoardBeforeFilter] = useState(board)
@@ -72,14 +73,42 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 		onAddTask(board.groups[0], 'New Task', fromHeader)
 	}
 
+	const quickFiltersStyle = {
+		display: 'flex',
+		gap: 2,
+		paddingTop: '8px',
+		overflowY: 'hidden',
+		overflowX: 'auto',
+		height: '270px',
+		scrollbarWidth: 'thin',
+		scrollbarColor: '#c3c6d4 transparent',
+	}
+
+	const filterListStyle = {
+		listStyle: 'none',
+		padding: '4px 4px 0 0',
+		margin: 0,
+		overflowY: 'auto',
+		overflowX: 'hidden',
+		maxHeight: '230px',
+		scrollbarWidth: 'thin',
+		scrollbarColor: '#c3c6d4 transparent',
+			paddingBottom: '20px',
+	}
+
 	const filterBtnStyle = {
-		width: '10rem',
+		width: '150px',
+		height: '32px',
+		padding: '0 12px',
+		fontSize: '14px',
+		fontWeight: 400,
 		textTransform: 'none',
 		display: 'flex',
 		alignItems: 'center',
-		gap: '10px',
+		gap: '6px',
 		justifyContent: 'space-between',
 		border: 'none',
+		borderRadius: '4px',
 		color: '#323338',
 		boxShadow: 'none',
 		'&.MuiButton-outlined': {
@@ -97,6 +126,11 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 			},
 		},
 	}
+
+	const filterActive = filterByToEdit.groups.length || filterByToEdit.tasks.length || filterByToEdit.members.length || filterByToEdit.statusLabels.length || filterByToEdit.priorityLabels.length ? 'active' : ''
+	const searchActive = filterByToEdit.txt.length ? 'active' : ''
+
+	const filterHeadertyle = {mb: 2,fontWeight: 600, color: '#353535', fontSize: '16px'}
 
 	const { txt } = filterByToEdit
 	return (
@@ -168,7 +202,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 			{isSearchInputVisible ? (
 				<ClickAwayListener onClickAway={handleClickAway}>
 					<Box ref={searchRef} component='form' className='search-txt-input'>
-						<IconButton sx={{ p: '4px 5px' }} aria-label='menu' disabled>
+						<IconButton sx={{ padding: '4px 5px' }} aria-label='menu' disabled>
 							<SearchOutlinedIcon className='icon' />
 						</IconButton>
 
@@ -182,8 +216,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 							onChange={handleFilterChange}
 							autoFocus
 						/>
-
-						<IconButton
+						{/* <IconButton
 							type='button'
 							sx={{ p: '4px 5px', borderRadius: '5px' }}
 							aria-label='search'>
@@ -191,11 +224,11 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 								iconName='boardActionsBar_searchOptions'
 								options={{ height: 17, width: 17 }}
 							/>
-						</IconButton>
+						</IconButton> */}
 					</Box>
 				</ClickAwayListener>
 			) : (
-				<MuiIconButton className='icon-button' onClick={() => setIsSearchInputVisible(true)}>
+				<MuiIconButton className={`icon-button ${searchActive}`} onClick={() => setIsSearchInputVisible(true)}>
 					<SearchOutlinedIcon className='icon' />
 					<span>Search</span>
 				</MuiIconButton>
@@ -204,7 +237,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 				<SvgIcon iconName='boardActionsBar_person' options={{ height: 22, width: 22 }} />
 				<span>Person</span>
 			</MuiIconButton>
-			<MuiIconButton className='icon-button' onClick={OnOpenFilterPopover}>
+			<MuiIconButton className={`icon-button ${filterActive}`} onClick={OnOpenFilterPopover}>
 				<SvgIcon iconName='boardActionsBar_filter' options={{ height: 22, width: 22 }} />
 				<span>Filter</span>
 			</MuiIconButton>
@@ -217,18 +250,19 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 					vertical: 'bottom',
 					horizontal: 'center',
 				}}>
-				<Box sx={{ p: 2, minWidth: 600, color: '#323338' }}>
-					<Typography variant='h6' sx={{ mb: 2 }}>
-						Filter Options
+				<Box sx={{ p: '16px 24px 24px 24px', width: 800, color: '#323338' }}>
+					<Typography variant='h6' sx={filterHeadertyle}>
+						Quick filters
 					</Typography>
 
-					<Box sx={{ display: 'flex', gap: 3 }}>
+					<Box sx={quickFiltersStyle}>
 						{/* Filter by Groups */}
 						<Box>
 							<Typography variant='subtitle2' sx={{ mb: 1 }}>
 								Group
 							</Typography>
-							<ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+							<ul
+								style={filterListStyle}>
 								{boardBeforeFilter.groups.map((group) => (
 									<li key={group.id} style={{ marginBottom: '8px' }}>
 										<Button
@@ -251,8 +285,8 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 											{group.title}
 											<span
 												style={{
-													width: 12,
-													height: 12,
+													width: 10,
+													height: 10,
 													borderRadius: '50%',
 													backgroundColor: group.style.color,
 												}}
@@ -268,7 +302,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 							<Typography variant='subtitle2' sx={{ mb: 1 }}>
 								Tasks
 							</Typography>
-							<ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+							<ul style={filterListStyle}>
 								{boardBeforeFilter.groups.flatMap((group) =>
 									group.tasks.map((task) => (
 										<li key={task.id} style={{ marginBottom: '8px' }}>
@@ -301,7 +335,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 							<Typography variant='subtitle2' sx={{ mb: 1 }}>
 								Members
 							</Typography>
-							<ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+							<ul style={filterListStyle}>
 								{board.members.map((member) => (
 									<li key={member._id} style={{ marginBottom: '8px' }}>
 										<Button
@@ -343,7 +377,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 							<Typography variant='subtitle2' sx={{ mb: 1 }}>
 								Status
 							</Typography>
-							<ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+							<ul style={filterListStyle}>
 								{board.labels
 									.filter((label) => label.id.startsWith('l1'))
 									.map((label) => (
@@ -369,8 +403,8 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 												{label.title || 'No Status'}
 												<span
 													style={{
-														width: 12,
-														height: 12,
+														width: 10,
+														height: 10,
 														borderRadius: '50%',
 														backgroundColor: label.color,
 													}}
@@ -386,7 +420,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 							<Typography variant='subtitle2' sx={{ mb: 1 }}>
 								Priority
 							</Typography>
-							<ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+							<ul style={filterListStyle}>
 								{board.labels
 									.filter((label) => label.id.startsWith('l2'))
 									.map((label) => (
@@ -414,8 +448,8 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 												{label.title || 'No Status'}
 												<span
 													style={{
-														width: 12,
-														height: 12,
+														width: 10,
+														height: 10,
 														borderRadius: '50%',
 														backgroundColor: label.color,
 													}}

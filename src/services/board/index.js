@@ -136,7 +136,7 @@ function createNewUpdate(text, user) {
       imgUrl: user.imgUrl,
     },
     text,
-    createdAt: utilService.formatDate(Date.now()),
+    createdAt: Date.now(),
     replies: [],
   };
 }

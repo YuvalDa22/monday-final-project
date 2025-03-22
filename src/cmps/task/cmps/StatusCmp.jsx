@@ -52,6 +52,7 @@ export function StatusCmp({ onUpdate, board, info }) {
       flexDirection: 'column',
       alignItems: 'center',
       boxShadow: ' 0 0 8px rgba(0, 0, 0, 0.5)',
+      zIndex: '11'
     }),
   };
 
