@@ -9,14 +9,14 @@ export function AppHeader() {
       <div>
         <img
           onClick={() => navigate("/")}
-          src="https://agenda.agami-network.com/static/media/agenda-logo-color.cb0ce09dcc5b97c18eb5755c559acc2a.svg"
+					src='https://res.cloudinary.com/ofirgady/image/upload/v1742651944/nkafdc4fmxgpx3ysvx3r.png'
           alt="logo"
         />
         <h2>Tomorrow</h2>
       </div>
       <div>
         <button onClick={() => navigate("/login")}>Log in</button>
-        <button>Start Demo</button>
+        {/* <button>Start Demo</button> */}
       </div>
     </div>
   );

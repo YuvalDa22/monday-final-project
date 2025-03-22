@@ -35,6 +35,7 @@ import {
 import { arrayMove } from '@dnd-kit/sortable'
 import { Item } from '../../src/cmps/group/GroupItemContainer'
 import { socketService } from '../services/socket.service'
+import { LoadingSpinner } from '../cmps/LoadingSpinner'
 
 const SvgIcon = ({ iconName, options }) => {
 	return <i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>
@@ -44,14 +45,14 @@ export function BoardDetails() {
 	const [filterBy, setFilterBy] = useState(boardService.getDefaultFilter())
 	const { boardId } = useParams()
 	const user = useSelector((storeState) => storeState.userModule.user)
+	const isLoading = useSelector((storeState) => storeState.boardModule.isLoading)
 	const navigate = useNavigate()
 	const currentBoard = useSelector((storeState) => storeState.boardModule.currentBoard)
-
 	const board = useSelector((storeState) => {
 		const currentBoard = storeState.boardModule.currentBoard
 		return currentBoard ? boardService.filterBoard(currentBoard, filterBy) : null
 	})
-
+	const [loading, setLoading] = useState(true)
 
 	const [activeTask, setActiveTask] = useState() // drag and drop
 	const [checkedTasksList, setCheckedTasksList] = useState([])
@@ -70,9 +71,10 @@ export function BoardDetails() {
 
 	useEffect(() => {
 		loadBoards()
-	}, [])
+	}, [boardId])
 
 	useEffect(() => {
+
 		if (boardId) {
 			socketService.emit('join-board', boardId)
 		}
@@ -80,7 +82,6 @@ export function BoardDetails() {
 		socketService.on('board-updated', (boardId) => {
 			onLoadBoard()
 		})
-
 		return () => {
 			socketService.emit('leave-board', boardId)
 			socketService.off('board-updated')
@@ -94,14 +95,13 @@ export function BoardDetails() {
 
 	async function onLoadBoard() {
 		try {
+			// await new Promise((resolve) => setTimeout(resolve, 1000)) // Wait for 1 seconds
 			await getBoardById(boardId)
 		} catch (error) {
 			showErrorMsg('Cannot load board')
 			console.error(error)
-		}
+		} 
 	}
-
-	if (!board) return <div>Loading...</div>
 
 	function onAddTask(group, initialTitle = 'New Task', fromHeader) {
 		try {
@@ -287,7 +287,7 @@ export function BoardDetails() {
 	}
 
 	///////////////////
-
+	if (!board) return <LoadingSpinner />
 	return (
 		<div className='board-details-container'>
 			<div className='board-details-header'>
@@ -301,75 +301,79 @@ export function BoardDetails() {
 				/>
 			</div>
 
-			{board.groups.length ? (<div className='board-details-groups-container'>
-				<DndContext
-					collisionDetection={closestCorners}
-					onDragStart={handleDragStart}
-					onDragOver={handleDragOver}
-					onDragEnd={handleDragEnd}
-					sensors={sensors}>
-					{board?.groups &&
-						board.groups.length !== 0 &&
-						board?.groups.map((group) => (
-							<GroupPreview
-								board={board}
-								group={group}
-								cmpTitles={board.cmpTitles}
-								cmpsOrder={board.cmpsOrder}
-								key={group.id}
-								onTasksCheckedChange={handleTasksChecked}
-								checkedTasksList={checkedTasksList}
-								onAddTask={onAddTask}
-							/>
-						))}
-					<DragOverlay>
-						{activeTask ? (
-							<Item
-								item={activeTask}
-								board={board}
-								group={getGroupByTaskId(activeTask.id)}
-								cmpsOrder={board.cmpsOrder}
-							/>
-						) : null}
-					</DragOverlay>
-				</DndContext>
-				<div className='add-group-button-container'>
-					<Button
-						variant='outlined'
-						onClick={() => onAddGroup(false)}
-						sx={{
-							color: '#323338 !important',
-							borderColor: '#c4c6d4',
-							whiteSpace: 'nowrap',
-							textTransform: 'none',
-							padding: '0px !important',
-							fontSize: '14px',
-							height: '32px',
-							justifyContent: 'center',
-							width: '142.09px',
-							marginLeft: '42px',
-							marginTop: '-50px',
-							fontWeight: '200 !important',
-							fontFamily:
-								'Figtree, Roboto, Noto Sans Hebrew, Noto Kufi Arabic, Noto Sans JP, sans-serif',
-						}}>
-						<div className='div-in-button'>
-							<IconVibe
-								icon={Add}
-								iconSize={20}
-								style={{ flexShrink: 0, top: '5px', margin: '0px 5px' }}
-								//   className="add-group-button-add-icon" marginRight: '6px'
-							/>
-							Add new group
-						</div>
-					</Button>
+			{isLoading ? (
+				<LoadingSpinner />
+			) : ( board.groups && board.groups.length) ? (
+				<div className='board-details-groups-container'>
+					<DndContext
+						collisionDetection={closestCorners}
+						onDragStart={handleDragStart}
+						onDragOver={handleDragOver}
+						onDragEnd={handleDragEnd}
+						sensors={sensors}>
+						{board?.groups.map((group) => (
+								<GroupPreview
+									board={board}
+									group={group}
+									cmpTitles={board.cmpTitles}
+									cmpsOrder={board.cmpsOrder}
+									key={group.id}
+									onTasksCheckedChange={handleTasksChecked}
+									checkedTasksList={checkedTasksList}
+									onAddTask={onAddTask}
+								/>
+							))}
+						<DragOverlay>
+							{activeTask ? (
+								<Item
+									item={activeTask}
+									board={board}
+									group={getGroupByTaskId(activeTask.id)}
+									cmpsOrder={board.cmpsOrder}
+								/>
+							) : null}
+						</DragOverlay>
+					</DndContext>
+					<div className='add-group-button-container'>
+						<Button
+							variant='outlined'
+							onClick={() => onAddGroup(false)}
+							sx={{
+								color: '#323338 !important',
+								borderColor: '#c4c6d4',
+								whiteSpace: 'nowrap',
+								textTransform: 'none',
+								padding: '0px !important',
+								fontSize: '14px',
+								height: '32px',
+								justifyContent: 'center',
+								width: '142.09px',
+								marginLeft: '42px',
+								marginTop: '-50px',
+								fontWeight: '200 !important',
+								fontFamily:
+									'Figtree, Roboto, Noto Sans Hebrew, Noto Kufi Arabic, Noto Sans JP, sans-serif',
+							}}>
+							<div className='div-in-button'>
+								<IconVibe
+									icon={Add}
+									iconSize={20}
+									style={{ flexShrink: 0, top: '5px', margin: '0px 5px' }}
+									//   className="add-group-button-add-icon" marginRight: '6px'
+								/>
+								Add new group
+							</div>
+						</Button>
+					</div>
 				</div>
-			</div> 
-			): (
-				<div className="no-groups-container">
-					<img src="https://res.cloudinary.com/ofirgady/image/upload/v1742631862/je9sa8d5amvpuykzdcxq.svg" alt="empty board" 
-						style={{width: '200px', height: '230px'}}/>
-					<Heading type='h2' >No results were found</Heading>
+			) : (
+				<div className='no-groups-container'>
+					<img
+						src='https://res.cloudinary.com/ofirgady/image/upload/v1742631862/je9sa8d5amvpuykzdcxq.svg'
+						alt='empty board'
+						style={{ width: '200px', height: '230px' }}
+					/>
+					<Heading type='h2'>No results were found</Heading>
 				</div>
 			)}
 			<div
@@ -479,7 +483,7 @@ export function BoardDetails() {
 											borderRight: '8px solid transparent',
 											borderTop: '8px solid white',
 										}}></div>
-									{board.groups.map((group) => (
+									{board?.groups?.map((group) => (
 										<DropdownMenu.Item
 											onClick={() => handleFooterAction('move_to', group.id)}
 											className='dropdown-item'

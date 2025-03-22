@@ -13,12 +13,13 @@ import Typography from '@mui/material/Typography'
 import ListIcon from '@mui/icons-material/List'
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined'
 import { ActivityLog } from './cmps/ActivityLog'
-import { getBoardById, updateBoard } from '../../store/board/board.actions'
+import { getBoardById, getGroupById, getTaskById, updateBoard } from '../../store/board/board.actions'
 import { boardService } from '../../services/board'
 import { showErrorMsg, showSuccessMsg } from '../../services/event-bus.service'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { socketService } from '../../services/socket.service'
+import { LoadingSpinner } from '../LoadingSpinner'
 
 const SvgIcon = ({ iconName, options }) => {
 	return (
@@ -54,19 +55,16 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 
 	useEffect(() => {
 		onSetUpdates()
-	}, [])
+	}, [taskId])
 
 	async function onSetUpdates() {
-		setLoading(true)
+		const task = getTaskById(taskId)
 		try {
-			const currentUpdates = board?.groups
-				?.find((group) => group.id === groupId)
-				?.tasks?.find((task) => task.id === taskId)?.updates
+			const currentUpdates = task?.updates
 			// Sync updates with board data
 			if (currentUpdates) {
 				setUpdates(currentUpdates)
 			}
-			setLoading(false)
 		} catch (error) {
 			showErrorMsg('Failed to set updates')
 			console.error('Error in onSetUpdates:', error)
@@ -114,9 +112,9 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 		}
 	}
 
-	useEffect(() => {
-		onLoadBoard()
-	}, [updates])
+	// useEffect(() => {
+	// 	onLoadBoard()
+	// }, [updates])
 
 	useEffect(() => {
 		const handleClickOutside = (event) => {
@@ -128,14 +126,14 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 		}
 	}, [editNewComment])
 
-	async function onLoadBoard() {
-		try {
-			await getBoardById(board._id)
-		} catch (error) {
-			showErrorMsg('Cannot load boards')
-			console.error(error)
-		}
-	}
+	// async function onLoadBoard() {
+	// 	try {
+	// 		await getBoardById(board._id)
+	// 	} catch (error) {
+	// 		showErrorMsg('Cannot load boards')
+	// 		console.error(error)
+	// 	}
+	// }
 
 	// useEffect(() => {
 	// 	if (updates) {
@@ -157,8 +155,6 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 	// 		console.error('Error in updateBoardData:', error)
 	// 	}
 	// }
-
-
 
 	useEffect(() => {
 		// Updated click-out for replies using DOM query similar to comment click-out
@@ -362,8 +358,9 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 
 				{/* Render Updates */}
 
-				{loading && <div>Loading...</div>}
-				{(updates && updates.length) ? (
+				{loading || !updates ? (
+					<LoadingSpinner />
+				) : updates.length ? (
 					<div className='chat-body'>
 						<div className='chat-inner-body'>
 							<ul className='comments-list'>
@@ -412,7 +409,9 @@ export function TaskDetails_NavBar({ taskId, board, user, groupId }) {
 														<ReactQuill
 															className='textarea-quill'
 															value={findNewReplyByComment(update)?.text}
-															onChange={debounce((event) => handleReplyChange(event, update.id), 200
+															onChange={debounce(
+																(event) => handleReplyChange(event, update.id),
+																200
 															)}
 															modules={{
 																toolbar: [

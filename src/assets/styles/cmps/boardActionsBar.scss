@@ -67,9 +67,8 @@ button {
       background-color: #f0f0f0;
     }
 
-    i {
-    }
   }
+
 
   .icon-button {
     border-radius: 5px;
@@ -98,4 +97,22 @@ button {
       opacity: 1;
     }
   }
+
+  .filter-list {
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #c3c7d9;
+      border-radius: 6px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    /* Firefox */
+    scrollbar-width: auto;
+    scrollbar-color: #c3c7d9 transparent;
+  }
 }
+

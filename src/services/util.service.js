@@ -99,7 +99,7 @@ function calcTimePassed(item) {
   const seconds = Math.floor(diff / 1000) // Convert to seconds
 
   // if less than a minute, show seconds , if less than an hour , show minutes , etc etc ....
-  if (seconds < 60) return 'a few seconds ago'
+  if (seconds < 60) return 'now'
   const minutes = Math.floor(seconds / 60)
   if (minutes < 60) return minutes + 'm'
   const hours = Math.floor(minutes / 60)

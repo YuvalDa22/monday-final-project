@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { loadBoards } from '../store/board/board.actions'
 import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service'
+import { LoadingSpinner } from '../cmps/LoadingSpinner'
 
 const SvgIcon = ({ iconName, options, style }) => {
 	return <i dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }} style={style}></i>
@@ -55,7 +56,7 @@ export function BoardIndex() {
 		setGreeting(newGreeting)
 	}, [])
 
-	if (isLoading) return <div>Loading...</div>
+	if (isLoading) return <LoadingSpinner />
 	return (
 		<Theme asChild>
 			{/* for radix ui card (which is custom theme and not a primitive UI item*/}
@@ -119,7 +120,12 @@ export function BoardIndex() {
 													size='2'
 													color='gray'
 													style={{ display: 'flex', gap: '6px' }}>
-													<SvgIcon iconName='monday_flower_icon' />
+													<img
+														style={{ width: '14px', height: '14px' }}
+														onClick={() => navigate('/')}
+														src='https://res.cloudinary.com/ofirgady/image/upload/v1742651944/nkafdc4fmxgpx3ysvx3r.png'
+														alt='logo'
+													/>
 													<span style={{ position: 'relative', bottom: 2 }}>
 														work management {'>'} Main workspace
 													</span>

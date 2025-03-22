@@ -1,4 +1,5 @@
 import { userService } from '../../services/user'
+import { SET_IS_LOADING } from '../board/board.reducer'
 import { store } from '../store'
 import { REMOVE_USER, SET_USER, SET_USERS } from './user.reducer'
 
@@ -33,17 +34,22 @@ export async function updateUser(user) {
 }
 
 export async function login(credentials) {
+	store.dispatch({ type: SET_IS_LOADING, isLoading: true })
 	try {
+		await new Promise(resolve => setTimeout(resolve, 1000))
 		const user = await userService.login(credentials)
 		store.dispatch({ type: SET_USER, user })
 		return user
 	} catch (err) {
 		console.log('user actions -> Cannot login:', err)
 		throw err
+	} finally {
+		store.dispatch({ type: SET_IS_LOADING, isLoading: false })
 	}
 }
 
 export async function signup(credentials) {
+	store.dispatch({ type: SET_IS_LOADING, isLoading: true })
 	try {
 		const user = await userService.signup(credentials)
 		store.dispatch({ type: SET_USER, user })
@@ -51,6 +57,8 @@ export async function signup(credentials) {
 	} catch (err) {
 		console.log('user actions -> Cannot signup:', err)
 		throw err
+	} finally {
+		store.dispatch({ type: SET_IS_LOADING, isLoading: false })
 	}
 }
 

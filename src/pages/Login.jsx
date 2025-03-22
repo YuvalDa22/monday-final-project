@@ -5,10 +5,12 @@ import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service'
 import { AppHeader } from '../cmps/layout/AppHeader'
 import { Link } from 'react-router-dom'
 import { TextField, Button } from '@mui/material'
+import { LoadingSpinner } from '../cmps/LoadingSpinner'
+import { useSelector } from 'react-redux'
 
 export function Login() {
 	const [credentials, setCredentials] = useState({ username: '', password: '' })
-
+	const isLoading = useSelector((state) => state.boardModule.isLoading)
 	const navigate = useNavigate()
 
 	function handleChange(event) {
@@ -40,6 +42,7 @@ export function Login() {
 	return (
 		<div className='login-page'>
 			<AppHeader />
+			{isLoading ? <LoadingSpinner /> : (
 			<div className='container'>
 				<h1>Log into your account!</h1>
 				<form className='login-form' onSubmit={handleLogIn}>
@@ -70,6 +73,7 @@ export function Login() {
 					</p>
 				</div>
 			</div>
+			)}
 		</div>
 	)
 }
