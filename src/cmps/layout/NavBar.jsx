@@ -1,3 +1,5 @@
+
+
 // src/Navbar.jsx
 import React, { useCallback, useEffect, useState } from 'react'
 import Avatar from '@mui/material/Avatar'
@@ -46,7 +48,7 @@ const NavBar = () => {
 				/>
         {/* <SvgIcon iconName={'app_logo'} /> */}
 
-				<span className='navBar-company-name'>monday</span>
+				<span className='navBar-company-name'>Tomorrow</span>
 				<span className='navBar-logo-title'>work management</span>
 			</div>
 
