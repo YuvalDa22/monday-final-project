@@ -280,6 +280,7 @@ export default function GroupItemContainer({
 					</td>
 				)
 			})}
+			<td className='end-cell'></td>
 		</tr>
 	)
 }

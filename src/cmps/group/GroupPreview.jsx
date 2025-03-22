@@ -244,6 +244,7 @@ export function GroupPreview({
                             borderRadius: '8px',
                             backgroundColor: '#fff',
                             boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+                            zIndex: 11,
                           }}
                         >
                           <Box className='color-picker-content' sx={{ p: 1, borderRadius: 2 }}>

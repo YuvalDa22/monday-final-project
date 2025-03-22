@@ -93,7 +93,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 		maxHeight: '230px',
 		scrollbarWidth: 'thin',
 		scrollbarColor: '#c3c6d4 transparent',
-			paddingBottom: '20px',
+		paddingBottom: '20px',
 	}
 
 	const filterBtnStyle = {
@@ -103,6 +103,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 		fontSize: '14px',
 		fontWeight: 400,
 		textTransform: 'none',
+		whiteSpace: 'nowrap',
 		display: 'flex',
 		alignItems: 'center',
 		gap: '6px',
@@ -127,10 +128,17 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 		},
 	}
 
-	const filterActive = filterByToEdit.groups.length || filterByToEdit.tasks.length || filterByToEdit.members.length || filterByToEdit.statusLabels.length || filterByToEdit.priorityLabels.length ? 'active' : ''
+	const filterActive =
+		filterByToEdit.groups.length ||
+		filterByToEdit.tasks.length ||
+		filterByToEdit.members.length ||
+		filterByToEdit.statusLabels.length ||
+		filterByToEdit.priorityLabels.length
+			? 'active'
+			: ''
 	const searchActive = filterByToEdit.txt.length ? 'active' : ''
 
-	const filterHeadertyle = {mb: 2,fontWeight: 600, color: '#353535', fontSize: '16px'}
+	const filterHeadertyle = { mb: 2, fontWeight: 600, color: '#353535', fontSize: '16px' }
 
 	const { txt } = filterByToEdit
 	return (
@@ -228,7 +236,9 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 					</Box>
 				</ClickAwayListener>
 			) : (
-				<MuiIconButton className={`icon-button ${searchActive}`} onClick={() => setIsSearchInputVisible(true)}>
+				<MuiIconButton
+					className={`icon-button ${searchActive}`}
+					onClick={() => setIsSearchInputVisible(true)}>
 					<SearchOutlinedIcon className='icon' />
 					<span>Search</span>
 				</MuiIconButton>
@@ -261,9 +271,8 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 							<Typography variant='subtitle2' sx={{ mb: 1 }}>
 								Group
 							</Typography>
-							<ul
-								style={filterListStyle}>
-								{boardBeforeFilter.groups.map((group) => (
+							<ul style={filterListStyle}>
+								{boardBeforeFilter?.groups?.map((group) => (
 									<li key={group.id} style={{ marginBottom: '8px' }}>
 										<Button
 											disableRipple
@@ -282,7 +291,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 												})
 											}}
 											sx={filterBtnStyle}>
-											{group.title}
+											{group.title.length > 12 ? group.title.slice(0, 12) + '...' : group.title}
 											<span
 												style={{
 													width: 10,
@@ -303,7 +312,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 								Tasks
 							</Typography>
 							<ul style={filterListStyle}>
-								{boardBeforeFilter.groups.flatMap((group) =>
+								{boardBeforeFilter?.groups?.flatMap((group) =>
 									group.tasks.map((task) => (
 										<li key={task.id} style={{ marginBottom: '8px' }}>
 											<Button
@@ -322,7 +331,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 													})
 												}}
 												sx={filterBtnStyle}>
-												{task.title}
+												{task.title.length > 12 ? task.title.slice(0, 12) + '...' : task.title}
 											</Button>
 										</li>
 									))
@@ -336,7 +345,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 								Members
 							</Typography>
 							<ul style={filterListStyle}>
-								{board.members.map((member) => (
+								{board?.members?.map((member) => (
 									<li key={member._id} style={{ marginBottom: '8px' }}>
 										<Button
 											disableRipple
@@ -356,7 +365,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 												})
 											}}
 											sx={filterBtnStyle}>
-											{member.fullname}
+											{member.fullname.length > 12 ? member.fullname.slice(0, 12) + '...' : member.fullname}
 											<img
 												src={member.imgUrl}
 												alt={member.fullname}
@@ -378,8 +387,8 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 								Status
 							</Typography>
 							<ul style={filterListStyle}>
-								{board.labels
-									.filter((label) => label.id.startsWith('l1'))
+								{board?.labels
+									?.filter((label) => label.id.startsWith('l1'))
 									.map((label) => (
 										<li key={label.id} style={{ marginBottom: '8px' }}>
 											<Button
@@ -400,7 +409,9 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 													})
 												}}
 												sx={filterBtnStyle}>
-												{label.title || 'No Status'}
+												{!label.title && 'No Status'}
+												{label.title.length > 12 ? label.title.slice(0, 12) + '...' : label.title}
+
 												<span
 													style={{
 														width: 10,
@@ -421,8 +432,8 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 								Priority
 							</Typography>
 							<ul style={filterListStyle}>
-								{board.labels
-									.filter((label) => label.id.startsWith('l2'))
+								{board?.labels
+									?.filter((label) => label.id.startsWith('l2'))
 									.map((label) => (
 										<li key={label.id} style={{ marginBottom: '8px' }}>
 											<Button
@@ -445,7 +456,8 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 													})
 												}}
 												sx={filterBtnStyle}>
-												{label.title || 'No Status'}
+												{!label.title && 'No Status'}
+												{label.title.length > 12 ? label.title.slice(0, 12) + '...' : label.title}
 												<span
 													style={{
 														width: 10,
@@ -462,7 +474,6 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 					</Box>
 				</Box>
 			</Popover>
-
 			<MuiIconButton className='icon-button'>
 				<SvgIcon iconName='boardActionsBar_sort' options={{ height: 22, width: 22 }} />
 				<span>Sort</span>

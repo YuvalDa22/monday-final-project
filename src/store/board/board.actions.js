@@ -186,6 +186,7 @@ export async function updateBoard(groupId, taskId, { key, value }, activity = {}
 		board.activities.unshift(logActivity(board, null, null, prev, activity))
 	}
 	try {
+		store.dispatch({ type: SET_BOARD, board })
 		const updatedBoard = await boardService.save(board)
 		store.dispatch({ type: SET_BOARD, board: updatedBoard })
 		store.dispatch({
@@ -296,9 +297,6 @@ export async function duplicateMultipleTasks(_, tasksToDuplicate) {
 		// Update the group in the updatedGroups array
 		updatedGroups[groupIndex] = group
 
-		console.log(
-			updatedGroups[groupIndex]
-		)
 		// 2 logs , one for the duplicated task and one for the original task
 		// logActivity(group, duplicatedTask, null, 'copyCreated')
 		// logActivity(group, taskToDuplicate, null, 'duplicateTask')
@@ -306,9 +304,19 @@ export async function duplicateMultipleTasks(_, tasksToDuplicate) {
 	// Update the board with the modified groups
 	if (tasksToDuplicate.length === 1) {
 		const updatedGroup = updatedGroups.find((group) => group.id === tasksToDuplicate[0].groupId)
-		updateBoard( updatedGroup.id, null, { key: 'tasks', value: updatedGroup.tasks }, { action: 'duplicateTask' })
+		updateBoard(
+			updatedGroup.id,
+			null,
+			{ key: 'tasks', value: updatedGroup.tasks },
+			{ action: 'duplicateTask' }
+		)
 	} else {
-	updateBoard(null, null,	{key: 'groups',	value: updatedGroups},{ action: 'duplicateMultipleTask' })
+		updateBoard(
+			null,
+			null,
+			{ key: 'groups', value: updatedGroups },
+			{ action: 'duplicateMultipleTask' }
+		)
 	}
 }
 

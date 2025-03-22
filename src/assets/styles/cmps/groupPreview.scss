@@ -20,6 +20,12 @@
 	align-items: baseline;
 	position: relative;
 
+	_::-webkit-full-page-media, _:future, :root & {
+		transform: translateX(40px);
+	}
+	
+	
+
 	.gh-title-h4 {
 		white-space: nowrap;
 		overflow: hidden;
@@ -91,6 +97,8 @@
 				position: relative;
 			}
 
+
+
 			// tfoot tr:first-of-type,
 			// tfoot tr:first-of-type td,
 			// tfoot tr:first-of-type th {
@@ -99,43 +107,54 @@
 			// }
 
 			/* This is for the infinite look for the board! */
-			tr td:last-child::after,
-			tr th:last-child::after {
+			tr:last-child td:last-child::after{
 				content: '';
 				position: absolute;
 				bottom: 0;
 				left: 0;
-				// width: 100vh;
-				width: calc(100vw - 322px);
+			 	// width: 100vh;
+				width: calc(100vw - 1422px);
 				height: 0.1px;
 				background-color: #ddd;
-				transform: translateX(159px);
+				transform: translateX(160px);
 			}
 
+			// tr:nth-last-child(3)::after {
+			// 	content: '';
+			// 	position: absolute;
+			// 	bottom: 0;
+			// 	left: 0;
+			// 	// width: 100vh;
+			// 	width: calc(100vw - 1422px);
+			// 	height: 1px;
+			// 	background-color: #c93f3f;
+			// 	transform: translateX(159px);
+			// }
+
 			/* This is for the infinite look for the board! */
-			thead tr th:last-child::before {
-				content: '';
-				position: absolute;
-				top: -1px;
-				left: 0;
-				// width: 100%;
-				width: calc(100vw - 322px);
-				height: 0.1px;
-				background-color: #ddd;
-				transform: translateX(159px);
-			}
+			// thead tr th:last-child::before {
+			// 	content: '';
+			// 	position: absolute;
+			// 	top: -1px;
+			// 	left: 0;
+			// 	// width: 100%;
+			// 	width: calc(100vw - 1422px);
+			// 	height: 0.1px;
+			// 	background-color: #ddd;
+			// 	transform: translateX(159px);
+			// }
 			/* This is for the infinite look for the board! */
-			thead tr th:last-child::after {
-				content: '';
-				background-color: transparent;
-				position: absolute;
-				bottom: 0;
-				left: 0;
-				// width: 100%;
-				width: calc(100vw - 322px);
-				// height: 0.1px;
-				transform: translateX(159px);
-			}
+			// thead tr th:last-child::after {
+			// 	content: '';
+			// 	background-color: transparent;
+			// 	position: absolute;
+			// 	bottom: 0;
+			// 	left: 0;
+			// 	// width: 100%;
+			// 	width: calc(100vw - 1422px);
+			// 	height: 0.1px;
+			// 	transform: translateX(159px);
+			// }
 
 			td:nth-child(1),
 			th:nth-child(1) {
@@ -235,6 +254,11 @@
 
 .add-item-row {
 	border-right: none;
+	&::after {
+		height: 2rem;
+		background-color: #d43636;
+		border-color: transparent;
+	}
 }
 
 .checkbox-cell:not(:first-child)::before {

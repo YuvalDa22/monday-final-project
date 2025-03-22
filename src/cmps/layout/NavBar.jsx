@@ -43,7 +43,7 @@ const NavBar = () => {
 			{/* Logo */}
 			<div className='navbar-logo'>
 				<img
-					src='https://res.cloudinary.com/ofirgady/image/upload/v1742378354/kom2ycnxmfdgcvmfet8z.svg'
+					src='https://res.cloudinary.com/ofirgady/image/upload/v1742651944/nkafdc4fmxgpx3ysvx3r.png'
 					alt='Logo'
 				/>
         {/* <SvgIcon iconName={'app_logo'} /> */}

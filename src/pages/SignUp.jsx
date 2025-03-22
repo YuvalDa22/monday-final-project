@@ -6,9 +6,12 @@ import { AppHeader } from '../cmps/layout/AppHeader'
 import { Link } from 'react-router-dom'
 import { TextField, Button } from '@mui/material'
 import { ImgUploader } from '../cmps/ImgUploader'
+import { LoadingSpinner } from '../cmps/LoadingSpinner'
+import { useSelector } from 'react-redux'
 
 export function SignUp() {
 	const [credentials, setCredentials] = useState({})
+	const isLoading = useSelector((state) => state.boardModule.isLoading)
 	const navigate = useNavigate()
 
 	function handleChange(event) {
@@ -19,16 +22,16 @@ export function SignUp() {
 		}))
 	}
 
-    function clearState() {
-        setCredentials({ username: '', password: '', fullname: '', email: '', imgUrl: '' })
-    }
+	function clearState() {
+		setCredentials({ username: '', password: '', fullname: '', email: '', imgUrl: '' })
+	}
 
 	async function handleSignup(e) {
 		e.preventDefault()
 
 		try {
 			await signup(credentials)
-            clearState()
+			clearState()
 			showSuccessMsg('Account created successfully')
 			navigate('/workspace')
 		} catch (err) {
@@ -44,33 +47,34 @@ export function SignUp() {
 	return (
 		<div className='signup-page'>
 			<AppHeader />
+			{isLoading ? <LoadingSpinner /> : (
 			<div className='container'>
 				<h1>Sign Up Now!</h1>
 				<form className='login-form' onSubmit={handleSignup}>
-                    <TextField
-                        label='Full Name'
-                        variant='outlined'
-                        name='fullname'
-                        onChange={handleChange}
-                        fullWidth
-                        required
-                    />
-                    <TextField
+					<TextField
+						label='Full Name'
+						variant='outlined'
+						name='fullname'
+						onChange={handleChange}
+						fullWidth
+						required
+					/>
+					<TextField
 						label='Username'
 						variant='outlined'
 						name='username'
 						onChange={handleChange}
 						fullWidth
-                        required
+						required
 					/>
 					<TextField
 						label='Email Address'
 						variant='outlined'
 						name='email'
-                        type='email'
+						type='email'
 						onChange={handleChange}
 						fullWidth
-                        required
+						required
 					/>
 					<TextField
 						label='Password'
@@ -79,16 +83,15 @@ export function SignUp() {
 						name='password'
 						onChange={handleChange}
 						fullWidth
-                        required
+						required
 					/>
-                    <TextField
+					<TextField
 						label='Role'
 						variant='outlined'
 						type='text'
 						name='role'
 						onChange={handleChange}
 						fullWidth
-                
 					/>
 					<ImgUploader onUploaded={onUploaded} />
 					<Button type='submit' variant='contained' color='primary' fullWidth>
@@ -101,6 +104,7 @@ export function SignUp() {
 					</p>
 				</div>
 			</div>
+			)}
 		</div>
 	)
 }
