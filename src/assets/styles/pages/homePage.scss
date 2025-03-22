@@ -1,16 +1,26 @@
+@use '../setup/vars' as vars;
 .home-page {
-  font-family: 'Quicksand';
-  background-image: url('https://agenda.agami-network.com/static/media/home-bg-img.6c3461523da0a635bd77.jpg');
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-img {
+  position: absolute;
+  top: 3%;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://res.cloudinary.com/dv5xfztht/image/upload/v1742657854/Screenshot_2025-03-22_at_17.37.04_ff5vcd.png');
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover; // stretch bg-image to fill
-  height: 100vh; // This is a hack to escape from the grid that coomes from .app-container
-  width: 100vw;
+  background-size: 50%;
+  filter: blur(2px);
+  z-index: -1;
 }
 
 .hero-layout {
   width: 40%;
-
   margin: 0 auto;
   color: #fff;
   padding-top: 5rem;
@@ -21,18 +31,26 @@
 }
 .hero {
   h1 {
-    font-size: 3rem;
-    color: white;
+    font-size: 4rem;
+    color: vars.$color-blackish;
+    font-family: vars.$title-font-family;
+    font-weight: 100;
+    text-wrap: nowrap;
+    right: 15%;
+    position: relative;
+    bottom: 70px;
   }
 }
 
 .hero-btn {
+  margin-top: 0%;
   border: none;
   padding: 1.5rem 3rem;
   font-size: 1.5rem;
   background-color: #5a5ad5;
   color: #fff;
   border-radius: 2rem;
+  font-weight: 500;
 
   &:hover {
     background-color: #4f4fa5;
