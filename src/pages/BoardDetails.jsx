@@ -53,6 +53,7 @@ export function BoardDetails() {
     const currentBoard = storeState.boardModule.currentBoard
     return currentBoard ? boardService.filterBoard(currentBoard, filterBy) : null
   })
+  let pendingUpdates = [] // Stores updates until dragEnd
   const [loading, setLoading] = useState(true)
 
   const [activeTask, setActiveTask] = useState() // drag and drop
@@ -225,7 +226,6 @@ export function BoardDetails() {
 
   function handleDragOver(event) {
     let { active, over } = event
-
     if (!over || !active) return
 
     const activeTask = board.groups
@@ -238,35 +238,35 @@ export function BoardDetails() {
     if (!activeContainer || !overContainer) {
       overContainer = board.groups.find((group) => group.id === over.id)
 
-      if (overContainer.tasks.length == 1) {
+      if (overContainer.tasks.length === 1) {
         over = { id: overContainer.tasks[0].id }
-      } else if (overContainer.collapsed && overContainer.tasks.length > 0)
+      } else if (overContainer.collapsed && overContainer.tasks.length > 0) {
         over = { id: overContainer.tasks[0].id }
-      else if (overContainer.tasks.length != 0) return
+      } else if (overContainer.tasks.length !== 0) return
     }
 
     let activeIndex = activeContainer.tasks.findIndex((task) => task.id === active.id)
     let overIndex = overContainer.tasks.findIndex((task) => task.id === over.id)
-    if (overIndex == -1) overIndex = 0
-
+    if (overIndex === -1) {
+      overIndex = overContainer.tasks.length // Place at the end if no valid `over.id`
+    }
     if (activeContainer.id === overContainer.id) {
-      // if same container swap elements inside
-      const updatedGroupAfterSwap = swapArrayElements(activeContainer.tasks, activeIndex, overIndex)
+      // move the task under the task it's hovering over
+      const [movedTask] = activeContainer.tasks.splice(activeIndex, 1)
+      activeContainer.tasks.splice(overIndex, 0, movedTask)
 
-      updateBoard(activeContainer.id, null, {
-        key: 'tasks',
-        value: updatedGroupAfterSwap,
-      })
+      pendingUpdates = [{ groupId: activeContainer.id, key: 'tasks', value: activeContainer.tasks }]
       return
     }
 
-    if (overIndex > 0) overIndex++ // i added +1 to fix 'transfer item to bottom of new group puts it in the wrong place (-1 index)
-    activeContainer.tasks = activeContainer.tasks.filter((task) => task.id !== active.id)
-    overContainer.tasks = [
-      ...overContainer.tasks.slice(0, overIndex),
-      activeTask,
-      ...overContainer.tasks.slice(overIndex),
-    ]
+    if (overIndex > 0) overIndex++ // Fix for placing at bottom
+
+    if (activeContainer.id !== overContainer.id) {
+      // Remove task from original container
+      activeContainer.tasks = activeContainer.tasks.filter((task) => task.id !== active.id)
+
+      overContainer.tasks.splice(overIndex, 0, activeTask)
+    }
 
     updateBoard(activeContainer.id, null, {
       key: 'tasks',
@@ -276,15 +276,21 @@ export function BoardDetails() {
       key: 'tasks',
       value: overContainer.tasks,
     })
-    return
   }
 
   function handleDragEnd(event) {
     const { active } = event
     const destinationGroup = findContainerByTaskId(active.id)
-    // logActivity(destinationGroup, active, null, 'movedTo')
+
+    // Apply all pending updates at once
+    pendingUpdates.forEach(({ groupId, key, value }) => {
+      updateBoard(groupId, null, { key, value })
+    })
+
+    // Clear pending updates after applying them
+    pendingUpdates = []
+
     setActiveTask(null)
-    return
   }
 
   ///////////////////
