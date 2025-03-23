@@ -9,6 +9,7 @@ import {
 	duplicateTask,
 	logActivity,
 } from '../../store/board/board.actions'
+import GroupTitleEditor from './GroupTitleEditor.jsx'
 import { utilService } from '../../services/util.service'
 import Checkbox from '@mui/material/Checkbox'
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined'
