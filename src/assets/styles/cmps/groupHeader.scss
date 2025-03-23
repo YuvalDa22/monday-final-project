@@ -5,7 +5,7 @@
 	width: 100%;
 	display: block;
 	align-items: baseline;
-	margin: 0 43px;
+	// margin: 0 43px;
 }
 
 .gh-title {
@@ -13,9 +13,9 @@
 	// This is for suggestedActions !! for the three dots that appear to the left of the group when hovering
 	position: relative;
 	left: -40px;
-	//
 	align-items: center;
 	gap: 6.5px;
+
 }
 
 .gh-how-many-tasks {
@@ -30,15 +30,63 @@
 	opacity: 1;
 }
 
-.gh-title-expandMoreIcon {
-	display: flex; // Align the icon with group title etc etc
-	cursor: 'pointer';
+// Add this rule to ensure the hover works in the collapsed state
+.collapsed-gp:hover .sa-main-container {
+	opacity: 1;
 }
 
 .colored-area {
 	display: flex;
-	align-items: center;
 	gap: 10px;
 	color: var(--group-color);
 	letter-spacing: 0.1px;
+
+	&.collapsed {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		grid-template-rows: auto 1fr;
+		// background-color: rgb(204, 204, 255);
+		padding: 4px 8px 8px 0;
+
+		h4 {
+			grid-column: 2;
+			grid-row: 1;
+			justify-self: start;
+			height: 28px;
+		}
+
+		span {
+			grid-column: 2;
+			grid-row: 2;
+			justify-self: start;
+			align-self: start;
+			// background-color: #fff;
+		}
+	}
+}
+
+.gh-title-expandMoreIcon {
+	grid-column: 1;
+	grid-row: 1;
+	display: flex; // Align the icon with group title etc etc
+	cursor: pointer;
+	align-self: center;
+	height: 28px;
+}
+
+.ProgressBar_single_color {
+	background-color: var(--progress-bar-color, #ccc); // Default color
+	width: var(--progress-bar-width, 0%); // Default width
+}
+
+.popover-content {
+	border-radius: 8px;
+	background-color: #fff;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	z-index: 11;
+}
+
+.color-picker-content {
+	padding: 1rem;
+	border-radius: 8px;
 }
