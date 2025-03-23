@@ -2,12 +2,13 @@ import { useState } from 'react'
 import { InputBase, Paper, Box } from '@mui/material'
 import { BlockPicker } from 'react-color'
 import * as Popover from '@radix-ui/react-popover'
+import { boardService } from '../../services/board'
 
 export function GroupTitleEditor({ group, updateBoard, onSave }) {
 	const [groupTempTitle, setGroupTempTitle] = useState(group.title)
 	const [isPopoverOpen, setIsPopoverOpen] = useState(false)
 
-	const handleSave = () => {
+	const handleGroupTitleSave = () => {
 		if (groupTempTitle.trim() && groupTempTitle !== group.title) {
 			updateBoard(
 				group.id,
@@ -32,6 +33,7 @@ export function GroupTitleEditor({ group, updateBoard, onSave }) {
 						sideOffset={5}
 						className='popover-content'
 						style={{
+							
 							borderRadius: '8px',
 							backgroundColor: '#fff',
 							boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
@@ -91,8 +93,9 @@ export function GroupTitleEditor({ group, updateBoard, onSave }) {
 				slotProps={{
 					input: {
 						sx: {
+							fontFamily: 'inherit',
+							fontSize: 'auto',
 							color: group.style.color,
-							fontSize: '18px',
 							fontWeight: 500,
 							padding: 0,
 						},
@@ -102,3 +105,5 @@ export function GroupTitleEditor({ group, updateBoard, onSave }) {
 		</Paper>
 	)
 }
+
+export default GroupTitleEditor
