@@ -139,6 +139,8 @@ export default function Sidebar() {
 	}
 
 	return (
+
+		// REMOVED ALL UNUSED BUTTONS TO COMMENTED OUT CODE - 23/03/2025
 		<div className='sidebar'>
 			{/* Navigation Links */}
 			<div>
@@ -159,17 +161,11 @@ export default function Sidebar() {
 				</ul>
 			</div>
 			<Divider className='divider' />
-			<div>
+			{/* <div>
 				<ul className='sidebar-links'>
 					<li className='sidebar-item'>
 						<SvgIcon iconName='sidebar_favorites' />
 						<span className='textInSidebar' style={{ position: 'relative', right: 2 }}>
-							{/* <IconVibe icon= {Favorite}
-             style={{
-              height: '20px',
-              width: '19px',
-            }}
-            className="sidebar_favorites" /> */}
 							Favorites
 						</span>
 					</li>
@@ -193,6 +189,9 @@ export default function Sidebar() {
 						<span className='textInSidebar'>Workspaces</span>
 					</li>
 				</ul>
+			</div> */}
+			<div>
+
 			</div>
 			<div>
 				<ul className='main-workspace'>

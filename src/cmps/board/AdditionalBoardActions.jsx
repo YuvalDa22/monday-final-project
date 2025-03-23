@@ -27,9 +27,12 @@ export function AdditionalBoardActions({board}) {
 		navigate(`/workspace/board/${boardId}/activity_log`)
 	}, [navigate, boardId])
 
+			//MOVED ALL UNUSED BUTTONS TO COMMENTED OUT CODE - 23/03/2025
+
+
 	return (
 		<Stack direction={'row'} gap={'10px'} style={{ display: 'flex', alignItems: 'center' }}>
-			<IconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
+			{/* <IconButton sx={{ borderRadius: '5px', fontSize: '15px', gap: 1 }}>
 				<SvgIcon
 					iconName={'additionalBoardActions_integrate'}
 					options={{ height: 20, width: 20 }}
@@ -45,7 +48,7 @@ export function AdditionalBoardActions({board}) {
 					iconName={'additionalBoardActions_discussion'}
 					options={{ height: 20, width: 20 }}
 				/>
-			</IconButton>
+			</IconButton> */}
 			<Tooltip.Provider>
 				<Tooltip.Root delayDuration={0}>
 					<Tooltip.Trigger asChild>
@@ -87,7 +90,7 @@ export function AdditionalBoardActions({board}) {
 				</Tooltip.Root>
 			</Tooltip.Provider>
 
-			<Box
+			{/* <Box
 				sx={{
 					display: 'inline-flex',
 					alignItems: 'center',
@@ -136,7 +139,7 @@ export function AdditionalBoardActions({board}) {
 					options={{ height: 16, width: 16 }}
 					customStyle={{ display: 'flex', opacity: 1 }}
 				/>
-			</IconButton>
+			</IconButton> */}
 		</Stack>
 	)
 }

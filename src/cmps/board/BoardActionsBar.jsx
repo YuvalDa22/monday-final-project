@@ -142,6 +142,9 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 
 	const { txt } = filterByToEdit
 	return (
+			// REMOVED ALL UNUSED BUTTONS TO COMMENTED OUT CODE - 23/03/2025
+
+
 		<MuiStack direction='row' spacing='15px' className='board-actions-bar'>
 			<ButtonGroup variant='contained' className='new-task-buttons'>
 				<Button onClick={() => handleAddTask(true)} className='add-task-button'>
@@ -474,7 +477,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 					</Box>
 				</Box>
 			</Popover>
-			<MuiIconButton className='icon-button'>
+			{/* <MuiIconButton className='icon-button'>
 				<SvgIcon iconName='boardActionsBar_sort' options={{ height: 22, width: 22 }} />
 				<span>Sort</span>
 			</MuiIconButton>
@@ -485,7 +488,7 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 			<MuiIconButton className='icon-button'>
 				<SvgIcon iconName='boardActionsBar_groupBy' options={{ height: 17, width: 17 }} />
 				<span>Group by</span>
-			</MuiIconButton>
+			</MuiIconButton> */}
 		</MuiStack>
 	)
 }

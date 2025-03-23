@@ -58,6 +58,7 @@ export function BoardIndex() {
 
 	if (isLoading) return <LoadingSpinner />
 	return (
+		// REMOVED ALL UNUSED BUTTONS TO COMMENTED OUT CODE - 23/03/2025
 		<Theme asChild>
 			{/* for radix ui card (which is custom theme and not a primitive UI item*/}
 			<div className='boardIndex_container'>
@@ -113,7 +114,7 @@ export function BoardIndex() {
 															{board.title}
 														</Text>
 													</div>
-													<SvgIcon iconName='sidebar_favorites' style={{ opacity: '0.7' }} />
+													{/* <SvgIcon iconName='sidebar_favorites' style={{ opacity: '0.7' }} /> */}
 												</div>
 												<Text
 													as='div'
@@ -153,14 +154,16 @@ export function BoardIndex() {
 								<Box style={{ marginTop: '10px' }}>
 									<Text as='div' size='3' style={{ display: 'flex', gap: '6px', opacity: '0.9' }}>
 										<span style={{ position: 'relative', bottom: 2, left: 3 }}>
-											Boost your workflow in minutes with ready-made templates
+											Boost your workflow in minutes with Tomorrow 
 										</span>{' '}
 									</Text>
 									<Flex justify='center' mt='3'>
 										{' '}
 										{/* Centering the button */}
 										<Button
+											disabled
 											style={{
+												cursor: 'text',
 												width: '100%',
 												padding: '22px 0px',
 												color: 'black',

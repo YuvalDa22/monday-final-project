@@ -39,6 +39,9 @@ const NavBar = () => {
 	// }, [changeCountCallback])
 
 	return (
+
+		// REMOVED ALL UNUSED BUTTONS TO COMMENTED OUT CODE - 23/03/2025
+
 		<nav className='navbar'>
 			{/* Logo */}
 			<div className='navbar-logo'>
@@ -51,10 +54,11 @@ const NavBar = () => {
 				<span className='navBar-company-name'>Tomorrow</span>
 				<span className='navBar-logo-title'>work management</span>
 			</div>
+	
 
 			{/* Navigation Links */}
 			<div className='navbar-links'>
-				<div className='navbar-link'>
+				{/* <div className='navbar-link'>
 					<SvgIcon iconName={'navbar_bell'} />
 						{/* <Counter
 							count={count}
@@ -62,9 +66,9 @@ const NavBar = () => {
 							maxDigits={1}
 							color='negative'
 							className='storybook-counter_counter-position-top'
-						/> */}
-				</div>
-				<div className='navbar-link'>
+						/>
+				</div> */}
+				{/* <div className='navbar-link'>
 					<SvgIcon iconName={'navbar_updateFeed'} />
 				</div>
 				<div className='navbar-link'>
@@ -88,7 +92,7 @@ const NavBar = () => {
 						opacity: 0.3,
 						margin: '8px 0px 8px',
 					}}
-				/>
+				/> */}
 				<Avatar
 					className='navbar-avatar'
 					alt='User Avatar'
