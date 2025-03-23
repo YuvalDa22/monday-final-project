@@ -18,13 +18,13 @@
 .board-details-groups-container {
   display: flex;
   flex-direction: column;
-  gap: vars.$spacing-large;
+  // padding: 0 0 vars.$spacing-large 0;
   margin-top: vars.$spacing-medium;
-  padding-left: 0;
   height: 83vh;
   overflow-x: hidden;
   overflow-y: scroll; /* Always show scrollbar */
   scroll-behavior: smooth; /* Smooth scrolling */
+  // transform: translateX(40px);
 
   &::-webkit-scrollbar {
     width: vars.$spacing-small; /* Use spacing variable for scrollbar width */
@@ -67,7 +67,7 @@
 }
 
 .add-group-button-container {
-  margin-bottom: vars.$spacing-xxl;
+  margin: vars.$spacing-xxl 0;
   &:hover {
     background-color: vars.$primary-background-hover-color;
   }
