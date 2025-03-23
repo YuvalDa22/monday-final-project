@@ -181,20 +181,27 @@ export function BoardDetails() {
               newTask.groupId === taskInList.groupId && newTask.taskId === taskInList.taskId
           )
       )
+
       setCheckedTasksList(filteredTasks)
     }
   }
 
   function groupCheckedTasksByColor(tasks) {
-    return tasks.reduce((groups, task) => {
-      const color = getGroupByTaskId(task.taskId).style.color
+    try {
+      return tasks.reduce((groups, task) => {
+        const color = getGroupByTaskId(task.taskId).style.color
 
-      if (!groups[color]) {
-        groups[color] = []
-      }
-      groups[color].push(task)
-      return groups
-    }, {})
+        if (!groups[color]) {
+          groups[color] = []
+        }
+        groups[color].push(task)
+        return groups
+      }, {})
+    } catch (error) {
+      setCheckedTasksList([])
+      return {}
+      //  return groupCheckedTasksByColor(checkedTasksList)
+    }
   }
 
   ///////////////////
