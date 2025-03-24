@@ -9,7 +9,7 @@ import { BoardDetails } from './pages/BoardDetails'
 import NavBar from './cmps/layout/NavBar'
 import { TaskDetails } from './pages/TaskDetails'
 import { BoardIndex } from './pages/BoardIndex'
-import { MenuFromMenuFromTheRight } from './pages/MenuFromTheRight'
+import { MenuFromTheRight } from './pages/MenuFromTheRight'
 import { UserMsg } from './cmps/UserMsg'
 
 function RootCmp() {
