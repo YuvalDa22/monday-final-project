@@ -138,7 +138,7 @@ export function BoardDetails() {
       switch (action) {
         case 'duplicate':
           await duplicateMultipleTasks(board, checkedTasksList)
-          handleTasksChecked(checkedTasksList, 'add')
+          handleTasksChecked(checkedTasksList, 'delete')
           showSuccessMsg('Tasks duplicated successfully')
           break
         case 'delete':
