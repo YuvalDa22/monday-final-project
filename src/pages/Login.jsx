@@ -46,7 +46,9 @@ export function Login() {
 			<div className='container'>
 				<h1>Log into your account!</h1>
 				<form className='login-form' onSubmit={handleLogIn}>
+					<span className='login-form-text'>Your username</span>
 					<TextField
+					
 						label='Username'
 						variant='outlined'
 						name='username'
@@ -54,6 +56,7 @@ export function Login() {
 						fullWidth
 					/>
 					<div className='form-section'>
+					<span className='login-form-text'>Enter your password</span>
 						<TextField
 							label='Password'
 							variant='outlined'
@@ -63,8 +66,15 @@ export function Login() {
 							fullWidth
 						/>
 					</div>
-					<Button type='submit' variant='contained' color='primary' fullWidth>
-						Log In
+					<Button 
+					type='submit' 
+					variant='contained' 
+					fullWidth
+					sx={{ textTransform: 'none', width:'100% !important' , color: '#ffffff',
+						 backgroundColor: '#4CAF50', '&:hover': { backgroundColor: '#0060b9' } }}
+					
+					>
+						Log in
 					</Button>
 				</form>
 				<div>

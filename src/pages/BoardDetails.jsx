@@ -133,7 +133,7 @@ export function BoardDetails() {
     }
   }
 
-  const handleFooterAction = async (action, groupTargetId) => {
+  const   handleFooterAction = async (action, groupTargetId) => {
     try {
       switch (action) {
         case 'duplicate':
