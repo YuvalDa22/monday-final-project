@@ -203,7 +203,7 @@ export function GroupPreview({
 	if (isCollapsed) return (
 		<div
 			className='gp-main-container'
-			style={{ '--group-color': group.style.color || '#000', transform: 'translateX(40px)' }}>
+			style={{ '--group-color': group.style.color || '#000', left: '40px' }}>
 			{/* {isCollapsed ? ( */}
 				<div className='collapsed-gp'>
           <div style={{ marginTop: '5px', justifySelf: 'center' }}>
@@ -265,7 +265,7 @@ export function GroupPreview({
   else return (  
       <div
 			className='gp-main-container'
-			style={{ '--group-color': group.style.color || '#000', transform: 'translateX(40px)' }}>
+			style={{ '--group-color': group.style.color || '#000', left: '40px' }}>
 					<div className='gh-main-container'>
 						<div className='gh-title'>
 							<SuggestedActions
