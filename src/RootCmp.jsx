@@ -9,7 +9,7 @@ import { BoardDetails } from './pages/BoardDetails'
 import NavBar from './cmps/layout/NavBar'
 import { TaskDetails } from './pages/TaskDetails'
 import { BoardIndex } from './pages/BoardIndex'
-import { MenuFromTheRight } from './pages/MenuFromTheRight'
+import { MenuFromMenuFromTheRight } from './pages/MenuFromTheRight'
 import { UserMsg } from './cmps/UserMsg'
 
 function RootCmp() {
@@ -20,7 +20,7 @@ function RootCmp() {
       {showSidebarAndNavBar && <SideBar />}
       {showSidebarAndNavBar && <NavBar />}
       <div>
-      <UserMsg />
+        <UserMsg />
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/login' element={<Login />} />

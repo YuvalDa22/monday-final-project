@@ -12,6 +12,8 @@
   z-index: 1000;
   padding: 10px 0 10px 10px;
   display: flex;
+  height: 96vh;
+  overflow: auto;
   flex-direction: column;
   gap: 5px;
 }
