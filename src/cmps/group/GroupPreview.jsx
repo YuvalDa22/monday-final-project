@@ -229,6 +229,7 @@ export function GroupPreview({
 											{isEditingGroupTitle ? (
 												<GroupTitleEditor
                         group={group}
+                        isCollapsed={isCollapsed}
                         updateBoard={updateBoard}
                         onSave={() => setIsEditingGroupTitle(false)}
                     />
@@ -282,10 +283,10 @@ export function GroupPreview({
 										}}
 									/>
 								</div>
-								{/* <div className='group-name-container'> */}
 									{isEditingGroupTitle ? (
 									<GroupTitleEditor
                   group={group}
+                  isCollapsed={isCollapsed}
                   updateBoard={updateBoard}
                   onSave={() => setIsEditingGroupTitle(false)}
               />
@@ -294,10 +295,12 @@ export function GroupPreview({
 											{group.title ? group.title : 'New Group'}
 										</h4>
 									)}
-								{/* </div> */}
 							</div>
-							
-								<span className='gh-how-many-tasks'>{group.tasks.length} Tasks</span>
+							<span className='gh-how-many-tasks'>
+												{group.tasks.length > 1
+													? `${group.tasks.length} Tasks`
+													: `${group.tasks.length} Task`}
+											</span>
 						</div>
 					</div>
 					<div className='gp-table'>
@@ -333,7 +336,9 @@ export function GroupPreview({
 							<SortableContext
 								id={group.id}
 								items={group.tasks.map((task) => task.id)}
-								strategy={verticalListSortingStrategy}>
+								strategy={verticalListSortingStrategy}>              </SortableContext> 
+                {/* Look if the Sortable Context is needed here or at the end of the tBody */}
+
 							<tbody ref={setGroupRef} style={{ position: 'relative' }}>
 								{group.tasks.map((task, index) => (
 										<GroupItemContainer
@@ -359,7 +364,6 @@ export function GroupPreview({
 										/>
 									))}
 							</tbody>
-              </SortableContext>
 							<tfoot>
 								<tr>
 									<td className='checkbox-cell lastone'>
