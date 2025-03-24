@@ -51,20 +51,15 @@ const members = [
     imgUrl: 'https://i.pravatar.cc/250?u=mail@ashallendesign.co.uk',
   },
   {
-    _id: 'u102',
-    fullname: 'Yuval Dadon',
-    imgUrl: 'https://gravatar.com/images/homepage/avatar-04.png',
-  },
-  {
     _id: 'u103',
     fullname: 'Ofir Gady',
     imgUrl:
-      'https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250',
+      'https://res.cloudinary.com/ofirgady/image/upload/v1742829715/xq0fpywzayimgyed0uje.jpg',
   },
   {
     _id: 'u104',
     fullname: 'Gal Israeli',
-    imgUrl: 'https://gravatar.com/images/homepage/avatar-02.png',
+    imgUrl: 'https://res.cloudinary.com/ofirgady/image/upload/v1742829514/ewq5kdmjxdoewqdbwhyw.jpg',
   },
 ];
 
