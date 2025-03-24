@@ -170,11 +170,12 @@ export function BoardActionsBar({ board, onAddTask, onAddGroup, filterBy, onSetF
 								border: '1px solid #ccc',
 								borderRadius: '8px',
 								padding: '6px',
-								boxShadow: '0 4px 17px 6px rgba(0, 0, 0, 0.1)',
+								boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
 								animationDuration: '400ms',
 								animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
 								willChange: 'transform, opacity',
 								width: '12rem',
+								zIndex: 11
 							}}>
 							<DropdownMenu.Item
 								className='dropdown-item'

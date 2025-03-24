@@ -228,6 +228,7 @@ function deepSearch(obj, searchText, board) {
   }
 
   if (Array.isArray(obj)) {
+    if (obj === 'updates') return false; // Don't search in updates
     return obj.some((item) => deepSearch(item, searchText, board)); // Search inside arrays
   }
 

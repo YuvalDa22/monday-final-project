@@ -200,11 +200,11 @@ export function GroupPreview({
 		id: group.id,
 	})
 
-	return (
+	if (isCollapsed) return (
 		<div
 			className='gp-main-container'
-			style={{ '--group-color': group.style.color || '#000', transform: 'translateX(40px)' }}>
-			{isCollapsed ? (
+			style={{ '--group-color': group.style.color || '#000', left: '40px' }}>
+			{/* {isCollapsed ? ( */}
 				<div className='collapsed-gp'>
           <div style={{ marginTop: '5px', justifySelf: 'center' }}>
 					<SuggestedActions
@@ -229,6 +229,7 @@ export function GroupPreview({
 											{isEditingGroupTitle ? (
 												<GroupTitleEditor
                         group={group}
+                        isCollapsed={isCollapsed}
                         updateBoard={updateBoard}
                         onSave={() => setIsEditingGroupTitle(false)}
                     />
@@ -260,8 +261,12 @@ export function GroupPreview({
 						</table>
 					</div>
 				</div>
-			) : (
-				<>
+			</div>
+      ) 
+  else return (  
+      <div
+			className='gp-main-container'
+			style={{ '--group-color': group.style.color || '#000', left: '40px' }}>
 					<div className='gh-main-container'>
 						<div className='gh-title'>
 							<SuggestedActions
@@ -274,30 +279,28 @@ export function GroupPreview({
 									<ExpandMoreIcon
 										style={{
 											transition: 'transform 0.3s ease',
-											transform: isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)',
+											transform: 'rotate(0deg)',
 										}}
 									/>
 								</div>
-								{/* <div className='group-name-container'> */}
 									{isEditingGroupTitle ? (
 									<GroupTitleEditor
                   group={group}
+                  isCollapsed={isCollapsed}
                   updateBoard={updateBoard}
                   onSave={() => setIsEditingGroupTitle(false)}
               />
 									) : (
 										<h4 onClick={() => setIsEditingGroupTitle(true)} className='group-title'>
-											{group.title ? group.title : 'New Group'}{' '}
-											<span style={{ color: 'gray', marginLeft: '10px' }}>
-												{isCollapsed ? `${group.tasks.length} Tasks [Collapsed]` : ''}
-											</span>
+											{group.title ? group.title : 'New Group'}
 										</h4>
 									)}
-								{/* </div> */}
 							</div>
-							{!isCollapsed && (
-								<span className='gh-how-many-tasks'>{group.tasks.length} Tasks</span>
-							)}
+							<span className='gh-how-many-tasks'>
+												{group.tasks.length > 1
+													? `${group.tasks.length} Tasks`
+													: `${group.tasks.length} Task`}
+											</span>
 						</div>
 					</div>
 					<div className='gp-table'>
@@ -333,10 +336,11 @@ export function GroupPreview({
 							<SortableContext
 								id={group.id}
 								items={group.tasks.map((task) => task.id)}
-								strategy={verticalListSortingStrategy}></SortableContext>
+								strategy={verticalListSortingStrategy}>              </SortableContext> 
+                {/* Look if the Sortable Context is needed here or at the end of the tBody */}
+
 							<tbody ref={setGroupRef} style={{ position: 'relative' }}>
-								{!isCollapsed &&
-									group.tasks.map((task, index) => (
+								{group.tasks.map((task, index) => (
 										<GroupItemContainer
 											key={`task-${task.id}`}
 											item={task}
@@ -405,9 +409,6 @@ export function GroupPreview({
 							</tfoot>
 						</table>
 					</div>
-				</>
-				// </div>
-			)}
-		</div>
+				</div>
 	)
 }

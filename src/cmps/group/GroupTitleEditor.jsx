@@ -4,7 +4,7 @@ import { BlockPicker } from 'react-color'
 import * as Popover from '@radix-ui/react-popover'
 import { boardService } from '../../services/board'
 
-export function GroupTitleEditor({ group, updateBoard, onSave }) {
+export function GroupTitleEditor({ group, updateBoard, onSave, isCollapsed }) {
 	const [groupTempTitle, setGroupTempTitle] = useState(group.title)
 	const [isPopoverOpen, setIsPopoverOpen] = useState(false)
 
@@ -19,6 +19,8 @@ export function GroupTitleEditor({ group, updateBoard, onSave }) {
 		}
 		onSave()
 	}
+
+	const collapsed = isCollapsed ? 'collapsed' : ''
 
 	return (
 		<Paper component='form' className='gh-title-input-container flex align-center input'>
@@ -75,7 +77,7 @@ export function GroupTitleEditor({ group, updateBoard, onSave }) {
 			<InputBase
 				autoFocus
 				type='text'
-				className='title-input'
+				className={`title-input ${collapsed}`}
 				value={groupTempTitle}
 				onChange={(e) => setGroupTempTitle(e.target.value)}
 				onKeyDown={(e) => {
@@ -98,6 +100,7 @@ export function GroupTitleEditor({ group, updateBoard, onSave }) {
 							color: group.style.color,
 							fontWeight: 500,
 							padding: 0,
+							fontSize: '1.1rem',
 						},
 					},
 				}}

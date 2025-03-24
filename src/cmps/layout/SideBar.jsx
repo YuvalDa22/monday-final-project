@@ -262,7 +262,10 @@ export default function Sidebar() {
 									style={{ color: '#676879', height: '20px', width: '19px' }}
 									className='sidebar_board'
 								/>
-								<span className='textInSidebar'>{obj.title}</span>
+								
+								<span className='textInSidebar'>{obj.title?.length > 17
+                ? obj.title.slice(0, 17) + '...'
+                : obj.title}</span>
 								<div className='menu-container'>
 									<MenuButtonVibe
 										className='menu-button'
