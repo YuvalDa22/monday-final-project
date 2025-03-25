@@ -42,7 +42,7 @@ export function GroupPreview({
 			<i className={className} dangerouslySetInnerHTML={{ __html: getSvg(iconName, options) }}></i>
 		)
 	}
-	const [isCollapsed, setIsCollapsed] = useState(group.collapsed)
+	const [isCollapsed, setIsCollapsed] = useState(false)
 	const [editingTaskId, setEditingTaskId] = useState(null)
 	const [existingItemTempTitle, setExistingItemTempTitle] = useState('')
 	const [newItemTempTitle, setNewItemTempTitle] = useState('')
