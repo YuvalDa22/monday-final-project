@@ -1,4 +1,4 @@
-import { Divider, Menu, MenuItem } from '@mui/material'
+import { Divider, IconButton, Menu, MenuItem } from '@mui/material'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { getSvg } from '../../services/util.service'
 import {
@@ -194,8 +194,8 @@ export default function Sidebar() {
 					</li>
 				</ul>
 			</div>
-			<div>
-				<ul className='main-workspace'>
+			<div className='main-workspace-container'>
+				<div className='main-workspace'>
 					<ButtonVibe
 						size={ButtonVibe.sizes.SMALL}
 						className='main-workspace-button'
@@ -231,21 +231,21 @@ export default function Sidebar() {
 						</span>
 					</ButtonVibe>
 
-					<IconButtonVibe
-						className='add-board-button'
-						size={ButtonVibe.sizes.SMALL}
-						kind={ButtonVibe.kinds.PRIMARY}
-						ariaLabel='Add Board'
-						icon={AddIcon}
-						aria-disabled='false'
-						style={{
-							marginLeft: '8px',
-							backgroundColor: '#0073ea',
-							color: '#ffffff',
-						}}
-						onClick={onAddBoard}
-					/>
-				</ul>
+					<IconButton
+					className='add-board-button'
+					size='small'
+					aria-label='Add Board'
+					style={{
+						height: '32px',
+						width: '32px',
+						backgroundColor: '#0073ea',
+						color: '#ffffff',
+						borderRadius: '4px',
+					}}
+					onClick={onAddBoard}>
+					<AddIcon />
+				</IconButton>
+				</div>
 			</div>
 			<div className='workspace-section'>
 				<ul className='workspace-links'>

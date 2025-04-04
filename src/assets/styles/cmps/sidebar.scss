@@ -65,7 +65,10 @@
   height: 32px;
   display: flex;
   gap: 5px;
-  padding: 6px 6px 12px 18px; // Padding items and not container so divider line could span across the whole container
+  // padding: 6px 6px 12px 18px; // Padding items and not container so divider line could span across the whole container
+  padding: 6px 8px; // Keeps spacing consistent
+  margin: 0 10px;
+  border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -73,7 +76,8 @@
   position: relative; // Ensures the menu is positioned inside
   display: flex;
   align-items: center;
-  padding: 6px 18px; // Keeps spacing consistent
+  padding: 6px 8px; // Keeps spacing consistent
+  margin: 0 10px;
   gap: 8px; // Adds correct spacing between the icon and title
 
   &:hover {
@@ -120,7 +124,9 @@
   bottom: 3px;
   margin-right: 0px;
 }
-
+.main-workspace-container {
+  padding: 0 18px 0 10px;
+}
 .main-workspace {
   display: flex;
   align-items: center;
@@ -128,12 +134,13 @@
   width: 100%;
   border-radius: 4px;
   margin: 2px;
-  padding: 3px 4px 3px 3px;
+  // padding: 3px 4px 3px 3px;
 }
 .main-workspace-button {
   display: flex;
-  margin: 0px 4px;
-  padding: 0px 0px 0px 1px;
+  margin: 0px 4px 0 0;
+  padding: 3px 4px 3px 3px;
+  // padding: 0px 0px 0px 1px;
   text-align: left;
   justify-content: start;
   box-sizing: border-box;
